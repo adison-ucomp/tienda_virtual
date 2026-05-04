@@ -1,0 +1,71 @@
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# Gradle
+.gradle/
+build/
+*/build/
+
+# Android Studio / IntelliJ
+.idea/
+# *.iml
+*.ipr
+*.iws
+out/
+
+# Local configuration
+# local.properties
+
+# Android generated files
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.ap_
+*.aab
+*.dex
+
+# Logs
+*.log
+
+# OS files
+# .DS_Store
+Thumbs.db
+
+# Keystore / signing files
+*.jks
+*.keystore
+*.p12
+*.pem
+
+# Secrets / environment files
+.env
+.env.*
+secrets.properties
+
+# Kotlin / Java generated
+*.class
+
+# Native / C++ generated
+obj/
+libs/*/lib*.so
+
+# Testing / coverage
+coverage/
+*.ec
+
+# Google services
+# google-services.json
