@@ -12,7 +12,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TiendaVirtual">
         <activity
-            android:name=".MainActivity"
+            android:name=".admin.ui.AddShopAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".admin.ui.EditShopAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".admin.ui.EditProfileAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".admin.ui.ProfileAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".admin.ui.AddUserAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".admin.ui.EditUserAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".admin.ui.DashboardAdmin"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,6 +38,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".admin.ui.ReportAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".admin.ui.ShopManagementAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".admin.ui.UserManagementAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.inicio.SplashScreenActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
