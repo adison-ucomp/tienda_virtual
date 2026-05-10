@@ -12,6 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TiendaVirtual">
         <activity
+            android:name=".ui.platform.BuyerPurchaseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.platform.BuyerCartShopActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.platform.ProductDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.profile.ProfileAdminActivity"
             android:exported="false" />
         <activity
