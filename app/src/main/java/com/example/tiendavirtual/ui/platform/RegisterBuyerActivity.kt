@@ -1,4 +1,4 @@
-package com.example.tiendavirtual.ui.external
+package com.example.tiendavirtual.ui.platform
 
 import android.content.Intent
 import android.os.Bundle

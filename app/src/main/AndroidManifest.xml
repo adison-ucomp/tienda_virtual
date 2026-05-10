@@ -12,22 +12,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TiendaVirtual">
         <activity
+            android:name=".ui.profile.ProfileAdminActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.profile.ProfileBuyerActivity"
             android:exported="false" />
         <activity
             android:name=".ui.profile.ProfileSellerActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.external.HomeLoginActivity"
+            android:name=".ui.platform.HomeLoginActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.external.RegisterBuyerActivity"
+            android:name=".ui.platform.RegisterBuyerActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.external.RegisterSellerActivity"
+            android:name=".ui.platform.RegisterSellerActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.external.HomeProductActivity"
+            android:name=".ui.platform.HomeProductActivity"
             android:exported="false" />
         <activity
             android:name=".ui.model.address.AddressCreateActivity"

@@ -6,7 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tiendavirtual.R
-import com.example.tiendavirtual.ui.external.HomeProductActivity
+import com.example.tiendavirtual.ui.platform.HomeProductActivity
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

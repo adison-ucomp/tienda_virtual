@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context=".ui.external.HomeProductActivity">
+    tools:context=".ui.platform.HomeProductActivity">
 
     <!-- Navbar Superior -->
     <include
