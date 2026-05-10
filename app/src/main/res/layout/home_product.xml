@@ -49,7 +49,7 @@
             <!-- Categorías -->
             <include
                 android:id="@+id/includeHomeCategory"
-                layout="@layout/home_category" />
+                layout="@layout/filter_category" />
 
             <!-- Sugerencias -->
             <LinearLayout
