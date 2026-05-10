@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -11,7 +12,9 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.tiendavirtual.R
 
 class HomeLoginActivity : AppCompatActivity() {
-    private lateinit var navInicio: LinearLayout
+    private lateinit var navHome: LinearLayout
+    private lateinit var navCategory: LinearLayout
+    private lateinit var navAccount: LinearLayout
 
     private lateinit var btnRegisterBuyer: TextView
     private lateinit var btnRegisterSeller: TextView
@@ -40,17 +43,29 @@ class HomeLoginActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        navInicio = findViewById(R.id.navInicio)
+        navHome = findViewById(R.id.navHome)
+        navCategory = findViewById(R.id.navCategory)
+        navAccount = findViewById(R.id.navAccount)
 
         btnRegisterBuyer = findViewById(R.id.btnRegisterBuyer)
         btnRegisterSeller = findViewById(R.id.btnRegisterSeller)
     }
 
     private fun initEvents() {
-        navInicio.setOnClickListener {
+        navHome.setOnClickListener {
             val intent = Intent(this, HomeProductActivity::class.java)
             startActivity(intent)
             finish()
+        }
+
+        navCategory.setOnClickListener {
+            val intent = Intent(this, HomeCategoryActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        navAccount.setOnClickListener {
+            Toast.makeText(this, "Cuenta", Toast.LENGTH_SHORT).show()
         }
 
         btnRegisterBuyer.setOnClickListener {

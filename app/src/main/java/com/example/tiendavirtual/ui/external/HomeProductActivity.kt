@@ -1,4 +1,4 @@
-package com.example.tiendavirtual.ui.platform
+package com.example.tiendavirtual.ui.external
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,15 +10,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.tiendavirtual.R
+import com.example.tiendavirtual.ui.platform.HomeLoginActivity
 
 class HomeProductActivity : AppCompatActivity() {
 
-    // private lateinit var btnMenu: TextView
+    private lateinit var btnMenu: TextView
     private lateinit var btnCart: TextView
 
     private lateinit var navHome: LinearLayout
     private lateinit var navCategory: LinearLayout
-    private lateinit var navAccount: LinearLayout
 
     private lateinit var productOne: LinearLayout
     private lateinit var productTwo: LinearLayout
@@ -54,7 +54,6 @@ class HomeProductActivity : AppCompatActivity() {
 
         navHome = findViewById(R.id.navHome)
         navCategory = findViewById(R.id.navCategory)
-        navAccount = findViewById(R.id.navAccount)
 
         productOne = findViewById(R.id.productOne)
         productTwo = findViewById(R.id.productTwo)
@@ -77,13 +76,7 @@ class HomeProductActivity : AppCompatActivity() {
         }
 
         navCategory.setOnClickListener {
-            val intent = Intent(this, HomeCategoryActivity::class.java)
-            startActivity(intent)
-        }
-
-        navAccount.setOnClickListener {
-            val intent = Intent(this, HomeLoginActivity::class.java)
-            startActivity(intent)
+            Toast.makeText(this, "Categorías", Toast.LENGTH_SHORT).show()
         }
 
         productOne.setOnClickListener {
