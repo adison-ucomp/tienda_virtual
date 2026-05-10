@@ -13,13 +13,13 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface AddressDao {
 
-    @Query("SELECT * FROM address_send ORDER BY register ASC")
+    @Query("SELECT * FROM address ORDER BY register ASC")
     fun getAll(): Flow<List<AddressEntity>>
 
-    @Query("SELECT * FROM address_send WHERE register = :register LIMIT 1")
+    @Query("SELECT * FROM address WHERE register = :register LIMIT 1")
     suspend fun getByRegister(register: Long): AddressEntity?
 
-    @Query("SELECT * FROM address_send WHERE id_user = :idUser ORDER BY register ASC")
+    @Query("SELECT * FROM address WHERE id_user = :idUser ORDER BY register ASC")
     fun getByUser(idUser: Long): Flow<List<AddressEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -31,6 +31,6 @@ interface AddressDao {
     @Delete
     suspend fun delete(address: AddressEntity)
 
-    @Query("DELETE FROM address_send")
+    @Query("DELETE FROM address")
     suspend fun deleteAll()
 }

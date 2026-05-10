@@ -12,136 +12,31 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TiendaVirtual">
         <activity
-            android:name=".ui.auth.RegisterActivity"
+            android:name=".ui.profile.ProfileBuyerActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.auth.LoginActivity"
+            android:name=".ui.profile.ProfileSellerActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.model.user.UserUpdateActivity"
+            android:name=".ui.external.HomeRegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.model.user.UserSelectActivity"
+            android:name=".ui.external.HomeLoginActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.model.user.UserDeleteActivity"
+            android:name=".ui.model.address.AddressCreateActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.model.user.UserCreateActivity"
+            android:name=".ui.model.address.AddressDeleteActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.model.specify.SpecifyUpdateActivity"
+            android:name=".ui.model.address.AddressSelectActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.model.specify.SpecifyUpdate}Activity"
+            android:name=".ui.model.address.AddressUpdateActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.model.specify.SpecifySelectActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.specify.SpecifyDeleteActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.specify.SpecifyCreateActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.shop.ShopUpdateActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.shop.ShopSelectActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.shop.ShopDeleteActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.shop.ShopCreateActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.seller.SellerUpdateActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.seller.SellerSelectActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.seller.SellerDeleteActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.seller.SellerCreateActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.role.RoleUpdateActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.role.RoleSelectActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.role.RoleDeleteActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.role.RoleCreateActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.purchase.PurchaseUpdateActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.purchase.PurchaseSelectActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.purchase.PurchaseDeleteActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.purchase.PurchaseCreateActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.product.ProductUpdateActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.product.ProductSelectActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.product.ProductDeleteActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.product.ProductCreateActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.payment.PaymentUpdateActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.payment.PaymentSelectActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.payment.PaymentDeleteActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.payment.PaymentCreateActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.image.ImageUpdateActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.image.ImageSelectActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.image.ImageDeleteActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.image.ImageCreateActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.gateway.GatewayUpdateActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.gateway.GatewaySelectActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.gateway.GatewayDeleteActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.gateway.GatewayCreateActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.model.category.CategoryUpdateActivity"
+            android:name=".ui.model.category.CategoryCreateActivity"
             android:exported="false" />
         <activity
             android:name=".ui.model.category.CategoryDeleteActivity"
@@ -150,22 +45,127 @@
             android:name=".ui.model.category.CategorySelectActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.model.category.CategoryCreateActivity"
+            android:name=".ui.model.category.CategoryUpdateActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.model.address.AddressSelectActivity"
+            android:name=".ui.model.gateway.GatewayCreateActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.model.address.AddressDeleteActivity"
+            android:name=".ui.model.gateway.GatewayDeleteActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.model.address.AddressUpdateActivity"
+            android:name=".ui.model.gateway.GatewaySelectActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.model.address.AddressCreateActivity"
+            android:name=".ui.model.gateway.GatewayUpdateActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.model.address.AddressListActivity"
+            android:name=".ui.model.image.ImageCreateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.image.ImageDeleteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.image.ImageSelectActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.image.ImageUpdateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.payment.PaymentCreateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.payment.PaymentDeleteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.payment.PaymentSelectActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.payment.PaymentUpdateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.product.ProductCreateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.product.ProductDeleteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.product.ProductSelectActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.product.ProductUpdateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.purchase.PurchaseCreateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.purchase.PurchaseDeleteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.purchase.PurchaseSelectActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.purchase.PurchaseUpdateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.role.RoleCreateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.role.RoleDeleteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.role.RoleSelectActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.role.RoleUpdateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.seller.SellerCreateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.seller.SellerDeleteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.seller.SellerSelectActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.seller.SellerUpdateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.shop.ShopCreateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.shop.ShopDeleteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.shop.ShopSelectActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.shop.ShopUpdateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.specify.SpecifyCreateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.specify.SpecifyDeleteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.specify.SpecifySelectActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.specify.SpecifyUpdateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.user.UserCreateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.user.UserDeleteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.user.UserSelectActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.user.UserUpdateActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

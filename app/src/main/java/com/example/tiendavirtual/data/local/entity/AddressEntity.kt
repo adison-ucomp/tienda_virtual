@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 // Direcciones de Envio
-@Entity(tableName = "address_send")
+@Entity(tableName = "address")
 data class AddressEntity(
     @PrimaryKey(autoGenerate = true)
     val register: Long = 0,

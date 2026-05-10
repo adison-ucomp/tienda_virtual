@@ -14,10 +14,32 @@ import com.example.tiendavirtual.data.local.dao.SellerDao
 import com.example.tiendavirtual.data.local.dao.ShopDao
 import com.example.tiendavirtual.data.local.dao.SpecifyDao
 import com.example.tiendavirtual.data.local.dao.UserDao
+import com.example.tiendavirtual.data.local.entity.AddressEntity
+import com.example.tiendavirtual.data.local.entity.CategoryEntity
+import com.example.tiendavirtual.data.local.entity.GatewayEntity
+import com.example.tiendavirtual.data.local.entity.ImageEntity
+import com.example.tiendavirtual.data.local.entity.PaymentEntity
+import com.example.tiendavirtual.data.local.entity.ProductEntity
+import com.example.tiendavirtual.data.local.entity.PurchaseEntity
+import com.example.tiendavirtual.data.local.entity.RoleEntity
+import com.example.tiendavirtual.data.local.entity.SellerEntity
+import com.example.tiendavirtual.data.local.entity.ShopEntity
+import com.example.tiendavirtual.data.local.entity.SpecifyEntity
 import com.example.tiendavirtual.data.local.entity.UserEntity
 
 @Database(
     entities = [
+        AddressEntity::class,
+        CategoryEntity::class,
+        GatewayEntity::class,
+        ImageEntity::class,
+        PaymentEntity::class,
+        ProductEntity::class,
+        PurchaseEntity::class,
+        RoleEntity::class,
+        SellerEntity::class,
+        ShopEntity::class,
+        SpecifyEntity::class,
         UserEntity::class
     ],
     version = 1,
