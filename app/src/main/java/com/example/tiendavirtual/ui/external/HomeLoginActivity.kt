@@ -3,6 +3,7 @@ package com.example.tiendavirtual.ui.external
 import android.content.Intent
 import android.os.Bundle
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -12,16 +13,8 @@ import com.example.tiendavirtual.R
 class HomeLoginActivity : AppCompatActivity() {
     private lateinit var navInicio: LinearLayout
 
-    /*override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.home_login)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-    }*/
+    private lateinit var btnRegisterBuyer: TextView
+    private lateinit var btnRegisterSeller: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +41,9 @@ class HomeLoginActivity : AppCompatActivity() {
 
     private fun initViews() {
         navInicio = findViewById(R.id.navInicio)
+
+        btnRegisterBuyer = findViewById(R.id.btnRegisterBuyer)
+        btnRegisterSeller = findViewById(R.id.btnRegisterSeller)
     }
 
     private fun initEvents() {
@@ -55,6 +51,16 @@ class HomeLoginActivity : AppCompatActivity() {
             val intent = Intent(this, HomeProductActivity::class.java)
             startActivity(intent)
             finish()
+        }
+
+        btnRegisterBuyer.setOnClickListener {
+            val intent = Intent(this, RegisterBuyerActivity::class.java)
+            startActivity(intent)
+        }
+
+        btnRegisterSeller.setOnClickListener {
+            val intent = Intent(this, RegisterSellerActivity::class.java)
+            startActivity(intent)
         }
     }
 }

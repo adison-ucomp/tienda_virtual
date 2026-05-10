@@ -9,13 +9,13 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.tiendavirtual.R
 
-class RegisterSellerActivity : AppCompatActivity() {
+class RegisterBuyerActivity : AppCompatActivity() {
     private lateinit var btnBack: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.register_seller)
+        setContentView(R.layout.register_buyer)
 
         applyWindowInsets()
         initViews()

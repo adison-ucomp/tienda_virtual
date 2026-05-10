@@ -11,9 +11,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TiendaVirtual">
-        <!-- <activity
-            android:name=".ui.SplashActivity"
-            android:exported="false" /> -->
         <activity
             android:name=".ui.profile.ProfileBuyerActivity"
             android:exported="false" />
@@ -24,7 +21,10 @@
             android:name=".ui.external.HomeLoginActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.external.HomeRegisterActivity"
+            android:name=".ui.external.RegisterBuyerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.external.RegisterSellerActivity"
             android:exported="false" />
         <activity
             android:name=".ui.external.HomeProductActivity"
@@ -173,15 +173,6 @@
         <activity
             android:name=".ui.model.user.UserUpdateActivity"
             android:exported="false" />
-        <!-- <activity
-            android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity> -->
         <activity
             android:name=".ui.SplashActivity"
             android:exported="true">

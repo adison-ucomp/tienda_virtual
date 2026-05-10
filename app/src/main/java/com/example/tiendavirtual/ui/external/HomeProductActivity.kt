@@ -48,7 +48,7 @@ class HomeProductActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        btnMenu = findViewById(R.id.btnMenu)
+        // btnMenu = findViewById(R.id.btnMenu)
         btnCart = findViewById(R.id.btnCart)
 
         navInicio = findViewById(R.id.navInicio)
@@ -61,9 +61,9 @@ class HomeProductActivity : AppCompatActivity() {
     }
 
     private fun initEvents() {
-        btnMenu.setOnClickListener {
+        /*btnMenu.setOnClickListener {
             Toast.makeText(this, "Menú", Toast.LENGTH_SHORT).show()
-        }
+        }*/
 
         btnCart.setOnClickListener {
             val intent = Intent(this, HomeLoginActivity::class.java)
