@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">TiendaVirtual</string>
+    <string name="app_name">EMPTIO</string>
+    <string name="splash_welcome">¡Bienvenidos!</string>
 </resources>
