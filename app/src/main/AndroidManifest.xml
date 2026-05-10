@@ -24,7 +24,7 @@
             android:name=".ui.platform.BuyerCartShopActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.platform.ProductDetailActivity"
+            android:name=".ui.platform.HomeDetailActivity"
             android:exported="false" />
         <activity
             android:name=".ui.profile.ProfileAdminActivity"

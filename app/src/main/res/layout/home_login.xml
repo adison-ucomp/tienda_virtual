@@ -248,7 +248,7 @@
     <!-- Menú inferior -->
     <include
         android:id="@+id/includeBuyerIcon"
-        layout="@layout/home_inferior"
+        layout="@layout/navbar_inferior"
         android:layout_width="0dp"
         android:layout_height="76dp"
         app:layout_constraintBottom_toBottomOf="parent"
