@@ -1,5 +1,6 @@
 package com.example.tiendavirtual.ui.external
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -65,7 +66,8 @@ class HomeProductActivity : AppCompatActivity() {
         }
 
         btnCart.setOnClickListener {
-            Toast.makeText(this, "Carrito", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, HomeLoginActivity::class.java)
+            startActivity(intent)
         }
 
         navInicio.setOnClickListener {

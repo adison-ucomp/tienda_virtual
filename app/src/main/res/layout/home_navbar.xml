@@ -18,17 +18,12 @@
         android:textColor="#111111"
         android:textSize="28sp" />
 
-    <TextView
-        android:id="@+id/txtNavbarTitle"
+    <include
+        android:id="@+id/includeNavbarLogo"
+        layout="@layout/navbar_logo"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:letterSpacing="0.08"
-        android:text="EMPTIO"
-        android:textColor="#111111"
-        android:textSize="22sp"
-        android:textStyle="bold" />
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 
     <TextView
         android:id="@+id/btnCart"
