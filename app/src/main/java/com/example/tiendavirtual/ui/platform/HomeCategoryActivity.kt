@@ -17,6 +17,8 @@ class HomeCategoryActivity : AppCompatActivity() {
 
     private lateinit var navHome: LinearLayout
     private lateinit var navCategory: LinearLayout
+    private lateinit var navShopping: LinearLayout
+    private lateinit var navAddress: LinearLayout
     private lateinit var navAccount: LinearLayout
 
     private lateinit var categoryTechnology: LinearLayout
@@ -50,6 +52,8 @@ class HomeCategoryActivity : AppCompatActivity() {
 
         navHome = findViewById(R.id.navHome)
         navCategory = findViewById(R.id.navCategory)
+        navShopping = findViewById(R.id.navShopping)
+        navAddress = findViewById(R.id.navAddress)
         navAccount = findViewById(R.id.navAccount)
 
         categoryTechnology = findViewById(R.id.categoryTechnology)
@@ -70,6 +74,17 @@ class HomeCategoryActivity : AppCompatActivity() {
 
         navCategory.setOnClickListener {
             Toast.makeText(this, "Categorías", Toast.LENGTH_SHORT).show()
+        }
+
+        navShopping.setOnClickListener {
+            val intent = Intent(this, BuyerShoppingActivity::class.java)
+            startActivity(intent)
+        }
+
+        navAddress.setOnClickListener {
+            val intent = Intent(this, BuyerAddressActivity::class.java)
+            startActivity(intent)
+            finish()
         }
 
         navAccount.setOnClickListener {

@@ -4,24 +4,26 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.tiendavirtual.R
 
-class HomeDetailActivity : AppCompatActivity() {
+class BuyerAddressActivity : AppCompatActivity() {
 
     private lateinit var btnBack: TextView
-    private lateinit var btnCart: TextView
+    private lateinit var btnNew: Button
 
-    private lateinit var btnAddCart: Button
-    private lateinit var btnBuyNow: Button
+    private lateinit var btnEditMainAddress: TextView
+    private lateinit var btnEditOfficeAddress: TextView
+    private lateinit var btnEditOtherAddress: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.home_detail)
+        setContentView(R.layout.buyer_address)
 
         applyWindowInsets()
         initViews()
@@ -43,30 +45,36 @@ class HomeDetailActivity : AppCompatActivity() {
 
     private fun initViews() {
         btnBack = findViewById(R.id.btnBack)
-        btnCart = findViewById(R.id.btnCart)
+        btnNew = findViewById(R.id.btnAddressNew)
 
-        btnAddCart = findViewById(R.id.btnAddCart)
-        btnBuyNow = findViewById(R.id.btnBuyNow)
+        btnEditMainAddress = findViewById(R.id.btnEditMainAddress)
+        btnEditOfficeAddress = findViewById(R.id.btnEditOfficeAddress)
+        btnEditOtherAddress = findViewById(R.id.btnEditOtherAddress)
     }
 
     private fun initEvents() {
         btnBack.setOnClickListener {
+            // finish()
+            val intent = Intent(this, HomeProductActivity::class.java)
+            startActivity(intent)
             finish()
         }
 
-        btnCart.setOnClickListener {
-            val intent = Intent(this, BuyerCartShopActivity::class.java)
+        btnNew.setOnClickListener {
+            val intent = Intent(this, BuyerMapsActivity::class.java)
             startActivity(intent)
         }
 
-        btnAddCart.setOnClickListener {
-            val intent = Intent(this, BuyerCartShopActivity::class.java)
-            startActivity(intent)
+        btnEditMainAddress.setOnClickListener {
+            Toast.makeText(this, "Editar dirección principal", Toast.LENGTH_SHORT).show()
         }
 
-        btnBuyNow.setOnClickListener {
-            val intent = Intent(this, BuyerPurchaseActivity::class.java)
-            startActivity(intent)
+        btnEditOfficeAddress.setOnClickListener {
+            Toast.makeText(this, "Editar dirección oficina", Toast.LENGTH_SHORT).show()
+        }
+
+        btnEditOtherAddress.setOnClickListener {
+            Toast.makeText(this, "Editar otra dirección", Toast.LENGTH_SHORT).show()
         }
     }
 }

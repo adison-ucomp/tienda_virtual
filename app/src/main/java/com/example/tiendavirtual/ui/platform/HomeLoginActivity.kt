@@ -14,6 +14,8 @@ import com.example.tiendavirtual.R
 class HomeLoginActivity : AppCompatActivity() {
     private lateinit var navHome: LinearLayout
     private lateinit var navCategory: LinearLayout
+    private lateinit var navShopping: LinearLayout
+    private lateinit var navAddress: LinearLayout
     private lateinit var navAccount: LinearLayout
     private lateinit var actRestore: TextView
 
@@ -46,6 +48,8 @@ class HomeLoginActivity : AppCompatActivity() {
     private fun initViews() {
         navHome = findViewById(R.id.navHome)
         navCategory = findViewById(R.id.navCategory)
+        navShopping = findViewById(R.id.navShopping)
+        navAddress = findViewById(R.id.navAddress)
         navAccount = findViewById(R.id.navAccount)
         actRestore = findViewById(R.id.txtForgotPassword)
 
@@ -64,6 +68,16 @@ class HomeLoginActivity : AppCompatActivity() {
             val intent = Intent(this, HomeCategoryActivity::class.java)
             startActivity(intent)
             finish()
+        }
+
+        navShopping.setOnClickListener {
+            val intent = Intent(this, BuyerShoppingActivity::class.java)
+            startActivity(intent)
+        }
+
+        navAddress.setOnClickListener {
+            val intent = Intent(this, BuyerAddressActivity::class.java)
+            startActivity(intent)
         }
 
         navAccount.setOnClickListener {

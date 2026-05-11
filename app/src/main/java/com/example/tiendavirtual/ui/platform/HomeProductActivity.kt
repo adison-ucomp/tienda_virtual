@@ -19,6 +19,8 @@ class HomeProductActivity : AppCompatActivity() {
     private lateinit var navHome: LinearLayout
     private lateinit var navCategory: LinearLayout
     private lateinit var navAccount: LinearLayout
+    private lateinit var navShopping: LinearLayout
+    private lateinit var navAddress: LinearLayout
 
     private lateinit var productOne: LinearLayout
     private lateinit var productTwo: LinearLayout
@@ -54,6 +56,8 @@ class HomeProductActivity : AppCompatActivity() {
 
         navHome = findViewById(R.id.navHome)
         navCategory = findViewById(R.id.navCategory)
+        navShopping = findViewById(R.id.navShopping)
+        navAddress = findViewById(R.id.navAddress)
         navAccount = findViewById(R.id.navAccount)
 
         productOne = findViewById(R.id.productOne)
@@ -81,12 +85,22 @@ class HomeProductActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        navShopping.setOnClickListener {
+            val intent = Intent(this, BuyerShoppingActivity::class.java)
+            startActivity(intent)
+        }
+
+        navAddress.setOnClickListener {
+            val intent = Intent(this, BuyerAddressActivity::class.java)
+            startActivity(intent)
+        }
+
         navAccount.setOnClickListener {
             val intent = Intent(this, HomeLoginActivity::class.java)
             startActivity(intent)
         }
 
-        productOne.setOnClickListener {
+        /*productOne.setOnClickListener {
             Toast.makeText(this, "Smartphone Vertex Pro Max 5G", Toast.LENGTH_SHORT).show()
         }
 
@@ -100,6 +114,26 @@ class HomeProductActivity : AppCompatActivity() {
 
         productFour.setOnClickListener {
             Toast.makeText(this, "Lámpara de Estudio", Toast.LENGTH_SHORT).show()
+        }*/
+
+        productOne.setOnClickListener {
+            val intent = Intent(this, HomeDetailActivity::class.java)
+            startActivity(intent)
+        }
+
+        productTwo.setOnClickListener {
+            val intent = Intent(this, HomeDetailActivity::class.java)
+            startActivity(intent)
+        }
+
+        productThree.setOnClickListener {
+            val intent = Intent(this, HomeDetailActivity::class.java)
+            startActivity(intent)
+        }
+
+        productFour.setOnClickListener {
+            val intent = Intent(this, HomeDetailActivity::class.java)
+            startActivity(intent)
         }
     }
 }

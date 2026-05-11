@@ -12,16 +12,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TiendaVirtual">
         <activity
+            android:name=".ui.platform.BuyerMapsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.platform.BuyerAddressActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.platform.HomePasswordActivity"
             android:exported="false" />
         <activity
             android:name=".ui.platform.HomeRestoreActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.platform.CategorySportActivity"
+            android:name=".ui.platform.HomeCatSportActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.platform.CategoryTechActivity"
+            android:name=".ui.platform.HomeCatTechActivity"
             android:exported="false" />
         <activity
             android:name=".ui.platform.HomeCategoryActivity"
