@@ -58,9 +58,10 @@ dependencies {
 
         // Ubicación en tiempo real
         implementation("com.google.android.gms:play-services-location:21.3.0")
-
         // Google Maps
         implementation("com.google.android.gms:play-services-maps:19.0.0")
+        // Huella Biometrica
+        implementation("androidx.biometric:biometric:1.2.0-alpha05")
 
         testImplementation(libs.junit)
         androidTestImplementation(libs.androidx.junit)
