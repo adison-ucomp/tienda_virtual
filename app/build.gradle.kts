@@ -51,10 +51,16 @@ dependencies {
         implementation(libs.androidx.room.runtime)
         implementation(libs.androidx.room.ktx)
         ksp(libs.androidx.room.compiler)
-
         implementation(libs.gson)
         implementation(libs.retrofit)
         implementation(libs.retrofit.converter.gson)
+        implementation(libs.play.services.location)
+
+        // Ubicación en tiempo real
+        implementation("com.google.android.gms:play-services-location:21.3.0")
+
+        // Google Maps
+        implementation("com.google.android.gms:play-services-maps:19.0.0")
 
         testImplementation(libs.junit)
         androidTestImplementation(libs.androidx.junit)
