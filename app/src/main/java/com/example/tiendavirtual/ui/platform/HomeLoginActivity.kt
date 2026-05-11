@@ -15,6 +15,7 @@ class HomeLoginActivity : AppCompatActivity() {
     private lateinit var navHome: LinearLayout
     private lateinit var navCategory: LinearLayout
     private lateinit var navAccount: LinearLayout
+    private lateinit var actRestore: TextView
 
     private lateinit var btnRegisterBuyer: TextView
     private lateinit var btnRegisterSeller: TextView
@@ -46,6 +47,7 @@ class HomeLoginActivity : AppCompatActivity() {
         navHome = findViewById(R.id.navHome)
         navCategory = findViewById(R.id.navCategory)
         navAccount = findViewById(R.id.navAccount)
+        actRestore = findViewById(R.id.txtForgotPassword)
 
         btnRegisterBuyer = findViewById(R.id.btnRegisterBuyer)
         btnRegisterSeller = findViewById(R.id.btnRegisterSeller)
@@ -66,6 +68,11 @@ class HomeLoginActivity : AppCompatActivity() {
 
         navAccount.setOnClickListener {
             Toast.makeText(this, "Cuenta", Toast.LENGTH_SHORT).show()
+        }
+
+        actRestore.setOnClickListener {
+            val intent = Intent(this, HomeRestoreActivity::class.java)
+            startActivity(intent)
         }
 
         btnRegisterBuyer.setOnClickListener {

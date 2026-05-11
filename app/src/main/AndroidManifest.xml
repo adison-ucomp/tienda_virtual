@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TiendaVirtual">
         <activity
+            android:name=".ui.platform.HomePasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.platform.HomeRestoreActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.platform.CategorySportActivity"
             android:exported="false" />
         <activity
