@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "16328878271",
+    "project_id": "engineering-code",
+    "storage_bucket": "engineering-code.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:16328878271:android:d6e13144fa60c4fb967e0a",
+        "android_client_info": {
+          "package_name": "com.compensar.tienda"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJXIAdxFdIsqvYE0W1v9_gOBoIQ_7a-IQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

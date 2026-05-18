@@ -50,6 +50,5 @@
     <string name="download">Descargar</string>
     <string name="excel">Excel</string>
     <string name="export">Exportar</string>
-    <string name="app_name">EMPTIO</string>
     <string name="splash_welcome">¡Bienvenidos!</string>
 </resources>

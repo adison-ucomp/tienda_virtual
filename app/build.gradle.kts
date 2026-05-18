@@ -1,10 +1,12 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.ksp)
+    // id("com.android.application")
+    id("com.google.gms.google-services")
 }
 
 android {
-    namespace = "com.example.tiendavirtual"
+    namespace = "com.compensar.tienda"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -12,7 +14,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.tiendavirtual"
+        applicationId = "com.compensar.tienda"
         minSdk = 29
         targetSdk = 36
         versionCode = 1
@@ -55,6 +57,11 @@ dependencies {
         implementation(libs.retrofit)
         implementation(libs.retrofit.converter.gson)
         implementation(libs.play.services.location)
+
+        // Google Firestore
+        implementation(platform("com.google.firebase:firebase-bom:34.13.0"))
+        implementation("com.google.firebase:firebase-analytics")
+        implementation("com.google.firebase:firebase-firestore")
 
         // Ubicación en tiempo real
         implementation("com.google.android.gms:play-services-location:21.3.0")
