@@ -1,5 +1,63 @@
 <resources>
     <string name="app_name">EMPTIO</string>
+    <string name="splash_welcome">¡Bienvenidos!</string>
+
+    <!-- Modelo Direcciones -->
+    <string name="model_address_title">Gestionar Direcciones</string>
+    <string name="model_address_detail">Administra las direcciones del sistema</string>
+
+    <!-- Modelo Categorias -->
+    <string name="model_category_title">Gestionar Categorias</string>
+    <string name="model_category_detail">Administra las categorias del sistema</string>
+
+    <!-- Modelo Pagos -->
+    <string name="model_gateway_title">Gestionar Pasarela de Pagos</string>
+    <string name="model_gateway_detail">Administra las pasarelas de pago del sistema</string>
+
+    <!-- Modelo Imagenes -->
+    <string name="model_image_title">Gestionar Imagenes</string>
+    <string name="model_image_detail">Administra las imagenes del sistema</string>
+
+    <!-- Modelo Pagos -->
+    <string name="model_payment_title">Gestionar Pagos</string>
+    <string name="model_payment_detail">Administra los pagos del sistema</string>
+
+    <!-- Modelo Productos -->
+    <string name="model_product_title">Gestionar Productos</string>
+    <string name="model_product_detail">Administra los productos del sistema</string>
+
+    <!-- Modelo Compras -->
+    <string name="model_purchase_title">Gestionar Compras</string>
+    <string name="model_purchase_detail">Administra las compras del sistema</string>
+
+    <!-- Modelo Roles -->
+    <string name="model_role_title">Gestionar Roles</string>
+    <string name="model_role_detail">Administra los roles del sistema</string>
+
+    <!-- Modelo Vendedores -->
+    <string name="model_seller_title">Gestionar Vendedores</string>
+    <string name="model_seller_detail">Administra los vendedores del sistema</string>
+
+    <!-- Modelo Tiendas -->
+    <string name="model_shop_title">Gestionar Tiendas</string>
+    <string name="model_shop_detail">Administra las tiendas del sistema</string>
+
+    <!-- Modelo Especificaciones -->
+    <string name="model_specify_title">Gestionar Especificaciones</string>
+    <string name="model_specify_detail">Administra las especificaciones del sistema</string>
+
+    <!-- Modelo Usuarios -->
+    <string name="model_user_title">Gestionar Usuarios</string>
+    <string name="model_user_detail">Administra los usuarios del sistema</string>
+
+
+    <!-- Modulos Acciones -->
+    <string name="action_save">Guardar</string>
+    <string name="action_create">Nuevo</string>
+    <string name="action_update">Editar</string>
+    <string name="action_delete">Quitar</string>
+
+
     <string name="text_splash_welcome">¡Bienvenidos!</string>
     <string name="dash_admin_gestion_usu">Gestionar Usuarios</string>
     <string name="dash_admin_sub_gestion_usu">Administra los usuarios del sistema</string>
@@ -50,5 +108,4 @@
     <string name="download">Descargar</string>
     <string name="excel">Excel</string>
     <string name="export">Exportar</string>
-    <string name="splash_welcome">¡Bienvenidos!</string>
 </resources>

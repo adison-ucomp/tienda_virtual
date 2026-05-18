@@ -218,7 +218,7 @@
 
 
 
-        <activity
+        <!-- <activity
             android:name=".admin.ui.AddShopAdmin"
             android:exported="false" />
         <activity
@@ -236,7 +236,7 @@
         <activity
             android:name=".admin.ui.EditUserAdmin"
             android:exported="false" />
-        <!-- <activity
+        <activity
             android:name=".admin.ui.DashboardAdmin"
             android:exported="true">
             <intent-filter>
@@ -244,7 +244,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> -->
+        </activity>
         <activity
             android:name=".admin.ui.ReportAdmin"
             android:exported="false" />
@@ -259,9 +259,9 @@
             android:exported="false" />
         <activity
             android:name=".ui.inicio.SplashScreenActivity"
-            android:exported="false" />
+            android:exported="false" /> -->
 
-            
+
 
 
 

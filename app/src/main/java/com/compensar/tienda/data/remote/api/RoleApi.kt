@@ -10,26 +10,26 @@ import retrofit2.http.Path
 
 interface RoleApi {
 
-    @GET("api/roles")
+    @GET("api/role")
     suspend fun getAll(): List<RoleDto>
 
-    @GET("api/roles/{register}")
+    @GET("api/role/{register}")
     suspend fun getByRegister(
         @Path("register") register: Long
     ): RoleDto
 
-    @POST("api/roles")
+    @POST("api/role")
     suspend fun insert(
         @Body role: RoleDto
     ): RoleDto
 
-    @PUT("api/roles/{register}")
+    @PUT("api/role/{register}")
     suspend fun update(
         @Path("register") register: Long,
         @Body role: RoleDto
     ): RoleDto
 
-    @DELETE("api/roles/{register}")
+    @DELETE("api/role/{register}")
     suspend fun delete(
         @Path("register") register: Long
     )

@@ -10,36 +10,36 @@ import retrofit2.http.Path
 
 interface UserApi {
 
-    @GET("api/users")
+    @GET("api/user")
     suspend fun getAll(): List<UserDto>
 
-    @GET("api/users/{register}")
+    @GET("api/user/{register}")
     suspend fun getByRegister(
         @Path("register") register: Long
     ): UserDto
 
-    @GET("api/users/email/{email}")
+    @GET("api/user/email/{email}")
     suspend fun getByEmail(
         @Path("email") email: String
     ): UserDto
 
-    @GET("api/users/role/{idRole}")
+    @GET("api/user/role/{idRole}")
     suspend fun getByRole(
         @Path("idRole") idRole: Long
     ): List<UserDto>
 
-    @POST("api/users")
+    @POST("api/user")
     suspend fun insert(
         @Body user: UserDto
     ): UserDto
 
-    @PUT("api/users/{register}")
+    @PUT("api/user/{register}")
     suspend fun update(
         @Path("register") register: Long,
         @Body user: UserDto
     ): UserDto
 
-    @DELETE("api/users/{register}")
+    @DELETE("api/user/{register}")
     suspend fun delete(
         @Path("register") register: Long
     )

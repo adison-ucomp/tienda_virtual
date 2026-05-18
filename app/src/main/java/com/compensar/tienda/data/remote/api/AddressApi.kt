@@ -10,31 +10,31 @@ import retrofit2.http.Path
 
 interface AddressApi {
 
-    @GET("api/addresses")
+    @GET("api/address")
     suspend fun getAll(): List<AddressDto>
 
-    @GET("api/addresses/{register}")
+    @GET("api/address/{register}")
     suspend fun getByRegister(
         @Path("register") register: Long
     ): AddressDto
 
-    @GET("api/addresses/user/{idUser}")
+    @GET("api/address/user/{idUser}")
     suspend fun getByUser(
         @Path("idUser") idUser: Long
     ): List<AddressDto>
 
-    @POST("api/addresses")
+    @POST("api/address")
     suspend fun insert(
         @Body address: AddressDto
     ): AddressDto
 
-    @PUT("api/addresses/{register}")
+    @PUT("api/address/{register}")
     suspend fun update(
         @Path("register") register: Long,
         @Body address: AddressDto
     ): AddressDto
 
-    @DELETE("api/addresses/{register}")
+    @DELETE("api/address/{register}")
     suspend fun delete(
         @Path("register") register: Long
     )

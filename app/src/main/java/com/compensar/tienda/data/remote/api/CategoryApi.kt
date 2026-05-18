@@ -10,26 +10,26 @@ import retrofit2.http.Path
 
 interface CategoryApi {
 
-    @GET("api/categories")
+    @GET("api/category")
     suspend fun getAll(): List<CategoryDto>
 
-    @GET("api/categories/{register}")
+    @GET("api/category/{register}")
     suspend fun getByRegister(
         @Path("register") register: Long
     ): CategoryDto
 
-    @POST("api/categories")
+    @POST("api/category")
     suspend fun insert(
         @Body category: CategoryDto
     ): CategoryDto
 
-    @PUT("api/categories/{register}")
+    @PUT("api/category/{register}")
     suspend fun update(
         @Path("register") register: Long,
         @Body category: CategoryDto
     ): CategoryDto
 
-    @DELETE("api/categories/{register}")
+    @DELETE("api/category/{register}")
     suspend fun delete(
         @Path("register") register: Long
     )

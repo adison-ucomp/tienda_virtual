@@ -10,26 +10,26 @@ import retrofit2.http.Path
 
 interface GatewayApi {
 
-    @GET("api/gateways")
+    @GET("api/gateway")
     suspend fun getAll(): List<GatewayDto>
 
-    @GET("api/gateways/{register}")
+    @GET("api/gateway/{register}")
     suspend fun getByRegister(
         @Path("register") register: Long
     ): GatewayDto
 
-    @POST("api/gateways")
+    @POST("api/gateway")
     suspend fun insert(
         @Body gateway: GatewayDto
     ): GatewayDto
 
-    @PUT("api/gateways/{register}")
+    @PUT("api/gateway/{register}")
     suspend fun update(
         @Path("register") register: Long,
         @Body gateway: GatewayDto
     ): GatewayDto
 
-    @DELETE("api/gateways/{register}")
+    @DELETE("api/gateway/{register}")
     suspend fun delete(
         @Path("register") register: Long
     )

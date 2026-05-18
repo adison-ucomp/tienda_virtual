@@ -1,21 +1,164 @@
 package com.compensar.tienda.ui.model.category
 
+import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Typeface
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.view.Gravity
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
+import com.compensar.tienda.domain.model.CategoryModel
+import com.google.firebase.firestore.FirebaseFirestore
 
 class CategorySelectActivity : AppCompatActivity() {
+
+    private lateinit var categoryListContainer: LinearLayout
+    private lateinit var categoryAddBtn: LinearLayout
+
+    private val db = FirebaseFirestore.getInstance()
+    private val collection = db.collection("category")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.category_select)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        setContentView(R.layout.model_category_select)
+
+        categoryListContainer = findViewById(R.id.categoryListContainer)
+        categoryAddBtn = findViewById(R.id.categoryAddBtn)
+
+        categoryAddBtn.setOnClickListener {
+            val intent = Intent(this, CategoryCreateActivity::class.java)
+            startActivity(intent)
         }
+
+        loadDataBase()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadDataBase()
+    }
+
+    private fun loadDataBase() {
+        collection
+            .get()
+            .addOnSuccessListener { result ->
+                categoryListContainer.removeAllViews()
+
+                val categories = result.documents.mapNotNull { document ->
+                    document.toObject(CategoryModel::class.java)
+                }.sortedBy { it.register }
+
+                categories.forEach { category ->
+                    categoryListContainer.addView(loadCard(category))
+                }
+            }
+            .addOnFailureListener { exception ->
+                exception.printStackTrace()
+            }
+    }
+
+    private fun loadCard(category: CategoryModel): CardView {
+        val cardView = CardView(this).apply {
+            radius = dp(18).toFloat()
+            cardElevation = dp(6).toFloat()
+            setCardBackgroundColor(getColor(R.color.white))
+
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            ).apply {
+                setMargins(dp(4), 0, dp(4), dp(16))
+            }
+        }
+
+        val mainRow = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(dp(16), dp(16), dp(16), dp(16))
+        }
+
+        val textContainer = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            layoutParams = LinearLayout.LayoutParams(
+                0,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                1f
+            )
+        }
+
+        val txtId = TextView(this).apply {
+            text = "Registro: ${category.register}"
+            textSize = 14f
+            setTextColor(getColor(R.color.black))
+            setTypeface(null, Typeface.BOLD)
+        }
+
+        val txtName = TextView(this).apply {
+            text = category.name ?: ""
+            textSize = 14f
+            setTextColor(getColor(R.color.black))
+            setTypeface(null, Typeface.BOLD)
+            setPadding(0, dp(6), 0, 0)
+        }
+
+        textContainer.addView(txtId)
+        textContainer.addView(txtName)
+
+        val buttonContainer = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            gravity = Gravity.CENTER
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+        }
+
+        val btnEdit = ImageView(this).apply {
+            setImageResource(R.drawable.ic_edit)
+            layoutParams = LinearLayout.LayoutParams(dp(28), dp(28)).apply {
+                setMargins(0, 0, 0, dp(16))
+            }
+
+            setOnClickListener {
+                val intent = Intent(this@CategorySelectActivity, CategoryUpdateActivity::class.java)
+                intent.putExtra("register", category.register)
+                startActivity(intent)
+            }
+        }
+
+        val btnDelete = ImageView(this).apply {
+            setImageResource(R.drawable.ic_delete)
+            layoutParams = LinearLayout.LayoutParams(dp(28), dp(28)).apply {
+                setMargins(0, 0, 0, dp(16))
+            }
+
+            setOnClickListener {
+                val intent = Intent(this@CategorySelectActivity, CategoryDeleteActivity::class.java)
+                intent.putExtra("register", category.register)
+                startActivity(intent)
+            }
+        }
+
+        buttonContainer.addView(btnEdit)
+        buttonContainer.addView(btnDelete)
+
+        mainRow.addView(textContainer)
+        mainRow.addView(buttonContainer)
+
+        cardView.addView(mainRow)
+
+        return cardView
+    }
+
+    private fun dp(value: Int): Int {
+        return (value * resources.displayMetrics.density).toInt()
     }
 }

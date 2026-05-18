@@ -10,31 +10,31 @@ import retrofit2.http.Path
 
 interface SpecifyApi {
 
-    @GET("api/specifications")
+    @GET("api/specify")
     suspend fun getAll(): List<SpecifyDto>
 
-    @GET("api/specifications/{register}")
+    @GET("api/specify/{register}")
     suspend fun getByRegister(
         @Path("register") register: Long
     ): SpecifyDto
 
-    @GET("api/specifications/product/{idProduct}")
+    @GET("api/specify/product/{idProduct}")
     suspend fun getByProduct(
         @Path("idProduct") idProduct: Long
     ): List<SpecifyDto>
 
-    @POST("api/specifications")
+    @POST("api/specify")
     suspend fun insert(
         @Body specify: SpecifyDto
     ): SpecifyDto
 
-    @PUT("api/specifications/{register}")
+    @PUT("api/specify/{register}")
     suspend fun update(
         @Path("register") register: Long,
         @Body specify: SpecifyDto
     ): SpecifyDto
 
-    @DELETE("api/specifications/{register}")
+    @DELETE("api/specify/{register}")
     suspend fun delete(
         @Path("register") register: Long
     )

@@ -10,31 +10,31 @@ import retrofit2.http.Path
 
 interface ShopApi {
 
-    @GET("api/shops")
+    @GET("api/shop")
     suspend fun getAll(): List<ShopDto>
 
-    @GET("api/shops/{register}")
+    @GET("api/shop/{register}")
     suspend fun getByRegister(
         @Path("register") register: Long
     ): ShopDto
 
-    @GET("api/shops/seller/{idSeller}")
+    @GET("api/shop/seller/{idSeller}")
     suspend fun getBySeller(
         @Path("idSeller") idSeller: Long
     ): List<ShopDto>
 
-    @POST("api/shops")
+    @POST("api/shop")
     suspend fun insert(
         @Body shop: ShopDto
     ): ShopDto
 
-    @PUT("api/shops/{register}")
+    @PUT("api/shop/{register}")
     suspend fun update(
         @Path("register") register: Long,
         @Body shop: ShopDto
     ): ShopDto
 
-    @DELETE("api/shops/{register}")
+    @DELETE("api/shop/{register}")
     suspend fun delete(
         @Path("register") register: Long
     )

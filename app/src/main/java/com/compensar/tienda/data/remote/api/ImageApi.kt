@@ -10,31 +10,31 @@ import retrofit2.http.Path
 
 interface ImageApi {
 
-    @GET("api/images")
+    @GET("api/image")
     suspend fun getAll(): List<ImageDto>
 
-    @GET("api/images/{register}")
+    @GET("api/image/{register}")
     suspend fun getByRegister(
         @Path("register") register: Long
     ): ImageDto
 
-    @GET("api/images/product/{idProduct}")
+    @GET("api/image/product/{idProduct}")
     suspend fun getByProduct(
         @Path("idProduct") idProduct: Long
     ): List<ImageDto>
 
-    @POST("api/images")
+    @POST("api/image")
     suspend fun insert(
         @Body image: ImageDto
     ): ImageDto
 
-    @PUT("api/images/{register}")
+    @PUT("api/image/{register}")
     suspend fun update(
         @Path("register") register: Long,
         @Body image: ImageDto
     ): ImageDto
 
-    @DELETE("api/images/{register}")
+    @DELETE("api/image/{register}")
     suspend fun delete(
         @Path("register") register: Long
     )

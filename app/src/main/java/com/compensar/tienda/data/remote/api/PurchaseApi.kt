@@ -10,41 +10,41 @@ import retrofit2.http.Path
 
 interface PurchaseApi {
 
-    @GET("api/purchases")
+    @GET("api/purchase")
     suspend fun getAll(): List<PurchaseDto>
 
-    @GET("api/purchases/{register}")
+    @GET("api/purchase/{register}")
     suspend fun getByRegister(
         @Path("register") register: Long
     ): PurchaseDto
 
-    @GET("api/purchases/user/{idUser}")
+    @GET("api/purchase/user/{idUser}")
     suspend fun getByUser(
         @Path("idUser") idUser: Long
     ): List<PurchaseDto>
 
-    @GET("api/purchases/product/{idProduct}")
+    @GET("api/purchase/product/{idProduct}")
     suspend fun getByProduct(
         @Path("idProduct") idProduct: Long
     ): List<PurchaseDto>
 
-    @GET("api/purchases/date/{date}")
+    @GET("api/purchase/date/{date}")
     suspend fun getByDate(
         @Path("date") date: String
     ): List<PurchaseDto>
 
-    @POST("api/purchases")
+    @POST("api/purchase")
     suspend fun insert(
         @Body purchase: PurchaseDto
     ): PurchaseDto
 
-    @PUT("api/purchases/{register}")
+    @PUT("api/purchase/{register}")
     suspend fun update(
         @Path("register") register: Long,
         @Body purchase: PurchaseDto
     ): PurchaseDto
 
-    @DELETE("api/purchases/{register}")
+    @DELETE("api/purchase/{register}")
     suspend fun delete(
         @Path("register") register: Long
     )

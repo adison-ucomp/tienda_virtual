@@ -11,41 +11,41 @@ import retrofit2.http.Query
 
 interface ProductApi {
 
-    @GET("api/products")
+    @GET("api/product")
     suspend fun getAll(): List<ProductDto>
 
-    @GET("api/products/{register}")
+    @GET("api/product/{register}")
     suspend fun getByRegister(
         @Path("register") register: Long
     ): ProductDto
 
-    @GET("api/products/category/{idCategory}")
+    @GET("api/product/category/{idCategory}")
     suspend fun getByCategory(
         @Path("idCategory") idCategory: Long
     ): List<ProductDto>
 
-    @GET("api/products/shop/{idShop}")
+    @GET("api/product/shop/{idShop}")
     suspend fun getByShop(
         @Path("idShop") idShop: Long
     ): List<ProductDto>
 
-    @GET("api/products/search")
+    @GET("api/product/search")
     suspend fun searchByName(
         @Query("name") name: String
     ): List<ProductDto>
 
-    @POST("api/products")
+    @POST("api/product")
     suspend fun insert(
         @Body product: ProductDto
     ): ProductDto
 
-    @PUT("api/products/{register}")
+    @PUT("api/product/{register}")
     suspend fun update(
         @Path("register") register: Long,
         @Body product: ProductDto
     ): ProductDto
 
-    @DELETE("api/products/{register}")
+    @DELETE("api/product/{register}")
     suspend fun delete(
         @Path("register") register: Long
     )

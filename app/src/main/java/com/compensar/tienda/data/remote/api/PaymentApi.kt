@@ -10,26 +10,26 @@ import retrofit2.http.Path
 
 interface PaymentApi {
 
-    @GET("api/payments")
+    @GET("api/payment")
     suspend fun getAll(): List<PaymentDto>
 
-    @GET("api/payments/{register}")
+    @GET("api/payment/{register}")
     suspend fun getByRegister(
         @Path("register") register: Long
     ): PaymentDto
 
-    @POST("api/payments")
+    @POST("api/payment")
     suspend fun insert(
         @Body payment: PaymentDto
     ): PaymentDto
 
-    @PUT("api/payments/{register}")
+    @PUT("api/payment/{register}")
     suspend fun update(
         @Path("register") register: Long,
         @Body payment: PaymentDto
     ): PaymentDto
 
-    @DELETE("api/payments/{register}")
+    @DELETE("api/payment/{register}")
     suspend fun delete(
         @Path("register") register: Long
     )

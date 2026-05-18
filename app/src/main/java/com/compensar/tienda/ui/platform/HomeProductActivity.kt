@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
+import com.compensar.tienda.ui.model.category.CategorySelectActivity
 
 class HomeProductActivity : AppCompatActivity() {
 
@@ -71,8 +72,13 @@ class HomeProductActivity : AppCompatActivity() {
             Toast.makeText(this, "Menú", Toast.LENGTH_SHORT).show()
         }*/
 
-        btnCart.setOnClickListener {
+        /*btnCart.setOnClickListener {
             val intent = Intent(this, HomeLoginActivity::class.java)
+            startActivity(intent)
+        }*/
+
+        btnCart.setOnClickListener {
+            val intent = Intent(this, CategorySelectActivity::class.java)
             startActivity(intent)
         }
 
