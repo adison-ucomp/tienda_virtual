@@ -16,7 +16,6 @@ class PaymentUpdateActivity : AppCompatActivity() {
     private lateinit var actionCancel: Button
     private lateinit var actionExecute: Button
 
-    private lateinit var fieldRegister: EditText
     private lateinit var fieldName: EditText
 
     private val db = FirebaseFirestore.getInstance()
@@ -41,7 +40,6 @@ class PaymentUpdateActivity : AppCompatActivity() {
         actionReturn = findViewById(R.id.actionReturn)
         actionCancel = findViewById(R.id.actionCancel)
         actionExecute = findViewById(R.id.actionExecute)
-        fieldRegister = findViewById(R.id.fieldRegister)
         fieldName = findViewById(R.id.fieldName)
     }
 
@@ -77,7 +75,6 @@ class PaymentUpdateActivity : AppCompatActivity() {
 
     private fun showRegister() {
         val current = data ?: return
-        fieldRegister.setText(current.register.toString())
         fieldName.setText(current.name.toString())
     }
 

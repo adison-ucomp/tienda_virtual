@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.compensar.tienda.domain.model.CategoryModel
 import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import android.graphics.Bitmap
 import android.net.Uri
 import android.view.View
@@ -29,13 +30,14 @@ class CategoryCreateActivity : AppCompatActivity() {
     private lateinit var actionGallery: Button
     private lateinit var actionCamera: Button
     
-    private lateinit var fieldRegister: EditText
     private lateinit var fieldName: EditText
     private lateinit var fieldStorefire: EditText
     private lateinit var imagePreview: ImageView
 
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("category")
+
+    private var generatedRegister: Long? = null
 
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uploadImageFromGallery(uri)
@@ -54,6 +56,7 @@ class CategoryCreateActivity : AppCompatActivity() {
         initViews()
         displayImagePreview(null)
         initEvents()
+        loadNextRegister()
     }
 
     private fun initViews() {
@@ -64,7 +67,6 @@ class CategoryCreateActivity : AppCompatActivity() {
         actionGallery = findViewById(R.id.actionGallery)
         actionCamera = findViewById(R.id.actionCamera)
 
-        fieldRegister = findViewById(R.id.fieldRegister)
         fieldName = findViewById(R.id.fieldName)
         fieldStorefire = findViewById(R.id.fieldStorefire)
         imagePreview = findViewById(R.id.imagePreview)
@@ -99,24 +101,19 @@ class CategoryCreateActivity : AppCompatActivity() {
     }
 
     private fun actionOperate() {
-        val registerText = fieldRegister.text.toString().trim()
         val name = fieldName.text.toString().trim()
         val storefire = fieldStorefire.text.toString().trim().ifEmpty { null }
-
-        if (registerText.isEmpty()) {
-            Toast.makeText(this, "Debes ingresar el ID", Toast.LENGTH_SHORT).show()
-            return
-        }
 
         if (name.isEmpty()) {
             Toast.makeText(this, "Debes ingresar el nombre", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val register = registerText.toLongOrNull()
+        val register = generatedRegister
 
         if (register == null || register <= 0) {
-            Toast.makeText(this, "El ID no es válido", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "No fue posible generar el ID automático", Toast.LENGTH_SHORT).show()
+            loadNextRegister()
             return
         }
 
@@ -130,13 +127,38 @@ class CategoryCreateActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
-                    Toast.makeText(this, "Ya existe una categoría con ese ID", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "El ID automático ya existe. Intentando generar otro ID.", Toast.LENGTH_SHORT).show()
+                    loadNextRegister()
                 } else {
                     saveCategory(category)
                 }
             }
             .addOnFailureListener { exception ->
                 Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_LONG).show()
+                exception.printStackTrace()
+            }
+    }
+
+    private fun loadNextRegister() {
+        actionExecute.isEnabled = false
+
+        collection
+            .orderBy("register", Query.Direction.DESCENDING)
+            .limit(1)
+            .get()
+            .addOnSuccessListener { result ->
+                val lastRegister = result.documents
+                    .firstOrNull()
+                    ?.getLong("register")
+                    ?: 0L
+
+                generatedRegister = lastRegister + 1L
+                actionExecute.isEnabled = true
+            }
+            .addOnFailureListener { exception ->
+                generatedRegister = null
+                actionExecute.isEnabled = true
+                Toast.makeText(this, "Error al generar ID automático: ${exception.message}", Toast.LENGTH_LONG).show()
                 exception.printStackTrace()
             }
     }
@@ -223,11 +245,11 @@ class CategoryCreateActivity : AppCompatActivity() {
     }
 
     private fun getRegisterForImageUpload(): Long? {
-        val registerText = fieldRegister.text.toString().trim()
-        val register = registerText.toLongOrNull()
+        val register = generatedRegister
 
         if (register == null || register <= 0) {
-            Toast.makeText(this, "Debes ingresar un ID válido antes de cargar la imagen", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Espera a que se genere el ID automático antes de cargar la imagen", Toast.LENGTH_SHORT).show()
+            loadNextRegister()
             return null
         }
 

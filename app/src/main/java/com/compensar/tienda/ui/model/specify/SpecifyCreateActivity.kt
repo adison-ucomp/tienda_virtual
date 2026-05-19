@@ -15,6 +15,7 @@ import com.compensar.tienda.domain.model.SpecifyModel
 import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
 import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 
 class SpecifyCreateActivity : AppCompatActivity() {
     private lateinit var actionHome: LinearLayout
@@ -22,13 +23,14 @@ class SpecifyCreateActivity : AppCompatActivity() {
     private lateinit var actionCancel: Button
     private lateinit var actionExecute: Button
 
-    private lateinit var fieldRegister: EditText
     private lateinit var fieldName: EditText
     private lateinit var fieldDetail: EditText
     private lateinit var fieldIdProduct: Spinner
 
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("specify")
+
+    private var generatedRegister: Long? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +40,7 @@ class SpecifyCreateActivity : AppCompatActivity() {
         initViews()
         initEvents()
         loadSelectors()
+        loadNextRegister()
     }
 
     private fun initViews() {
@@ -46,7 +49,6 @@ class SpecifyCreateActivity : AppCompatActivity() {
         actionCancel = findViewById(R.id.actionCancel)
         actionExecute = findViewById(R.id.actionExecute)
 
-        fieldRegister = findViewById(R.id.fieldRegister)
         fieldName = findViewById(R.id.fieldName)
         fieldDetail = findViewById(R.id.fieldDetail)
         fieldIdProduct = findViewById(R.id.fieldIdProduct)
@@ -75,17 +77,11 @@ class SpecifyCreateActivity : AppCompatActivity() {
     }
 
     private fun actionOperate() {
-        val registerText = fieldRegister.text.toString().trim()
-
-        if (registerText.isEmpty()) {
-            Toast.makeText(this, "Debes ingresar el ID", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val register = registerText.toLongOrNull()
+        val register = generatedRegister
 
         if (register == null || register <= 0) {
-            Toast.makeText(this, "El ID no es válido", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "No fue posible generar el ID automático", Toast.LENGTH_SHORT).show()
+            loadNextRegister()
             return
         }
 
@@ -115,13 +111,38 @@ class SpecifyCreateActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
-                    Toast.makeText(this, "Ya existe un registro con ese ID", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "El ID automático ya existe. Intentando generar otro ID.", Toast.LENGTH_SHORT).show()
+                    loadNextRegister()
                 } else {
                     saveRegister(data)
                 }
             }
             .addOnFailureListener { exception ->
                 Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_LONG).show()
+                exception.printStackTrace()
+            }
+    }
+
+    private fun loadNextRegister() {
+        actionExecute.isEnabled = false
+
+        collection
+            .orderBy("register", Query.Direction.DESCENDING)
+            .limit(1)
+            .get()
+            .addOnSuccessListener { result ->
+                val lastRegister = result.documents
+                    .firstOrNull()
+                    ?.getLong("register")
+                    ?: 0L
+
+                generatedRegister = lastRegister + 1L
+                actionExecute.isEnabled = true
+            }
+            .addOnFailureListener { exception ->
+                generatedRegister = null
+                actionExecute.isEnabled = true
+                Toast.makeText(this, "Error al generar ID automático: ${exception.message}", Toast.LENGTH_LONG).show()
                 exception.printStackTrace()
             }
     }

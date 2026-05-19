@@ -22,7 +22,6 @@ class SellerUpdateActivity : AppCompatActivity() {
     private lateinit var actionCancel: Button
     private lateinit var actionExecute: Button
 
-    private lateinit var fieldRegister: EditText
     private lateinit var fieldCompany: EditText
     private lateinit var fieldNit: EditText
     private lateinit var fieldAddress: EditText
@@ -52,7 +51,6 @@ class SellerUpdateActivity : AppCompatActivity() {
         actionCancel = findViewById(R.id.actionCancel)
         actionExecute = findViewById(R.id.actionExecute)
 
-        fieldRegister = findViewById(R.id.fieldRegister)
         fieldCompany = findViewById(R.id.fieldCompany)
         fieldNit = findViewById(R.id.fieldNit)
         fieldAddress = findViewById(R.id.fieldAddress)
@@ -97,8 +95,6 @@ class SellerUpdateActivity : AppCompatActivity() {
 
     private fun showRegister() {
         val currentData = currentData ?: return
-
-        fieldRegister.setText(currentData.register.toString())
         fieldCompany.setText(currentData.company?.toString() ?: "")
         fieldNit.setText(currentData.nit?.toString() ?: "")
         fieldAddress.setText(currentData.address?.toString() ?: "")

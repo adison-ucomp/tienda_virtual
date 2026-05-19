@@ -22,7 +22,6 @@ class AddressUpdateActivity : AppCompatActivity() {
     private lateinit var actionCancel: Button
     private lateinit var actionExecute: Button
 
-    private lateinit var fieldRegister: EditText
     private lateinit var fieldAddress: EditText
     private lateinit var fieldIdUser: Spinner
 
@@ -50,7 +49,6 @@ class AddressUpdateActivity : AppCompatActivity() {
         actionCancel = findViewById(R.id.actionCancel)
         actionExecute = findViewById(R.id.actionExecute)
 
-        fieldRegister = findViewById(R.id.fieldRegister)
         fieldAddress = findViewById(R.id.fieldAddress)
         fieldIdUser = findViewById(R.id.fieldIdUser)
     }
@@ -93,8 +91,6 @@ class AddressUpdateActivity : AppCompatActivity() {
 
     private fun showRegister() {
         val currentData = currentData ?: return
-
-        fieldRegister.setText(currentData.register.toString())
         fieldAddress.setText(currentData.address?.toString() ?: "")
 
         FirestoreSelectHelper.load(

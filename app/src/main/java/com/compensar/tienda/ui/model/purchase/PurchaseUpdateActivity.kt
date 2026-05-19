@@ -22,7 +22,6 @@ class PurchaseUpdateActivity : AppCompatActivity() {
     private lateinit var actionCancel: Button
     private lateinit var actionExecute: Button
 
-    private lateinit var fieldRegister: EditText
     private lateinit var fieldDate: EditText
     private lateinit var fieldHour: EditText
     private lateinit var fieldAmount: EditText
@@ -57,7 +56,6 @@ class PurchaseUpdateActivity : AppCompatActivity() {
         actionCancel = findViewById(R.id.actionCancel)
         actionExecute = findViewById(R.id.actionExecute)
 
-        fieldRegister = findViewById(R.id.fieldRegister)
         fieldDate = findViewById(R.id.fieldDate)
         fieldHour = findViewById(R.id.fieldHour)
         fieldAmount = findViewById(R.id.fieldAmount)
@@ -107,8 +105,6 @@ class PurchaseUpdateActivity : AppCompatActivity() {
 
     private fun showRegister() {
         val currentData = currentData ?: return
-
-        fieldRegister.setText(currentData.register.toString())
         fieldDate.setText(currentData.date?.toString() ?: "")
         fieldHour.setText(currentData.hour?.toString() ?: "")
         fieldAmount.setText(currentData.amount?.toString() ?: "")

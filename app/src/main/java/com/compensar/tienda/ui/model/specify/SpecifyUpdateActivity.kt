@@ -22,7 +22,6 @@ class SpecifyUpdateActivity : AppCompatActivity() {
     private lateinit var actionCancel: Button
     private lateinit var actionExecute: Button
 
-    private lateinit var fieldRegister: EditText
     private lateinit var fieldName: EditText
     private lateinit var fieldDetail: EditText
     private lateinit var fieldIdProduct: Spinner
@@ -51,7 +50,6 @@ class SpecifyUpdateActivity : AppCompatActivity() {
         actionCancel = findViewById(R.id.actionCancel)
         actionExecute = findViewById(R.id.actionExecute)
 
-        fieldRegister = findViewById(R.id.fieldRegister)
         fieldName = findViewById(R.id.fieldName)
         fieldDetail = findViewById(R.id.fieldDetail)
         fieldIdProduct = findViewById(R.id.fieldIdProduct)
@@ -95,8 +93,6 @@ class SpecifyUpdateActivity : AppCompatActivity() {
 
     private fun showRegister() {
         val currentData = currentData ?: return
-
-        fieldRegister.setText(currentData.register.toString())
         fieldName.setText(currentData.name?.toString() ?: "")
         fieldDetail.setText(currentData.detail?.toString() ?: "")
 

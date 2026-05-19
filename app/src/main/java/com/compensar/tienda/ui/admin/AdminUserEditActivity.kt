@@ -23,7 +23,6 @@ import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.model.common.FirebaseStorageImageHelper
 import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
 import com.google.firebase.firestore.FirebaseFirestore
-import java.security.MessageDigest
 
 class AdminUserEditActivity : AppCompatActivity() {
     private lateinit var actionReturn: TextView
@@ -32,11 +31,9 @@ class AdminUserEditActivity : AppCompatActivity() {
     private lateinit var actionGallery: Button
     private lateinit var actionCamera: Button
 
-    private lateinit var fieldRegister: EditText
     private lateinit var fieldNames: EditText
     private lateinit var fieldSurnames: EditText
     private lateinit var fieldEmail: EditText
-    private lateinit var fieldPassword: EditText
     private lateinit var fieldStorefire: EditText
     private lateinit var imagePreview: ImageView
     private lateinit var fieldIdRole: Spinner
@@ -82,11 +79,9 @@ class AdminUserEditActivity : AppCompatActivity() {
         actionGallery = findViewById(R.id.actionGallery)
         actionCamera = findViewById(R.id.actionCamera)
 
-        fieldRegister = findViewById(R.id.fieldRegister)
         fieldNames = findViewById(R.id.fieldNames)
         fieldSurnames = findViewById(R.id.fieldSurnames)
         fieldEmail = findViewById(R.id.fieldEmail)
-        fieldPassword = findViewById(R.id.fieldPassword)
         fieldStorefire = findViewById(R.id.fieldStorefire)
         imagePreview = findViewById(R.id.imagePreview)
         fieldIdRole = findViewById(R.id.fieldIdRole)
@@ -145,14 +140,11 @@ class AdminUserEditActivity : AppCompatActivity() {
     private fun showRegister() {
         val currentData = currentData ?: return
 
-        fieldRegister.setText(currentData.register.toString())
         fieldNames.setText(currentData.names?.toString() ?: "")
         fieldSurnames.setText(currentData.srnms?.toString() ?: "")
         fieldEmail.setText(currentData.email?.toString() ?: "")
         fieldStorefire.setText(currentData.storefire?.toString() ?: "")
         displayImagePreview(currentData.storefire?.toString())
-        fieldPassword.setText("")
-        fieldPassword.hint = "Dejar vacío para conservar la contraseña actual"
 
         configureSellerFields(currentData.idRole == SELLER_ROLE_ID, clearFields = false)
         if (currentData.idRole == SELLER_ROLE_ID) {
@@ -195,7 +187,6 @@ class AdminUserEditActivity : AppCompatActivity() {
         val names = fieldNames.text.toString().trim()
         val srnms = fieldSurnames.text.toString().trim()
         val email = fieldEmail.text.toString().trim()
-        val passwordText = fieldPassword.text.toString().trim()
 
         if (names.isEmpty()) {
             Toast.makeText(this, "Debes ingresar names", Toast.LENGTH_SHORT).show()
@@ -234,7 +225,7 @@ class AdminUserEditActivity : AppCompatActivity() {
             names = names,
             srnms = srnms,
             email = email,
-            password = if (passwordText.isEmpty()) currentData.password else encryptPassword(passwordText),
+            password = currentData.password,
             storefire = storefire,
             idRole = idRole
         )
@@ -350,14 +341,6 @@ class AdminUserEditActivity : AppCompatActivity() {
         return FirestoreSelectHelper.getSelectedId(fieldIdRole) == SELLER_ROLE_ID
     }
 
-    private fun encryptPassword(password: String): String {
-        val salt = "com.compensar.tienda.user.password"
-        val bytes = MessageDigest.getInstance("SHA-256")
-            .digest((salt + password).toByteArray(Charsets.UTF_8))
-
-        return bytes.joinToString("") { "%02x".format(it) }
-    }
-
     private fun uploadImageFromGallery(uri: Uri?) {
         if (uri == null) {
             Toast.makeText(this, "No se seleccionó imagen", Toast.LENGTH_SHORT).show()
@@ -426,11 +409,8 @@ class AdminUserEditActivity : AppCompatActivity() {
     }
 
     private fun getRegisterForImageUpload(): Long? {
-        val registerText = fieldRegister.text.toString().trim()
-        val register = registerText.toLongOrNull()
-
-        if (register == null || register <= 0) {
-            Toast.makeText(this, "Debes ingresar un ID válido antes de cargar la imagen", Toast.LENGTH_SHORT).show()
+        if (register <= 0) {
+            Toast.makeText(this, "Registro no válido para cargar la imagen", Toast.LENGTH_SHORT).show()
             return null
         }
 

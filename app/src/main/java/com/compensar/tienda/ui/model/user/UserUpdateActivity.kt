@@ -32,7 +32,6 @@ class UserUpdateActivity : AppCompatActivity() {
     private lateinit var actionGallery: Button
     private lateinit var actionCamera: Button
 
-    private lateinit var fieldRegister: EditText
     private lateinit var fieldNames: EditText
     private lateinit var fieldSurnames: EditText
     private lateinit var fieldEmail: EditText
@@ -76,7 +75,6 @@ class UserUpdateActivity : AppCompatActivity() {
         actionGallery = findViewById(R.id.actionGallery)
         actionCamera = findViewById(R.id.actionCamera)
 
-        fieldRegister = findViewById(R.id.fieldRegister)
         fieldNames = findViewById(R.id.fieldNames)
         fieldSurnames = findViewById(R.id.fieldSurnames)
         fieldEmail = findViewById(R.id.fieldEmail)
@@ -132,8 +130,6 @@ class UserUpdateActivity : AppCompatActivity() {
 
     private fun showRegister() {
         val currentData = currentData ?: return
-
-        fieldRegister.setText(currentData.register.toString())
         fieldNames.setText(currentData.names?.toString() ?: "")
         fieldSurnames.setText(currentData.srnms?.toString() ?: "")
         fieldEmail.setText(currentData.email?.toString() ?: "")
@@ -280,11 +276,8 @@ class UserUpdateActivity : AppCompatActivity() {
     }
 
     private fun getRegisterForImageUpload(): Long? {
-        val registerText = fieldRegister.text.toString().trim()
-        val register = registerText.toLongOrNull()
-
-        if (register == null || register <= 0) {
-            Toast.makeText(this, "Debes ingresar un ID válido antes de cargar la imagen", Toast.LENGTH_SHORT).show()
+        if (register <= 0) {
+            Toast.makeText(this, "Registro no válido para cargar la imagen", Toast.LENGTH_SHORT).show()
             return null
         }
 
