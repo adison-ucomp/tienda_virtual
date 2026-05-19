@@ -4,18 +4,21 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
+import com.bumptech.glide.Glide
 import com.compensar.tienda.domain.model.ProductModel
 import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
 import com.compensar.tienda.ui.platform.DashboardAdminActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import android.graphics.Bitmap
 import android.net.Uri
+import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import com.compensar.tienda.ui.model.common.FirebaseStorageImageHelper
 
@@ -33,6 +36,7 @@ class ProductCreateActivity : AppCompatActivity() {
     private lateinit var fieldStock: EditText
     private lateinit var fieldPrice: EditText
     private lateinit var fieldStorefire: EditText
+    private lateinit var imagePreview: ImageView
     private lateinit var fieldIdCategory: Spinner
     private lateinit var fieldIdShop: Spinner
 
@@ -53,6 +57,7 @@ class ProductCreateActivity : AppCompatActivity() {
         setContentView(R.layout.model_product_create)
 
         initViews()
+        displayImagePreview(null)
         initEvents()
         loadSelectors()
     }
@@ -71,6 +76,7 @@ class ProductCreateActivity : AppCompatActivity() {
         fieldStock = findViewById(R.id.fieldStock)
         fieldPrice = findViewById(R.id.fieldPrice)
         fieldStorefire = findViewById(R.id.fieldStorefire)
+        imagePreview = findViewById(R.id.imagePreview)
         fieldIdCategory = findViewById(R.id.fieldIdCategory)
         fieldIdShop = findViewById(R.id.fieldIdShop)
     }
@@ -231,6 +237,7 @@ class ProductCreateActivity : AppCompatActivity() {
             uri = uri,
             onSuccess = { url ->
                 fieldStorefire.setText(url)
+                displayImagePreview(url)
                 Toast.makeText(this, "Imagen cargada correctamente", Toast.LENGTH_SHORT).show()
             },
             onFailure = { exception ->
@@ -256,6 +263,7 @@ class ProductCreateActivity : AppCompatActivity() {
             bitmap = bitmap,
             onSuccess = { url ->
                 fieldStorefire.setText(url)
+                displayImagePreview(url)
                 Toast.makeText(this, "Imagen cargada correctamente", Toast.LENGTH_SHORT).show()
             },
             onFailure = { exception ->
@@ -263,6 +271,22 @@ class ProductCreateActivity : AppCompatActivity() {
                 exception.printStackTrace()
             }
         )
+    }
+
+
+    private fun displayImagePreview(url: String?) {
+        if (url.isNullOrBlank()) {
+            imagePreview.setImageDrawable(null)
+            imagePreview.visibility = View.GONE
+            return
+        }
+
+        imagePreview.visibility = View.VISIBLE
+
+        Glide.with(this)
+            .load(url)
+            .centerCrop()
+            .into(imagePreview)
     }
 
     private fun getRegisterForImageUpload(): Long? {

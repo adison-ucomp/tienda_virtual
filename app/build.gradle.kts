@@ -64,6 +64,7 @@ dependencies {
         // implementation("com.google.firebase:firebase-analytics")
         // Firebase Storage
         implementation("com.google.firebase:firebase-storage")
+        implementation("com.github.bumptech.glide:glide:4.16.0")
 
         // Ubicación en tiempo real
         implementation("com.google.android.gms:play-services-location:21.3.0")

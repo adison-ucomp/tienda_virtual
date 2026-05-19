@@ -4,12 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
+import com.bumptech.glide.Glide
 import com.compensar.tienda.domain.model.UserModel
 import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
 import com.compensar.tienda.ui.platform.DashboardAdminActivity
@@ -17,6 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import java.security.MessageDigest
 import android.graphics.Bitmap
 import android.net.Uri
+import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import com.compensar.tienda.ui.model.common.FirebaseStorageImageHelper
 
@@ -34,6 +37,7 @@ class UserUpdateActivity : AppCompatActivity() {
     private lateinit var fieldEmail: EditText
     private lateinit var fieldPassword: EditText
     private lateinit var fieldStorefire: EditText
+    private lateinit var imagePreview: ImageView
     private lateinit var fieldIdRole: Spinner
 
     private val db = FirebaseFirestore.getInstance()
@@ -76,6 +80,7 @@ class UserUpdateActivity : AppCompatActivity() {
         fieldEmail = findViewById(R.id.fieldEmail)
         fieldPassword = findViewById(R.id.fieldPassword)
         fieldStorefire = findViewById(R.id.fieldStorefire)
+        imagePreview = findViewById(R.id.imagePreview)
         fieldIdRole = findViewById(R.id.fieldIdRole)
     }
 
@@ -131,6 +136,7 @@ class UserUpdateActivity : AppCompatActivity() {
         fieldSurnames.setText(currentData.srnms?.toString() ?: "")
         fieldEmail.setText(currentData.email?.toString() ?: "")
         fieldStorefire.setText(currentData.storefire?.toString() ?: "")
+        displayImagePreview(currentData.storefire?.toString())
         fieldPassword.setText("")
         fieldPassword.hint = "Dejar vacío para conservar la contraseña actual"
 
@@ -219,6 +225,7 @@ class UserUpdateActivity : AppCompatActivity() {
             uri = uri,
             onSuccess = { url ->
                 fieldStorefire.setText(url)
+                displayImagePreview(url)
                 Toast.makeText(this, "Imagen cargada correctamente", Toast.LENGTH_SHORT).show()
             },
             onFailure = { exception ->
@@ -244,6 +251,7 @@ class UserUpdateActivity : AppCompatActivity() {
             bitmap = bitmap,
             onSuccess = { url ->
                 fieldStorefire.setText(url)
+                displayImagePreview(url)
                 Toast.makeText(this, "Imagen cargada correctamente", Toast.LENGTH_SHORT).show()
             },
             onFailure = { exception ->
@@ -251,6 +259,22 @@ class UserUpdateActivity : AppCompatActivity() {
                 exception.printStackTrace()
             }
         )
+    }
+
+
+    private fun displayImagePreview(url: String?) {
+        if (url.isNullOrBlank()) {
+            imagePreview.setImageDrawable(null)
+            imagePreview.visibility = View.GONE
+            return
+        }
+
+        imagePreview.visibility = View.VISIBLE
+
+        Glide.with(this)
+            .load(url)
+            .centerCrop()
+            .into(imagePreview)
     }
 
     private fun getRegisterForImageUpload(): Long? {

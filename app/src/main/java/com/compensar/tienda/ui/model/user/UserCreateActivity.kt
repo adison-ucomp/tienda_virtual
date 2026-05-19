@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
+import com.bumptech.glide.Glide
 import com.compensar.tienda.domain.model.UserModel
 import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
 import com.compensar.tienda.ui.platform.DashboardAdminActivity
@@ -18,6 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import java.security.MessageDigest
 import android.graphics.Bitmap
 import android.net.Uri
+import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import com.compensar.tienda.ui.model.common.FirebaseStorageImageHelper
 
@@ -35,6 +38,7 @@ class UserCreateActivity : AppCompatActivity() {
     private lateinit var fieldEmail: EditText
     private lateinit var fieldPassword: EditText
     private lateinit var fieldStorefire: EditText
+    private lateinit var imagePreview: ImageView
     private lateinit var fieldIdRole: Spinner
 
     private val db = FirebaseFirestore.getInstance()
@@ -54,6 +58,7 @@ class UserCreateActivity : AppCompatActivity() {
         setContentView(R.layout.model_user_create)
 
         initViews()
+        displayImagePreview(null)
         initEvents()
         loadSelectors()
     }
@@ -72,6 +77,7 @@ class UserCreateActivity : AppCompatActivity() {
         fieldEmail = findViewById(R.id.fieldEmail)
         fieldPassword = findViewById(R.id.fieldPassword)
         fieldStorefire = findViewById(R.id.fieldStorefire)
+        imagePreview = findViewById(R.id.imagePreview)
         fieldIdRole = findViewById(R.id.fieldIdRole)
     }
 
@@ -218,6 +224,7 @@ class UserCreateActivity : AppCompatActivity() {
             uri = uri,
             onSuccess = { url ->
                 fieldStorefire.setText(url)
+                displayImagePreview(url)
                 Toast.makeText(this, "Imagen cargada correctamente", Toast.LENGTH_SHORT).show()
             },
             onFailure = { exception ->
@@ -243,6 +250,7 @@ class UserCreateActivity : AppCompatActivity() {
             bitmap = bitmap,
             onSuccess = { url ->
                 fieldStorefire.setText(url)
+                displayImagePreview(url)
                 Toast.makeText(this, "Imagen cargada correctamente", Toast.LENGTH_SHORT).show()
             },
             onFailure = { exception ->
@@ -250,6 +258,22 @@ class UserCreateActivity : AppCompatActivity() {
                 exception.printStackTrace()
             }
         )
+    }
+
+
+    private fun displayImagePreview(url: String?) {
+        if (url.isNullOrBlank()) {
+            imagePreview.setImageDrawable(null)
+            imagePreview.visibility = View.GONE
+            return
+        }
+
+        imagePreview.visibility = View.VISIBLE
+
+        Glide.with(this)
+            .load(url)
+            .centerCrop()
+            .into(imagePreview)
     }
 
     private fun getRegisterForImageUpload(): Long? {
