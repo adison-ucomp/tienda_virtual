@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/buyerMenu"
+    android:id="@+id/navbarBuyerSuperior"
     android:layout_width="match_parent"
     android:layout_height="76dp"
     android:background="#FFFFFF"
@@ -9,7 +9,7 @@
     android:orientation="horizontal">
 
     <LinearLayout
-        android:id="@+id/navHome"
+        android:id="@+id/actionHome"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -26,7 +26,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="INICIO"
+            android:text="Inicio"
             android:textColor="#111111"
             android:textSize="11sp"
             android:textStyle="bold" />
@@ -34,7 +34,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/navCategory"
+        android:id="@+id/actionCategory"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -51,7 +51,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="CATEGORÍAS"
+            android:text="Categorías"
             android:textColor="#111111"
             android:textSize="11sp"
             android:textStyle="bold" />
@@ -59,7 +59,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/navShopping"
+        android:id="@+id/actionShopping"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -76,7 +76,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="COMPRAS"
+            android:text="Compras"
             android:textColor="#111111"
             android:textSize="10sp"
             android:textStyle="bold" />
@@ -84,7 +84,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/navAddress"
+        android:id="@+id/actionAddress"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -101,7 +101,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="DIRECCIONES"
+            android:text="Direcciones"
             android:textColor="#111111"
             android:textSize="10sp"
             android:textStyle="bold" />
@@ -109,7 +109,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/navAccount"
+        android:id="@+id/actionAccount"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -126,7 +126,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="CUENTA"
+            android:text="Cuenta"
             android:textColor="#111111"
             android:textSize="11sp"
             android:textStyle="bold" />

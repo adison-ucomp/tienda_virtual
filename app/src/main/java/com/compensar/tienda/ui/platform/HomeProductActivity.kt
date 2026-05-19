@@ -17,11 +17,11 @@ class HomeProductActivity : AppCompatActivity() {
     // private lateinit var btnMenu: TextView
     private lateinit var btnCart: TextView
 
-    private lateinit var navHome: LinearLayout
-    private lateinit var navCategory: LinearLayout
-    private lateinit var navAccount: LinearLayout
-    private lateinit var navShopping: LinearLayout
-    private lateinit var navAddress: LinearLayout
+    private lateinit var actionHome: LinearLayout
+    private lateinit var actionCategory: LinearLayout
+    private lateinit var actionAccount: LinearLayout
+    private lateinit var actionShopping: LinearLayout
+    private lateinit var actionAddress: LinearLayout
 
     private lateinit var productOne: LinearLayout
     private lateinit var productTwo: LinearLayout
@@ -55,11 +55,11 @@ class HomeProductActivity : AppCompatActivity() {
         // btnMenu = findViewById(R.id.btnMenu)
         btnCart = findViewById(R.id.btnCart)
 
-        navHome = findViewById(R.id.navHome)
-        navCategory = findViewById(R.id.navCategory)
-        navShopping = findViewById(R.id.navShopping)
-        navAddress = findViewById(R.id.navAddress)
-        navAccount = findViewById(R.id.navAccount)
+        actionHome = findViewById(R.id.actionHome)
+        actionCategory = findViewById(R.id.actionCategory)
+        actionShopping = findViewById(R.id.actionShopping)
+        actionAddress = findViewById(R.id.actionAddress)
+        actionAccount = findViewById(R.id.actionAccount)
 
         productOne = findViewById(R.id.productOne)
         productTwo = findViewById(R.id.productTwo)
@@ -82,26 +82,26 @@ class HomeProductActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        navHome.setOnClickListener {
+        actionHome.setOnClickListener {
             Toast.makeText(this, "Inicio", Toast.LENGTH_SHORT).show()
         }
 
-        navCategory.setOnClickListener {
+        actionCategory.setOnClickListener {
             val intent = Intent(this, HomeCategoryActivity::class.java)
             startActivity(intent)
         }
 
-        navShopping.setOnClickListener {
+        actionShopping.setOnClickListener {
             val intent = Intent(this, BuyerShoppingActivity::class.java)
             startActivity(intent)
         }
 
-        navAddress.setOnClickListener {
+        actionAddress.setOnClickListener {
             val intent = Intent(this, BuyerAddressActivity::class.java)
             startActivity(intent)
         }
 
-        navAccount.setOnClickListener {
+        actionAccount.setOnClickListener {
             val intent = Intent(this, HomeLoginActivity::class.java)
             startActivity(intent)
         }

@@ -12,7 +12,7 @@
     <!-- Navbar superior -->
     <include
         android:id="@+id/includeHomeNavbar"
-        layout="@layout/navbar_home"
+        layout="@layout/navbar_buyer_superior"
         android:layout_width="0dp"
         android:layout_height="64dp"
         app:layout_constraintTop_toTopOf="parent"
@@ -319,7 +319,7 @@
     <!-- Menú inferior -->
     <include
         android:id="@+id/includeHomeInferior"
-        layout="@layout/navbar_inferior"
+        layout="@layout/navbar_buyer_inferior"
         android:layout_width="0dp"
         android:layout_height="76dp"
         app:layout_constraintBottom_toBottomOf="parent"

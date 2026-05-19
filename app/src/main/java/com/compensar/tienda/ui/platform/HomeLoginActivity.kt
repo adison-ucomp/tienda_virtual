@@ -12,11 +12,11 @@ import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
 
 class HomeLoginActivity : AppCompatActivity() {
-    private lateinit var navHome: LinearLayout
-    private lateinit var navCategory: LinearLayout
-    private lateinit var navShopping: LinearLayout
-    private lateinit var navAddress: LinearLayout
-    private lateinit var navAccount: LinearLayout
+    private lateinit var actionHome: LinearLayout
+    private lateinit var actionCategory: LinearLayout
+    private lateinit var actionShopping: LinearLayout
+    private lateinit var actionAddress: LinearLayout
+    private lateinit var actionAccount: LinearLayout
     private lateinit var actRestore: TextView
 
     private lateinit var btnRegisterBuyer: TextView
@@ -46,11 +46,11 @@ class HomeLoginActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        navHome = findViewById(R.id.navHome)
-        navCategory = findViewById(R.id.navCategory)
-        navShopping = findViewById(R.id.navShopping)
-        navAddress = findViewById(R.id.navAddress)
-        navAccount = findViewById(R.id.navAccount)
+        actionHome = findViewById(R.id.actionHome)
+        actionCategory = findViewById(R.id.actionCategory)
+        actionShopping = findViewById(R.id.actionShopping)
+        actionAddress = findViewById(R.id.actionAddress)
+        actionAccount = findViewById(R.id.actionAccount)
         actRestore = findViewById(R.id.txtForgotPassword)
 
         btnRegisterBuyer = findViewById(R.id.btnRegisterBuyer)
@@ -58,29 +58,29 @@ class HomeLoginActivity : AppCompatActivity() {
     }
 
     private fun initEvents() {
-        navHome.setOnClickListener {
+        actionHome.setOnClickListener {
             val intent = Intent(this, HomeProductActivity::class.java)
             startActivity(intent)
             finish()
         }
 
-        navCategory.setOnClickListener {
+        actionCategory.setOnClickListener {
             val intent = Intent(this, HomeCategoryActivity::class.java)
             startActivity(intent)
             finish()
         }
 
-        navShopping.setOnClickListener {
+        actionShopping.setOnClickListener {
             val intent = Intent(this, BuyerShoppingActivity::class.java)
             startActivity(intent)
         }
 
-        navAddress.setOnClickListener {
+        actionAddress.setOnClickListener {
             val intent = Intent(this, BuyerAddressActivity::class.java)
             startActivity(intent)
         }
 
-        navAccount.setOnClickListener {
+        actionAccount.setOnClickListener {
             Toast.makeText(this, "Cuenta", Toast.LENGTH_SHORT).show()
         }
 

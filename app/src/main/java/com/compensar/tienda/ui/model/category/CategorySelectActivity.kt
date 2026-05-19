@@ -19,9 +19,9 @@ import com.compensar.tienda.domain.model.CategoryModel
 import com.google.firebase.firestore.FirebaseFirestore
 
 class CategorySelectActivity : AppCompatActivity() {
-
-    private lateinit var categoryListContainer: LinearLayout
-    private lateinit var categoryAddBtn: LinearLayout
+    private lateinit var actionReturn: TextView
+    private lateinit var dataList: LinearLayout
+    private lateinit var actionNew: LinearLayout
 
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("category")
@@ -30,10 +30,15 @@ class CategorySelectActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.model_category_select)
 
-        categoryListContainer = findViewById(R.id.categoryListContainer)
-        categoryAddBtn = findViewById(R.id.categoryAddBtn)
+        actionReturn = findViewById(R.id.actionReturn)
+        dataList = findViewById(R.id.dataList)
+        actionNew = findViewById(R.id.actionNew)
 
-        categoryAddBtn.setOnClickListener {
+        actionReturn.setOnClickListener {
+            finish()
+        }
+
+        actionNew.setOnClickListener {
             val intent = Intent(this, CategoryCreateActivity::class.java)
             startActivity(intent)
         }
@@ -50,14 +55,14 @@ class CategorySelectActivity : AppCompatActivity() {
         collection
             .get()
             .addOnSuccessListener { result ->
-                categoryListContainer.removeAllViews()
+                dataList.removeAllViews()
 
                 val categories = result.documents.mapNotNull { document ->
                     document.toObject(CategoryModel::class.java)
                 }.sortedBy { it.register }
 
                 categories.forEach { category ->
-                    categoryListContainer.addView(loadCard(category))
+                    dataList.addView(loadCard(category))
                 }
             }
             .addOnFailureListener { exception ->
@@ -134,7 +139,7 @@ class CategorySelectActivity : AppCompatActivity() {
             }
         }
 
-        val btnDelete = ImageView(this).apply {
+        val btnQuit = ImageView(this).apply {
             setImageResource(R.drawable.ic_delete)
             layoutParams = LinearLayout.LayoutParams(dp(28), dp(28)).apply {
                 setMargins(0, 0, 0, dp(16))
@@ -148,7 +153,7 @@ class CategorySelectActivity : AppCompatActivity() {
         }
 
         buttonContainer.addView(btnEdit)
-        buttonContainer.addView(btnDelete)
+        buttonContainer.addView(btnQuit)
 
         mainRow.addView(textContainer)
         mainRow.addView(buttonContainer)

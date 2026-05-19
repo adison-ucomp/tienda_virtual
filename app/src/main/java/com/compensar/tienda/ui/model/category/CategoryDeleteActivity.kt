@@ -13,10 +13,12 @@ import com.compensar.tienda.domain.model.CategoryModel
 import com.google.firebase.firestore.FirebaseFirestore
 
 class CategoryDeleteActivity : AppCompatActivity() {
-    private lateinit var categoryDeleteIdTxt: TextView
-    private lateinit var categoryDeleteNameTxt: TextView
-    private lateinit var categoryBackBtn: Button
-    private lateinit var categoryDeleteBtn: Button
+    private lateinit var actionReturn: TextView
+    private lateinit var actionCancel: Button
+    private lateinit var actionExecute: Button
+
+    private lateinit var fieldRegister: TextView
+    private lateinit var fieldName: TextView
 
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("category")
@@ -32,27 +34,33 @@ class CategoryDeleteActivity : AppCompatActivity() {
 
         initViews()
         initEvents()
-        loadCategory()
+        loadRegister()
     }
 
     private fun initViews() {
-        categoryDeleteIdTxt = findViewById(R.id.categoryDeleteIdTxt)
-        categoryDeleteNameTxt = findViewById(R.id.categoryDeleteNameTxt)
-        categoryBackBtn = findViewById(R.id.categoryBackBtn)
-        categoryDeleteBtn = findViewById(R.id.categoryDeleteBtn)
+        actionReturn = findViewById(R.id.actionReturn)
+        actionCancel = findViewById(R.id.actionCancel)
+        actionExecute = findViewById(R.id.actionExecute)
+
+        fieldRegister = findViewById(R.id.fieldRegister)
+        fieldName = findViewById(R.id.fieldName)
     }
 
     private fun initEvents() {
-        categoryBackBtn.setOnClickListener {
+        actionReturn.setOnClickListener {
+            finish()
+        }
+        
+        actionCancel.setOnClickListener {
             finish()
         }
 
-        categoryDeleteBtn.setOnClickListener {
-            deleteCategory()
+        actionExecute.setOnClickListener {
+            actionOperate()
         }
     }
 
-    private fun loadCategory() {
+    private fun loadRegister() {
         if (register <= 0) {
             Toast.makeText(this, "Registro no válido", Toast.LENGTH_SHORT).show()
             finish()
@@ -64,7 +72,7 @@ class CategoryDeleteActivity : AppCompatActivity() {
             .addOnSuccessListener { document ->
                 if (document.exists()) {
                     category = document.toObject(CategoryModel::class.java)
-                    showCategory()
+                    showRegister()
                 } else {
                     Toast.makeText(this, "No se encontró la categoría", Toast.LENGTH_SHORT).show()
                     finish()
@@ -76,14 +84,14 @@ class CategoryDeleteActivity : AppCompatActivity() {
             }
     }
 
-    private fun showCategory() {
+    private fun showRegister() {
         val currentCategory = category ?: return
 
-        categoryDeleteIdTxt.text = currentCategory.register.toString()
-        categoryDeleteNameTxt.text = currentCategory.name ?: ""
+        fieldRegister.text = currentCategory.register.toString()
+        fieldName.text = currentCategory.name ?: ""
     }
 
-    private fun deleteCategory() {
+    private fun actionOperate() {
         if (register <= 0) {
             Toast.makeText(this, "Registro no válido", Toast.LENGTH_SHORT).show()
             return

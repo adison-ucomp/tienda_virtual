@@ -3,6 +3,7 @@ package com.compensar.tienda.ui.model.category
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
@@ -10,11 +11,12 @@ import com.compensar.tienda.domain.model.CategoryModel
 import com.google.firebase.firestore.FirebaseFirestore
 
 class CategoryUpdateActivity : AppCompatActivity() {
+    private lateinit var actionReturn: TextView
+    private lateinit var actionCancel: Button
+    private lateinit var actionExecute: Button
 
-    private lateinit var categoryUpdateIdTxt: EditText
-    private lateinit var categoryUpdateNameTxt: EditText
-    private lateinit var categoryUpdateBackBtn: Button
-    private lateinit var categoryUpdateSaveBtn: Button
+    private lateinit var fieldRegister: EditText
+    private lateinit var fieldName: EditText
 
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("category")
@@ -30,27 +32,33 @@ class CategoryUpdateActivity : AppCompatActivity() {
 
         initViews()
         initEvents()
-        loadCategory()
+        loadRegister()
     }
 
     private fun initViews() {
-        categoryUpdateIdTxt = findViewById(R.id.categoryUpdateIdTxt)
-        categoryUpdateNameTxt = findViewById(R.id.categoryUpdateNameTxt)
-        categoryUpdateBackBtn = findViewById(R.id.categoryUpdateBackBtn)
-        categoryUpdateSaveBtn = findViewById(R.id.categoryUpdateSaveBtn)
+        actionReturn = findViewById(R.id.actionReturn)
+        actionCancel = findViewById(R.id.actionCancel)
+        actionExecute = findViewById(R.id.actionExecute)
+
+        fieldRegister = findViewById(R.id.fieldRegister)
+        fieldName = findViewById(R.id.fieldName)
     }
 
     private fun initEvents() {
-        categoryUpdateBackBtn.setOnClickListener {
+        actionReturn.setOnClickListener {
+            finish()
+        }
+        
+        actionCancel.setOnClickListener {
             finish()
         }
 
-        categoryUpdateSaveBtn.setOnClickListener {
-            updateCategory()
+        actionExecute.setOnClickListener {
+            actionOperate()
         }
     }
 
-    private fun loadCategory() {
+    private fun loadRegister() {
         if (register <= 0) {
             Toast.makeText(this, "Registro no válido", Toast.LENGTH_SHORT).show()
             finish()
@@ -62,7 +70,7 @@ class CategoryUpdateActivity : AppCompatActivity() {
             .addOnSuccessListener { document ->
                 if (document.exists()) {
                     category = document.toObject(CategoryModel::class.java)
-                    showCategory()
+                    showRegister()
                 } else {
                     Toast.makeText(this, "No se encontró la categoría", Toast.LENGTH_SHORT).show()
                     finish()
@@ -74,15 +82,15 @@ class CategoryUpdateActivity : AppCompatActivity() {
             }
     }
 
-    private fun showCategory() {
+    private fun showRegister() {
         val currentCategory = category ?: return
 
-        categoryUpdateIdTxt.setText(currentCategory.register.toString())
-        categoryUpdateNameTxt.setText(currentCategory.name ?: "")
+        fieldRegister.setText(currentCategory.register.toString())
+        fieldName.setText(currentCategory.name ?: "")
     }
 
-    private fun updateCategory() {
-        val name = categoryUpdateNameTxt.text.toString().trim()
+    private fun actionOperate() {
+        val name = fieldName.text.toString().trim()
 
         if (name.isEmpty()) {
             Toast.makeText(this, "Debes ingresar el nombre", Toast.LENGTH_SHORT).show()

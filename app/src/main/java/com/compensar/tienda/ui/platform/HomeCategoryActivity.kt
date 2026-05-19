@@ -15,11 +15,11 @@ class HomeCategoryActivity : AppCompatActivity() {
 
     private lateinit var btnCart: TextView
 
-    private lateinit var navHome: LinearLayout
-    private lateinit var navCategory: LinearLayout
-    private lateinit var navShopping: LinearLayout
-    private lateinit var navAddress: LinearLayout
-    private lateinit var navAccount: LinearLayout
+    private lateinit var actionHome: LinearLayout
+    private lateinit var actionCategory: LinearLayout
+    private lateinit var actionShopping: LinearLayout
+    private lateinit var actionAddress: LinearLayout
+    private lateinit var actionAccount: LinearLayout
 
     private lateinit var categoryTechnology: LinearLayout
     private lateinit var categorySport: LinearLayout
@@ -50,11 +50,11 @@ class HomeCategoryActivity : AppCompatActivity() {
     private fun initViews() {
         btnCart = findViewById(R.id.btnCart)
 
-        navHome = findViewById(R.id.navHome)
-        navCategory = findViewById(R.id.navCategory)
-        navShopping = findViewById(R.id.navShopping)
-        navAddress = findViewById(R.id.navAddress)
-        navAccount = findViewById(R.id.navAccount)
+        actionHome = findViewById(R.id.actionHome)
+        actionCategory = findViewById(R.id.actionCategory)
+        actionShopping = findViewById(R.id.actionShopping)
+        actionAddress = findViewById(R.id.actionAddress)
+        actionAccount = findViewById(R.id.actionAccount)
 
         categoryTechnology = findViewById(R.id.categoryTechnology)
         categorySport = findViewById(R.id.categorySport)
@@ -66,28 +66,28 @@ class HomeCategoryActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        navHome.setOnClickListener {
+        actionHome.setOnClickListener {
             val intent = Intent(this, HomeProductActivity::class.java)
             startActivity(intent)
             finish()
         }
 
-        navCategory.setOnClickListener {
+        actionCategory.setOnClickListener {
             Toast.makeText(this, "Categorías", Toast.LENGTH_SHORT).show()
         }
 
-        navShopping.setOnClickListener {
+        actionShopping.setOnClickListener {
             val intent = Intent(this, BuyerShoppingActivity::class.java)
             startActivity(intent)
         }
 
-        navAddress.setOnClickListener {
+        actionAddress.setOnClickListener {
             val intent = Intent(this, BuyerAddressActivity::class.java)
             startActivity(intent)
             finish()
         }
 
-        navAccount.setOnClickListener {
+        actionAccount.setOnClickListener {
             val intent = Intent(this, HomeLoginActivity::class.java)
             startActivity(intent)
         }

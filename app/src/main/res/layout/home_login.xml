@@ -11,7 +11,7 @@
 
     <!-- Navbar Superior -->
     <include
-        android:id="@+id/includeBuyerNavbar"
+        android:id="@+id/includenavbarBuyerSuperior"
         layout="@layout/navbar_logo"
         android:layout_width="0dp"
         android:layout_height="64dp"
@@ -24,7 +24,7 @@
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:background="#111111"
-        app:layout_constraintTop_toBottomOf="@id/includeBuyerNavbar"
+        app:layout_constraintTop_toBottomOf="@id/includenavbarBuyerSuperior"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -248,7 +248,7 @@
     <!-- Menú inferior -->
     <include
         android:id="@+id/includeBuyerIcon"
-        layout="@layout/navbar_inferior"
+        layout="@layout/navbar_buyer_inferior"
         android:layout_width="0dp"
         android:layout_height="76dp"
         app:layout_constraintBottom_toBottomOf="parent"
