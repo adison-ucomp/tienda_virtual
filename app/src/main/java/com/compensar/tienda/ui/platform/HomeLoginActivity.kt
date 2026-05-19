@@ -2,6 +2,8 @@ package com.compensar.tienda.ui.platform
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -10,6 +12,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
+import com.compensar.tienda.domain.model.UserModel
+import com.google.firebase.firestore.FirebaseFirestore
+import java.security.MessageDigest
 
 class HomeLoginActivity : AppCompatActivity() {
     private lateinit var actionHome: LinearLayout
@@ -17,10 +22,18 @@ class HomeLoginActivity : AppCompatActivity() {
     private lateinit var actionShopping: LinearLayout
     private lateinit var actionAddress: LinearLayout
     private lateinit var actionAccount: LinearLayout
+
     private lateinit var actRestore: TextView
 
-    private lateinit var btnRegisterBuyer: TextView
-    private lateinit var btnRegisterSeller: TextView
+    private lateinit var actionBuyer: TextView
+    private lateinit var actionSeller: TextView
+
+    private lateinit var fieldEmail: EditText
+    private lateinit var fieldPassword: EditText
+    private lateinit var actionExecute: Button
+
+    private val db = FirebaseFirestore.getInstance()
+    private val collection = db.collection("user")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,10 +64,15 @@ class HomeLoginActivity : AppCompatActivity() {
         actionShopping = findViewById(R.id.actionShopping)
         actionAddress = findViewById(R.id.actionAddress)
         actionAccount = findViewById(R.id.actionAccount)
+
         actRestore = findViewById(R.id.txtForgotPassword)
 
-        btnRegisterBuyer = findViewById(R.id.btnRegisterBuyer)
-        btnRegisterSeller = findViewById(R.id.btnRegisterSeller)
+        actionBuyer = findViewById(R.id.actionBuyer)
+        actionSeller = findViewById(R.id.actionSeller)
+
+        fieldEmail = findViewById(R.id.fieldEmail)
+        fieldPassword = findViewById(R.id.fieldPassword)
+        actionExecute = findViewById(R.id.actionExecute)
     }
 
     private fun initEvents() {
@@ -89,14 +107,103 @@ class HomeLoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        btnRegisterBuyer.setOnClickListener {
+        actionBuyer.setOnClickListener {
             val intent = Intent(this, RegisterBuyerActivity::class.java)
             startActivity(intent)
         }
 
-        btnRegisterSeller.setOnClickListener {
+        actionSeller.setOnClickListener {
             val intent = Intent(this, RegisterSellerActivity::class.java)
             startActivity(intent)
         }
+
+        actionExecute.setOnClickListener {
+            actionLogin()
+        }
+    }
+
+    private fun actionLogin() {
+        val email = fieldEmail.text.toString().trim()
+        val password = fieldPassword.text.toString().trim()
+
+        if (email.isEmpty()) {
+            Toast.makeText(this, "Debes ingresar el correo", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (password.isEmpty()) {
+            Toast.makeText(this, "Debes ingresar la contraseña", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val encryptedPassword = encryptPassword(password)
+
+        collection
+            .whereEqualTo("email", email)
+            .whereEqualTo("password", encryptedPassword)
+            .get()
+            .addOnSuccessListener { result ->
+                if (result.isEmpty) {
+                    Toast.makeText(
+                        this,
+                        "Correo o contraseña incorrectos",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@addOnSuccessListener
+                }
+
+                val user = result.documents.firstOrNull()
+                    ?.toObject(UserModel::class.java)
+
+                if (user == null) {
+                    Toast.makeText(
+                        this,
+                        "No se pudo obtener la información del usuario",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@addOnSuccessListener
+                }
+
+                redirectByRole(user)
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(
+                    this,
+                    "Error: ${exception.message}",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                exception.printStackTrace()
+            }
+    }
+
+    private fun redirectByRole(user: UserModel) {
+        val intent = when (user.idRole) {
+            1L -> Intent(this, DashboardAdminActivity::class.java)
+            2L -> Intent(this, DashboardSellerActivity::class.java)
+            3L -> Intent(this, HomeProductActivity::class.java)
+            else -> null
+        }
+
+        if (intent == null) {
+            Toast.makeText(this, "Rol no autorizado", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        intent.putExtra("userRegister", user.register)
+        intent.putExtra("userEmail", user.email)
+        intent.putExtra("userRole", user.idRole)
+
+        startActivity(intent)
+        finish()
+    }
+
+    private fun encryptPassword(password: String): String {
+        val salt = "com.compensar.tienda.user.password"
+
+        val bytes = MessageDigest.getInstance("SHA-256")
+            .digest((salt + password).toByteArray(Charsets.UTF_8))
+
+        return bytes.joinToString("") { "%02x".format(it) }
     }
 }

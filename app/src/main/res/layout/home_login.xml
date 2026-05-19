@@ -81,12 +81,12 @@
                 android:textSize="16sp" />
 
             <EditText
-                android:id="@+id/txtEmail"
+                android:id="@+id/fieldEmail"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginTop="10dp"
                 android:background="#FFFFFF"
-                android:hint="nombre@ejemplo.com"
+                android:hint="email@domain.com"
                 android:inputType="textEmailAddress"
                 android:paddingStart="18dp"
                 android:paddingEnd="18dp"
@@ -136,12 +136,12 @@
                 android:paddingEnd="18dp">
 
                 <EditText
-                    android:id="@+id/txtPassword"
+                    android:id="@+id/fieldPassword"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
-                    android:hint="••••••••"
+                    android:hint="•••••••••"
                     android:inputType="textPassword"
                     android:singleLine="true"
                     android:textColor="#151A1D"
@@ -161,7 +161,7 @@
 
             <!-- Botón iniciar sesión -->
             <Button
-                android:id="@+id/btnLogin"
+                android:id="@+id/actionExecute"
                 android:layout_width="match_parent"
                 android:layout_height="68dp"
                 android:layout_marginTop="26dp"
@@ -205,7 +205,7 @@
 
             <!-- Registro comprador -->
             <TextView
-                android:id="@+id/btnRegisterBuyer"
+                android:id="@+id/actionBuyer"
                 android:layout_width="match_parent"
                 android:layout_height="58dp"
                 android:layout_marginTop="34dp"
@@ -217,7 +217,7 @@
 
             <!-- Registro vendedor -->
             <TextView
-                android:id="@+id/btnRegisterSeller"
+                android:id="@+id/actionSeller"
                 android:layout_width="match_parent"
                 android:layout_height="58dp"
                 android:layout_marginTop="14dp"
