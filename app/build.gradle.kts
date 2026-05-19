@@ -58,10 +58,13 @@ dependencies {
         implementation(libs.retrofit.converter.gson)
         implementation(libs.play.services.location)
 
-        // Google Firestore
+        // Firebase Firestore
         implementation(platform("com.google.firebase:firebase-bom:34.13.0"))
         implementation("com.google.firebase:firebase-firestore")
         // implementation("com.google.firebase:firebase-analytics")
+
+        // Firebase Storage
+        implementation("com.google.firebase:firebase-storage")
 
         // Ubicación en tiempo real
         implementation("com.google.android.gms:play-services-location:21.3.0")
