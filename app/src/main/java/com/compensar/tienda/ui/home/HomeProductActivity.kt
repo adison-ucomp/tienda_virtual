@@ -12,6 +12,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
 import com.compensar.tienda.ui.buyer.BuyerAddressActivity
 import com.compensar.tienda.ui.buyer.BuyerShoppingActivity
+import com.compensar.tienda.ui.common.SessionNavigation
 
 class HomeProductActivity : AppCompatActivity() {
 
@@ -37,6 +38,7 @@ class HomeProductActivity : AppCompatActivity() {
         applyWindowInsets()
         initViews()
         initEvents()
+        SessionNavigation.bindProfile(this)
     }
 
     private fun applyWindowInsets() {

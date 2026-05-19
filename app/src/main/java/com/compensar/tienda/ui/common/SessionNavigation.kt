@@ -13,9 +13,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
 import com.compensar.tienda.ui.home.HomeProductActivity
+import com.compensar.tienda.ui.home.HomeLoginActivity
 import com.compensar.tienda.ui.profile.ProfileAdminActivity
 import com.compensar.tienda.ui.profile.ProfileBuyerActivity
 import com.compensar.tienda.ui.profile.ProfileSellerActivity
+import com.compensar.tienda.ui.profile.ProfileShareActivity
 
 object SessionNavigation {
 
@@ -33,7 +35,7 @@ object SessionNavigation {
                 1L -> Intent(activity, ProfileAdminActivity::class.java)
                 2L -> Intent(activity, ProfileSellerActivity::class.java)
                 3L -> Intent(activity, ProfileBuyerActivity::class.java)
-                else -> Intent(activity, ProfileBuyerActivity::class.java)
+                else -> Intent(activity, HomeLoginActivity::class.java)
             }
 
             activity.startActivity(intent)
@@ -48,7 +50,8 @@ object SessionNavigation {
         val sellerMenu = activity.findViewById<TextView?>(R.id.actionMenu)
 
         val listener = {
-            showProfileShareDrawer(activity)
+            val intent = Intent(activity, ProfileShareActivity::class.java)
+            activity.startActivity(intent)
         }
 
         adminMenu?.setOnClickListener { listener() }
@@ -62,7 +65,7 @@ object SessionNavigation {
         dialog.setCanceledOnTouchOutside(true)
         dialog.setCancelable(true)
 
-        val actionReturn = dialog.findViewById<TextView>(R.id.actionReturn)
+        val actionReturn = dialog.findViewById<TextView?>(R.id.actionReturn)
         val textName = dialog.findViewById<TextView>(R.id.textName)
         val textEmail = dialog.findViewById<TextView>(R.id.textEmail)
         val btnSettings = dialog.findViewById<LinearLayout>(R.id.btnSettings)
@@ -72,7 +75,7 @@ object SessionNavigation {
         textName.text = SessionManager.getFullName(activity)
         textEmail.text = SessionManager.getEmail(activity)
 
-        actionReturn.setOnClickListener {
+        actionReturn?.setOnClickListener {
             dialog.dismiss()
         }
 
