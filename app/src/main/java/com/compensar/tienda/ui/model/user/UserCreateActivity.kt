@@ -16,22 +16,38 @@ import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
 import com.compensar.tienda.ui.platform.DashboardAdminActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import java.security.MessageDigest
+import android.graphics.Bitmap
+import android.net.Uri
+import androidx.activity.result.contract.ActivityResultContracts
+import com.compensar.tienda.ui.model.common.FirebaseStorageImageHelper
 
 class UserCreateActivity : AppCompatActivity() {
     private lateinit var actionHome: LinearLayout
     private lateinit var actionReturn: TextView
     private lateinit var actionCancel: Button
     private lateinit var actionExecute: Button
+    private lateinit var actionGallery: Button
+    private lateinit var actionCamera: Button
 
     private lateinit var fieldRegister: EditText
     private lateinit var fieldNames: EditText
     private lateinit var fieldSurnames: EditText
     private lateinit var fieldEmail: EditText
     private lateinit var fieldPassword: EditText
+    private lateinit var fieldStorefire: EditText
     private lateinit var fieldIdRole: Spinner
 
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("user")
+
+    private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uploadImageFromGallery(uri)
+    }
+
+    private val cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap: Bitmap? ->
+        uploadImageFromCamera(bitmap)
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,12 +63,15 @@ class UserCreateActivity : AppCompatActivity() {
         actionReturn = findViewById(R.id.actionReturn)
         actionCancel = findViewById(R.id.actionCancel)
         actionExecute = findViewById(R.id.actionExecute)
+        actionGallery = findViewById(R.id.actionGallery)
+        actionCamera = findViewById(R.id.actionCamera)
 
         fieldRegister = findViewById(R.id.fieldRegister)
         fieldNames = findViewById(R.id.fieldNames)
         fieldSurnames = findViewById(R.id.fieldSurnames)
         fieldEmail = findViewById(R.id.fieldEmail)
         fieldPassword = findViewById(R.id.fieldPassword)
+        fieldStorefire = findViewById(R.id.fieldStorefire)
         fieldIdRole = findViewById(R.id.fieldIdRole)
     }
 
@@ -65,6 +84,14 @@ class UserCreateActivity : AppCompatActivity() {
 
         actionReturn.setOnClickListener { finish() }
         actionCancel.setOnClickListener { finish() }
+        actionGallery.setOnClickListener {
+            galleryLauncher.launch("image/*")
+        }
+
+        actionCamera.setOnClickListener {
+            cameraLauncher.launch(null)
+        }
+
         actionExecute.setOnClickListener { actionOperate() }
     }
 
@@ -120,6 +147,8 @@ class UserCreateActivity : AppCompatActivity() {
             return
         }
 
+        val storefire = fieldStorefire.text.toString().trim().ifEmpty { null }
+
         val idRole = FirestoreSelectHelper.getSelectedId(fieldIdRole)
 
         if (idRole == null) {
@@ -133,6 +162,7 @@ class UserCreateActivity : AppCompatActivity() {
             srnms = srnms,
             email = email,
             password = encryptPassword(passwordText),
+            storefire = storefire,
             idRole = idRole
         )
 
@@ -171,4 +201,67 @@ class UserCreateActivity : AppCompatActivity() {
 
         return bytes.joinToString("") { "%02x".format(it) }
     }
+
+    private fun uploadImageFromGallery(uri: Uri?) {
+        if (uri == null) {
+            Toast.makeText(this, "No se seleccionó imagen", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val register = getRegisterForImageUpload() ?: return
+
+        Toast.makeText(this, "Subiendo imagen...", Toast.LENGTH_SHORT).show()
+
+        FirebaseStorageImageHelper.uploadFromUri(
+            module = "user",
+            register = register,
+            uri = uri,
+            onSuccess = { url ->
+                fieldStorefire.setText(url)
+                Toast.makeText(this, "Imagen cargada correctamente", Toast.LENGTH_SHORT).show()
+            },
+            onFailure = { exception ->
+                Toast.makeText(this, "Error al subir imagen: ${exception.message}", Toast.LENGTH_LONG).show()
+                exception.printStackTrace()
+            }
+        )
+    }
+
+    private fun uploadImageFromCamera(bitmap: Bitmap?) {
+        if (bitmap == null) {
+            Toast.makeText(this, "No se capturó imagen", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val register = getRegisterForImageUpload() ?: return
+
+        Toast.makeText(this, "Subiendo imagen...", Toast.LENGTH_SHORT).show()
+
+        FirebaseStorageImageHelper.uploadFromBitmap(
+            module = "user",
+            register = register,
+            bitmap = bitmap,
+            onSuccess = { url ->
+                fieldStorefire.setText(url)
+                Toast.makeText(this, "Imagen cargada correctamente", Toast.LENGTH_SHORT).show()
+            },
+            onFailure = { exception ->
+                Toast.makeText(this, "Error al subir imagen: ${exception.message}", Toast.LENGTH_LONG).show()
+                exception.printStackTrace()
+            }
+        )
+    }
+
+    private fun getRegisterForImageUpload(): Long? {
+        val registerText = fieldRegister.text.toString().trim()
+        val register = registerText.toLongOrNull()
+
+        if (register == null || register <= 0) {
+            Toast.makeText(this, "Debes ingresar un ID válido antes de cargar la imagen", Toast.LENGTH_SHORT).show()
+            return null
+        }
+
+        return register
+    }
+
 }

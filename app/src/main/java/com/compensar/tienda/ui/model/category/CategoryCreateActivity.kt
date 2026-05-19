@@ -12,18 +12,34 @@ import com.compensar.tienda.R
 import com.compensar.tienda.domain.model.CategoryModel
 import com.compensar.tienda.ui.platform.DashboardAdminActivity
 import com.google.firebase.firestore.FirebaseFirestore
+import android.graphics.Bitmap
+import android.net.Uri
+import androidx.activity.result.contract.ActivityResultContracts
+import com.compensar.tienda.ui.model.common.FirebaseStorageImageHelper
 
 class CategoryCreateActivity : AppCompatActivity() {
     private lateinit var actionHome: LinearLayout
     private lateinit var actionReturn: TextView
     private lateinit var actionCancel: Button
     private lateinit var actionExecute: Button
+    private lateinit var actionGallery: Button
+    private lateinit var actionCamera: Button
     
     private lateinit var fieldRegister: EditText
     private lateinit var fieldName: EditText
+    private lateinit var fieldStorefire: EditText
 
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("category")
+
+    private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uploadImageFromGallery(uri)
+    }
+
+    private val cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap: Bitmap? ->
+        uploadImageFromCamera(bitmap)
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,9 +54,12 @@ class CategoryCreateActivity : AppCompatActivity() {
         actionReturn = findViewById(R.id.actionReturn)
         actionCancel = findViewById(R.id.actionCancel)
         actionExecute = findViewById(R.id.actionExecute)
+        actionGallery = findViewById(R.id.actionGallery)
+        actionCamera = findViewById(R.id.actionCamera)
 
         fieldRegister = findViewById(R.id.fieldRegister)
         fieldName = findViewById(R.id.fieldName)
+        fieldStorefire = findViewById(R.id.fieldStorefire)
     }
 
     private fun initEvents() {
@@ -58,6 +77,14 @@ class CategoryCreateActivity : AppCompatActivity() {
             finish()
         }
 
+        actionGallery.setOnClickListener {
+            galleryLauncher.launch("image/*")
+        }
+
+        actionCamera.setOnClickListener {
+            cameraLauncher.launch(null)
+        }
+
         actionExecute.setOnClickListener {
             actionOperate()
         }
@@ -66,6 +93,7 @@ class CategoryCreateActivity : AppCompatActivity() {
     private fun actionOperate() {
         val registerText = fieldRegister.text.toString().trim()
         val name = fieldName.text.toString().trim()
+        val storefire = fieldStorefire.text.toString().trim().ifEmpty { null }
 
         if (registerText.isEmpty()) {
             Toast.makeText(this, "Debes ingresar el ID", Toast.LENGTH_SHORT).show()
@@ -86,7 +114,8 @@ class CategoryCreateActivity : AppCompatActivity() {
 
         val category = CategoryModel(
             register = register,
-            name = name
+            name = name,
+            storefire = storefire
         )
 
         collection.document(register.toString())
@@ -116,4 +145,67 @@ class CategoryCreateActivity : AppCompatActivity() {
                 exception.printStackTrace()
             }
     }
+
+    private fun uploadImageFromGallery(uri: Uri?) {
+        if (uri == null) {
+            Toast.makeText(this, "No se seleccionó imagen", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val register = getRegisterForImageUpload() ?: return
+
+        Toast.makeText(this, "Subiendo imagen...", Toast.LENGTH_SHORT).show()
+
+        FirebaseStorageImageHelper.uploadFromUri(
+            module = "category",
+            register = register,
+            uri = uri,
+            onSuccess = { url ->
+                fieldStorefire.setText(url)
+                Toast.makeText(this, "Imagen cargada correctamente", Toast.LENGTH_SHORT).show()
+            },
+            onFailure = { exception ->
+                Toast.makeText(this, "Error al subir imagen: ${exception.message}", Toast.LENGTH_LONG).show()
+                exception.printStackTrace()
+            }
+        )
+    }
+
+    private fun uploadImageFromCamera(bitmap: Bitmap?) {
+        if (bitmap == null) {
+            Toast.makeText(this, "No se capturó imagen", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val register = getRegisterForImageUpload() ?: return
+
+        Toast.makeText(this, "Subiendo imagen...", Toast.LENGTH_SHORT).show()
+
+        FirebaseStorageImageHelper.uploadFromBitmap(
+            module = "category",
+            register = register,
+            bitmap = bitmap,
+            onSuccess = { url ->
+                fieldStorefire.setText(url)
+                Toast.makeText(this, "Imagen cargada correctamente", Toast.LENGTH_SHORT).show()
+            },
+            onFailure = { exception ->
+                Toast.makeText(this, "Error al subir imagen: ${exception.message}", Toast.LENGTH_LONG).show()
+                exception.printStackTrace()
+            }
+        )
+    }
+
+    private fun getRegisterForImageUpload(): Long? {
+        val registerText = fieldRegister.text.toString().trim()
+        val register = registerText.toLongOrNull()
+
+        if (register == null || register <= 0) {
+            Toast.makeText(this, "Debes ingresar un ID válido antes de cargar la imagen", Toast.LENGTH_SHORT).show()
+            return null
+        }
+
+        return register
+    }
+
 }
