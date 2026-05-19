@@ -3,6 +3,7 @@ package com.compensar.tienda.data.remote.fire
 import com.compensar.tienda.data.remote.fire.default.CategoryDefault
 import com.compensar.tienda.data.remote.fire.default.PaymentDefault
 import com.compensar.tienda.data.remote.fire.default.RoleDefault
+import com.compensar.tienda.data.remote.fire.default.UserDefault
 import com.google.firebase.firestore.FirebaseFirestore
 
 class DefaultFire {
@@ -19,7 +20,12 @@ class DefaultFire {
                     onSuccess = {
                         createPayments(
                             onSuccess = {
-                                onSuccess()
+                                createUsers(
+                                    onSuccess = {
+                                        onSuccess()
+                                    },
+                                    onFailure = onFailure
+                                )
                             },
                             onFailure = onFailure
                         )
@@ -86,6 +92,28 @@ class DefaultFire {
                 .document(payment.register.toString())
 
             batch.set(document, payment)
+        }
+
+        batch.commit()
+            .addOnSuccessListener {
+                onSuccess()
+            }
+            .addOnFailureListener { exception ->
+                onFailure(exception)
+            }
+    }
+
+    private fun createUsers(
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val batch = db.batch()
+
+        UserDefault.getAll().forEach { user ->
+            val document = db.collection("user")
+                .document(user.register.toString())
+
+            batch.set(document, user)
         }
 
         batch.commit()
