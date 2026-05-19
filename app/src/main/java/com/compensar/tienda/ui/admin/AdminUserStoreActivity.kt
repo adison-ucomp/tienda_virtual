@@ -9,7 +9,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
@@ -21,14 +20,12 @@ import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.compensar.tienda.R
 import com.compensar.tienda.domain.model.UserModel
-import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
 import com.compensar.tienda.ui.model.common.FirebaseStorageImageHelper
 import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
 import com.google.firebase.firestore.FirebaseFirestore
 import java.security.MessageDigest
 
 class AdminUserStoreActivity : AppCompatActivity() {
-    private lateinit var actionHome: LinearLayout
     private lateinit var actionReturn: TextView
     private lateinit var actionCancel: Button
     private lateinit var actionExecute: Button
@@ -67,7 +64,6 @@ class AdminUserStoreActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        actionHome = findViewById(R.id.actionHome)
         actionReturn = findViewById(R.id.actionReturn)
         actionCancel = findViewById(R.id.actionCancel)
         actionExecute = findViewById(R.id.actionExecute)
@@ -85,11 +81,6 @@ class AdminUserStoreActivity : AppCompatActivity() {
     }
 
     private fun initEvents() {
-        actionHome.setOnClickListener {
-            val intent = Intent(this, DashboardAdminActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
 
         actionReturn.setOnClickListener { finish() }
         actionCancel.setOnClickListener { finish() }

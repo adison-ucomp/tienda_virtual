@@ -15,14 +15,12 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
 import com.compensar.tienda.domain.model.UserModel
-import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
 import com.compensar.tienda.ui.model.user.UserCreateActivity
 import com.compensar.tienda.ui.model.user.UserDeleteActivity
 import com.compensar.tienda.ui.model.user.UserUpdateActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
 class AdminUserListActivity : AppCompatActivity() {
-    private lateinit var actionHome: LinearLayout
     private lateinit var actionReturn: TextView
     private lateinit var dataList: LinearLayout
     private lateinit var actionNew: LinearLayout
@@ -36,17 +34,9 @@ class AdminUserListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.admin_user_list)
-
-        actionHome = findViewById(R.id.actionHome)
         actionReturn = findViewById(R.id.actionReturn)
         dataList = findViewById(R.id.dataList)
         actionNew = findViewById(R.id.actionNew)
-
-        actionHome.setOnClickListener {
-            val intent = Intent(this, DashboardAdminActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
 
         actionReturn.setOnClickListener { finish() }
 

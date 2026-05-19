@@ -23,6 +23,9 @@
             android:name=".ui.admin.AdminUserQuitActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.admin.AdminUserListActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.admin.AdminShopQuitActivity"
             android:exported="false" />
         <activity

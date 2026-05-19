@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
+import com.compensar.tienda.ui.admin.AdminUserListActivity
+import com.compensar.tienda.ui.admin.AdminShopListActivity
 import com.compensar.tienda.ui.model.address.AddressSelectActivity
 import com.compensar.tienda.ui.model.gateway.GatewaySelectActivity
 import com.compensar.tienda.ui.model.image.ImageSelectActivity

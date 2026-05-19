@@ -3,6 +3,11 @@
     <string name="splash_welcome">¡Bienvenidos!</string>
 
     <!-- Modelo Direcciones -->
+    <string name="register_edit">Actualiza la información del registro</string>
+    <string name="register_store">Registra la información del registro</string>
+    <string name="register_quit">Verifica la información antes de eliminar</string>
+
+    <!-- Modelo Direcciones -->
     <string name="model_address_title">Gestionar Direcciones</string>
     <string name="model_address_detail">Administra las direcciones del sistema</string>
 
