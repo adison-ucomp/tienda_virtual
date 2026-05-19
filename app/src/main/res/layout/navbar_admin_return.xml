@@ -14,7 +14,7 @@
         android:id="@+id/actionReturn"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:layout_gravity="start|center_vertical"
+        android:layout_gravity="end|center_vertical"
         android:layout_marginStart="8dp"
         android:background="@android:color/transparent"
         android:clickable="true"

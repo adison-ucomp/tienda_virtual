@@ -16,9 +16,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
 import com.compensar.tienda.domain.model.CategoryModel
+import com.compensar.tienda.ui.platform.DashboardAdminActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
 class CategorySelectActivity : AppCompatActivity() {
+    private lateinit var actionHome: LinearLayout
     private lateinit var actionReturn: TextView
     private lateinit var dataList: LinearLayout
     private lateinit var actionNew: LinearLayout
@@ -30,9 +32,16 @@ class CategorySelectActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.model_category_select)
 
+        actionHome = findViewById(R.id.actionHome)
         actionReturn = findViewById(R.id.actionReturn)
         dataList = findViewById(R.id.dataList)
         actionNew = findViewById(R.id.actionNew)
+
+        actionHome.setOnClickListener {
+            val intent = Intent(this, DashboardAdminActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
         actionReturn.setOnClickListener {
             finish()

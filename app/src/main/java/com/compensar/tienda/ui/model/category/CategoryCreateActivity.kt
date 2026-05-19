@@ -1,16 +1,20 @@
 package com.compensar.tienda.ui.model.category
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
 import com.compensar.tienda.domain.model.CategoryModel
+import com.compensar.tienda.ui.platform.DashboardAdminActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
 class CategoryCreateActivity : AppCompatActivity() {
+    private lateinit var actionHome: LinearLayout
     private lateinit var actionReturn: TextView
     private lateinit var actionCancel: Button
     private lateinit var actionExecute: Button
@@ -30,6 +34,7 @@ class CategoryCreateActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
+        actionHome = findViewById(R.id.actionHome)
         actionReturn = findViewById(R.id.actionReturn)
         actionCancel = findViewById(R.id.actionCancel)
         actionExecute = findViewById(R.id.actionExecute)
@@ -39,6 +44,12 @@ class CategoryCreateActivity : AppCompatActivity() {
     }
 
     private fun initEvents() {
+        actionHome.setOnClickListener {
+            val intent = Intent(this, DashboardAdminActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
         actionReturn.setOnClickListener {
             finish()
         }
