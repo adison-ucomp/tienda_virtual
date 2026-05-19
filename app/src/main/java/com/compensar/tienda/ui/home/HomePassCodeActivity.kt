@@ -2,8 +2,10 @@ package com.compensar.tienda.ui.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -20,6 +22,9 @@ class HomePassCodeActivity : AppCompatActivity() {
     private lateinit var btnContinue: Button
     private lateinit var txtCode: EditText
     private lateinit var txtEmailInfo: TextView
+    private lateinit var loaderPassCode: ProgressBar
+
+    private var isCodeLoading = false
 
     private val db = FirebaseFirestore.getInstance()
     private val resetCollection = db.collection("password")
@@ -60,12 +65,17 @@ class HomePassCodeActivity : AppCompatActivity() {
         btnContinue = findViewById(R.id.btnContinue)
         txtCode = findViewById(R.id.txtCode)
         txtEmailInfo = findViewById(R.id.txtEmailInfo)
+        loaderPassCode = findViewById(R.id.loaderPassCode)
     }
 
     private fun initEvents() {
         btnBack.setOnClickListener { goToRestore() }
         btnBackLogin.setOnClickListener { goToLogin() }
-        btnContinue.setOnClickListener { actionValidateCode() }
+        btnContinue.setOnClickListener {
+            if (!isCodeLoading) {
+                actionValidateCode()
+            }
+        }
     }
 
     private fun validateInitialData() {
@@ -91,13 +101,13 @@ class HomePassCodeActivity : AppCompatActivity() {
             return
         }
 
-        btnContinue.isEnabled = false
+        setCodeLoading(true)
 
         resetCollection.document(token)
             .get()
             .addOnSuccessListener { document ->
                 if (!document.exists()) {
-                    btnContinue.isEnabled = true
+                    setCodeLoading(false)
                     Toast.makeText(this, "La solicitud no existe", Toast.LENGTH_LONG).show()
                     return@addOnSuccessListener
                 }
@@ -108,25 +118,25 @@ class HomePassCodeActivity : AppCompatActivity() {
                 val expiresAt = document.getLong("expiresAt") ?: 0
 
                 if (used) {
-                    btnContinue.isEnabled = true
+                    setCodeLoading(false)
                     Toast.makeText(this, "Este código ya fue utilizado", Toast.LENGTH_LONG).show()
                     return@addOnSuccessListener
                 }
 
                 if (System.currentTimeMillis() > expiresAt) {
-                    btnContinue.isEnabled = true
+                    setCodeLoading(false)
                     Toast.makeText(this, "El código de recuperación expiró", Toast.LENGTH_LONG).show()
                     return@addOnSuccessListener
                 }
 
                 if (!savedEmail.equals(email, ignoreCase = true)) {
-                    btnContinue.isEnabled = true
+                    setCodeLoading(false)
                     Toast.makeText(this, "El correo de la solicitud no coincide", Toast.LENGTH_LONG).show()
                     return@addOnSuccessListener
                 }
 
                 if (savedCode != code) {
-                    btnContinue.isEnabled = true
+                    setCodeLoading(false)
                     Toast.makeText(this, "Código incorrecto", Toast.LENGTH_SHORT).show()
                     return@addOnSuccessListener
                 }
@@ -140,16 +150,26 @@ class HomePassCodeActivity : AppCompatActivity() {
                         finish()
                     }
                     .addOnFailureListener { exception ->
-                        btnContinue.isEnabled = true
+                        setCodeLoading(false)
                         Toast.makeText(this, "Error validando código: ${exception.message}", Toast.LENGTH_LONG).show()
                         exception.printStackTrace()
                     }
             }
             .addOnFailureListener { exception ->
-                btnContinue.isEnabled = true
+                setCodeLoading(false)
                 Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_LONG).show()
                 exception.printStackTrace()
             }
+    }
+
+    private fun setCodeLoading(isLoading: Boolean) {
+        isCodeLoading = isLoading
+        btnContinue.isEnabled = !isLoading
+        btnBack.isEnabled = !isLoading
+        btnBackLogin.isEnabled = !isLoading
+        txtCode.isEnabled = !isLoading
+        loaderPassCode.visibility = if (isLoading) View.VISIBLE else View.GONE
+        btnContinue.text = if (isLoading) "Validando..." else "Validar código"
     }
 
     private fun goToRestore() {

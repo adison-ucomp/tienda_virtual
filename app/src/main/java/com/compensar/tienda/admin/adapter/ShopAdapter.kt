@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.compensar.tienda.R
 import com.compensar.tienda.admin.model.Shop
 import android.content.Intent
-import com.compensar.tienda.admin.ui.EditShopAdmin
 
 class ShopAdapter(
     private val listShops: List<Shop>

@@ -2,8 +2,10 @@ package com.compensar.tienda.ui.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -21,6 +23,9 @@ class HomePasswordActivity : AppCompatActivity() {
     private lateinit var btnContinue: Button
     private lateinit var txtNewPassword: EditText
     private lateinit var txtConfirmPassword: EditText
+    private lateinit var loaderPassword: ProgressBar
+
+    private var isPasswordLoading = false
 
     private val db = FirebaseFirestore.getInstance()
     private val userCollection = db.collection("user")
@@ -64,6 +69,7 @@ class HomePasswordActivity : AppCompatActivity() {
         btnContinue = findViewById(R.id.btnContinue)
         txtNewPassword = findViewById(R.id.txtNewPassword)
         txtConfirmPassword = findViewById(R.id.txtConfirmPassword)
+        loaderPassword = findViewById(R.id.loaderPassword)
     }
 
     private fun initEvents() {
@@ -76,7 +82,9 @@ class HomePasswordActivity : AppCompatActivity() {
         }
 
         btnContinue.setOnClickListener {
-            actionUpdatePassword()
+            if (!isPasswordLoading) {
+                actionUpdatePassword()
+            }
         }
     }
 
@@ -165,7 +173,7 @@ class HomePasswordActivity : AppCompatActivity() {
             return
         }
 
-        btnContinue.isEnabled = false
+        setPasswordLoading(true)
 
         val encryptedPassword = encryptPassword(newPassword)
 
@@ -179,16 +187,27 @@ class HomePasswordActivity : AppCompatActivity() {
                         goToLogin()
                     }
                     .addOnFailureListener { exception ->
-                        btnContinue.isEnabled = true
+                        setPasswordLoading(false)
                         Toast.makeText(this, "Error actualizando solicitud: ${exception.message}", Toast.LENGTH_LONG).show()
                         exception.printStackTrace()
                     }
             }
             .addOnFailureListener { exception ->
-                btnContinue.isEnabled = true
+                setPasswordLoading(false)
                 Toast.makeText(this, "Error actualizando contraseña: ${exception.message}", Toast.LENGTH_LONG).show()
                 exception.printStackTrace()
             }
+    }
+
+    private fun setPasswordLoading(isLoading: Boolean) {
+        isPasswordLoading = isLoading
+        btnContinue.isEnabled = !isLoading
+        btnBack.isEnabled = !isLoading
+        btnBackLogin.isEnabled = !isLoading
+        txtNewPassword.isEnabled = !isLoading
+        txtConfirmPassword.isEnabled = !isLoading
+        loaderPassword.visibility = if (isLoading) View.VISIBLE else View.GONE
+        btnContinue.text = if (isLoading) "Guardando..." else "Continuar"
     }
 
     private fun encryptPassword(password: String): String {

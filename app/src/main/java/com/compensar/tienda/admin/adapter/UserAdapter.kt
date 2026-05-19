@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.compensar.tienda.R
 import com.compensar.tienda.admin.model.User
 import android.content.Intent
-import com.compensar.tienda.admin.ui.EditUserAdmin
 
 class UserAdapter(
 

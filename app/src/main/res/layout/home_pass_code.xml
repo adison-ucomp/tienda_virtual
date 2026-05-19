@@ -132,6 +132,16 @@
             android:textSize="22sp"
             android:textStyle="bold" />
 
+        <ProgressBar
+            android:id="@+id/loaderPassCode"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:indeterminate="true"
+            android:visibility="gone" />
+
         <LinearLayout
             android:id="@+id/separatorContainer"
             android:layout_width="match_parent"

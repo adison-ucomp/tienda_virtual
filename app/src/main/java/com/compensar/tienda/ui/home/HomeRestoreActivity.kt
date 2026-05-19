@@ -2,8 +2,10 @@ package com.compensar.tienda.ui.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -22,6 +24,9 @@ class HomeRestoreActivity : AppCompatActivity() {
     private lateinit var btnBackLogin: TextView
     private lateinit var btnRestore: Button
     private lateinit var txtEmail: EditText
+    private lateinit var loaderRestore: ProgressBar
+
+    private var isRestoreLoading = false
 
     private val db = FirebaseFirestore.getInstance()
     private val userCollection = db.collection("user")
@@ -55,12 +60,17 @@ class HomeRestoreActivity : AppCompatActivity() {
         btnBackLogin = findViewById(R.id.btnBackLogin)
         btnRestore = findViewById(R.id.btnRestore)
         txtEmail = findViewById(R.id.txtEmail)
+        loaderRestore = findViewById(R.id.loaderRestore)
     }
 
     private fun initEvents() {
         btnBack.setOnClickListener { goToLogin() }
         btnBackLogin.setOnClickListener { goToLogin() }
-        btnRestore.setOnClickListener { actionRestore() }
+        btnRestore.setOnClickListener {
+            if (!isRestoreLoading) {
+                actionRestore()
+            }
+        }
     }
 
     private fun actionRestore() {
@@ -71,14 +81,14 @@ class HomeRestoreActivity : AppCompatActivity() {
             return
         }
 
-        btnRestore.isEnabled = false
+        setRestoreLoading(true)
 
         userCollection
             .whereEqualTo("email", email)
             .get()
             .addOnSuccessListener { result ->
                 if (result.isEmpty) {
-                    btnRestore.isEnabled = true
+                    setRestoreLoading(false)
                     Toast.makeText(this, "El correo no existe en el sistema", Toast.LENGTH_SHORT).show()
                     return@addOnSuccessListener
                 }
@@ -86,7 +96,7 @@ class HomeRestoreActivity : AppCompatActivity() {
                 val user = result.documents.firstOrNull()?.toObject(UserModel::class.java)
 
                 if (user == null || user.register <= 0) {
-                    btnRestore.isEnabled = true
+                    setRestoreLoading(false)
                     Toast.makeText(this, "No se pudo obtener el usuario", Toast.LENGTH_SHORT).show()
                     return@addOnSuccessListener
                 }
@@ -94,7 +104,7 @@ class HomeRestoreActivity : AppCompatActivity() {
                 createRestoreRequest(user)
             }
             .addOnFailureListener { exception ->
-                btnRestore.isEnabled = true
+                setRestoreLoading(false)
                 Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_LONG).show()
                 exception.printStackTrace()
             }
@@ -133,7 +143,7 @@ class HomeRestoreActivity : AppCompatActivity() {
                 )
             }
             .addOnFailureListener { exception ->
-                btnRestore.isEnabled = true
+                setRestoreLoading(false)
                 Toast.makeText(this, "Error creando solicitud: ${exception.message}", Toast.LENGTH_LONG).show()
                 exception.printStackTrace()
             }
@@ -150,7 +160,7 @@ class HomeRestoreActivity : AppCompatActivity() {
             code = code,
             name = name,
             onSuccess = {
-                btnRestore.isEnabled = true
+                setRestoreLoading(false)
                 Toast.makeText(this, "Código enviado correctamente", Toast.LENGTH_LONG).show()
 
                 val intent = Intent(this, HomePassCodeActivity::class.java)
@@ -159,7 +169,7 @@ class HomeRestoreActivity : AppCompatActivity() {
                 startActivity(intent)
             },
             onFailure = { exception ->
-                btnRestore.isEnabled = true
+                setRestoreLoading(false)
                 Toast.makeText(
                     this,
                     "No se pudo enviar el código: ${exception.message}",
@@ -168,6 +178,16 @@ class HomeRestoreActivity : AppCompatActivity() {
                 exception.printStackTrace()
             }
         )
+    }
+
+    private fun setRestoreLoading(isLoading: Boolean) {
+        isRestoreLoading = isLoading
+        btnRestore.isEnabled = !isLoading
+        btnBack.isEnabled = !isLoading
+        btnBackLogin.isEnabled = !isLoading
+        txtEmail.isEnabled = !isLoading
+        loaderRestore.visibility = if (isLoading) View.VISIBLE else View.GONE
+        btnRestore.text = if (isLoading) "Enviando..." else "Enviar código"
     }
 
     private fun generateCode(): String {

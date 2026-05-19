@@ -28,7 +28,6 @@ class DashboardAdminActivity : AppCompatActivity() {
 
     private lateinit var cardAddress: CardView
     private lateinit var cardCategory: CardView
-    private lateinit var cardEmail: CardView
     private lateinit var cardGateway: CardView
     private lateinit var cardImage: CardView
     private lateinit var cardPayment: CardView
@@ -90,14 +89,6 @@ class DashboardAdminActivity : AppCompatActivity() {
         cardCategory.setOnClickListener {
             val intent = Intent(this, CategorySelectActivity::class.java)
             startActivity(intent)
-        }
-
-        cardEmail.setOnClickListener {
-            android.widget.Toast.makeText(
-                this,
-                "La configuración SMTP se administra desde el backend PHP",
-                android.widget.Toast.LENGTH_SHORT
-            ).show()
         }
 
         cardGateway.setOnClickListener {

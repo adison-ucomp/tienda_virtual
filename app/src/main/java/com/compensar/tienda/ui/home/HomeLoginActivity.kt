@@ -2,9 +2,11 @@ package com.compensar.tienda.ui.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -38,6 +40,9 @@ class HomeLoginActivity : AppCompatActivity() {
     private lateinit var fieldEmail: EditText
     private lateinit var fieldPassword: EditText
     private lateinit var actionExecute: Button
+    private lateinit var loaderLogin: ProgressBar
+
+    private var isLoginLoading = false
 
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("user")
@@ -80,6 +85,7 @@ class HomeLoginActivity : AppCompatActivity() {
         fieldEmail = findViewById(R.id.fieldEmail)
         fieldPassword = findViewById(R.id.fieldPassword)
         actionExecute = findViewById(R.id.actionExecute)
+        loaderLogin = findViewById(R.id.loaderLogin)
     }
 
     private fun initEvents() {
@@ -125,7 +131,9 @@ class HomeLoginActivity : AppCompatActivity() {
         }
 
         actionExecute.setOnClickListener {
-            actionLogin()
+            if (!isLoginLoading) {
+                actionLogin()
+            }
         }
     }
 
@@ -143,6 +151,8 @@ class HomeLoginActivity : AppCompatActivity() {
             return
         }
 
+        setLoginLoading(true)
+
         val encryptedPassword = encryptPassword(password)
 
         collection
@@ -151,6 +161,7 @@ class HomeLoginActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { result ->
                 if (result.isEmpty) {
+                    setLoginLoading(false)
                     Toast.makeText(
                         this,
                         "Correo o contraseña incorrectos",
@@ -163,6 +174,7 @@ class HomeLoginActivity : AppCompatActivity() {
                     ?.toObject(UserModel::class.java)
 
                 if (user == null) {
+                    setLoginLoading(false)
                     Toast.makeText(
                         this,
                         "No se pudo obtener la información del usuario",
@@ -175,6 +187,7 @@ class HomeLoginActivity : AppCompatActivity() {
                 redirectByRole(user)
             }
             .addOnFailureListener { exception ->
+                setLoginLoading(false)
                 Toast.makeText(
                     this,
                     "Error: ${exception.message}",
@@ -183,6 +196,18 @@ class HomeLoginActivity : AppCompatActivity() {
 
                 exception.printStackTrace()
             }
+    }
+
+    private fun setLoginLoading(isLoading: Boolean) {
+        isLoginLoading = isLoading
+        actionExecute.isEnabled = !isLoading
+        fieldEmail.isEnabled = !isLoading
+        fieldPassword.isEnabled = !isLoading
+        actRestore.isEnabled = !isLoading
+        actionBuyer.isEnabled = !isLoading
+        actionSeller.isEnabled = !isLoading
+        loaderLogin.visibility = if (isLoading) View.VISIBLE else View.GONE
+        actionExecute.text = if (isLoading) "Validando..." else "Iniciar Sesión"
     }
 
     private fun redirectByRole(user: UserModel) {
@@ -194,6 +219,7 @@ class HomeLoginActivity : AppCompatActivity() {
         }
 
         if (intent == null) {
+            setLoginLoading(false)
             Toast.makeText(this, "Rol no autorizado", Toast.LENGTH_SHORT).show()
             return
         }
