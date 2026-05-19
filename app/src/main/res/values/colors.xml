@@ -2,9 +2,12 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="background_layout">#F5F5F5</color>
-    <color name="subtitle">#666666</color>
+    <color name="green">#34A853</color>
+    <color name="red">#D52D09</color>
     <color name="blue">#2962FF</color>
+
+    <color name="background_layout">#DFF1F1</color>
+    <color name="subtitle">#666666</color>
     <color name="hint">#999999</color>
     <color name="roles">#6200EE</color>
     <color name="line">#DDDDDD</color>
