@@ -1,7 +1,6 @@
 package com.compensar.tienda.data.remote.fire
 
 import com.compensar.tienda.data.remote.fire.default.CategoryDefault
-import com.compensar.tienda.data.remote.fire.default.EmailDefault
 import com.compensar.tienda.data.remote.fire.default.PaymentDefault
 import com.compensar.tienda.data.remote.fire.default.ProductDefault
 import com.compensar.tienda.data.remote.fire.default.RoleDefault
@@ -26,12 +25,7 @@ class DefaultFire {
                                     onSuccess = {
                                         createProducts(
                                             onSuccess = {
-                                                createEmails(
-                                                    onSuccess = {
-                                                        onSuccess()
-                                                    },
-                                                    onFailure = onFailure
-                                                )
+                                                onSuccess()
                                             },
                                             onFailure = onFailure
                                         )
@@ -148,27 +142,6 @@ class DefaultFire {
                 .document(product.register.toString())
 
             batch.set(document, product)
-        }
-
-        batch.commit()
-            .addOnSuccessListener {
-                onSuccess()
-            }
-            .addOnFailureListener { exception ->
-                onFailure(exception)
-            }
-    }
-    private fun createEmails(
-        onSuccess: () -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
-        val batch = db.batch()
-
-        EmailDefault.getAll().forEach { email ->
-            val document = db.collection("email")
-                .document(email.register.toString())
-
-            batch.set(document, email)
         }
 
         batch.commit()

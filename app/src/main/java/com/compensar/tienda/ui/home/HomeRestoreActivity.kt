@@ -12,7 +12,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
 import com.compensar.tienda.domain.model.UserModel
-import com.compensar.tienda.ui.common.SmtpEmailHelper
+import com.compensar.tienda.ui.common.EmailBackHelper
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.UUID
 
@@ -58,17 +58,9 @@ class HomeRestoreActivity : AppCompatActivity() {
     }
 
     private fun initEvents() {
-        btnBack.setOnClickListener {
-            goToLogin()
-        }
-
-        btnBackLogin.setOnClickListener {
-            goToLogin()
-        }
-
-        btnRestore.setOnClickListener {
-            actionRestore()
-        }
+        btnBack.setOnClickListener { goToLogin() }
+        btnBackLogin.setOnClickListener { goToLogin() }
+        btnRestore.setOnClickListener { actionRestore() }
     }
 
     private fun actionRestore() {
@@ -110,23 +102,35 @@ class HomeRestoreActivity : AppCompatActivity() {
 
     private fun createRestoreRequest(user: UserModel) {
         val token = UUID.randomUUID().toString()
+        val code = generateCode()
         val now = System.currentTimeMillis()
         val expiresAt = now + 30 * 60 * 1000
-        val resetLink = "emptio://password/reset?token=$token"
+        val email = user.email ?: ""
+        val name = listOfNotNull(user.names, user.srnms)
+            .joinToString(" ")
+            .trim()
+            .ifEmpty { "Usuario" }
 
         val data = hashMapOf(
             "token" to token,
-            "email" to (user.email ?: ""),
+            "code" to code,
+            "email" to email,
             "userRegister" to user.register,
             "createdAt" to now,
             "expiresAt" to expiresAt,
+            "codeValidated" to false,
             "used" to false
         )
 
         resetCollection.document(token)
             .set(data)
             .addOnSuccessListener {
-                sendRestoreEmail(user.email ?: "", resetLink)
+                sendRestoreCode(
+                    token = token,
+                    email = email,
+                    code = code,
+                    name = name
+                )
             }
             .addOnFailureListener { exception ->
                 btnRestore.isEnabled = true
@@ -135,28 +139,39 @@ class HomeRestoreActivity : AppCompatActivity() {
             }
     }
 
-    private fun sendRestoreEmail(email: String, resetLink: String) {
-        SmtpEmailHelper.sendPasswordRestoreEmail(
-            toEmail = email,
-            resetLink = resetLink,
+    private fun sendRestoreCode(
+        token: String,
+        email: String,
+        code: String,
+        name: String
+    ) {
+        EmailBackHelper.sendCode(
+            email = email,
+            code = code,
+            name = name,
             onSuccess = {
                 btnRestore.isEnabled = true
-                Toast.makeText(
-                    this,
-                    "Se envió el enlace de recuperación al correo",
-                    Toast.LENGTH_LONG
-                ).show()
+                Toast.makeText(this, "Código enviado correctamente", Toast.LENGTH_LONG).show()
+
+                val intent = Intent(this, HomePassCodeActivity::class.java)
+                intent.putExtra("token", token)
+                intent.putExtra("email", email)
+                startActivity(intent)
             },
             onFailure = { exception ->
                 btnRestore.isEnabled = true
                 Toast.makeText(
                     this,
-                    "No se pudo enviar el correo: ${exception.message}",
+                    "No se pudo enviar el código: ${exception.message}",
                     Toast.LENGTH_LONG
                 ).show()
                 exception.printStackTrace()
             }
         )
+    }
+
+    private fun generateCode(): String {
+        return (100000..999999).random().toString()
     }
 
     private fun goToLogin() {

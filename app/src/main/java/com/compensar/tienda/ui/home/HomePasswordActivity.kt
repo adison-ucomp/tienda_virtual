@@ -97,6 +97,7 @@ class HomePasswordActivity : AppCompatActivity() {
                 }
 
                 val used = document.getBoolean("used") ?: false
+                val codeValidated = document.getBoolean("codeValidated") ?: false
                 val expiresAt = document.getLong("expiresAt") ?: 0
                 val register = document.getLong("userRegister") ?: 0
 
@@ -108,7 +109,13 @@ class HomePasswordActivity : AppCompatActivity() {
 
                 if (System.currentTimeMillis() > expiresAt) {
                     btnContinue.isEnabled = false
-                    Toast.makeText(this, "El enlace de recuperación expiró", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "El código de recuperación expiró", Toast.LENGTH_LONG).show()
+                    return@addOnSuccessListener
+                }
+
+                if (!codeValidated) {
+                    btnContinue.isEnabled = false
+                    Toast.makeText(this, "Primero debes validar el código enviado al correo", Toast.LENGTH_LONG).show()
                     return@addOnSuccessListener
                 }
 

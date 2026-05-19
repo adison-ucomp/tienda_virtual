@@ -59,6 +59,9 @@
             android:name=".ui.buyer.BuyerAddressActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.home.HomePassCodeActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.home.HomePasswordActivity"
             android:exported="true">
             <intent-filter>

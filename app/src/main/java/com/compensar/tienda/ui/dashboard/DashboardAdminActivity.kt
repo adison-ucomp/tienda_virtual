@@ -10,7 +10,6 @@ import com.compensar.tienda.ui.admin.AdminUserListActivity
 import com.compensar.tienda.ui.admin.AdminShopListActivity
 import com.compensar.tienda.ui.model.address.AddressSelectActivity
 import com.compensar.tienda.ui.model.category.CategorySelectActivity
-import com.compensar.tienda.ui.model.email.EmailSelectActivity
 import com.compensar.tienda.ui.model.gateway.GatewaySelectActivity
 import com.compensar.tienda.ui.model.image.ImageSelectActivity
 import com.compensar.tienda.ui.model.payment.PaymentSelectActivity
@@ -56,7 +55,6 @@ class DashboardAdminActivity : AppCompatActivity() {
 
         cardAddress = findViewById(R.id.cardAddress)
         cardCategory = findViewById(R.id.cardCategory)
-        cardEmail = findViewById(R.id.cardEmail)
         cardGateway = findViewById(R.id.cardGateway)
         cardImage = findViewById(R.id.cardImage)
         cardPayment = findViewById(R.id.cardPayment)
@@ -95,8 +93,11 @@ class DashboardAdminActivity : AppCompatActivity() {
         }
 
         cardEmail.setOnClickListener {
-            val intent = Intent(this, EmailSelectActivity::class.java)
-            startActivity(intent)
+            android.widget.Toast.makeText(
+                this,
+                "La configuración SMTP se administra desde el backend PHP",
+                android.widget.Toast.LENGTH_SHORT
+            ).show()
         }
 
         cardGateway.setOnClickListener {

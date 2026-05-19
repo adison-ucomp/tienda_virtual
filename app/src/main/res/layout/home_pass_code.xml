@@ -7,11 +7,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F7F8FA"
-    tools:context=".ui.home.HomeRestoreActivity">
+    tools:context=".ui.home.HomePassCodeActivity">
 
-    <!-- Navbar superior -->
     <LinearLayout
-        android:id="@+id/restoreNavbar"
+        android:id="@+id/passCodeNavbar"
         android:layout_width="0dp"
         android:layout_height="76dp"
         android:background="#FFFFFF"
@@ -51,13 +50,12 @@
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:background="#EEEEEE"
-        app:layout_constraintTop_toBottomOf="@id/restoreNavbar"
+        app:layout_constraintTop_toBottomOf="@id/passCodeNavbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Contenido -->
     <LinearLayout
-        android:id="@+id/restoreContainer"
+        android:id="@+id/passCodeContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="#F7F8FA"
@@ -76,64 +74,64 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Recuperar Contraseña"
+            android:text="Verificar Código"
             android:textColor="#151A1D"
             android:textSize="30sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/txtDescription"
+            android:id="@+id/txtEmailInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
             android:gravity="center"
             android:lineSpacingExtra="4dp"
-            android:text="Introduce tu correo electrónico y te\nenviaremos las\ninstrucciones necesarias para restablecer tu\nacceso de forma segura."
+            android:text="Enviamos un código de 6 dígitos a tu correo electrónico."
             android:textColor="#4B5060"
             android:textSize="18sp" />
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="56dp" />
+            android:layout_height="48dp" />
 
-        <!-- Correo -->
         <TextView
-            android:id="@+id/lblEmail"
+            android:id="@+id/lblCode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Correo Electrónico"
+            android:text="Código de verificación"
             android:textColor="#747A8C"
             android:textSize="16sp" />
 
         <EditText
-            android:id="@+id/txtEmail"
+            android:id="@+id/txtCode"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="64dp"
             android:layout_marginTop="10dp"
             android:background="#FFFFFF"
-            android:hint="nombre@ejemplo.com"
-            android:inputType="textEmailAddress"
+            android:gravity="center"
+            android:hint="000000"
+            android:inputType="number"
+            android:maxLength="6"
             android:paddingStart="18dp"
             android:paddingEnd="18dp"
             android:singleLine="true"
             android:textColor="#151A1D"
-            android:textColorHint="#747A8C"
-            android:textSize="16sp" />
+            android:textColorHint="#C2C5D3"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
-        <!-- Botón recuperar -->
         <Button
-            android:id="@+id/btnRestore"
+            android:id="@+id/btnContinue"
             android:layout_width="match_parent"
             android:layout_height="68dp"
             android:layout_marginTop="50dp"
             android:backgroundTint="#151A1D"
-            android:text="Enviar código"
+            android:text="Validar código"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
             android:textSize="22sp"
             android:textStyle="bold" />
 
-        <!-- Separador -->
         <LinearLayout
             android:id="@+id/separatorContainer"
             android:layout_width="match_parent"
@@ -164,7 +162,6 @@
 
         </LinearLayout>
 
-        <!-- Volver login -->
         <TextView
             android:id="@+id/btnBackLogin"
             android:layout_width="match_parent"

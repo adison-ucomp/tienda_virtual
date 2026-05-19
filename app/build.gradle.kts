@@ -73,8 +73,6 @@ dependencies {
         // implementation("com.google.firebase:firebase-analytics")
         // Firebase Storage
         implementation("com.google.firebase:firebase-storage")
-        implementation("com.sun.mail:android-mail:1.6.7")
-        implementation("com.sun.mail:android-activation:1.6.7")
         implementation("com.github.bumptech.glide:glide:4.16.0")
 
         // Ubicación en tiempo real
