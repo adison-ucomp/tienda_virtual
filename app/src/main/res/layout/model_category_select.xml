@@ -23,7 +23,7 @@
 
     <!-- Contenido principal -->
     <ScrollView
-        android:id="@+id/scrollCategorySelect"
+        android:id="@+id/scrollSelect"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"

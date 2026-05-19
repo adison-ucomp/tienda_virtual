@@ -23,7 +23,7 @@
 
     <!-- Contenido principal -->
     <ScrollView
-        android:id="@+id/scrollCategoryDelete"
+        android:id="@+id/scrollDelete"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
@@ -89,7 +89,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardCategoryDeleteInfo"
+                android:id="@+id/cardDelete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
