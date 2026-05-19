@@ -149,6 +149,8 @@ class ProductSelectActivity : AppCompatActivity() {
         addText(textContainer, "Registro: ${data.register}")
         addText(textContainer, "Nombre: ${data.name ?: ""}")
         addText(textContainer, "Detalle: ${data.detail ?: ""}")
+        addText(textContainer, "Stock: ${data.stock}")
+        addText(textContainer, "Precio: ${data.price}")
         addText(textContainer, "URL Imagen: ${data.storefire ?: ""}")
         addText(textContainer, "Categoría: ${label(categoryMap, data.idCategory)}")
         addText(textContainer, "Tienda: ${label(shopMap, data.idShop)}")

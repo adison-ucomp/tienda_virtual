@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TiendaVirtual">
         <activity
+            android:name=".ui.profile.ProfileShareActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.platform.DashboardSellerActivity"
             android:exported="false" />
         <activity

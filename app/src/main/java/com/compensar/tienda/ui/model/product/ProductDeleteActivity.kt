@@ -17,6 +17,8 @@ class ProductDeleteActivity : AppCompatActivity() {
     private lateinit var fieldRegister: TextView
     private lateinit var fieldName: TextView
     private lateinit var fieldDetail: TextView
+    private lateinit var fieldStock: TextView
+    private lateinit var fieldPrice: TextView
     private lateinit var fieldStorefire: TextView
     private lateinit var fieldIdCategory: TextView
     private lateinit var fieldIdShop: TextView
@@ -45,6 +47,8 @@ class ProductDeleteActivity : AppCompatActivity() {
         fieldRegister = findViewById(R.id.fieldRegister)
         fieldName = findViewById(R.id.fieldName)
         fieldDetail = findViewById(R.id.fieldDetail)
+        fieldStock = findViewById(R.id.fieldStock)
+        fieldPrice = findViewById(R.id.fieldPrice)
         fieldStorefire = findViewById(R.id.fieldStorefire)
         fieldIdCategory = findViewById(R.id.fieldIdCategory)
         fieldIdShop = findViewById(R.id.fieldIdShop)
@@ -85,6 +89,8 @@ class ProductDeleteActivity : AppCompatActivity() {
         fieldRegister.text = current.register.toString()
         fieldName.text = current.name.toString()
         fieldDetail.text = current.detail.toString()
+        fieldStock.text = current.stock.toString()
+        fieldPrice.text = current.price.toString()
         fieldStorefire.text = current.storefire.toString()
         fieldIdCategory.text = current.idCategory.toString()
         fieldIdShop.text = current.idShop.toString()
