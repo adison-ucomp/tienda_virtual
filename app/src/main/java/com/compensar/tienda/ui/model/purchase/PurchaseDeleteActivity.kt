@@ -1,21 +1,122 @@
 package com.compensar.tienda.ui.model.purchase
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
+import com.google.firebase.firestore.FirebaseFirestore
+import com.compensar.tienda.domain.model.PurchaseModel
 
 class PurchaseDeleteActivity : AppCompatActivity() {
+    private lateinit var actionReturn: TextView
+    private lateinit var actionCancel: Button
+    private lateinit var actionExecute: Button
+
+    private lateinit var fieldRegister: TextView
+    private lateinit var fieldDate: TextView
+    private lateinit var fieldHour: TextView
+    private lateinit var fieldAmount: TextView
+    private lateinit var fieldValue: TextView
+    private lateinit var fieldTotal: TextView
+    private lateinit var fieldIdProduct: TextView
+    private lateinit var fieldIdMethod: TextView
+    private lateinit var fieldIdGangway: TextView
+    private lateinit var fieldIdUser: TextView
+
+    private val db = FirebaseFirestore.getInstance()
+    private val collection = db.collection("purchase")
+
+    private var register: Long = 0
+    private var data: PurchaseModel? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.model_purchase_delete)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        register = intent.getLongExtra("register", 0)
+
+        initViews()
+        initEvents()
+        loadRegister()
+    }
+
+    private fun initViews() {
+        actionReturn = findViewById(R.id.actionReturn)
+        actionCancel = findViewById(R.id.actionCancel)
+        actionExecute = findViewById(R.id.actionExecute)
+        fieldRegister = findViewById(R.id.fieldRegister)
+        fieldDate = findViewById(R.id.fieldDate)
+        fieldHour = findViewById(R.id.fieldHour)
+        fieldAmount = findViewById(R.id.fieldAmount)
+        fieldValue = findViewById(R.id.fieldValue)
+        fieldTotal = findViewById(R.id.fieldTotal)
+        fieldIdProduct = findViewById(R.id.fieldIdProduct)
+        fieldIdMethod = findViewById(R.id.fieldIdMethod)
+        fieldIdGangway = findViewById(R.id.fieldIdGangway)
+        fieldIdUser = findViewById(R.id.fieldIdUser)
+    }
+
+    private fun initEvents() {
+        actionReturn.setOnClickListener { finish() }
+        actionCancel.setOnClickListener { finish() }
+        actionExecute.setOnClickListener { actionOperate() }
+    }
+
+    private fun loadRegister() {
+        if (register <= 0) {
+            Toast.makeText(this, "Registro no válido", Toast.LENGTH_SHORT).show()
+            finish()
+            return
         }
+
+        collection.document(register.toString())
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    data = document.toObject(PurchaseModel::class.java)
+                    showRegister()
+                } else {
+                    Toast.makeText(this, "No se encontró el registro", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_LONG).show()
+                exception.printStackTrace()
+            }
+    }
+
+    private fun showRegister() {
+        val current = data ?: return
+        fieldRegister.text = current.register.toString()
+        fieldDate.text = current.date.toString()
+        fieldHour.text = current.hour.toString()
+        fieldAmount.text = current.amount.toString()
+        fieldValue.text = current.value.toString()
+        fieldTotal.text = current.total.toString()
+        fieldIdProduct.text = current.idProduct.toString()
+        fieldIdMethod.text = current.idMethod.toString()
+        fieldIdGangway.text = current.idGangway.toString()
+        fieldIdUser.text = current.idUser.toString()
+    }
+
+    private fun actionOperate() {
+        if (register <= 0) {
+            Toast.makeText(this, "Registro no válido", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        collection.document(register.toString())
+            .delete()
+            .addOnSuccessListener {
+                Toast.makeText(this, "Registro eliminado correctamente", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error al eliminar: ${exception.message}", Toast.LENGTH_LONG).show()
+                exception.printStackTrace()
+            }
     }
 }

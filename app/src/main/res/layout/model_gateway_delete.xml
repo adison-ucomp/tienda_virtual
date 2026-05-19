@@ -1,36 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/background_layout"
-    tools:context=".ui.model.category.CategoryDeleteActivity">
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context=".ui.model.gateway.GatewayDeleteActivity">
 
     <include
-        android:id="@+id/toolbarBack"
-        layout="@layout/toolbar_back"
+        android:id="@+id/includeSuperior"
+        layout="@layout/navbar_admin_return"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="64dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <ScrollView
-        android:id="@+id/scrollCategoryDelete"
+        android:id="@+id/scrollGatewayDelete"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
         android:background="@color/background_layout"
-        app:layout_constraintTop_toBottomOf="@id/toolbarBack"
-        app:layout_constraintBottom_toTopOf="@id/bottomNavigationAdmin"
+        app:layout_constraintTop_toBottomOf="@id/includeSuperior"
+        app:layout_constraintBottom_toTopOf="@id/includeInferior"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
-            android:id="@+id/categoryDeleteContent"
+            android:id="@+id/contentContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -65,7 +67,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Eliminar Categoría"
+                            android:text="Eliminar Pasarela"
                             android:textSize="20sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
@@ -73,7 +75,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Verifica la información antes de eliminar"
+                            android:text="Gestiona la información del registro"
                             android:textSize="14sp"
                             android:textColor="@color/subtitle"
                             android:layout_marginTop="8dp" />
@@ -85,7 +87,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardCategoryDeleteInfo"
+                android:id="@+id/cardGatewayDelete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
@@ -108,13 +110,6 @@
                         android:textStyle="bold"
                         android:gravity="center" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="18dp"
-                        android:layout_marginBottom="18dp"
-                        android:background="@color/subtitle" />
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -132,7 +127,7 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/categoryDeleteIdTxt"
+                            android:id="@+id/fieldRegister"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -165,7 +160,7 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/categoryDeleteNameTxt"
+                            android:id="@+id/fieldName"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -176,30 +171,35 @@
 
                     </LinearLayout>
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/background_layout" />
+
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
 
             <TextView
-                android:id="@+id/categoryDeleteMessageTxt"
+                android:id="@+id/messageDelete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="26dp"
                 android:text="¿Estás seguro de eliminar este registro?"
                 android:textColor="@color/black"
                 android:textSize="18sp"
-                android:textStyle="bold"
+                android:textStyle="normal"
                 android:gravity="center" />
 
             <LinearLayout
-                android:id="@+id/categoryDeleteButtonContainer"
+                android:id="@+id/buttonContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="28dp"
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/categoryBackBtn"
+                    android:id="@+id/actionCancel"
                     android:layout_width="0dp"
                     android:layout_height="56dp"
                     android:layout_weight="1"
@@ -212,7 +212,7 @@
                     android:textStyle="bold" />
 
                 <Button
-                    android:id="@+id/categoryDeleteBtn"
+                    android:id="@+id/actionExecute"
                     android:layout_width="0dp"
                     android:layout_height="56dp"
                     android:layout_weight="1"
@@ -231,10 +231,10 @@
     </ScrollView>
 
     <include
-        android:id="@+id/bottomNavigationAdmin"
-        layout="@layout/bottom_navigation_admin"
+        android:id="@+id/includeInferior"
+        layout="@layout/navbar_admin_inferior"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="76dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
