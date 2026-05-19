@@ -5,8 +5,10 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
 import com.compensar.tienda.ui.common.SessionNavigation
+import com.compensar.tienda.ui.model.common.ImagePreviewHelper
 import com.compensar.tienda.ui.model.common.FirestoreRelationLabelHelper
 import com.google.firebase.firestore.FirebaseFirestore
 import com.compensar.tienda.domain.model.ProductModel
@@ -89,6 +91,8 @@ class ProductDeleteActivity : AppCompatActivity() {
 
     private fun showRegister() {
         val current = data ?: return
+
+        ImagePreviewHelper.addPreviewToCard(this, findViewById(R.id.cardProductDelete), current.storefire)
         fieldRegister.text = current.register.toString()
         fieldName.text = current.name.toString()
         fieldDetail.text = current.detail.toString()

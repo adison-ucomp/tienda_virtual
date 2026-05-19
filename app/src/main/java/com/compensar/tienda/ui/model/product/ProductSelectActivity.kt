@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
+import com.compensar.tienda.ui.model.common.ImagePreviewHelper
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.google.firebase.firestore.FirebaseFirestore
 import com.compensar.tienda.domain.model.ProductModel
@@ -153,7 +154,6 @@ class ProductSelectActivity : AppCompatActivity() {
         addText(textContainer, "Detalle: ${data.detail ?: ""}")
         addText(textContainer, "Stock: ${data.stock}")
         addText(textContainer, "Precio: ${data.price}")
-        addText(textContainer, "URL Imagen: ${data.storefire ?: ""}")
         addText(textContainer, "Categoría: ${label(categoryMap, data.idCategory)}")
         addText(textContainer, "Tienda: ${label(shopMap, data.idShop)}")
 
@@ -195,6 +195,7 @@ class ProductSelectActivity : AppCompatActivity() {
         buttonContainer.addView(btnEdit)
         buttonContainer.addView(btnQuit)
 
+        ImagePreviewHelper.addPreviewToRow(this, mainRow, data.storefire)
         mainRow.addView(textContainer)
         mainRow.addView(buttonContainer)
 

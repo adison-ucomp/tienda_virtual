@@ -14,6 +14,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
+import com.compensar.tienda.ui.model.common.ImagePreviewHelper
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.domain.model.UserModel
 import com.compensar.tienda.ui.model.user.UserCreateActivity
@@ -176,6 +177,7 @@ class AdminUserListActivity : AppCompatActivity() {
         buttonContainer.addView(btnEdit)
         buttonContainer.addView(btnQuit)
 
+        ImagePreviewHelper.addPreviewToRow(this, mainRow, data.storefire)
         mainRow.addView(textContainer)
         mainRow.addView(buttonContainer)
 

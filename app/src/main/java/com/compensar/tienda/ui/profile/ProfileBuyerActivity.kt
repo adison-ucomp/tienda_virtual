@@ -14,10 +14,15 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
+import com.compensar.tienda.ui.common.SessionManager
+import com.compensar.tienda.ui.home.HomeProductActivity
 
 class ProfileBuyerActivity : AppCompatActivity() {
 
     private lateinit var btnBack: TextView
+    private lateinit var textName: TextView
+    private lateinit var textEmail: TextView
+    private lateinit var btnLogout: TextView
     private lateinit var switchBiometric: Switch
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +33,7 @@ class ProfileBuyerActivity : AppCompatActivity() {
         applyWindowInsets()
         initViews()
         initEvents()
+        loadSession()
     }
 
     private fun applyWindowInsets() {
@@ -45,11 +51,23 @@ class ProfileBuyerActivity : AppCompatActivity() {
 
     private fun initViews() {
         btnBack = findViewById(R.id.btnBack)
+        textName = findViewById(R.id.txtUserName)
+        textEmail = findViewById(R.id.txtUserEmail)
+        btnLogout = findViewById(R.id.btnLogout)
         switchBiometric = findViewById(R.id.switchBiometric)
     }
 
     private fun initEvents() {
         btnBack.setOnClickListener {
+            finish()
+        }
+
+        btnLogout.setOnClickListener {
+            SessionManager.clear(this)
+
+            val intent = Intent(this, HomeProductActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
             finish()
         }
 
@@ -60,6 +78,11 @@ class ProfileBuyerActivity : AppCompatActivity() {
                 Toast.makeText(this, "Biometría desactivada", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun loadSession() {
+        textName.text = SessionManager.getFullName(this)
+        textEmail.text = SessionManager.getEmail(this)
     }
 
     private fun validateBiometric() {

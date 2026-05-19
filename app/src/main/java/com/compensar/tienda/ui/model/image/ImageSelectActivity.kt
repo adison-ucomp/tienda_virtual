@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
+import com.compensar.tienda.ui.model.common.ImagePreviewHelper
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.google.firebase.firestore.FirebaseFirestore
 import com.compensar.tienda.domain.model.ImageModel
@@ -127,7 +128,6 @@ class ImageSelectActivity : AppCompatActivity() {
         }
 
         addText(textContainer, "Registro: ${data.register}")
-        addText(textContainer, "URL Imagen: ${data.storefire ?: ""}")
         addText(textContainer, "Producto: ${label(productMap, data.idProduct)}")
 
         val buttonContainer = LinearLayout(this).apply {
@@ -168,6 +168,7 @@ class ImageSelectActivity : AppCompatActivity() {
         buttonContainer.addView(btnEdit)
         buttonContainer.addView(btnQuit)
 
+        ImagePreviewHelper.addPreviewToRow(this, mainRow, data.storefire)
         mainRow.addView(textContainer)
         mainRow.addView(buttonContainer)
 

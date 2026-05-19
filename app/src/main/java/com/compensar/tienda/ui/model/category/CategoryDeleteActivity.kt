@@ -7,8 +7,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
 import com.compensar.tienda.ui.common.SessionNavigation
+import com.compensar.tienda.ui.model.common.ImagePreviewHelper
 import com.compensar.tienda.domain.model.CategoryModel
 import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
 import com.google.firebase.firestore.FirebaseFirestore
@@ -96,6 +98,8 @@ class CategoryDeleteActivity : AppCompatActivity() {
 
     private fun showRegister() {
         val currentCategory = category ?: return
+
+        ImagePreviewHelper.addPreviewToCard(this, findViewById(R.id.cardDelete), currentCategory.storefire)
 
         fieldRegister.text = currentCategory.register.toString()
         fieldName.text = currentCategory.name ?: ""

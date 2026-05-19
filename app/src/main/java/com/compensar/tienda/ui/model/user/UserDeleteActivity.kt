@@ -7,8 +7,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
 import com.compensar.tienda.ui.common.SessionNavigation
+import com.compensar.tienda.ui.model.common.ImagePreviewHelper
 import com.compensar.tienda.ui.model.common.FirestoreRelationLabelHelper
 import com.compensar.tienda.domain.model.UserModel
 import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
@@ -103,6 +105,8 @@ class UserDeleteActivity : AppCompatActivity() {
 
     private fun showRegister() {
         val currentUser = user ?: return
+
+        ImagePreviewHelper.addPreviewToCard(this, findViewById(R.id.cardUserDeleteInfo), currentUser.storefire)
 
         fieldRegister.text = currentUser.register.toString()
         fieldNames.text = currentUser.names ?: ""

@@ -1,21 +1,40 @@
 package com.compensar.tienda.ui.profile
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
+import com.compensar.tienda.ui.common.SessionManager
 
 class ProfileAdminActivity : AppCompatActivity() {
+
+    private lateinit var actionReturn: TextView
+    private lateinit var textName: TextView
+    private lateinit var textEmail: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.profile_admin)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        initViews()
+        initEvents()
+        loadSession()
+    }
+
+    private fun initViews() {
+        actionReturn = findViewById(R.id.actionReturn)
+        textName = findViewById(R.id.txtNameAdmin)
+        textEmail = findViewById(R.id.txtEmail)
+    }
+
+    private fun initEvents() {
+        actionReturn.setOnClickListener {
+            finish()
         }
+    }
+
+    private fun loadSession() {
+        textName.text = SessionManager.getFullName(this)
+        textEmail.text = SessionManager.getEmail(this)
     }
 }

@@ -7,10 +7,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
 import com.compensar.tienda.ui.common.SessionNavigation
+import com.compensar.tienda.ui.model.common.ImagePreviewHelper
 import com.compensar.tienda.ui.model.common.FirestoreRelationLabelHelper
 import com.compensar.tienda.domain.model.UserModel
 import com.google.firebase.firestore.FirebaseFirestore
@@ -97,6 +99,8 @@ class AdminUserQuitActivity : AppCompatActivity() {
 
     private fun showRegister() {
         val currentUser = user ?: return
+
+        ImagePreviewHelper.addPreviewToCard(this, findViewById(R.id.cardUserDeleteInfo), currentUser.storefire)
 
         fieldRegister.text = currentUser.register.toString()
         fieldNames.text = currentUser.names ?: ""

@@ -6,7 +6,9 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="@color/background_layout"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
     tools:context=".ui.profile.ProfileBuyerActivity">
 
     <!-- Navbar superior con botón regresar -->
