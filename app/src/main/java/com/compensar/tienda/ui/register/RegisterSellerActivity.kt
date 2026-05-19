@@ -1,4 +1,4 @@
-package com.compensar.tienda.ui.platform
+package com.compensar.tienda.ui.register
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
+import com.compensar.tienda.ui.home.HomeLoginActivity
 
 class RegisterSellerActivity : AppCompatActivity() {
     private lateinit var btnBack: TextView

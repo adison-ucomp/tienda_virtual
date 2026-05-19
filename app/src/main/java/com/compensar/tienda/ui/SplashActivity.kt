@@ -7,7 +7,7 @@ import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
 import com.compensar.tienda.data.remote.fire.DefaultFire
-import com.compensar.tienda.ui.platform.HomeProductActivity
+import com.compensar.tienda.ui.home.HomeProductActivity
 
 class SplashActivity : AppCompatActivity() {
     /*override fun onCreate(savedInstanceState: Bundle?) {

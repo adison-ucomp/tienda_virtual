@@ -1,4 +1,4 @@
-package com.compensar.tienda.ui.platform
+package com.compensar.tienda.ui.home
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,6 +13,12 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
 import com.compensar.tienda.domain.model.UserModel
+import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
+import com.compensar.tienda.ui.dashboard.DashboardSellerActivity
+import com.compensar.tienda.ui.register.RegisterBuyerActivity
+import com.compensar.tienda.ui.register.RegisterSellerActivity
+import com.compensar.tienda.ui.buyer.BuyerAddressActivity
+import com.compensar.tienda.ui.buyer.BuyerShoppingActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import java.security.MessageDigest
 

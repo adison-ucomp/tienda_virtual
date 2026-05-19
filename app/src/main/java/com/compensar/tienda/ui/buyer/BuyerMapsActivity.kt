@@ -1,4 +1,4 @@
-package com.compensar.tienda.ui.platform
+package com.compensar.tienda.ui.buyer
 
 import android.Manifest
 import android.content.pm.PackageManager

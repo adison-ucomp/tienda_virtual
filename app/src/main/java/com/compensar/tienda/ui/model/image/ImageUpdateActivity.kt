@@ -14,7 +14,7 @@ import com.compensar.tienda.R
 import com.bumptech.glide.Glide
 import com.compensar.tienda.domain.model.ImageModel
 import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
-import com.compensar.tienda.ui.platform.DashboardAdminActivity
+import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import android.graphics.Bitmap
 import android.net.Uri

@@ -1,4 +1,4 @@
-package com.compensar.tienda.ui.home
+package com.compensar.tienda.ui.admin
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -7,11 +7,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
 
-class HomeCatSportActivity : AppCompatActivity() {
+class AdminUserListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.home_cat_sport)
+        setContentView(R.layout.admin_user_list)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)

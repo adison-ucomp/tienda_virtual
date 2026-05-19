@@ -11,7 +11,7 @@ object UserDefault {
                 register = 1,
                 names = "Admin",
                 srnms = "Admin",
-                email = "admin@gmail.com",
+                email = "test@adisonjimenez.dev",
                 password = encryptPassword("Admin"),
                 storefire = "https://firebasestorage.googleapis.com/v0/b/engineering-code.firebasestorage.app/o/images%2Fuser%2F1_1779207007566.jpg?alt=media&token=7b8bc578-7de0-4787-bf0f-1d450c48a144",
                 idRole = 1

@@ -1,22 +1,18 @@
 package com.compensar.tienda.ui.model.category
 
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.Gravity
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
 import com.compensar.tienda.domain.model.CategoryModel
-import com.compensar.tienda.ui.platform.DashboardAdminActivity
+import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
 class CategorySelectActivity : AppCompatActivity() {

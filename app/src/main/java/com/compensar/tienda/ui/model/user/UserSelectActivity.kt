@@ -13,7 +13,7 @@ import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
 import com.google.firebase.firestore.FirebaseFirestore
 import com.compensar.tienda.domain.model.UserModel
-import com.compensar.tienda.ui.platform.DashboardAdminActivity
+import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
 
 class UserSelectActivity : AppCompatActivity() {
     private lateinit var actionHome: LinearLayout

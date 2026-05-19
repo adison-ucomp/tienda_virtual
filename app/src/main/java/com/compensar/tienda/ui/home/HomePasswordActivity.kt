@@ -1,4 +1,4 @@
-package com.compensar.tienda.ui.platform
+package com.compensar.tienda.ui.home
 
 import android.content.Intent
 import android.os.Bundle

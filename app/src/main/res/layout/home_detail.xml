@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context=".ui.platform.HomeDetailActivity">
+    tools:context=".ui.home.HomeDetailActivity">
 
     <!-- Navbar superior con botón regresar -->
     <LinearLayout

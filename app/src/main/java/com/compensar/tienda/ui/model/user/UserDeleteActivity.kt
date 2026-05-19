@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
 import com.compensar.tienda.domain.model.UserModel
-import com.compensar.tienda.ui.platform.DashboardAdminActivity
+import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
 class UserDeleteActivity : AppCompatActivity() {

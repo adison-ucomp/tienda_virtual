@@ -29,43 +29,43 @@
             android:name=".ui.profile.ProfileShareActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.platform.DashboardSellerActivity"
+            android:name=".ui.dashboard.DashboardSellerActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.platform.DashboardAdminActivity"
+            android:name=".ui.dashboard.DashboardAdminActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.platform.BuyerMapsActivity"
+            android:name=".ui.buyer.BuyerMapsActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.platform.BuyerAddressActivity"
+            android:name=".ui.buyer.BuyerAddressActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.platform.HomePasswordActivity"
+            android:name=".ui.home.HomePasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.platform.HomeRestoreActivity"
+            android:name=".ui.home.HomeRestoreActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.platform.HomeCatSportActivity"
+            android:name=".ui.home.HomeCatSportActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.platform.HomeCatTechActivity"
+            android:name=".ui.home.HomeCatTechActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.platform.HomeCategoryActivity"
+            android:name=".ui.home.HomeCategoryActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.platform.BuyerShoppingActivity"
+            android:name=".ui.buyer.BuyerShoppingActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.platform.BuyerPurchaseActivity"
+            android:name=".ui.buyer.BuyerPurchaseActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.platform.BuyerCartShopActivity"
+            android:name=".ui.buyer.BuyerCartShopActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.platform.HomeDetailActivity"
+            android:name=".ui.home.HomeDetailActivity"
             android:exported="false" />
         <activity
             android:name=".ui.profile.ProfileAdminActivity"
@@ -77,16 +77,16 @@
             android:name=".ui.profile.ProfileSellerActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.platform.HomeLoginActivity"
+            android:name=".ui.home.HomeLoginActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.platform.RegisterBuyerActivity"
+            android:name=".ui.register.RegisterBuyerActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.platform.RegisterSellerActivity"
+            android:name=".ui.register.RegisterSellerActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.platform.HomeProductActivity"
+            android:name=".ui.home.HomeProductActivity"
             android:exported="false" />
         <activity
             android:name=".ui.model.address.AddressCreateActivity"
