@@ -16,7 +16,7 @@ class ImageCreateActivity : AppCompatActivity() {
     private lateinit var actionExecute: Button
 
     private lateinit var fieldRegister: EditText
-    private lateinit var fieldUrlImage: EditText
+    private lateinit var fieldStorefire: EditText
     private lateinit var fieldIdProduct: EditText
 
     private val db = FirebaseFirestore.getInstance()
@@ -35,7 +35,7 @@ class ImageCreateActivity : AppCompatActivity() {
         actionCancel = findViewById(R.id.actionCancel)
         actionExecute = findViewById(R.id.actionExecute)
         fieldRegister = findViewById(R.id.fieldRegister)
-        fieldUrlImage = findViewById(R.id.fieldUrlImage)
+        fieldStorefire = findViewById(R.id.fieldStorefire)
         fieldIdProduct = findViewById(R.id.fieldIdProduct)
     }
 
@@ -60,7 +60,7 @@ class ImageCreateActivity : AppCompatActivity() {
 
         val data = ImageModel(
             register = register,
-            urlImage = fieldUrlImage.text.toString().trim().ifEmpty { null },
+            storefire = fieldStorefire.text.toString().trim().ifEmpty { null },
             idProduct = fieldIdProduct.text.toString().trim().toLongOrNull() ?: 0
         )
 

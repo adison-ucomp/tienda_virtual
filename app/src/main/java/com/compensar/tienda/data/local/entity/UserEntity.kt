@@ -17,6 +17,8 @@ data class UserEntity(
     val email: String? = null,
 
     val password: String? = null,
+    
+    val storefire: String? = null,
 
     @ColumnInfo(name = "id_role")
     val idRole: Long

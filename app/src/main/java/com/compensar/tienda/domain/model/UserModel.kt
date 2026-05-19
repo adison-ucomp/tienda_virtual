@@ -6,5 +6,6 @@ data class UserModel(
     val srnms: String? = null,
     val email: String? = null,
     val password: String? = null,
+    val storefire: String? = null,
     val idRole: Long = 0
 )

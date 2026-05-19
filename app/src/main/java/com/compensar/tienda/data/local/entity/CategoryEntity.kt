@@ -9,5 +9,7 @@ data class CategoryEntity(
     @PrimaryKey(autoGenerate = true)
     val register: Long = 0,
 
-    val name: String? = null
+    val name: String? = null,
+
+    val storefire: String? = null,
 )

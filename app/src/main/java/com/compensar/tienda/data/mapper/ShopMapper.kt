@@ -7,6 +7,7 @@ fun ShopDto.toEntity(): ShopEntity {
     return ShopEntity(
         register = register ?: 0,
         name = name,
+        storefire = storefire,
         idSeller = idSeller ?: 0
     )
 }
@@ -15,6 +16,7 @@ fun ShopEntity.toDto(): ShopDto {
     return ShopDto(
         register = register,
         name = name,
+        storefire = storefire,
         idSeller = idSeller
     )
 }

@@ -102,14 +102,14 @@ class ImageSelectActivity : AppCompatActivity() {
         }
         textContainer.addView(txtRegister)
 
-        val txtUrlImage = TextView(this).apply {
-            text = "URL Imagen: ${data.urlImage ?: ""}"
+        val txtStorefire = TextView(this).apply {
+            text = "URL Imagen: ${data.storefire ?: ""}"
             textSize = 14f
             setTextColor(getColor(R.color.black))
             setTypeface(null, Typeface.BOLD)
             setPadding(0, dp(6), 0, 0)
         }
-        textContainer.addView(txtUrlImage)
+        textContainer.addView(txtStorefire)
 
         val txtIdProduct = TextView(this).apply {
             text = "ID Producto: ${data.idProduct}"

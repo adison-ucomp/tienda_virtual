@@ -8,6 +8,7 @@ data class UserDto(
     val srnms: String? = null,
     val email: String? = null,
     val password: String? = null,
+    val storefire: String? = null,
 
     @SerializedName("id_role")
     val idRole: Long? = null

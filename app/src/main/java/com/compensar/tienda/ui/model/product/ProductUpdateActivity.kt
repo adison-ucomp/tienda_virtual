@@ -18,7 +18,7 @@ class ProductUpdateActivity : AppCompatActivity() {
     private lateinit var fieldRegister: EditText
     private lateinit var fieldName: EditText
     private lateinit var fieldDetail: EditText
-    private lateinit var fieldUrlImage: EditText
+    private lateinit var fieldStorefire: EditText
     private lateinit var fieldIdCategory: EditText
     private lateinit var fieldIdShop: EditText
 
@@ -46,7 +46,7 @@ class ProductUpdateActivity : AppCompatActivity() {
         fieldRegister = findViewById(R.id.fieldRegister)
         fieldName = findViewById(R.id.fieldName)
         fieldDetail = findViewById(R.id.fieldDetail)
-        fieldUrlImage = findViewById(R.id.fieldUrlImage)
+        fieldStorefire = findViewById(R.id.fieldStorefire)
         fieldIdCategory = findViewById(R.id.fieldIdCategory)
         fieldIdShop = findViewById(R.id.fieldIdShop)
     }
@@ -86,7 +86,7 @@ class ProductUpdateActivity : AppCompatActivity() {
         fieldRegister.setText(current.register.toString())
         fieldName.setText(current.name.toString())
         fieldDetail.setText(current.detail.toString())
-        fieldUrlImage.setText(current.urlImage.toString())
+        fieldStorefire.setText(current.storefire.toString())
         fieldIdCategory.setText(current.idCategory.toString())
         fieldIdShop.setText(current.idShop.toString())
     }
@@ -101,7 +101,7 @@ class ProductUpdateActivity : AppCompatActivity() {
             register = register,
             name = fieldName.text.toString().trim().ifEmpty { null },
             detail = fieldDetail.text.toString().trim().ifEmpty { null },
-            urlImage = fieldUrlImage.text.toString().trim().ifEmpty { null },
+            storefire = fieldStorefire.text.toString().trim().ifEmpty { null },
             idCategory = fieldIdCategory.text.toString().trim().toLongOrNull() ?: 0,
             idShop = fieldIdShop.text.toString().trim().toLongOrNull() ?: 0
         )

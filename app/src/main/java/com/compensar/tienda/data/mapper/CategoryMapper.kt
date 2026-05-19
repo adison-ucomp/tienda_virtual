@@ -6,6 +6,7 @@ import com.compensar.tienda.data.remote.dto.CategoryDto
 fun CategoryDto.toEntity(): CategoryEntity {
     return CategoryEntity(
         register = register ?: 0,
+        storefire = storefire,
         name = name
     )
 }
@@ -13,6 +14,7 @@ fun CategoryDto.toEntity(): CategoryEntity {
 fun CategoryEntity.toDto(): CategoryDto {
     return CategoryDto(
         register = register,
+        storefire = storefire,
         name = name
     )
 }

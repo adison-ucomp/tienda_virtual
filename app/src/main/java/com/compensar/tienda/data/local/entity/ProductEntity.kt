@@ -14,8 +14,7 @@ data class ProductEntity(
 
     val detail: String? = null,
 
-    @ColumnInfo(name = "url_image")
-    val urlImage: String? = null,
+    val storefire: String? = null,
 
     @ColumnInfo(name = "id_category")
     val idCategory: Long,

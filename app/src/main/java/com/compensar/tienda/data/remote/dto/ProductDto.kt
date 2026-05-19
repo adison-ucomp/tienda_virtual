@@ -6,9 +6,7 @@ data class ProductDto(
     val register: Long? = null,
     val name: String? = null,
     val detail: String? = null,
-
-    @SerializedName("url_image")
-    val urlImage: String? = null,
+    val storefire: String? = null,
 
     @SerializedName("id_category")
     val idCategory: Long? = null,

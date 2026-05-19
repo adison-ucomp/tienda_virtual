@@ -10,8 +10,7 @@ data class ImageEntity(
     @PrimaryKey(autoGenerate = true)
     val register: Long = 0,
 
-    @ColumnInfo(name = "url_image")
-    val urlImage: String? = null,
+    val storefire: String? = null,
 
     @ColumnInfo(name = "id_product")
     val idProduct: Long

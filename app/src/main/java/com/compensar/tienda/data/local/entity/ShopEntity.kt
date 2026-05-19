@@ -11,6 +11,8 @@ data class ShopEntity(
     val register: Long = 0,
 
     val name: String? = null,
+    
+    val storefire: String? = null,
 
     @ColumnInfo(name = "id_seller")
     val idSeller: Long

@@ -8,7 +8,7 @@ fun ProductDto.toEntity(): ProductEntity {
         register = register ?: 0,
         name = name,
         detail = detail,
-        urlImage = urlImage,
+        storefire = storefire,
         idCategory = idCategory ?: 0,
         idShop = idShop ?: 0
     )
@@ -19,7 +19,7 @@ fun ProductEntity.toDto(): ProductDto {
         register = register,
         name = name,
         detail = detail,
-        urlImage = urlImage,
+        storefire = storefire,
         idCategory = idCategory,
         idShop = idShop
     )

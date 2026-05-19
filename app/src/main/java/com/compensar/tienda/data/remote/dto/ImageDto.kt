@@ -4,9 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class ImageDto(
     val register: Long? = null,
-
-    @SerializedName("url_image")
-    val urlImage: String? = null,
+    val storefire: String? = null,
 
     @SerializedName("id_product")
     val idProduct: Long? = null

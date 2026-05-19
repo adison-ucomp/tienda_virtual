@@ -10,6 +10,7 @@ fun UserDto.toEntity(): UserEntity {
         srnms = srnms,
         email = email,
         password = password,
+        storefire = storefire,
         idRole = idRole ?: 0
     )
 }
@@ -21,6 +22,7 @@ fun UserEntity.toDto(): UserDto {
         srnms = srnms,
         email = email,
         password = password,
+        storefire = storefire,
         idRole = idRole
     )
 }

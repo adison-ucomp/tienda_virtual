@@ -6,7 +6,7 @@ import com.compensar.tienda.data.remote.dto.ImageDto
 fun ImageDto.toEntity(): ImageEntity {
     return ImageEntity(
         register = register ?: 0,
-        urlImage = urlImage,
+        storefire = storefire,
         idProduct = idProduct ?: 0
     )
 }
@@ -14,7 +14,7 @@ fun ImageDto.toEntity(): ImageEntity {
 fun ImageEntity.toDto(): ImageDto {
     return ImageDto(
         register = register,
-        urlImage = urlImage,
+        storefire = storefire,
         idProduct = idProduct
     )
 }

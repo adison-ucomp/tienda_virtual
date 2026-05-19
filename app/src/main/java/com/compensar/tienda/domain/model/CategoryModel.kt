@@ -2,5 +2,6 @@ package com.compensar.tienda.domain.model
 
 data class CategoryModel(
     val register: Long = 0,
-    val name: String? = null
+    val name: String? = null,
+    val storefire: String? = null
 )

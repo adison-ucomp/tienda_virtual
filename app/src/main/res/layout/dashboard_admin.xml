@@ -6,6 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context=".ui.platform.DashboardAdminActivity">
 
@@ -21,7 +22,7 @@
 
     <!-- Contenido principal -->
     <ScrollView
-        android:id="@+id/scrollCategoryCreate"
+        android:id="@+id/scrollDashAdmin"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
@@ -38,7 +39,7 @@
             android:padding="20dp">
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardUsers"
+                android:id="@+id/cardUser"
                 android:layout_width="match_parent"
                 android:layout_height="170dp"
                 android:layout_marginBottom="16dp"
@@ -87,7 +88,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardShops"
+                android:id="@+id/cardShop"
                 android:layout_width="match_parent"
                 android:layout_height="170dp"
                 android:layout_marginBottom="16dp"
@@ -136,7 +137,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardReports"
+                android:id="@+id/cardReport"
                 android:layout_width="match_parent"
                 android:layout_height="170dp"
                 app:cardCornerRadius="16dp"

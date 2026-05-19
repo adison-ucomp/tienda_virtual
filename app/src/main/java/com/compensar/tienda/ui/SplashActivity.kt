@@ -10,7 +10,7 @@ import com.compensar.tienda.data.remote.fire.DefaultFire
 import com.compensar.tienda.ui.platform.HomeProductActivity
 
 class SplashActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
+    /*override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_splash)
@@ -20,9 +20,9 @@ class SplashActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }, 1000)
-    }
+    }*/
 
-    /*private val defaultDataFire = DefaultFire()
+    private val defaultDataFire = DefaultFire()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,5 +51,5 @@ class SplashActivity : AppCompatActivity() {
             // overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
         }, 25)
-    }*/
+    }
 }
