@@ -60,7 +60,19 @@
             android:exported="false" />
         <activity
             android:name=".ui.home.HomePasswordActivity"
-            android:exported="false" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="password"
+                    android:path="/reset"
+                    android:scheme="emptio" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.home.HomeRestoreActivity"
             android:exported="false" />

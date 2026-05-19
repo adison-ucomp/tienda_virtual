@@ -36,6 +36,15 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
+    packaging {
+        resources {
+            excludes += "META-INF/NOTICE.md"
+            excludes += "META-INF/LICENSE.md"
+            excludes += "META-INF/NOTICE"
+            excludes += "META-INF/LICENSE"
+        }
+    }
 }
 
 dependencies {
@@ -64,6 +73,8 @@ dependencies {
         // implementation("com.google.firebase:firebase-analytics")
         // Firebase Storage
         implementation("com.google.firebase:firebase-storage")
+        implementation("com.sun.mail:android-mail:1.6.7")
+        implementation("com.sun.mail:android-activation:1.6.7")
         implementation("com.github.bumptech.glide:glide:4.16.0")
 
         // Ubicación en tiempo real
