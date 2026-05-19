@@ -12,6 +12,7 @@ import com.compensar.tienda.ui.home.HomeProductActivity
 
 class ProfileShareActivity : AppCompatActivity() {
 
+    private lateinit var actionReturn: TextView
     private lateinit var textName: TextView
     private lateinit var textEmail: TextView
     private lateinit var btnSettings: LinearLayout
@@ -28,6 +29,7 @@ class ProfileShareActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
+        actionReturn = findViewById(R.id.actionReturn)
         textName = findViewById(R.id.textName)
         textEmail = findViewById(R.id.textEmail)
         btnSettings = findViewById(R.id.btnSettings)
@@ -36,6 +38,10 @@ class ProfileShareActivity : AppCompatActivity() {
     }
 
     private fun initEvents() {
+        actionReturn.setOnClickListener {
+            finish()
+        }
+
         btnSettings.setOnClickListener {
             Toast.makeText(this, "Configuración", Toast.LENGTH_SHORT).show()
         }

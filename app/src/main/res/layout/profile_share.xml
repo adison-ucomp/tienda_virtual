@@ -10,6 +10,16 @@
     android:padding="20dp"
     tools:context=".ui.profile.ProfileShareActivity">
 
+    <TextView
+        android:id="@+id/actionReturn"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:gravity="center"
+        android:text="←"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
     <ImageView
         android:id="@+id/imgPerfilDrawer"
         android:layout_width="80dp"

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/navbarAdminBack"
+    android:id="@+id/navbarSellerReturn"
     android:layout_width="match_parent"
     android:layout_height="64dp">
 
     <include
-        android:id="@+id/includeNavbarAdminSuperior"
-        layout="@layout/navbar_admin_superior"
+        android:id="@+id/includeNavbarSellerSuperior"
+        layout="@layout/navbar_seller_superior"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

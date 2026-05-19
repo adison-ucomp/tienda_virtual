@@ -13,7 +13,7 @@
 
     <include
         android:id="@+id/includeSuperior"
-        layout="@layout/navbar_admin_return"
+        layout="@layout/navbar_seller_return"
         android:layout_width="0dp"
         android:layout_height="64dp"
         app:layout_constraintTop_toTopOf="parent"
@@ -27,7 +27,7 @@
         android:fillViewport="true"
         android:background="@color/background_layout"
         app:layout_constraintTop_toBottomOf="@id/includeSuperior"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/includeInferior"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -101,5 +101,15 @@
         </LinearLayout>
 
     </ScrollView>
+
+
+    <include
+        android:id="@+id/includeInferior"
+        layout="@layout/navbar_seller_inferior"
+        android:layout_width="0dp"
+        android:layout_height="76dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
