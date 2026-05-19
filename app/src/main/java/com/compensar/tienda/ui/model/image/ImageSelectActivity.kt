@@ -22,6 +22,9 @@ class ImageSelectActivity : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("image")
 
+    private var productMap: Map<Long, String> = emptyMap()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.model_image_select)
@@ -42,10 +45,38 @@ class ImageSelectActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        loadDataBase()
+        loadReferenceData { loadItems() }
     }
 
     private fun loadDataBase() {
+        loadReferenceData { loadItems() }
+    }
+
+    private fun loadReferenceData(onComplete: () -> Unit) {
+        loadProducts(onComplete)
+    }
+
+    private fun loadProducts(onComplete: () -> Unit) {
+        db.collection("product")
+            .get()
+            .addOnSuccessListener { result ->
+                productMap = result.documents.mapNotNull { document ->
+                    val register = document.getLong("register") ?: return@mapNotNull null
+                    val description = document.getString("name") ?: "Sin Informacion"
+                    register to description
+                }.toMap()
+
+                onComplete()
+            }
+            .addOnFailureListener { exception ->
+                exception.printStackTrace()
+                productMap = emptyMap()
+                onComplete()
+            }
+    }
+
+
+    private fun loadItems() {
         collection
             .get()
             .addOnSuccessListener { result ->
@@ -93,32 +124,9 @@ class ImageSelectActivity : AppCompatActivity() {
             )
         }
 
-        val txtRegister = TextView(this).apply {
-            text = "Registro: ${data.register}"
-            textSize = 14f
-            setTextColor(getColor(R.color.black))
-            setTypeface(null, Typeface.BOLD)
-            setPadding(0, dp(6), 0, 0)
-        }
-        textContainer.addView(txtRegister)
-
-        val txtStorefire = TextView(this).apply {
-            text = "URL Imagen: ${data.storefire ?: ""}"
-            textSize = 14f
-            setTextColor(getColor(R.color.black))
-            setTypeface(null, Typeface.BOLD)
-            setPadding(0, dp(6), 0, 0)
-        }
-        textContainer.addView(txtStorefire)
-
-        val txtIdProduct = TextView(this).apply {
-            text = "ID Producto: ${data.idProduct}"
-            textSize = 14f
-            setTextColor(getColor(R.color.black))
-            setTypeface(null, Typeface.BOLD)
-            setPadding(0, dp(6), 0, 0)
-        }
-        textContainer.addView(txtIdProduct)
+        addText(textContainer, "Registro: ${data.register}")
+        addText(textContainer, "URL Imagen: ${data.storefire ?: ""}")
+        addText(textContainer, "Producto: ${label(productMap, data.idProduct)}")
 
         val buttonContainer = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -165,6 +173,23 @@ class ImageSelectActivity : AppCompatActivity() {
 
         return cardView
     }
+
+    private fun addText(container: LinearLayout, value: String, color: Int = R.color.black) {
+        val textView = TextView(this).apply {
+            text = value
+            textSize = 14f
+            setTextColor(getColor(color))
+            setTypeface(null, Typeface.BOLD)
+            setPadding(0, dp(6), 0, 0)
+        }
+
+        container.addView(textView)
+    }
+
+    private fun label(map: Map<Long, String>, id: Long): String {
+        return map[id] ?: "Sin Informacion"
+    }
+
 
     private fun dp(value: Int): Int {
         return (value * resources.displayMetrics.density).toInt()

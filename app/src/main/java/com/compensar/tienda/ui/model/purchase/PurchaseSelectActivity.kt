@@ -22,6 +22,12 @@ class PurchaseSelectActivity : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("purchase")
 
+    private var productMap: Map<Long, String> = emptyMap()
+    private var paymentMap: Map<Long, String> = emptyMap()
+    private var gatewayMap: Map<Long, String> = emptyMap()
+    private var userMap: Map<Long, String> = emptyMap()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.model_purchase_select)
@@ -42,10 +48,101 @@ class PurchaseSelectActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        loadDataBase()
+        loadReferenceData { loadItems() }
     }
 
     private fun loadDataBase() {
+        loadReferenceData { loadItems() }
+    }
+
+    private fun loadReferenceData(onComplete: () -> Unit) {
+        loadProducts {
+            loadPayments {
+                loadGateways {
+                    loadUsers(onComplete)
+                }
+            }
+        }
+    }
+
+    private fun loadProducts(onComplete: () -> Unit) {
+        db.collection("product")
+            .get()
+            .addOnSuccessListener { result ->
+                productMap = result.documents.mapNotNull { document ->
+                    val register = document.getLong("register") ?: return@mapNotNull null
+                    val description = document.getString("name") ?: "Sin Informacion"
+                    register to description
+                }.toMap()
+
+                onComplete()
+            }
+            .addOnFailureListener { exception ->
+                exception.printStackTrace()
+                productMap = emptyMap()
+                onComplete()
+            }
+    }
+
+    private fun loadPayments(onComplete: () -> Unit) {
+        db.collection("payment")
+            .get()
+            .addOnSuccessListener { result ->
+                paymentMap = result.documents.mapNotNull { document ->
+                    val register = document.getLong("register") ?: return@mapNotNull null
+                    val description = document.getString("name") ?: "Sin Informacion"
+                    register to description
+                }.toMap()
+
+                onComplete()
+            }
+            .addOnFailureListener { exception ->
+                exception.printStackTrace()
+                paymentMap = emptyMap()
+                onComplete()
+            }
+    }
+
+    private fun loadGateways(onComplete: () -> Unit) {
+        db.collection("gateway")
+            .get()
+            .addOnSuccessListener { result ->
+                gatewayMap = result.documents.mapNotNull { document ->
+                    val register = document.getLong("register") ?: return@mapNotNull null
+                    val description = document.getString("name") ?: "Sin Informacion"
+                    register to description
+                }.toMap()
+
+                onComplete()
+            }
+            .addOnFailureListener { exception ->
+                exception.printStackTrace()
+                gatewayMap = emptyMap()
+                onComplete()
+            }
+    }
+
+    private fun loadUsers(onComplete: () -> Unit) {
+        db.collection("user")
+            .get()
+            .addOnSuccessListener { result ->
+                userMap = result.documents.mapNotNull { document ->
+                    val register = document.getLong("register") ?: return@mapNotNull null
+                    val description = document.getString("email") ?: "Sin Informacion"
+                    register to description
+                }.toMap()
+
+                onComplete()
+            }
+            .addOnFailureListener { exception ->
+                exception.printStackTrace()
+                userMap = emptyMap()
+                onComplete()
+            }
+    }
+
+
+    private fun loadItems() {
         collection
             .get()
             .addOnSuccessListener { result ->
@@ -93,95 +190,16 @@ class PurchaseSelectActivity : AppCompatActivity() {
             )
         }
 
-        val txtRegister = TextView(this).apply {
-            text = "Registro: ${data.register}"
-            textSize = 14f
-            setTextColor(getColor(R.color.black))
-            setTypeface(null, Typeface.BOLD)
-            setPadding(0, dp(6), 0, 0)
-        }
-        textContainer.addView(txtRegister)
-
-        val txtDate = TextView(this).apply {
-            text = "Fecha: ${data.date ?: ""}"
-            textSize = 14f
-            setTextColor(getColor(R.color.black))
-            setTypeface(null, Typeface.BOLD)
-            setPadding(0, dp(6), 0, 0)
-        }
-        textContainer.addView(txtDate)
-
-        val txtHour = TextView(this).apply {
-            text = "Hora: ${data.hour ?: ""}"
-            textSize = 14f
-            setTextColor(getColor(R.color.black))
-            setTypeface(null, Typeface.BOLD)
-            setPadding(0, dp(6), 0, 0)
-        }
-        textContainer.addView(txtHour)
-
-        val txtAmount = TextView(this).apply {
-            text = "Cantidad: ${data.amount}"
-            textSize = 14f
-            setTextColor(getColor(R.color.black))
-            setTypeface(null, Typeface.BOLD)
-            setPadding(0, dp(6), 0, 0)
-        }
-        textContainer.addView(txtAmount)
-
-        val txtValue = TextView(this).apply {
-            text = "Valor: ${data.value}"
-            textSize = 14f
-            setTextColor(getColor(R.color.black))
-            setTypeface(null, Typeface.BOLD)
-            setPadding(0, dp(6), 0, 0)
-        }
-        textContainer.addView(txtValue)
-
-        val txtTotal = TextView(this).apply {
-            text = "Total: ${data.total}"
-            textSize = 14f
-            setTextColor(getColor(R.color.black))
-            setTypeface(null, Typeface.BOLD)
-            setPadding(0, dp(6), 0, 0)
-        }
-        textContainer.addView(txtTotal)
-
-        val txtIdProduct = TextView(this).apply {
-            text = "ID Producto: ${data.idProduct}"
-            textSize = 14f
-            setTextColor(getColor(R.color.black))
-            setTypeface(null, Typeface.BOLD)
-            setPadding(0, dp(6), 0, 0)
-        }
-        textContainer.addView(txtIdProduct)
-
-        val txtIdMethod = TextView(this).apply {
-            text = "ID Medio Pago: ${data.idMethod}"
-            textSize = 14f
-            setTextColor(getColor(R.color.black))
-            setTypeface(null, Typeface.BOLD)
-            setPadding(0, dp(6), 0, 0)
-        }
-        textContainer.addView(txtIdMethod)
-
-        val txtIdGangway = TextView(this).apply {
-            text = "ID Pasarela: ${data.idGangway}"
-            textSize = 14f
-            setTextColor(getColor(R.color.black))
-            setTypeface(null, Typeface.BOLD)
-            setPadding(0, dp(6), 0, 0)
-        }
-        textContainer.addView(txtIdGangway)
-
-        val txtIdUser = TextView(this).apply {
-            text = "ID Usuario: ${data.idUser}"
-            textSize = 14f
-            setTextColor(getColor(R.color.black))
-            setTypeface(null, Typeface.BOLD)
-            setPadding(0, dp(6), 0, 0)
-        }
-        textContainer.addView(txtIdUser)
+        addText(textContainer, "Registro: ${data.register}")
+        addText(textContainer, "Fecha: ${data.date ?: ""}")
+        addText(textContainer, "Hora: ${data.hour ?: ""}")
+        addText(textContainer, "Cantidad: ${data.amount}")
+        addText(textContainer, "Valor: ${data.value}")
+        addText(textContainer, "Total: ${data.total}")
+        addText(textContainer, "Producto: ${label(productMap, data.idProduct)}")
+        addText(textContainer, "Medio Pago: ${label(paymentMap, data.idMethod)}")
+        addText(textContainer, "Pasarela: ${label(gatewayMap, data.idGangway)}")
+        addText(textContainer, "Usuario: ${label(userMap, data.idUser)}")
 
         val buttonContainer = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -228,6 +246,23 @@ class PurchaseSelectActivity : AppCompatActivity() {
 
         return cardView
     }
+
+    private fun addText(container: LinearLayout, value: String, color: Int = R.color.black) {
+        val textView = TextView(this).apply {
+            text = value
+            textSize = 14f
+            setTextColor(getColor(color))
+            setTypeface(null, Typeface.BOLD)
+            setPadding(0, dp(6), 0, 0)
+        }
+
+        container.addView(textView)
+    }
+
+    private fun label(map: Map<Long, String>, id: Long): String {
+        return map[id] ?: "Sin Informacion"
+    }
+
 
     private fun dp(value: Int): Int {
         return (value * resources.displayMetrics.density).toInt()

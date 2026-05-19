@@ -22,6 +22,9 @@ class ShopSelectActivity : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("shop")
 
+    private var sellerMap: Map<Long, String> = emptyMap()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.model_shop_select)
@@ -42,10 +45,38 @@ class ShopSelectActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        loadDataBase()
+        loadReferenceData { loadItems() }
     }
 
     private fun loadDataBase() {
+        loadReferenceData { loadItems() }
+    }
+
+    private fun loadReferenceData(onComplete: () -> Unit) {
+        loadSellers(onComplete)
+    }
+
+    private fun loadSellers(onComplete: () -> Unit) {
+        db.collection("seller")
+            .get()
+            .addOnSuccessListener { result ->
+                sellerMap = result.documents.mapNotNull { document ->
+                    val register = document.getLong("register") ?: return@mapNotNull null
+                    val description = document.getString("company") ?: document.getString("nit") ?: "Sin Informacion"
+                    register to description
+                }.toMap()
+
+                onComplete()
+            }
+            .addOnFailureListener { exception ->
+                exception.printStackTrace()
+                sellerMap = emptyMap()
+                onComplete()
+            }
+    }
+
+
+    private fun loadItems() {
         collection
             .get()
             .addOnSuccessListener { result ->
@@ -93,32 +124,9 @@ class ShopSelectActivity : AppCompatActivity() {
             )
         }
 
-        val txtRegister = TextView(this).apply {
-            text = "Registro: ${data.register}"
-            textSize = 14f
-            setTextColor(getColor(R.color.black))
-            setTypeface(null, Typeface.BOLD)
-            setPadding(0, dp(6), 0, 0)
-        }
-        textContainer.addView(txtRegister)
-
-        val txtName = TextView(this).apply {
-            text = "Nombre: ${data.name ?: ""}"
-            textSize = 14f
-            setTextColor(getColor(R.color.black))
-            setTypeface(null, Typeface.BOLD)
-            setPadding(0, dp(6), 0, 0)
-        }
-        textContainer.addView(txtName)
-
-        val txtIdSeller = TextView(this).apply {
-            text = "ID Vendedor: ${data.idSeller}"
-            textSize = 14f
-            setTextColor(getColor(R.color.black))
-            setTypeface(null, Typeface.BOLD)
-            setPadding(0, dp(6), 0, 0)
-        }
-        textContainer.addView(txtIdSeller)
+        addText(textContainer, "Registro: ${data.register}")
+        addText(textContainer, "Nombre: ${data.name ?: ""}")
+        addText(textContainer, "Vendedor: ${label(sellerMap, data.idSeller)}")
 
         val buttonContainer = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -165,6 +173,23 @@ class ShopSelectActivity : AppCompatActivity() {
 
         return cardView
     }
+
+    private fun addText(container: LinearLayout, value: String, color: Int = R.color.black) {
+        val textView = TextView(this).apply {
+            text = value
+            textSize = 14f
+            setTextColor(getColor(color))
+            setTypeface(null, Typeface.BOLD)
+            setPadding(0, dp(6), 0, 0)
+        }
+
+        container.addView(textView)
+    }
+
+    private fun label(map: Map<Long, String>, id: Long): String {
+        return map[id] ?: "Sin Informacion"
+    }
+
 
     private fun dp(value: Int): Int {
         return (value * resources.displayMetrics.density).toInt()

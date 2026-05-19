@@ -11,9 +11,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
+import com.google.firebase.firestore.FirebaseFirestore
 import com.compensar.tienda.domain.model.UserModel
 import com.compensar.tienda.ui.platform.DashboardAdminActivity
-import com.google.firebase.firestore.FirebaseFirestore
 
 class UserSelectActivity : AppCompatActivity() {
     private lateinit var actionHome: LinearLayout
@@ -23,6 +23,9 @@ class UserSelectActivity : AppCompatActivity() {
 
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("user")
+
+    private var roleMap: Map<Long, String> = emptyMap()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,9 +42,7 @@ class UserSelectActivity : AppCompatActivity() {
             finish()
         }
 
-        actionReturn.setOnClickListener {
-            finish()
-        }
+        actionReturn.setOnClickListener { finish() }
 
         actionNew.setOnClickListener {
             val intent = Intent(this, UserCreateActivity::class.java)
@@ -53,21 +54,49 @@ class UserSelectActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        loadDataBase()
+        loadReferenceData { loadItems() }
     }
 
     private fun loadDataBase() {
+        loadReferenceData { loadItems() }
+    }
+
+    private fun loadReferenceData(onComplete: () -> Unit) {
+        loadRoles(onComplete)
+    }
+
+    private fun loadRoles(onComplete: () -> Unit) {
+        db.collection("role")
+            .get()
+            .addOnSuccessListener { result ->
+                roleMap = result.documents.mapNotNull { document ->
+                    val register = document.getLong("register") ?: return@mapNotNull null
+                    val description = document.getString("name") ?: "Sin Informacion"
+                    register to description
+                }.toMap()
+
+                onComplete()
+            }
+            .addOnFailureListener { exception ->
+                exception.printStackTrace()
+                roleMap = emptyMap()
+                onComplete()
+            }
+    }
+
+
+    private fun loadItems() {
         collection
             .get()
             .addOnSuccessListener { result ->
                 dataList.removeAllViews()
 
-                val users = result.documents.mapNotNull { document ->
+                val items = result.documents.mapNotNull { document ->
                     document.toObject(UserModel::class.java)
                 }.sortedBy { it.register }
 
-                users.forEach { user ->
-                    dataList.addView(loadCard(user))
+                items.forEach { data ->
+                    dataList.addView(loadCard(data))
                 }
             }
             .addOnFailureListener { exception ->
@@ -75,7 +104,7 @@ class UserSelectActivity : AppCompatActivity() {
             }
     }
 
-    private fun loadCard(user: UserModel): CardView {
+    private fun loadCard(data: UserModel): CardView {
         val cardView = CardView(this).apply {
             radius = dp(18).toFloat()
             cardElevation = dp(6).toFloat()
@@ -104,40 +133,12 @@ class UserSelectActivity : AppCompatActivity() {
             )
         }
 
-        val txtId = TextView(this).apply {
-            text = "Registro: ${user.register}"
-            textSize = 14f
-            setTextColor(getColor(R.color.black))
-            setTypeface(null, Typeface.BOLD)
-        }
+        val fullName = "${data.names ?: ""} ${data.srnms ?: ""}".trim()
 
-        val txtName = TextView(this).apply {
-            text = "${user.names ?: ""} ${user.srnms ?: ""}".trim()
-            textSize = 14f
-            setTextColor(getColor(R.color.black))
-            setTypeface(null, Typeface.BOLD)
-            setPadding(0, dp(6), 0, 0)
-        }
-
-        val txtEmail = TextView(this).apply {
-            text = user.email ?: ""
-            textSize = 14f
-            setTextColor(getColor(R.color.subtitle))
-            setPadding(0, dp(6), 0, 0)
-        }
-
-        val txtRole = TextView(this).apply {
-            text = "Rol: ${user.idRole}"
-            textSize = 14f
-            setTextColor(getColor(R.color.roles))
-            setTypeface(null, Typeface.BOLD)
-            setPadding(0, dp(6), 0, 0)
-        }
-
-        textContainer.addView(txtId)
-        textContainer.addView(txtName)
-        textContainer.addView(txtEmail)
-        textContainer.addView(txtRole)
+        addText(textContainer, "Registro: ${data.register}")
+        addText(textContainer, "Usuario: $fullName")
+        addText(textContainer, "Correo: ${data.email ?: ""}", R.color.subtitle)
+        addText(textContainer, "Rol: ${label(roleMap, data.idRole)}", R.color.roles)
 
         val buttonContainer = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -156,7 +157,7 @@ class UserSelectActivity : AppCompatActivity() {
 
             setOnClickListener {
                 val intent = Intent(this@UserSelectActivity, UserUpdateActivity::class.java)
-                intent.putExtra("register", user.register)
+                intent.putExtra("register", data.register)
                 startActivity(intent)
             }
         }
@@ -169,7 +170,7 @@ class UserSelectActivity : AppCompatActivity() {
 
             setOnClickListener {
                 val intent = Intent(this@UserSelectActivity, UserDeleteActivity::class.java)
-                intent.putExtra("register", user.register)
+                intent.putExtra("register", data.register)
                 startActivity(intent)
             }
         }
@@ -184,6 +185,23 @@ class UserSelectActivity : AppCompatActivity() {
 
         return cardView
     }
+
+    private fun addText(container: LinearLayout, value: String, color: Int = R.color.black) {
+        val textView = TextView(this).apply {
+            text = value
+            textSize = 14f
+            setTextColor(getColor(color))
+            setTypeface(null, Typeface.BOLD)
+            setPadding(0, dp(6), 0, 0)
+        }
+
+        container.addView(textView)
+    }
+
+    private fun label(map: Map<Long, String>, id: Long): String {
+        return map[id] ?: "Sin Informacion"
+    }
+
 
     private fun dp(value: Int): Int {
         return (value * resources.displayMetrics.density).toInt()

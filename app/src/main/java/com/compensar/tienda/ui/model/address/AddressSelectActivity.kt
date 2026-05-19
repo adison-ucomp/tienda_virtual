@@ -22,6 +22,9 @@ class AddressSelectActivity : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("address")
 
+    private var userMap: Map<Long, String> = emptyMap()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.model_address_select)
@@ -42,10 +45,38 @@ class AddressSelectActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        loadDataBase()
+        loadReferenceData { loadItems() }
     }
 
     private fun loadDataBase() {
+        loadReferenceData { loadItems() }
+    }
+
+    private fun loadReferenceData(onComplete: () -> Unit) {
+        loadUsers(onComplete)
+    }
+
+    private fun loadUsers(onComplete: () -> Unit) {
+        db.collection("user")
+            .get()
+            .addOnSuccessListener { result ->
+                userMap = result.documents.mapNotNull { document ->
+                    val register = document.getLong("register") ?: return@mapNotNull null
+                    val description = document.getString("email") ?: "Sin Informacion"
+                    register to description
+                }.toMap()
+
+                onComplete()
+            }
+            .addOnFailureListener { exception ->
+                exception.printStackTrace()
+                userMap = emptyMap()
+                onComplete()
+            }
+    }
+
+
+    private fun loadItems() {
         collection
             .get()
             .addOnSuccessListener { result ->
@@ -93,32 +124,9 @@ class AddressSelectActivity : AppCompatActivity() {
             )
         }
 
-        val txtRegister = TextView(this).apply {
-            text = "Registro: ${data.register}"
-            textSize = 14f
-            setTextColor(getColor(R.color.black))
-            setTypeface(null, Typeface.BOLD)
-            setPadding(0, dp(6), 0, 0)
-        }
-        textContainer.addView(txtRegister)
-
-        val txtAddress = TextView(this).apply {
-            text = "Dirección: ${data.address ?: ""}"
-            textSize = 14f
-            setTextColor(getColor(R.color.black))
-            setTypeface(null, Typeface.BOLD)
-            setPadding(0, dp(6), 0, 0)
-        }
-        textContainer.addView(txtAddress)
-
-        val txtIdUser = TextView(this).apply {
-            text = "ID Usuario: ${data.idUser}"
-            textSize = 14f
-            setTextColor(getColor(R.color.black))
-            setTypeface(null, Typeface.BOLD)
-            setPadding(0, dp(6), 0, 0)
-        }
-        textContainer.addView(txtIdUser)
+        addText(textContainer, "Registro: ${data.register}")
+        addText(textContainer, "Dirección: ${data.address ?: ""}")
+        addText(textContainer, "Usuario: ${label(userMap, data.idUser)}")
 
         val buttonContainer = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -165,6 +173,23 @@ class AddressSelectActivity : AppCompatActivity() {
 
         return cardView
     }
+
+    private fun addText(container: LinearLayout, value: String, color: Int = R.color.black) {
+        val textView = TextView(this).apply {
+            text = value
+            textSize = 14f
+            setTextColor(getColor(color))
+            setTypeface(null, Typeface.BOLD)
+            setPadding(0, dp(6), 0, 0)
+        }
+
+        container.addView(textView)
+    }
+
+    private fun label(map: Map<Long, String>, id: Long): String {
+        return map[id] ?: "Sin Informacion"
+    }
+
 
     private fun dp(value: Int): Int {
         return (value * resources.displayMetrics.density).toInt()

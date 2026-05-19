@@ -22,6 +22,10 @@ class ProductSelectActivity : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("product")
 
+    private var categoryMap: Map<Long, String> = emptyMap()
+    private var shopMap: Map<Long, String> = emptyMap()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.model_product_select)
@@ -42,10 +46,59 @@ class ProductSelectActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        loadDataBase()
+        loadReferenceData { loadItems() }
     }
 
     private fun loadDataBase() {
+        loadReferenceData { loadItems() }
+    }
+
+    private fun loadReferenceData(onComplete: () -> Unit) {
+        loadCategories {
+            loadShops(onComplete)
+        }
+    }
+
+    private fun loadCategories(onComplete: () -> Unit) {
+        db.collection("category")
+            .get()
+            .addOnSuccessListener { result ->
+                categoryMap = result.documents.mapNotNull { document ->
+                    val register = document.getLong("register") ?: return@mapNotNull null
+                    val description = document.getString("name") ?: "Sin Informacion"
+                    register to description
+                }.toMap()
+
+                onComplete()
+            }
+            .addOnFailureListener { exception ->
+                exception.printStackTrace()
+                categoryMap = emptyMap()
+                onComplete()
+            }
+    }
+
+    private fun loadShops(onComplete: () -> Unit) {
+        db.collection("shop")
+            .get()
+            .addOnSuccessListener { result ->
+                shopMap = result.documents.mapNotNull { document ->
+                    val register = document.getLong("register") ?: return@mapNotNull null
+                    val description = document.getString("name") ?: "Sin Informacion"
+                    register to description
+                }.toMap()
+
+                onComplete()
+            }
+            .addOnFailureListener { exception ->
+                exception.printStackTrace()
+                shopMap = emptyMap()
+                onComplete()
+            }
+    }
+
+
+    private fun loadItems() {
         collection
             .get()
             .addOnSuccessListener { result ->
@@ -93,59 +146,12 @@ class ProductSelectActivity : AppCompatActivity() {
             )
         }
 
-        val txtRegister = TextView(this).apply {
-            text = "Registro: ${data.register}"
-            textSize = 14f
-            setTextColor(getColor(R.color.black))
-            setTypeface(null, Typeface.BOLD)
-            setPadding(0, dp(6), 0, 0)
-        }
-        textContainer.addView(txtRegister)
-
-        val txtName = TextView(this).apply {
-            text = "Nombre: ${data.name ?: ""}"
-            textSize = 14f
-            setTextColor(getColor(R.color.black))
-            setTypeface(null, Typeface.BOLD)
-            setPadding(0, dp(6), 0, 0)
-        }
-        textContainer.addView(txtName)
-
-        val txtDetail = TextView(this).apply {
-            text = "Detalle: ${data.detail ?: ""}"
-            textSize = 14f
-            setTextColor(getColor(R.color.black))
-            setTypeface(null, Typeface.BOLD)
-            setPadding(0, dp(6), 0, 0)
-        }
-        textContainer.addView(txtDetail)
-
-        val txtStorefire = TextView(this).apply {
-            text = "URL Imagen: ${data.storefire ?: ""}"
-            textSize = 14f
-            setTextColor(getColor(R.color.black))
-            setTypeface(null, Typeface.BOLD)
-            setPadding(0, dp(6), 0, 0)
-        }
-        textContainer.addView(txtStorefire)
-
-        val txtIdCategory = TextView(this).apply {
-            text = "ID Categoría: ${data.idCategory}"
-            textSize = 14f
-            setTextColor(getColor(R.color.black))
-            setTypeface(null, Typeface.BOLD)
-            setPadding(0, dp(6), 0, 0)
-        }
-        textContainer.addView(txtIdCategory)
-
-        val txtIdShop = TextView(this).apply {
-            text = "ID Tienda: ${data.idShop}"
-            textSize = 14f
-            setTextColor(getColor(R.color.black))
-            setTypeface(null, Typeface.BOLD)
-            setPadding(0, dp(6), 0, 0)
-        }
-        textContainer.addView(txtIdShop)
+        addText(textContainer, "Registro: ${data.register}")
+        addText(textContainer, "Nombre: ${data.name ?: ""}")
+        addText(textContainer, "Detalle: ${data.detail ?: ""}")
+        addText(textContainer, "URL Imagen: ${data.storefire ?: ""}")
+        addText(textContainer, "Categoría: ${label(categoryMap, data.idCategory)}")
+        addText(textContainer, "Tienda: ${label(shopMap, data.idShop)}")
 
         val buttonContainer = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -192,6 +198,23 @@ class ProductSelectActivity : AppCompatActivity() {
 
         return cardView
     }
+
+    private fun addText(container: LinearLayout, value: String, color: Int = R.color.black) {
+        val textView = TextView(this).apply {
+            text = value
+            textSize = 14f
+            setTextColor(getColor(color))
+            setTypeface(null, Typeface.BOLD)
+            setPadding(0, dp(6), 0, 0)
+        }
+
+        container.addView(textView)
+    }
+
+    private fun label(map: Map<Long, String>, id: Long): String {
+        return map[id] ?: "Sin Informacion"
+    }
+
 
     private fun dp(value: Int): Int {
         return (value * resources.displayMetrics.density).toInt()
