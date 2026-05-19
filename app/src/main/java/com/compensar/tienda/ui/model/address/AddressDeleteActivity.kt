@@ -6,6 +6,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
+import com.compensar.tienda.ui.model.common.FirestoreRelationLabelHelper
 import com.google.firebase.firestore.FirebaseFirestore
 import com.compensar.tienda.domain.model.AddressModel
 
@@ -78,7 +79,7 @@ class AddressDeleteActivity : AppCompatActivity() {
         val current = data ?: return
         fieldRegister.text = current.register.toString()
         fieldAddress.text = current.address.toString()
-        fieldIdUser.text = current.idUser.toString()
+        FirestoreRelationLabelHelper.load(fieldIdUser, "user", current.idUser, listOf("email"))
     }
 
     private fun actionOperate() {

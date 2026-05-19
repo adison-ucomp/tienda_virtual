@@ -6,6 +6,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
+import com.compensar.tienda.ui.model.common.FirestoreRelationLabelHelper
 import com.google.firebase.firestore.FirebaseFirestore
 import com.compensar.tienda.domain.model.ImageModel
 
@@ -78,7 +79,7 @@ class ImageDeleteActivity : AppCompatActivity() {
         val current = data ?: return
         fieldRegister.text = current.register.toString()
         fieldStorefire.text = current.storefire.toString()
-        fieldIdProduct.text = current.idProduct.toString()
+        FirestoreRelationLabelHelper.load(fieldIdProduct, "product", current.idProduct, listOf("name"))
     }
 
     private fun actionOperate() {

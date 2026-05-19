@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
+import com.compensar.tienda.ui.model.common.FirestoreRelationLabelHelper
 import com.compensar.tienda.domain.model.UserModel
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -99,7 +100,7 @@ class AdminUserQuitActivity : AppCompatActivity() {
         fieldNames.text = currentUser.names ?: ""
         fieldSurnames.text = currentUser.srnms ?: ""
         fieldEmail.text = currentUser.email ?: ""
-        fieldIdRole.text = currentUser.idRole.toString()
+        FirestoreRelationLabelHelper.load(fieldIdRole, "role", currentUser.idRole, listOf("name"))
     }
 
     private fun actionOperate() {

@@ -8,6 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
+import com.compensar.tienda.ui.model.common.FirestoreRelationLabelHelper
 import com.compensar.tienda.domain.model.UserModel
 import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
 import com.google.firebase.firestore.FirebaseFirestore
@@ -105,7 +106,7 @@ class UserDeleteActivity : AppCompatActivity() {
         fieldNames.text = currentUser.names ?: ""
         fieldSurnames.text = currentUser.srnms ?: ""
         fieldEmail.text = currentUser.email ?: ""
-        fieldIdRole.text = currentUser.idRole.toString()
+        FirestoreRelationLabelHelper.load(fieldIdRole, "role", currentUser.idRole, listOf("name"))
     }
 
     private fun actionOperate() {

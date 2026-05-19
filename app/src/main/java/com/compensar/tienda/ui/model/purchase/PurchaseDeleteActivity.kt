@@ -6,6 +6,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
+import com.compensar.tienda.ui.model.common.FirestoreRelationLabelHelper
 import com.google.firebase.firestore.FirebaseFirestore
 import com.compensar.tienda.domain.model.PurchaseModel
 
@@ -96,10 +97,10 @@ class PurchaseDeleteActivity : AppCompatActivity() {
         fieldAmount.text = current.amount.toString()
         fieldValue.text = current.value.toString()
         fieldTotal.text = current.total.toString()
-        fieldIdProduct.text = current.idProduct.toString()
-        fieldIdMethod.text = current.idMethod.toString()
-        fieldIdGangway.text = current.idGangway.toString()
-        fieldIdUser.text = current.idUser.toString()
+        FirestoreRelationLabelHelper.load(fieldIdProduct, "product", current.idProduct, listOf("name"))
+        FirestoreRelationLabelHelper.load(fieldIdMethod, "payment", current.idMethod, listOf("name"))
+        FirestoreRelationLabelHelper.load(fieldIdGangway, "gateway", current.idGangway, listOf("name"))
+        FirestoreRelationLabelHelper.load(fieldIdUser, "user", current.idUser, listOf("email"))
     }
 
     private fun actionOperate() {
