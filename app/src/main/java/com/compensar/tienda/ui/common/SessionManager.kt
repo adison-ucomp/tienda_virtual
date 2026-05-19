@@ -23,10 +23,38 @@ object SessionManager {
             .apply()
     }
 
-    fun getFullName(context: Context): String {
+    fun updateProfile(
+        context: Context,
+        names: String,
+        surnames: String,
+        email: String
+    ) {
+        context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
+            .edit()
+            .putString(KEY_NAMES, names)
+            .putString(KEY_SURNAMES, surnames)
+            .putString(KEY_EMAIL, email)
+            .apply()
+    }
+
+    fun getRegister(context: Context): Long {
         val preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
-        val names = preferences.getString(KEY_NAMES, "") ?: ""
-        val surnames = preferences.getString(KEY_SURNAMES, "") ?: ""
+        return preferences.getLong(KEY_REGISTER, 0)
+    }
+
+    fun getNames(context: Context): String {
+        val preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
+        return preferences.getString(KEY_NAMES, "") ?: ""
+    }
+
+    fun getSurnames(context: Context): String {
+        val preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
+        return preferences.getString(KEY_SURNAMES, "") ?: ""
+    }
+
+    fun getFullName(context: Context): String {
+        val names = getNames(context)
+        val surnames = getSurnames(context)
         val fullName = "$names $surnames".trim()
 
         return fullName.ifEmpty { "Sin Informacion" }
