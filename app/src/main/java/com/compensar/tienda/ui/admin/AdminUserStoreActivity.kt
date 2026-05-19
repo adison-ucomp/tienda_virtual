@@ -1,26 +1,25 @@
 package com.compensar.tienda.ui.admin
 
-import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
+import android.widget.AdapterView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.compensar.tienda.R
-import com.compensar.tienda.ui.common.SessionNavigation
+import com.compensar.tienda.domain.model.SellerModel
 import com.compensar.tienda.domain.model.UserModel
+import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.model.common.FirebaseStorageImageHelper
 import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
 import com.google.firebase.firestore.FirebaseFirestore
@@ -42,8 +41,14 @@ class AdminUserStoreActivity : AppCompatActivity() {
     private lateinit var imagePreview: ImageView
     private lateinit var fieldIdRole: Spinner
 
+    private lateinit var sellerFieldsContainer: LinearLayout
+    private lateinit var fieldSellerCompany: EditText
+    private lateinit var fieldSellerNit: EditText
+    private lateinit var fieldSellerAddress: EditText
+
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("user")
+    private val sellerCollection = db.collection("seller")
 
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uploadImageFromGallery(uri)
@@ -53,7 +58,6 @@ class AdminUserStoreActivity : AppCompatActivity() {
         uploadImageFromCamera(bitmap)
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.admin_user_store)
@@ -61,6 +65,7 @@ class AdminUserStoreActivity : AppCompatActivity() {
 
         initViews()
         displayImagePreview(null)
+        configureSellerFields(false)
         initEvents()
         loadSelectors()
     }
@@ -80,21 +85,29 @@ class AdminUserStoreActivity : AppCompatActivity() {
         fieldStorefire = findViewById(R.id.fieldStorefire)
         imagePreview = findViewById(R.id.imagePreview)
         fieldIdRole = findViewById(R.id.fieldIdRole)
+
+        sellerFieldsContainer = findViewById(R.id.sellerFieldsContainer)
+        fieldSellerCompany = findViewById(R.id.fieldSellerCompany)
+        fieldSellerNit = findViewById(R.id.fieldSellerNit)
+        fieldSellerAddress = findViewById(R.id.fieldSellerAddress)
     }
 
     private fun initEvents() {
-
         actionReturn.setOnClickListener { finish() }
         actionCancel.setOnClickListener { finish() }
-        actionGallery.setOnClickListener {
-            galleryLauncher.launch("image/*")
-        }
-
-        actionCamera.setOnClickListener {
-            cameraLauncher.launch(null)
-        }
-
+        actionGallery.setOnClickListener { galleryLauncher.launch("image/*") }
+        actionCamera.setOnClickListener { cameraLauncher.launch(null) }
         actionExecute.setOnClickListener { actionOperate() }
+
+        fieldIdRole.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                configureSellerFields(isSellerRoleSelected())
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                configureSellerFields(false)
+            }
+        }
     }
 
     private fun loadSelectors() {
@@ -149,14 +162,20 @@ class AdminUserStoreActivity : AppCompatActivity() {
             return
         }
 
-        val storefire = fieldStorefire.text.toString().trim().ifEmpty { null }
-
         val idRole = FirestoreSelectHelper.getSelectedId(fieldIdRole)
 
         if (idRole == null) {
             Toast.makeText(this, "Debe seleccionar una opción válida", Toast.LENGTH_SHORT).show()
             return
         }
+
+        val sellerData = if (idRole == SELLER_ROLE_ID) {
+            buildSellerData(register) ?: return
+        } else {
+            null
+        }
+
+        val storefire = fieldStorefire.text.toString().trim().ifEmpty { null }
 
         val data = UserModel(
             register = register,
@@ -174,7 +193,7 @@ class AdminUserStoreActivity : AppCompatActivity() {
                 if (document.exists()) {
                     Toast.makeText(this, "Ya existe un registro con ese ID", Toast.LENGTH_SHORT).show()
                 } else {
-                    saveRegister(data)
+                    saveRegister(data, sellerData)
                 }
             }
             .addOnFailureListener { exception ->
@@ -183,17 +202,78 @@ class AdminUserStoreActivity : AppCompatActivity() {
             }
     }
 
-    private fun saveRegister(data: UserModel) {
+    private fun saveRegister(data: UserModel, sellerData: SellerModel?) {
         collection.document(data.register.toString())
             .set(data)
             .addOnSuccessListener {
-                Toast.makeText(this, "Registro creado correctamente", Toast.LENGTH_SHORT).show()
-                finish()
+                if (sellerData != null) {
+                    saveSellerRegister(sellerData)
+                } else {
+                    Toast.makeText(this, "Registro creado correctamente", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
             }
             .addOnFailureListener { exception ->
                 Toast.makeText(this, "Error al guardar: ${exception.message}", Toast.LENGTH_LONG).show()
                 exception.printStackTrace()
             }
+    }
+
+    private fun saveSellerRegister(data: SellerModel) {
+        sellerCollection.document(data.register.toString())
+            .set(data)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Usuario vendedor creado correctamente", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Usuario creado, pero error al guardar vendedor: ${exception.message}", Toast.LENGTH_LONG).show()
+                exception.printStackTrace()
+            }
+    }
+
+    private fun buildSellerData(userRegister: Long): SellerModel? {
+        val company = fieldSellerCompany.text.toString().trim()
+        val nit = fieldSellerNit.text.toString().trim()
+        val address = fieldSellerAddress.text.toString().trim()
+
+        if (company.isEmpty()) {
+            Toast.makeText(this, "Debes ingresar la empresa del vendedor", Toast.LENGTH_SHORT).show()
+            return null
+        }
+        if (nit.isEmpty()) {
+            Toast.makeText(this, "Debes ingresar el NIT del vendedor", Toast.LENGTH_SHORT).show()
+            return null
+        }
+        if (address.isEmpty()) {
+            Toast.makeText(this, "Debes ingresar la dirección del vendedor", Toast.LENGTH_SHORT).show()
+            return null
+        }
+
+        return SellerModel(
+            register = userRegister,
+            company = company,
+            nit = nit,
+            address = address,
+            idUser = userRegister
+        )
+    }
+
+    private fun configureSellerFields(show: Boolean) {
+        sellerFieldsContainer.visibility = if (show) View.VISIBLE else View.GONE
+        fieldSellerCompany.isEnabled = show
+        fieldSellerNit.isEnabled = show
+        fieldSellerAddress.isEnabled = show
+
+        if (!show) {
+            fieldSellerCompany.setText("")
+            fieldSellerNit.setText("")
+            fieldSellerAddress.setText("")
+        }
+    }
+
+    private fun isSellerRoleSelected(): Boolean {
+        return FirestoreSelectHelper.getSelectedId(fieldIdRole) == SELLER_ROLE_ID
     }
 
     private fun encryptPassword(password: String): String {
@@ -256,7 +336,6 @@ class AdminUserStoreActivity : AppCompatActivity() {
         )
     }
 
-
     private fun displayImagePreview(url: String?) {
         if (url.isNullOrBlank()) {
             imagePreview.setImageDrawable(null)
@@ -282,5 +361,9 @@ class AdminUserStoreActivity : AppCompatActivity() {
         }
 
         return register
+    }
+
+    companion object {
+        private const val SELLER_ROLE_ID = 2L
     }
 }
