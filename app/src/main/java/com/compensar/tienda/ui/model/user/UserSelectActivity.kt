@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
+import com.compensar.tienda.ui.common.SessionNavigation
 import com.google.firebase.firestore.FirebaseFirestore
 import com.compensar.tienda.domain.model.UserModel
 import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
@@ -30,6 +31,7 @@ class UserSelectActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.model_user_select)
+        SessionNavigation.bindProfile(this)
 
         actionHome = findViewById(R.id.actionHome)
         actionReturn = findViewById(R.id.actionReturn)

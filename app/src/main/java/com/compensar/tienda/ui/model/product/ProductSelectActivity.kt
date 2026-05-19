@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
+import com.compensar.tienda.ui.common.SessionNavigation
 import com.google.firebase.firestore.FirebaseFirestore
 import com.compensar.tienda.domain.model.ProductModel
 
@@ -29,6 +30,7 @@ class ProductSelectActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.model_product_select)
+        SessionNavigation.bindProfile(this)
 
         actionReturn = findViewById(R.id.actionReturn)
         dataList = findViewById(R.id.dataList)

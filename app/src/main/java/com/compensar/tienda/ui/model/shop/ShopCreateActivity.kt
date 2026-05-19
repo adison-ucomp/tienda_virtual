@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
+import com.compensar.tienda.ui.common.SessionNavigation
 import com.bumptech.glide.Glide
 import com.compensar.tienda.domain.model.ShopModel
 import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
@@ -51,6 +52,7 @@ class ShopCreateActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.model_shop_create)
+        SessionNavigation.bindProfile(this)
 
         initViews()
         displayImagePreview(null)

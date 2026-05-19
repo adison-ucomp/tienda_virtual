@@ -14,6 +14,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
+import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.domain.model.ShopModel
 import com.compensar.tienda.ui.model.shop.ShopCreateActivity
 import com.compensar.tienda.ui.model.shop.ShopDeleteActivity
@@ -34,6 +35,7 @@ class AdminShopListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.admin_shop_list)
+        SessionNavigation.bindProfile(this)
 
         actionReturn = findViewById(R.id.actionReturn)
         dataList = findViewById(R.id.dataList)

@@ -19,6 +19,7 @@ import com.compensar.tienda.ui.register.RegisterBuyerActivity
 import com.compensar.tienda.ui.register.RegisterSellerActivity
 import com.compensar.tienda.ui.buyer.BuyerAddressActivity
 import com.compensar.tienda.ui.buyer.BuyerShoppingActivity
+import com.compensar.tienda.ui.common.SessionManager
 import com.google.firebase.firestore.FirebaseFirestore
 import java.security.MessageDigest
 
@@ -170,6 +171,7 @@ class HomeLoginActivity : AppCompatActivity() {
                     return@addOnSuccessListener
                 }
 
+                SessionManager.save(this, user)
                 redirectByRole(user)
             }
             .addOnFailureListener { exception ->

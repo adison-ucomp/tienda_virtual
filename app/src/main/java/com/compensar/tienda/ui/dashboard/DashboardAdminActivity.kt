@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
+import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.admin.AdminUserListActivity
 import com.compensar.tienda.ui.admin.AdminShopListActivity
 import com.compensar.tienda.ui.model.address.AddressSelectActivity
@@ -39,6 +40,7 @@ class DashboardAdminActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dashboard_admin)
+        SessionNavigation.bindProfile(this)
 
         initViews()
         initEvents()

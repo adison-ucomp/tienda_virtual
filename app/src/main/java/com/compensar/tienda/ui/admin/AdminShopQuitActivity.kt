@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
+import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.model.common.FirestoreRelationLabelHelper
 import com.compensar.tienda.domain.model.ShopModel
 import com.google.firebase.firestore.FirebaseFirestore
@@ -31,6 +32,7 @@ class AdminShopQuitActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.admin_shop_quit)
+        SessionNavigation.bindProfile(this)
 
         register = intent.getLongExtra("register", 0)
 
