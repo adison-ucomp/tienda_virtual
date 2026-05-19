@@ -20,7 +20,6 @@ class ProfileBuyerActivity : AppCompatActivity() {
     private lateinit var actionReturn: TextView
     private lateinit var textName: TextView
     private lateinit var textEmail: TextView
-    private lateinit var actionLogout: Button
 
     private lateinit var actionHome: LinearLayout
     private lateinit var actionCategory: LinearLayout
@@ -45,7 +44,6 @@ class ProfileBuyerActivity : AppCompatActivity() {
         actionReturn = findViewById(R.id.actionReturn)
         textName = findViewById(R.id.txtUserName)
         textEmail = findViewById(R.id.txtUserEmail)
-        actionLogout = findViewById(R.id.actionLogout)
 
         actionHome = findViewById(R.id.actionHome)
         actionCategory = findViewById(R.id.actionCategory)
@@ -95,15 +93,6 @@ class ProfileBuyerActivity : AppCompatActivity() {
         cardBuyerAddress.setOnClickListener {
             val intent = Intent(this, BuyerAddressActivity::class.java)
             startActivity(intent)
-        }
-
-        actionLogout.setOnClickListener {
-            SessionManager.clear(this)
-
-            val intent = Intent(this, HomeProductActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-            finish()
         }
     }
 

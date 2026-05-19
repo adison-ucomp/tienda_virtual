@@ -23,7 +23,6 @@ class ProductDeleteActivity : AppCompatActivity() {
     private lateinit var fieldDetail: TextView
     private lateinit var fieldStock: TextView
     private lateinit var fieldPrice: TextView
-    private lateinit var fieldStorefire: TextView
     private lateinit var fieldIdCategory: TextView
     private lateinit var fieldIdShop: TextView
 
@@ -54,7 +53,6 @@ class ProductDeleteActivity : AppCompatActivity() {
         fieldDetail = findViewById(R.id.fieldDetail)
         fieldStock = findViewById(R.id.fieldStock)
         fieldPrice = findViewById(R.id.fieldPrice)
-        fieldStorefire = findViewById(R.id.fieldStorefire)
         fieldIdCategory = findViewById(R.id.fieldIdCategory)
         fieldIdShop = findViewById(R.id.fieldIdShop)
     }
@@ -98,7 +96,6 @@ class ProductDeleteActivity : AppCompatActivity() {
         fieldDetail.text = current.detail.toString()
         fieldStock.text = current.stock.toString()
         fieldPrice.text = current.price.toString()
-        fieldStorefire.text = current.storefire.toString()
         FirestoreRelationLabelHelper.load(fieldIdCategory, "category", current.idCategory, listOf("name"))
         FirestoreRelationLabelHelper.load(fieldIdShop, "shop", current.idShop, listOf("name"))
     }

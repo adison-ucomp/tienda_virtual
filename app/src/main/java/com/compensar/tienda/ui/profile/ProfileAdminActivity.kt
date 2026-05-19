@@ -9,6 +9,7 @@ import com.compensar.tienda.R
 import com.compensar.tienda.ui.common.SessionManager
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
+import com.google.firebase.firestore.FirebaseFirestore
 
 class ProfileAdminActivity : AppCompatActivity() {
 
@@ -18,6 +19,10 @@ class ProfileAdminActivity : AppCompatActivity() {
 
     private lateinit var textName: TextView
     private lateinit var textEmail: TextView
+    private lateinit var textNumberCategories: TextView
+    private lateinit var textNumberShops: TextView
+
+    private val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +32,7 @@ class ProfileAdminActivity : AppCompatActivity() {
         initViews()
         initEvents()
         loadSession()
+        loadCounters()
     }
 
     private fun initViews() {
@@ -36,6 +42,8 @@ class ProfileAdminActivity : AppCompatActivity() {
 
         textName = findViewById(R.id.txtNameAdmin)
         textEmail = findViewById(R.id.txtEmail)
+        textNumberCategories = findViewById(R.id.txtNumberCategories)
+        textNumberShops = findViewById(R.id.txtShops)
     }
 
     private fun initEvents() {
@@ -57,5 +65,25 @@ class ProfileAdminActivity : AppCompatActivity() {
     private fun loadSession() {
         textName.text = SessionManager.getFullName(this)
         textEmail.text = SessionManager.getEmail(this)
+    }
+
+    private fun loadCounters() {
+        db.collection("category")
+            .get()
+            .addOnSuccessListener { result ->
+                textNumberCategories.text = result.size().toString()
+            }
+            .addOnFailureListener {
+                textNumberCategories.text = "0"
+            }
+
+        db.collection("shop")
+            .get()
+            .addOnSuccessListener { result ->
+                textNumberShops.text = result.size().toString()
+            }
+            .addOnFailureListener {
+                textNumberShops.text = "0"
+            }
     }
 }

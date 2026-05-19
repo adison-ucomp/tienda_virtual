@@ -19,7 +19,6 @@ class ProfileSellerActivity : AppCompatActivity() {
     private lateinit var actionReturn: TextView
     private lateinit var textName: TextView
     private lateinit var textEmail: TextView
-    private lateinit var actionLogout: Button
 
     private lateinit var navHome: LinearLayout
     private lateinit var navProducts: LinearLayout
@@ -40,7 +39,6 @@ class ProfileSellerActivity : AppCompatActivity() {
         actionReturn = findViewById(R.id.actionReturn)
         textName = findViewById(R.id.textName)
         textEmail = findViewById(R.id.textEmail)
-        actionLogout = findViewById(R.id.actionLogout)
 
         navHome = findViewById(R.id.navHome)
         navProducts = findViewById(R.id.navProducts)
@@ -71,15 +69,6 @@ class ProfileSellerActivity : AppCompatActivity() {
 
         navProfile.setOnClickListener {
             // Ya se encuentra en el perfil de vendedor.
-        }
-
-        actionLogout.setOnClickListener {
-            SessionManager.clear(this)
-
-            val intent = Intent(this, HomeProductActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-            finish()
         }
     }
 

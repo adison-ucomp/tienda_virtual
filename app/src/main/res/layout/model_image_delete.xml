@@ -143,33 +143,7 @@
                         android:layout_height="1dp"
                         android:background="@color/background_layout" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp">
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="URL Imagen"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/fieldStorefire"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="-"
-                            android:textColor="@color/subtitle"
-                            android:textSize="16sp"
-                            android:gravity="end" />
-
-                    </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"

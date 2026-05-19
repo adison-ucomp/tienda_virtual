@@ -19,7 +19,6 @@ class ImageDeleteActivity : AppCompatActivity() {
     private lateinit var actionExecute: Button
 
     private lateinit var fieldRegister: TextView
-    private lateinit var fieldStorefire: TextView
     private lateinit var fieldIdProduct: TextView
 
     private val db = FirebaseFirestore.getInstance()
@@ -45,7 +44,6 @@ class ImageDeleteActivity : AppCompatActivity() {
         actionCancel = findViewById(R.id.actionCancel)
         actionExecute = findViewById(R.id.actionExecute)
         fieldRegister = findViewById(R.id.fieldRegister)
-        fieldStorefire = findViewById(R.id.fieldStorefire)
         fieldIdProduct = findViewById(R.id.fieldIdProduct)
     }
 
@@ -84,7 +82,6 @@ class ImageDeleteActivity : AppCompatActivity() {
 
         ImagePreviewHelper.addPreviewToCard(this, findViewById(R.id.cardImageDelete), current.storefire)
         fieldRegister.text = current.register.toString()
-        fieldStorefire.text = current.storefire.toString()
         FirestoreRelationLabelHelper.load(fieldIdProduct, "product", current.idProduct, listOf("name"))
     }
 
