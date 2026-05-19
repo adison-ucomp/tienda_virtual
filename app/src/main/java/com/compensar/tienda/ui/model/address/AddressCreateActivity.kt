@@ -1,23 +1,29 @@
 package com.compensar.tienda.ui.model.address
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
-import com.google.firebase.firestore.FirebaseFirestore
 import com.compensar.tienda.domain.model.AddressModel
+import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
+import com.compensar.tienda.ui.platform.DashboardAdminActivity
+import com.google.firebase.firestore.FirebaseFirestore
 
 class AddressCreateActivity : AppCompatActivity() {
+    private lateinit var actionHome: LinearLayout
     private lateinit var actionReturn: TextView
     private lateinit var actionCancel: Button
     private lateinit var actionExecute: Button
 
     private lateinit var fieldRegister: EditText
     private lateinit var fieldAddress: EditText
-    private lateinit var fieldIdUser: EditText
+    private lateinit var fieldIdUser: Spinner
 
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("address")
@@ -28,40 +34,75 @@ class AddressCreateActivity : AppCompatActivity() {
 
         initViews()
         initEvents()
+        loadSelectors()
     }
 
     private fun initViews() {
+        actionHome = findViewById(R.id.actionHome)
         actionReturn = findViewById(R.id.actionReturn)
         actionCancel = findViewById(R.id.actionCancel)
         actionExecute = findViewById(R.id.actionExecute)
+
         fieldRegister = findViewById(R.id.fieldRegister)
         fieldAddress = findViewById(R.id.fieldAddress)
         fieldIdUser = findViewById(R.id.fieldIdUser)
     }
 
     private fun initEvents() {
+        actionHome.setOnClickListener {
+            val intent = Intent(this, DashboardAdminActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
         actionReturn.setOnClickListener { finish() }
         actionCancel.setOnClickListener { finish() }
         actionExecute.setOnClickListener { actionOperate() }
     }
 
+    private fun loadSelectors() {
+        FirestoreSelectHelper.load(
+            context = this,
+            spinner = fieldIdUser,
+            collectionName = "user",
+            labelFields = listOf("names", "srnms", "email"),
+            selectedId = 0
+        )
+    }
+
     private fun actionOperate() {
         val registerText = fieldRegister.text.toString().trim()
+
         if (registerText.isEmpty()) {
             Toast.makeText(this, "Debes ingresar el ID", Toast.LENGTH_SHORT).show()
             return
         }
 
         val register = registerText.toLongOrNull()
+
         if (register == null || register <= 0) {
             Toast.makeText(this, "El ID no es válido", Toast.LENGTH_SHORT).show()
             return
         }
 
+        val address = fieldAddress.text.toString().trim()
+
+        if (address.isEmpty()) {
+            Toast.makeText(this, "Debes ingresar address", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val idUser = FirestoreSelectHelper.getSelectedId(fieldIdUser)
+
+        if (idUser == null) {
+            Toast.makeText(this, "Debe seleccionar una opción válida", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val data = AddressModel(
             register = register,
-            address = fieldAddress.text.toString().trim().ifEmpty { null },
-            idUser = fieldIdUser.text.toString().trim().toLongOrNull() ?: 0
+            address = address,
+            idUser = idUser
         )
 
         collection.document(register.toString())

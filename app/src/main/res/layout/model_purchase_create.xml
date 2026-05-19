@@ -263,20 +263,14 @@
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
-                    <EditText
+                    <Spinner
                         android:id="@+id/fieldIdProduct"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/bg_button"
-                        android:enabled="true"
-                        android:hint="Ej. 1"
-                        android:inputType="number"
                         android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        android:textColor="@color/black"
-                        android:textColorHint="@color/hint"
-                        android:textSize="16sp" />
+                        android:paddingEnd="16dp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -287,20 +281,14 @@
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
-                    <EditText
+                    <Spinner
                         android:id="@+id/fieldIdMethod"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/bg_button"
-                        android:enabled="true"
-                        android:hint="Ej. 1"
-                        android:inputType="number"
                         android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        android:textColor="@color/black"
-                        android:textColorHint="@color/hint"
-                        android:textSize="16sp" />
+                        android:paddingEnd="16dp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -311,20 +299,14 @@
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
-                    <EditText
+                    <Spinner
                         android:id="@+id/fieldIdGangway"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/bg_button"
-                        android:enabled="true"
-                        android:hint="Ej. 1"
-                        android:inputType="number"
                         android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        android:textColor="@color/black"
-                        android:textColorHint="@color/hint"
-                        android:textSize="16sp" />
+                        android:paddingEnd="16dp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -335,20 +317,14 @@
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
-                    <EditText
+                    <Spinner
                         android:id="@+id/fieldIdUser"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/bg_button"
-                        android:enabled="true"
-                        android:hint="Ej. 1"
-                        android:inputType="number"
                         android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        android:textColor="@color/black"
-                        android:textColorHint="@color/hint"
-                        android:textSize="16sp" />
+                        android:paddingEnd="16dp" />
 
                 </LinearLayout>
 

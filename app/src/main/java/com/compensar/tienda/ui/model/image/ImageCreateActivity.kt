@@ -1,23 +1,29 @@
 package com.compensar.tienda.ui.model.image
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
-import com.google.firebase.firestore.FirebaseFirestore
 import com.compensar.tienda.domain.model.ImageModel
+import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
+import com.compensar.tienda.ui.platform.DashboardAdminActivity
+import com.google.firebase.firestore.FirebaseFirestore
 
 class ImageCreateActivity : AppCompatActivity() {
+    private lateinit var actionHome: LinearLayout
     private lateinit var actionReturn: TextView
     private lateinit var actionCancel: Button
     private lateinit var actionExecute: Button
 
     private lateinit var fieldRegister: EditText
     private lateinit var fieldStorefire: EditText
-    private lateinit var fieldIdProduct: EditText
+    private lateinit var fieldIdProduct: Spinner
 
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("image")
@@ -28,40 +34,72 @@ class ImageCreateActivity : AppCompatActivity() {
 
         initViews()
         initEvents()
+        loadSelectors()
     }
 
     private fun initViews() {
+        actionHome = findViewById(R.id.actionHome)
         actionReturn = findViewById(R.id.actionReturn)
         actionCancel = findViewById(R.id.actionCancel)
         actionExecute = findViewById(R.id.actionExecute)
+
         fieldRegister = findViewById(R.id.fieldRegister)
         fieldStorefire = findViewById(R.id.fieldStorefire)
         fieldIdProduct = findViewById(R.id.fieldIdProduct)
     }
 
     private fun initEvents() {
+        actionHome.setOnClickListener {
+            val intent = Intent(this, DashboardAdminActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
         actionReturn.setOnClickListener { finish() }
         actionCancel.setOnClickListener { finish() }
         actionExecute.setOnClickListener { actionOperate() }
     }
 
+    private fun loadSelectors() {
+        FirestoreSelectHelper.load(
+            context = this,
+            spinner = fieldIdProduct,
+            collectionName = "product",
+            labelFields = listOf("name"),
+            selectedId = 0
+        )
+    }
+
     private fun actionOperate() {
         val registerText = fieldRegister.text.toString().trim()
+
         if (registerText.isEmpty()) {
             Toast.makeText(this, "Debes ingresar el ID", Toast.LENGTH_SHORT).show()
             return
         }
 
         val register = registerText.toLongOrNull()
+
         if (register == null || register <= 0) {
             Toast.makeText(this, "El ID no es válido", Toast.LENGTH_SHORT).show()
             return
         }
 
+        val storefire = fieldStorefire.text.toString().trim().ifEmpty { null }
+
+
+
+        val idProduct = FirestoreSelectHelper.getSelectedId(fieldIdProduct)
+
+        if (idProduct == null) {
+            Toast.makeText(this, "Debe seleccionar una opción válida", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val data = ImageModel(
             register = register,
-            storefire = fieldStorefire.text.toString().trim().ifEmpty { null },
-            idProduct = fieldIdProduct.text.toString().trim().toLongOrNull() ?: 0
+            storefire = storefire,
+            idProduct = idProduct
         )
 
         collection.document(register.toString())

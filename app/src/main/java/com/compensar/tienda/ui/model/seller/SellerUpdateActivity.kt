@@ -1,16 +1,22 @@
 package com.compensar.tienda.ui.model.seller
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
-import com.google.firebase.firestore.FirebaseFirestore
 import com.compensar.tienda.domain.model.SellerModel
+import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
+import com.compensar.tienda.ui.platform.DashboardAdminActivity
+import com.google.firebase.firestore.FirebaseFirestore
 
 class SellerUpdateActivity : AppCompatActivity() {
+    private lateinit var actionHome: LinearLayout
     private lateinit var actionReturn: TextView
     private lateinit var actionCancel: Button
     private lateinit var actionExecute: Button
@@ -19,13 +25,13 @@ class SellerUpdateActivity : AppCompatActivity() {
     private lateinit var fieldCompany: EditText
     private lateinit var fieldNit: EditText
     private lateinit var fieldAddress: EditText
-    private lateinit var fieldIdUser: EditText
+    private lateinit var fieldIdUser: Spinner
 
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("seller")
 
     private var register: Long = 0
-    private var data: SellerModel? = null
+    private var currentData: SellerModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,9 +45,11 @@ class SellerUpdateActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
+        actionHome = findViewById(R.id.actionHome)
         actionReturn = findViewById(R.id.actionReturn)
         actionCancel = findViewById(R.id.actionCancel)
         actionExecute = findViewById(R.id.actionExecute)
+
         fieldRegister = findViewById(R.id.fieldRegister)
         fieldCompany = findViewById(R.id.fieldCompany)
         fieldNit = findViewById(R.id.fieldNit)
@@ -50,6 +58,12 @@ class SellerUpdateActivity : AppCompatActivity() {
     }
 
     private fun initEvents() {
+        actionHome.setOnClickListener {
+            val intent = Intent(this, DashboardAdminActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
         actionReturn.setOnClickListener { finish() }
         actionCancel.setOnClickListener { finish() }
         actionExecute.setOnClickListener { actionOperate() }
@@ -66,7 +80,7 @@ class SellerUpdateActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
-                    data = document.toObject(SellerModel::class.java)
+                    currentData = document.toObject(SellerModel::class.java)
                     showRegister()
                 } else {
                     Toast.makeText(this, "No se encontró el registro", Toast.LENGTH_SHORT).show()
@@ -80,30 +94,61 @@ class SellerUpdateActivity : AppCompatActivity() {
     }
 
     private fun showRegister() {
-        val current = data ?: return
-        fieldRegister.setText(current.register.toString())
-        fieldCompany.setText(current.company.toString())
-        fieldNit.setText(current.nit.toString())
-        fieldAddress.setText(current.address.toString())
-        fieldIdUser.setText(current.idUser.toString())
+        val currentData = currentData ?: return
+
+        fieldRegister.setText(currentData.register.toString())
+        fieldCompany.setText(currentData.company?.toString() ?: "")
+        fieldNit.setText(currentData.nit?.toString() ?: "")
+        fieldAddress.setText(currentData.address?.toString() ?: "")
+
+        FirestoreSelectHelper.load(
+            context = this,
+            spinner = fieldIdUser,
+            collectionName = "user",
+            labelFields = listOf("names", "srnms", "email"),
+            selectedId = currentData.idUser,
+            filterField = "idRole",
+            filterValue = 2L
+        )
     }
 
     private fun actionOperate() {
-        if (register <= 0) {
-            Toast.makeText(this, "Registro no válido", Toast.LENGTH_SHORT).show()
+        val currentData = currentData ?: return
+
+        val company = fieldCompany.text.toString().trim()
+        val nit = fieldNit.text.toString().trim()
+        val address = fieldAddress.text.toString().trim()
+
+        if (company.isEmpty()) {
+            Toast.makeText(this, "Debes ingresar company", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (nit.isEmpty()) {
+            Toast.makeText(this, "Debes ingresar nit", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (address.isEmpty()) {
+            Toast.makeText(this, "Debes ingresar address", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val updatedData = SellerModel(
+        val idUser = FirestoreSelectHelper.getSelectedId(fieldIdUser)
+
+        if (idUser == null) {
+            Toast.makeText(this, "Debe seleccionar una opción válida", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val data = SellerModel(
             register = register,
-            company = fieldCompany.text.toString().trim().ifEmpty { null },
-            nit = fieldNit.text.toString().trim().ifEmpty { null },
-            address = fieldAddress.text.toString().trim().ifEmpty { null },
-            idUser = fieldIdUser.text.toString().trim().toLongOrNull() ?: 0
+            company = company,
+            nit = nit,
+            address = address,
+            idUser = idUser
         )
 
         collection.document(register.toString())
-            .set(updatedData)
+            .set(data)
             .addOnSuccessListener {
                 Toast.makeText(this, "Registro actualizado correctamente", Toast.LENGTH_SHORT).show()
                 finish()

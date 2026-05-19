@@ -234,19 +234,14 @@
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
-                    <EditText
+                    <Spinner
                         android:id="@+id/fieldIdRole"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/bg_button"
-                        android:hint="1 Admin, 2 Vendedor, 3 Comprador"
-                        android:inputType="number"
                         android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        android:textColor="@color/black"
-                        android:textColorHint="@color/hint"
-                        android:textSize="16sp" />
+                        android:paddingEnd="16dp" />
 
                 </LinearLayout>
 

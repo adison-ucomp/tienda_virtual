@@ -2,15 +2,16 @@ package com.compensar.tienda.ui.model.user
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
 import com.compensar.tienda.domain.model.UserModel
+import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
 import com.compensar.tienda.ui.platform.DashboardAdminActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import java.security.MessageDigest
@@ -26,13 +27,13 @@ class UserUpdateActivity : AppCompatActivity() {
     private lateinit var fieldSurnames: EditText
     private lateinit var fieldEmail: EditText
     private lateinit var fieldPassword: EditText
-    private lateinit var fieldIdRole: EditText
+    private lateinit var fieldIdRole: Spinner
 
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("user")
 
     private var register: Long = 0
-    private var user: UserModel? = null
+    private var currentData: UserModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,17 +67,9 @@ class UserUpdateActivity : AppCompatActivity() {
             finish()
         }
 
-        actionReturn.setOnClickListener {
-            finish()
-        }
-
-        actionCancel.setOnClickListener {
-            finish()
-        }
-
-        actionExecute.setOnClickListener {
-            actionOperate()
-        }
+        actionReturn.setOnClickListener { finish() }
+        actionCancel.setOnClickListener { finish() }
+        actionExecute.setOnClickListener { actionOperate() }
     }
 
     private fun loadRegister() {
@@ -90,10 +83,10 @@ class UserUpdateActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
-                    user = document.toObject(UserModel::class.java)
+                    currentData = document.toObject(UserModel::class.java)
                     showRegister()
                 } else {
-                    Toast.makeText(this, "No se encontró el usuario", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "No se encontró el registro", Toast.LENGTH_SHORT).show()
                     finish()
                 }
             }
@@ -104,55 +97,66 @@ class UserUpdateActivity : AppCompatActivity() {
     }
 
     private fun showRegister() {
-        val currentUser = user ?: return
+        val currentData = currentData ?: return
 
-        fieldRegister.setText(currentUser.register.toString())
-        fieldNames.setText(currentUser.names ?: "")
-        fieldSurnames.setText(currentUser.srnms ?: "")
-        fieldEmail.setText(currentUser.email ?: "")
-        fieldIdRole.setText(currentUser.idRole.toString())
+        fieldRegister.setText(currentData.register.toString())
+        fieldNames.setText(currentData.names?.toString() ?: "")
+        fieldSurnames.setText(currentData.srnms?.toString() ?: "")
+        fieldEmail.setText(currentData.email?.toString() ?: "")
         fieldPassword.setText("")
+        fieldPassword.hint = "Dejar vacío para conservar la contraseña actual"
+
+        FirestoreSelectHelper.load(
+            context = this,
+            spinner = fieldIdRole,
+            collectionName = "role",
+            labelFields = listOf("name"),
+            selectedId = currentData.idRole
+        )
     }
 
     private fun actionOperate() {
-        val currentUser = user ?: return
+        val currentData = currentData ?: return
 
         val names = fieldNames.text.toString().trim()
-        val surnames = fieldSurnames.text.toString().trim()
+        val srnms = fieldSurnames.text.toString().trim()
         val email = fieldEmail.text.toString().trim()
-        val password = fieldPassword.text.toString().trim()
-        val idRoleText = fieldIdRole.text.toString().trim()
+        val passwordText = fieldPassword.text.toString().trim()
 
-        if (names.isEmpty() || surnames.isEmpty() || email.isEmpty() || idRoleText.isEmpty()) {
-            Toast.makeText(this, "Debes completar los campos obligatorios", Toast.LENGTH_SHORT).show()
+        if (names.isEmpty()) {
+            Toast.makeText(this, "Debes ingresar names", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (srnms.isEmpty()) {
+            Toast.makeText(this, "Debes ingresar srnms", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (email.isEmpty()) {
+            Toast.makeText(this, "Debes ingresar email", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val idRole = idRoleText.toLongOrNull()
+        val idRole = FirestoreSelectHelper.getSelectedId(fieldIdRole)
 
-        if (idRole == null || idRole <= 0) {
-            Toast.makeText(this, "El ID Rol no es válido", Toast.LENGTH_SHORT).show()
+        if (idRole == null) {
+            Toast.makeText(this, "Debe seleccionar una opción válida", Toast.LENGTH_SHORT).show()
             return
         }
 
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(this, "El correo no es válido", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val updatedUser = UserModel(
+        val data = UserModel(
             register = register,
             names = names,
-            srnms = surnames,
+            srnms = srnms,
             email = email,
-            password = if (password.isEmpty()) currentUser.password else encryptPassword(password),
+            password = if (passwordText.isEmpty()) currentData.password else encryptPassword(passwordText),
+            storefire = currentData.storefire,
             idRole = idRole
         )
 
         collection.document(register.toString())
-            .set(updatedUser)
+            .set(data)
             .addOnSuccessListener {
-                Toast.makeText(this, "Usuario actualizado correctamente", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Registro actualizado correctamente", Toast.LENGTH_SHORT).show()
                 finish()
             }
             .addOnFailureListener { exception ->
@@ -168,5 +172,4 @@ class UserUpdateActivity : AppCompatActivity() {
 
         return bytes.joinToString("") { "%02x".format(it) }
     }
-
 }

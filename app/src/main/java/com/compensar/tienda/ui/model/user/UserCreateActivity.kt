@@ -6,11 +6,13 @@ import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
 import com.compensar.tienda.domain.model.UserModel
+import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
 import com.compensar.tienda.ui.platform.DashboardAdminActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import java.security.MessageDigest
@@ -26,7 +28,7 @@ class UserCreateActivity : AppCompatActivity() {
     private lateinit var fieldSurnames: EditText
     private lateinit var fieldEmail: EditText
     private lateinit var fieldPassword: EditText
-    private lateinit var fieldIdRole: EditText
+    private lateinit var fieldIdRole: Spinner
 
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("user")
@@ -37,6 +39,7 @@ class UserCreateActivity : AppCompatActivity() {
 
         initViews()
         initEvents()
+        loadSelectors()
     }
 
     private fun initViews() {
@@ -60,42 +63,55 @@ class UserCreateActivity : AppCompatActivity() {
             finish()
         }
 
-        actionReturn.setOnClickListener {
-            finish()
-        }
+        actionReturn.setOnClickListener { finish() }
+        actionCancel.setOnClickListener { finish() }
+        actionExecute.setOnClickListener { actionOperate() }
+    }
 
-        actionCancel.setOnClickListener {
-            finish()
-        }
-
-        actionExecute.setOnClickListener {
-            actionOperate()
-        }
+    private fun loadSelectors() {
+        FirestoreSelectHelper.load(
+            context = this,
+            spinner = fieldIdRole,
+            collectionName = "role",
+            labelFields = listOf("name"),
+            selectedId = 0
+        )
     }
 
     private fun actionOperate() {
         val registerText = fieldRegister.text.toString().trim()
-        val names = fieldNames.text.toString().trim()
-        val surnames = fieldSurnames.text.toString().trim()
-        val email = fieldEmail.text.toString().trim()
-        val password = fieldPassword.text.toString().trim()
-        val idRoleText = fieldIdRole.text.toString().trim()
 
-        if (registerText.isEmpty() || names.isEmpty() || surnames.isEmpty() || email.isEmpty() || password.isEmpty() || idRoleText.isEmpty()) {
-            Toast.makeText(this, "Debes completar todos los campos", Toast.LENGTH_SHORT).show()
+        if (registerText.isEmpty()) {
+            Toast.makeText(this, "Debes ingresar el ID", Toast.LENGTH_SHORT).show()
             return
         }
 
         val register = registerText.toLongOrNull()
-        val idRole = idRoleText.toLongOrNull()
 
         if (register == null || register <= 0) {
             Toast.makeText(this, "El ID no es válido", Toast.LENGTH_SHORT).show()
             return
         }
 
-        if (idRole == null || idRole <= 0) {
-            Toast.makeText(this, "El ID Rol no es válido", Toast.LENGTH_SHORT).show()
+        val names = fieldNames.text.toString().trim()
+        val srnms = fieldSurnames.text.toString().trim()
+        val email = fieldEmail.text.toString().trim()
+        val passwordText = fieldPassword.text.toString().trim()
+
+        if (names.isEmpty()) {
+            Toast.makeText(this, "Debes ingresar names", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (srnms.isEmpty()) {
+            Toast.makeText(this, "Debes ingresar srnms", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (email.isEmpty()) {
+            Toast.makeText(this, "Debes ingresar email", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (passwordText.isEmpty()) {
+            Toast.makeText(this, "Debes ingresar la contraseña", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -104,12 +120,19 @@ class UserCreateActivity : AppCompatActivity() {
             return
         }
 
-        val user = UserModel(
+        val idRole = FirestoreSelectHelper.getSelectedId(fieldIdRole)
+
+        if (idRole == null) {
+            Toast.makeText(this, "Debe seleccionar una opción válida", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val data = UserModel(
             register = register,
             names = names,
-            srnms = surnames,
+            srnms = srnms,
             email = email,
-            password = encryptPassword(password),
+            password = encryptPassword(passwordText),
             idRole = idRole
         )
 
@@ -117,9 +140,9 @@ class UserCreateActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
-                    Toast.makeText(this, "Ya existe un usuario con ese ID", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Ya existe un registro con ese ID", Toast.LENGTH_SHORT).show()
                 } else {
-                    saveUser(user)
+                    saveRegister(data)
                 }
             }
             .addOnFailureListener { exception ->
@@ -128,11 +151,11 @@ class UserCreateActivity : AppCompatActivity() {
             }
     }
 
-    private fun saveUser(user: UserModel) {
-        collection.document(user.register.toString())
-            .set(user)
+    private fun saveRegister(data: UserModel) {
+        collection.document(data.register.toString())
+            .set(data)
             .addOnSuccessListener {
-                Toast.makeText(this, "Usuario creado correctamente", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Registro creado correctamente", Toast.LENGTH_SHORT).show()
                 finish()
             }
             .addOnFailureListener { exception ->
@@ -148,5 +171,4 @@ class UserCreateActivity : AppCompatActivity() {
 
         return bytes.joinToString("") { "%02x".format(it) }
     }
-
 }
