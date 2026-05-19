@@ -300,5 +300,4 @@ class ProductCreateActivity : AppCompatActivity() {
 
         return register
     }
-
 }

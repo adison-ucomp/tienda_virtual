@@ -239,5 +239,4 @@ class CategoryUpdateActivity : AppCompatActivity() {
 
         return register
     }
-
 }

@@ -1,28 +1,28 @@
-package com.compensar.tienda.ui.model.shop
+package com.compensar.tienda.ui.admin
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.compensar.tienda.R
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
-import com.compensar.tienda.domain.model.ShopModel
-import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
+import com.compensar.tienda.R
+import com.compensar.tienda.domain.model.UserModel
 import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
-import com.google.firebase.firestore.FirebaseFirestore
-import android.graphics.Bitmap
-import android.net.Uri
-import android.view.View
-import androidx.activity.result.contract.ActivityResultContracts
 import com.compensar.tienda.ui.model.common.FirebaseStorageImageHelper
+import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
+import com.google.firebase.firestore.FirebaseFirestore
 
-class ShopUpdateActivity : AppCompatActivity() {
+class AdminUserEditActivity : AppCompatActivity() {
     private lateinit var actionHome: LinearLayout
     private lateinit var actionReturn: TextView
     private lateinit var actionCancel: Button
@@ -31,13 +31,16 @@ class ShopUpdateActivity : AppCompatActivity() {
     private lateinit var actionCamera: Button
 
     private lateinit var fieldRegister: EditText
-    private lateinit var fieldName: EditText
+    private lateinit var fieldNames: EditText
+    private lateinit var fieldSurnames: EditText
+    private lateinit var fieldEmail: EditText
+    private lateinit var fieldPassword: EditText
     private lateinit var fieldStorefire: EditText
     private lateinit var imagePreview: ImageView
-    private lateinit var fieldIdSeller: Spinner
+    private lateinit var fieldIdRole: Spinner
 
     private val db = FirebaseFirestore.getInstance()
-    private val collection = db.collection("shop")
+    private val collection = db.collection("user")
 
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uploadImageFromGallery(uri)
@@ -49,11 +52,11 @@ class ShopUpdateActivity : AppCompatActivity() {
 
 
     private var register: Long = 0
-    private var currentData: ShopModel? = null
+    private var currentData: UserModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.model_shop_update)
+        setContentView(R.layout.admin_user_edit)
 
         register = intent.getLongExtra("register", 0)
 
@@ -71,10 +74,13 @@ class ShopUpdateActivity : AppCompatActivity() {
         actionCamera = findViewById(R.id.actionCamera)
 
         fieldRegister = findViewById(R.id.fieldRegister)
-        fieldName = findViewById(R.id.fieldName)
+        fieldNames = findViewById(R.id.fieldNames)
+        fieldSurnames = findViewById(R.id.fieldSurnames)
+        fieldEmail = findViewById(R.id.fieldEmail)
+        fieldPassword = findViewById(R.id.fieldPassword)
         fieldStorefire = findViewById(R.id.fieldStorefire)
         imagePreview = findViewById(R.id.imagePreview)
-        fieldIdSeller = findViewById(R.id.fieldIdSeller)
+        fieldIdRole = findViewById(R.id.fieldIdRole)
     }
 
     private fun initEvents() {
@@ -108,7 +114,7 @@ class ShopUpdateActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
-                    currentData = document.toObject(ShopModel::class.java)
+                    currentData = document.toObject(UserModel::class.java)
                     showRegister()
                 } else {
                     Toast.makeText(this, "No se encontró el registro", Toast.LENGTH_SHORT).show()
@@ -125,43 +131,61 @@ class ShopUpdateActivity : AppCompatActivity() {
         val currentData = currentData ?: return
 
         fieldRegister.setText(currentData.register.toString())
-        fieldName.setText(currentData.name?.toString() ?: "")
+        fieldNames.setText(currentData.names?.toString() ?: "")
+        fieldSurnames.setText(currentData.srnms?.toString() ?: "")
+        fieldEmail.setText(currentData.email?.toString() ?: "")
         fieldStorefire.setText(currentData.storefire?.toString() ?: "")
         displayImagePreview(currentData.storefire?.toString())
+        fieldPassword.setText("")
+        fieldPassword.hint = "Dejar vacío para conservar la contraseña actual"
 
         FirestoreSelectHelper.load(
             context = this,
-            spinner = fieldIdSeller,
-            collectionName = "seller",
-            labelFields = listOf("company", "nit"),
-            selectedId = currentData.idSeller
+            spinner = fieldIdRole,
+            collectionName = "role",
+            labelFields = listOf("name"),
+            selectedId = currentData.idRole
         )
     }
 
     private fun actionOperate() {
         val currentData = currentData ?: return
 
-        val name = fieldName.text.toString().trim()
+        val names = fieldNames.text.toString().trim()
+        val srnms = fieldSurnames.text.toString().trim()
+        val email = fieldEmail.text.toString().trim()
+        val passwordText = fieldPassword.text.toString().trim()
 
-        if (name.isEmpty()) {
-            Toast.makeText(this, "Debes ingresar name", Toast.LENGTH_SHORT).show()
+        if (names.isEmpty()) {
+            Toast.makeText(this, "Debes ingresar names", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (srnms.isEmpty()) {
+            Toast.makeText(this, "Debes ingresar srnms", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (email.isEmpty()) {
+            Toast.makeText(this, "Debes ingresar email", Toast.LENGTH_SHORT).show()
             return
         }
 
         val storefire = fieldStorefire.text.toString().trim().ifEmpty { null }
 
-        val idSeller = FirestoreSelectHelper.getSelectedId(fieldIdSeller)
+        val idRole = FirestoreSelectHelper.getSelectedId(fieldIdRole)
 
-        if (idSeller == null) {
+        if (idRole == null) {
             Toast.makeText(this, "Debe seleccionar una opción válida", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val data = ShopModel(
+        val data = UserModel(
             register = register,
-            name = name,
+            names = names,
+            srnms = srnms,
+            email = email,
+            password = if (passwordText.isEmpty()) currentData.password else encryptPassword(passwordText),
             storefire = storefire,
-            idSeller = idSeller
+            idRole = idRole
         )
 
         collection.document(register.toString())
@@ -176,6 +200,14 @@ class ShopUpdateActivity : AppCompatActivity() {
             }
     }
 
+    private fun encryptPassword(password: String): String {
+        val salt = "com.compensar.tienda.user.password"
+        val bytes = MessageDigest.getInstance("SHA-256")
+            .digest((salt + password).toByteArray(Charsets.UTF_8))
+
+        return bytes.joinToString("") { "%02x".format(it) }
+    }
+
     private fun uploadImageFromGallery(uri: Uri?) {
         if (uri == null) {
             Toast.makeText(this, "No se seleccionó imagen", Toast.LENGTH_SHORT).show()
@@ -187,7 +219,7 @@ class ShopUpdateActivity : AppCompatActivity() {
         Toast.makeText(this, "Subiendo imagen...", Toast.LENGTH_SHORT).show()
 
         FirebaseStorageImageHelper.uploadFromUri(
-            module = "shop",
+            module = "user",
             register = register,
             uri = uri,
             onSuccess = { url ->
@@ -213,7 +245,7 @@ class ShopUpdateActivity : AppCompatActivity() {
         Toast.makeText(this, "Subiendo imagen...", Toast.LENGTH_SHORT).show()
 
         FirebaseStorageImageHelper.uploadFromBitmap(
-            module = "shop",
+            module = "user",
             register = register,
             bitmap = bitmap,
             onSuccess = { url ->

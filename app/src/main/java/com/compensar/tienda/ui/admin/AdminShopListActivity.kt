@@ -14,44 +14,35 @@ import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
-import com.compensar.tienda.domain.model.UserModel
-import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
-import com.compensar.tienda.ui.model.user.UserCreateActivity
-import com.compensar.tienda.ui.model.user.UserDeleteActivity
-import com.compensar.tienda.ui.model.user.UserUpdateActivity
+import com.compensar.tienda.domain.model.ShopModel
+import com.compensar.tienda.ui.model.shop.ShopCreateActivity
+import com.compensar.tienda.ui.model.shop.ShopDeleteActivity
+import com.compensar.tienda.ui.model.shop.ShopUpdateActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
-class AdminUserListActivity : AppCompatActivity() {
-    private lateinit var actionHome: LinearLayout
+class AdminShopListActivity : AppCompatActivity() {
     private lateinit var actionReturn: TextView
     private lateinit var dataList: LinearLayout
     private lateinit var actionNew: LinearLayout
 
     private val db = FirebaseFirestore.getInstance()
-    private val collection = db.collection("user")
+    private val collection = db.collection("shop")
 
-    private var roleMap: Map<Long, String> = emptyMap()
+    private var sellerMap: Map<Long, String> = emptyMap()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.admin_user_list)
+        setContentView(R.layout.admin_shop_list)
 
-        actionHome = findViewById(R.id.actionHome)
         actionReturn = findViewById(R.id.actionReturn)
         dataList = findViewById(R.id.dataList)
         actionNew = findViewById(R.id.actionNew)
 
-        actionHome.setOnClickListener {
-            val intent = Intent(this, DashboardAdminActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-
         actionReturn.setOnClickListener { finish() }
 
         actionNew.setOnClickListener {
-            val intent = Intent(this, AdminUserStoreActivity::class.java)
+            val intent = Intent(this, AdminShopStoreActivity::class.java)
             startActivity(intent)
         }
 
@@ -68,16 +59,16 @@ class AdminUserListActivity : AppCompatActivity() {
     }
 
     private fun loadReferenceData(onComplete: () -> Unit) {
-        loadRoles(onComplete)
+        loadSellers(onComplete)
     }
 
-    private fun loadRoles(onComplete: () -> Unit) {
-        db.collection("role")
+    private fun loadSellers(onComplete: () -> Unit) {
+        db.collection("seller")
             .get()
             .addOnSuccessListener { result ->
-                roleMap = result.documents.mapNotNull { document ->
+                sellerMap = result.documents.mapNotNull { document ->
                     val register = document.getLong("register") ?: return@mapNotNull null
-                    val description = document.getString("name") ?: "Sin Informacion"
+                    val description = document.getString("company") ?: document.getString("nit") ?: "Sin Informacion"
                     register to description
                 }.toMap()
 
@@ -85,7 +76,7 @@ class AdminUserListActivity : AppCompatActivity() {
             }
             .addOnFailureListener { exception ->
                 exception.printStackTrace()
-                roleMap = emptyMap()
+                sellerMap = emptyMap()
                 onComplete()
             }
     }
@@ -98,7 +89,7 @@ class AdminUserListActivity : AppCompatActivity() {
                 dataList.removeAllViews()
 
                 val items = result.documents.mapNotNull { document ->
-                    document.toObject(UserModel::class.java)
+                    document.toObject(ShopModel::class.java)
                 }.sortedBy { it.register }
 
                 items.forEach { data ->
@@ -110,7 +101,7 @@ class AdminUserListActivity : AppCompatActivity() {
             }
     }
 
-    private fun loadCard(data: UserModel): CardView {
+    private fun loadCard(data: ShopModel): CardView {
         val cardView = CardView(this).apply {
             radius = dp(18).toFloat()
             cardElevation = dp(6).toFloat()
@@ -139,12 +130,9 @@ class AdminUserListActivity : AppCompatActivity() {
             )
         }
 
-        val fullName = "${data.names ?: ""} ${data.srnms ?: ""}".trim()
-
         addText(textContainer, "Registro: ${data.register}")
-        addText(textContainer, "Usuario: $fullName")
-        addText(textContainer, "Correo: ${data.email ?: ""}", R.color.subtitle)
-        addText(textContainer, "Rol: ${label(roleMap, data.idRole)}", R.color.roles)
+        addText(textContainer, "Nombre: ${data.name ?: ""}")
+        addText(textContainer, "Vendedor: ${label(sellerMap, data.idSeller)}")
 
         val buttonContainer = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -162,7 +150,7 @@ class AdminUserListActivity : AppCompatActivity() {
             }
 
             setOnClickListener {
-                val intent = Intent(this@AdminUserListActivity, AdminUserEditActivity::class.java)
+                val intent = Intent(this@AdminShopListActivity, AdminShopEditActivity::class.java)
                 intent.putExtra("register", data.register)
                 startActivity(intent)
             }
@@ -175,7 +163,7 @@ class AdminUserListActivity : AppCompatActivity() {
             }
 
             setOnClickListener {
-                val intent = Intent(this@AdminUserListActivity, AdminUserQuitActivity::class.java)
+                val intent = Intent(this@AdminShopListActivity, AdminShopQuitActivity::class.java)
                 intent.putExtra("register", data.register)
                 startActivity(intent)
             }

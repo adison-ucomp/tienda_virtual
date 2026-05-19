@@ -1,7 +1,10 @@
-package com.compensar.tienda.ui.model.shop
+package com.compensar.tienda.ui.admin
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -9,20 +12,20 @@ import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import com.compensar.tienda.R
-import com.bumptech.glide.Glide
-import com.compensar.tienda.domain.model.ShopModel
-import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
-import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
-import com.google.firebase.firestore.FirebaseFirestore
-import android.graphics.Bitmap
-import android.net.Uri
-import android.view.View
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import com.bumptech.glide.Glide
+import com.compensar.tienda.R
+import com.compensar.tienda.domain.model.ShopModel
+import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
 import com.compensar.tienda.ui.model.common.FirebaseStorageImageHelper
+import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
+import com.google.firebase.firestore.FirebaseFirestore
 
-class ShopUpdateActivity : AppCompatActivity() {
+class AdminShopEditActivity : AppCompatActivity() {
     private lateinit var actionHome: LinearLayout
     private lateinit var actionReturn: TextView
     private lateinit var actionCancel: Button
@@ -53,7 +56,7 @@ class ShopUpdateActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.model_shop_update)
+        setContentView(R.layout.admin_shop_edit)
 
         register = intent.getLongExtra("register", 0)
 

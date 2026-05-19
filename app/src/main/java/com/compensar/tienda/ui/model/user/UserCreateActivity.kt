@@ -287,5 +287,4 @@ class UserCreateActivity : AppCompatActivity() {
 
         return register
     }
-
 }

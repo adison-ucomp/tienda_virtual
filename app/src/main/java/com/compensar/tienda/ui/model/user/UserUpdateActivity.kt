@@ -288,5 +288,4 @@ class UserUpdateActivity : AppCompatActivity() {
 
         return register
     }
-
 }

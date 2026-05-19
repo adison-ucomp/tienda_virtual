@@ -231,5 +231,4 @@ class CategoryCreateActivity : AppCompatActivity() {
 
         return register
     }
-
 }

@@ -19,6 +19,9 @@ import com.compensar.tienda.ui.model.user.UserSelectActivity
 
 class DashboardAdminActivity : AppCompatActivity() {
 
+    private lateinit var dataShop: CardView
+    private lateinit var dataUser: CardView
+
     private lateinit var cardAddress: CardView
     private lateinit var cardGateway: CardView
     private lateinit var cardImage: CardView
@@ -40,6 +43,9 @@ class DashboardAdminActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
+        dataShop = findViewById(R.id.dataShop)
+        dataUser = findViewById(R.id.dataUser)
+
         cardAddress = findViewById(R.id.cardAddress)
         cardGateway = findViewById(R.id.cardGateway)
         cardImage = findViewById(R.id.cardImage)
@@ -54,6 +60,20 @@ class DashboardAdminActivity : AppCompatActivity() {
     }
 
     private fun initEvents() {
+        dataShop.setOnClickListener {
+            val intent = Intent(this, AdminShopListActivity::class.java)
+            startActivity(intent)
+        }
+
+        dataUser.setOnClickListener {
+            val intent = Intent(this, AdminUserListActivity::class.java)
+            startActivity(intent)
+        }
+
+
+
+
+
         cardAddress.setOnClickListener {
             val intent = Intent(this, AddressSelectActivity::class.java)
             startActivity(intent)

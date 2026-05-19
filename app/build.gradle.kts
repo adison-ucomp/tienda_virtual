@@ -81,6 +81,7 @@ dependencies {
     implementation(libs.androidx.cardview)
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.recyclerview)
+    implementation(libs.play.services.maps3d)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -308,5 +308,4 @@ class ProductUpdateActivity : AppCompatActivity() {
 
         return register
     }
-
 }

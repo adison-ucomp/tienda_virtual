@@ -246,5 +246,4 @@ class ImageUpdateActivity : AppCompatActivity() {
 
         return register
     }
-
 }

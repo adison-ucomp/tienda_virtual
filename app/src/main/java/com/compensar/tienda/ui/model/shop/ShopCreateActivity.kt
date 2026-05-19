@@ -248,5 +248,4 @@ class ShopCreateActivity : AppCompatActivity() {
 
         return register
     }
-
 }

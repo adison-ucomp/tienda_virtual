@@ -1,28 +1,31 @@
-package com.compensar.tienda.ui.model.shop
+package com.compensar.tienda.ui.admin
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import com.compensar.tienda.R
-import com.bumptech.glide.Glide
-import com.compensar.tienda.domain.model.ShopModel
-import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
-import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
-import com.google.firebase.firestore.FirebaseFirestore
-import android.graphics.Bitmap
-import android.net.Uri
-import android.view.View
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import com.bumptech.glide.Glide
+import com.compensar.tienda.R
+import com.compensar.tienda.domain.model.ShopModel
+import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
 import com.compensar.tienda.ui.model.common.FirebaseStorageImageHelper
+import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
+import com.google.android.gms.maps3d.model.ImageView
+import com.google.firebase.firestore.FirebaseFirestore
 
-class ShopUpdateActivity : AppCompatActivity() {
+class AdminShopStoreActivity : AppCompatActivity() {
     private lateinit var actionHome: LinearLayout
     private lateinit var actionReturn: TextView
     private lateinit var actionCancel: Button
@@ -48,18 +51,14 @@ class ShopUpdateActivity : AppCompatActivity() {
     }
 
 
-    private var register: Long = 0
-    private var currentData: ShopModel? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.model_shop_update)
-
-        register = intent.getLongExtra("register", 0)
+        setContentView(R.layout.admin_shop_store)
 
         initViews()
+        displayImagePreview(null)
         initEvents()
-        loadRegister()
+        loadSelectors()
     }
 
     private fun initViews() {
@@ -97,49 +96,30 @@ class ShopUpdateActivity : AppCompatActivity() {
         actionExecute.setOnClickListener { actionOperate() }
     }
 
-    private fun loadRegister() {
-        if (register <= 0) {
-            Toast.makeText(this, "Registro no válido", Toast.LENGTH_SHORT).show()
-            finish()
-            return
-        }
-
-        collection.document(register.toString())
-            .get()
-            .addOnSuccessListener { document ->
-                if (document.exists()) {
-                    currentData = document.toObject(ShopModel::class.java)
-                    showRegister()
-                } else {
-                    Toast.makeText(this, "No se encontró el registro", Toast.LENGTH_SHORT).show()
-                    finish()
-                }
-            }
-            .addOnFailureListener { exception ->
-                Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_LONG).show()
-                exception.printStackTrace()
-            }
-    }
-
-    private fun showRegister() {
-        val currentData = currentData ?: return
-
-        fieldRegister.setText(currentData.register.toString())
-        fieldName.setText(currentData.name?.toString() ?: "")
-        fieldStorefire.setText(currentData.storefire?.toString() ?: "")
-        displayImagePreview(currentData.storefire?.toString())
-
+    private fun loadSelectors() {
         FirestoreSelectHelper.load(
             context = this,
             spinner = fieldIdSeller,
             collectionName = "seller",
             labelFields = listOf("company", "nit"),
-            selectedId = currentData.idSeller
+            selectedId = 0
         )
     }
 
     private fun actionOperate() {
-        val currentData = currentData ?: return
+        val registerText = fieldRegister.text.toString().trim()
+
+        if (registerText.isEmpty()) {
+            Toast.makeText(this, "Debes ingresar el ID", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val register = registerText.toLongOrNull()
+
+        if (register == null || register <= 0) {
+            Toast.makeText(this, "El ID no es válido", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         val name = fieldName.text.toString().trim()
 
@@ -165,13 +145,29 @@ class ShopUpdateActivity : AppCompatActivity() {
         )
 
         collection.document(register.toString())
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    Toast.makeText(this, "Ya existe un registro con ese ID", Toast.LENGTH_SHORT).show()
+                } else {
+                    saveRegister(data)
+                }
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_LONG).show()
+                exception.printStackTrace()
+            }
+    }
+
+    private fun saveRegister(data: ShopModel) {
+        collection.document(data.register.toString())
             .set(data)
             .addOnSuccessListener {
-                Toast.makeText(this, "Registro actualizado correctamente", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Registro creado correctamente", Toast.LENGTH_SHORT).show()
                 finish()
             }
             .addOnFailureListener { exception ->
-                Toast.makeText(this, "Error al actualizar: ${exception.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Error al guardar: ${exception.message}", Toast.LENGTH_LONG).show()
                 exception.printStackTrace()
             }
     }

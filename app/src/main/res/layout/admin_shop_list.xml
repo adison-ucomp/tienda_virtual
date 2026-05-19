@@ -8,7 +8,7 @@
     android:background="@color/background_layout"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context=".ui.admin.AdminUserListActivity">
+    tools:context=".ui.admin.AdminShopListActivity">
 
     <include
         android:id="@+id/includeSuperior"
@@ -20,7 +20,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <ScrollView
-        android:id="@+id/scrollUserSelect"
+        android:id="@+id/scrollShopSelect"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
@@ -31,7 +31,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
-            android:id="@+id/userContent"
+            android:id="@+id/contentContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -66,7 +66,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_user_title"
+                            android:text="@string/model_shop_title"
                             android:textSize="20sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
@@ -74,7 +74,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_user_detail"
+                            android:text="@string/model_shop_detail"
                             android:textSize="14sp"
                             android:textColor="@color/subtitle"
                             android:layout_marginTop="8dp" />
@@ -94,7 +94,7 @@
                 android:gravity="center_vertical">
 
                 <LinearLayout
-                    android:id="@+id/userLayoutSearch"
+                    android:id="@+id/layoutSearch"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:layout_weight="1"
@@ -104,13 +104,13 @@
                     android:background="@drawable/bg_button">
 
                     <ImageView
-                        android:id="@+id/userSearchBtn"
+                        android:id="@+id/actionSearch"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_search" />
 
                     <EditText
-                        android:id="@+id/userSearchTxt"
+                        android:id="@+id/fieldSearch"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"

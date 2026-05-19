@@ -240,5 +240,4 @@ class ImageCreateActivity : AppCompatActivity() {
 
         return register
     }
-
 }

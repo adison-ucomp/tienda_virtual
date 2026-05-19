@@ -3,15 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
     <!-- Permisos para obtener ubicación -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-    <!-- Internet -->
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <!-- Imágenes Android 13+ -->
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-
-    <!-- Compatibilidad Android <= 12 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- Internet -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- Imágenes Android 13+ -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" /> <!-- Compatibilidad Android <= 12 -->
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
@@ -25,6 +19,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TiendaVirtual">
+        <activity
+            android:name=".ui.admin.AdminUserQuitActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.admin.AdminShopQuitActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.admin.AdminShopStoreActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.admin.AdminShopListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.admin.AdminShopEditActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.admin.AdminUserStoreActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.admin.AdminUserEditActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.profile.ProfileShareActivity"
             android:exported="false" />
