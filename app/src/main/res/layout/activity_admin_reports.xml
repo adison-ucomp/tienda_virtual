@@ -314,6 +314,6 @@
     </ScrollView>
 
 
-    <include layout="@layout/bottom_navigation_admin"/>
+    <!-- <include layout="@layout/bottom_navigation_admin"/> -->
 
 </LinearLayout>
