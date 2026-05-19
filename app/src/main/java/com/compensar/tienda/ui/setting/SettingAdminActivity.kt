@@ -1,37 +1,21 @@
-package com.compensar.tienda.admin.ui
+package com.compensar.tienda.ui.setting
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
-import android.content.Intent
-import android.widget.LinearLayout
 
-class ProfileAdmin : BaseAdmin() {
-
-    private lateinit var btnEditProfile: LinearLayout
-
+class SettingAdminActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_profile_admin)
-
-        configurarBottomNavigation()
-        setupDrawer()
-
+        setContentView(R.layout.setting_admin)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
-        }
-
-        btnEditProfile = findViewById(R.id.btnEditProfile)
-        btnEditProfile.setOnClickListener {
-
-            val intent = Intent(this, EditProfileAdmin::class.java)
-            startActivity(intent)
-
         }
     }
 }
