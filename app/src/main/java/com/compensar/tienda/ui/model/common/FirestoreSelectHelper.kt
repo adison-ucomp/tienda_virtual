@@ -53,7 +53,7 @@ object FirestoreSelectHelper {
                             label = if (label.isEmpty()) {
                                 "Registro: $register"
                             } else {
-                                "$register - $label"
+                                label
                             }
                         )
                     }
