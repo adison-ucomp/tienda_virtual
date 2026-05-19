@@ -11,7 +11,7 @@
     <string name="model_category_detail">Administra las categorias del sistema</string>
 
     <!-- Modelo Pagos -->
-    <string name="model_gateway_title">Gestionar Pasarela de Pagos</string>
+    <string name="model_gateway_title">Gestionar Pasarelas</string>
     <string name="model_gateway_detail">Administra las pasarelas de pago del sistema</string>
 
     <!-- Modelo Imagenes -->
