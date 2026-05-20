@@ -6,10 +6,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
+import com.compensar.tienda.model.PurchaseModel
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.model.common.FirestoreRelationLabelHelper
 import com.google.firebase.firestore.FirebaseFirestore
-import com.compensar.tienda.model.PurchaseModel
 
 class PurchaseDeleteActivity : AppCompatActivity() {
     private lateinit var actionReturn: TextView
@@ -26,8 +26,7 @@ class PurchaseDeleteActivity : AppCompatActivity() {
     private lateinit var fieldIdUser: TextView
     private lateinit var fieldIdOrder: TextView
 
-    private val db = FirebaseFirestore.getInstance()
-    private val collection = db.collection("purchase")
+    private val collection = FirebaseFirestore.getInstance().collection("purchase")
 
     private var register: Long = 0
     private var data: PurchaseModel? = null
@@ -67,7 +66,7 @@ class PurchaseDeleteActivity : AppCompatActivity() {
 
     private fun loadRegister() {
         if (register <= 0) {
-            Toast.makeText(this, "Registro no válido", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Registro no valido", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
@@ -79,22 +78,21 @@ class PurchaseDeleteActivity : AppCompatActivity() {
                     data = document.toObject(PurchaseModel::class.java)
                     showRegister()
                 } else {
-                    Toast.makeText(this, "No se encontró el registro", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "No se encontro el registro", Toast.LENGTH_SHORT).show()
                     finish()
                 }
             }
             .addOnFailureListener { exception ->
                 Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_LONG).show()
-                exception.printStackTrace()
             }
     }
 
     private fun showRegister() {
         val current = data ?: return
         fieldRegister.text = current.register.toString()
-        fieldAmount.text = current.amount.toString()
-        fieldValue.text = current.value.toString()
-        fieldTotal.text = current.total.toString()
+        fieldAmount.text = current.amount?.toString() ?: "-"
+        fieldValue.text = current.value?.toString() ?: "-"
+        fieldTotal.text = current.total?.toString() ?: "-"
         FirestoreRelationLabelHelper.load(fieldIdProduct, "product", current.idProduct, listOf("name"))
         FirestoreRelationLabelHelper.load(fieldIdMethod, "payment", current.idMethod, listOf("name"))
         FirestoreRelationLabelHelper.load(fieldIdGangway, "gateway", current.idGangway, listOf("name"))
@@ -104,7 +102,7 @@ class PurchaseDeleteActivity : AppCompatActivity() {
 
     private fun actionOperate() {
         if (register <= 0) {
-            Toast.makeText(this, "Registro no válido", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Registro no valido", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -116,7 +114,6 @@ class PurchaseDeleteActivity : AppCompatActivity() {
             }
             .addOnFailureListener { exception ->
                 Toast.makeText(this, "Error al eliminar: ${exception.message}", Toast.LENGTH_LONG).show()
-                exception.printStackTrace()
             }
     }
 }

@@ -2,7 +2,12 @@ package com.compensar.tienda.ui.model.purchase
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.Spinner
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
 import com.compensar.tienda.model.PurchaseModel
@@ -27,16 +32,17 @@ class PurchaseCreateActivity : AppCompatActivity() {
     private lateinit var fieldIdOrder: Spinner
 
     private val collection = FirebaseFirestore.getInstance().collection("purchase")
-    private var generatedRegister: Long = 0
+    private var generatedRegister: Long? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.model_purchase_create)
         SessionNavigation.bindProfile(this)
+
         initViews()
         initEvents()
+        loadSelectors()
         loadNextRegister()
-        loadRelations()
     }
 
     private fun initViews() {
@@ -55,13 +61,17 @@ class PurchaseCreateActivity : AppCompatActivity() {
     }
 
     private fun initEvents() {
-        actionHome.setOnClickListener { startActivity(Intent(this, DashboardAdminActivity::class.java)); finish() }
+        actionHome.setOnClickListener {
+            startActivity(Intent(this, DashboardAdminActivity::class.java))
+            finish()
+        }
+
         actionReturn.setOnClickListener { finish() }
         actionCancel.setOnClickListener { finish() }
-        actionExecute.setOnClickListener { save() }
+        actionExecute.setOnClickListener { actionOperate() }
     }
 
-    private fun loadRelations() {
+    private fun loadSelectors() {
         FirestoreSelectHelper.load(this, fieldIdProduct, "product", listOf("name"), 0)
         FirestoreSelectHelper.load(this, fieldIdMethod, "payment", listOf("name"), 0)
         FirestoreSelectHelper.load(this, fieldIdGangway, "gateway", listOf("name"), 0)
@@ -71,37 +81,78 @@ class PurchaseCreateActivity : AppCompatActivity() {
 
     private fun loadNextRegister() {
         actionExecute.isEnabled = false
-        collection.orderBy("register", Query.Direction.DESCENDING).limit(1).get()
-            .addOnSuccessListener {
-                generatedRegister = (it.documents.firstOrNull()?.getLong("register") ?: 0L) + 1L
+
+        collection
+            .orderBy("register", Query.Direction.DESCENDING)
+            .limit(1)
+            .get()
+            .addOnSuccessListener { result ->
+                val lastRegister = result.documents.firstOrNull()?.getLong("register") ?: 0L
+                generatedRegister = lastRegister + 1L
                 actionExecute.isEnabled = true
             }
-            .addOnFailureListener { actionExecute.isEnabled = true }
+            .addOnFailureListener { exception ->
+                generatedRegister = null
+                actionExecute.isEnabled = true
+                Toast.makeText(this, "Error al generar ID automatico: ${exception.message}", Toast.LENGTH_LONG).show()
+            }
     }
 
-    private fun save() {
+    private fun actionOperate() {
+        val register = generatedRegister
+        if (register == null || register <= 0) {
+            Toast.makeText(this, "No fue posible generar el ID automatico", Toast.LENGTH_SHORT).show()
+            loadNextRegister()
+            return
+        }
+
         val idProduct = FirestoreSelectHelper.getSelectedId(fieldIdProduct)
+        val idMethod = FirestoreSelectHelper.getSelectedId(fieldIdMethod)
+        val idGangway = FirestoreSelectHelper.getSelectedId(fieldIdGangway)
         val idUser = FirestoreSelectHelper.getSelectedId(fieldIdUser)
         val idOrder = FirestoreSelectHelper.getSelectedId(fieldIdOrder)
-        if (idProduct == null || idUser == null || idOrder == null) {
-            Toast.makeText(this, "Debe seleccionar producto, usuario y orden", Toast.LENGTH_SHORT).show()
+
+        if (idProduct == null || idMethod == null || idGangway == null || idUser == null || idOrder == null) {
+            Toast.makeText(this, "Debe seleccionar producto, metodo, pasarela, usuario y orden", Toast.LENGTH_SHORT).show()
             return
         }
 
         val data = PurchaseModel(
-            register = generatedRegister,
-            amount = fieldAmount.text.toString().toIntOrNull(),
-            value = fieldValue.text.toString().toDoubleOrNull(),
-            total = fieldTotal.text.toString().toDoubleOrNull(),
+            register = register,
+            amount = fieldAmount.text.toString().trim().toIntOrNull(),
+            value = fieldValue.text.toString().trim().toDoubleOrNull(),
+            total = fieldTotal.text.toString().trim().toDoubleOrNull(),
             idProduct = idProduct,
-            idMethod = FirestoreSelectHelper.getSelectedId(fieldIdMethod) ?: 0L,
-            idGangway = FirestoreSelectHelper.getSelectedId(fieldIdGangway) ?: 0L,
+            idMethod = idMethod,
+            idGangway = idGangway,
             idUser = idUser,
             idOrder = idOrder
         )
 
-        collection.document(generatedRegister.toString()).set(data)
-            .addOnSuccessListener { Toast.makeText(this, "Compra creada", Toast.LENGTH_SHORT).show(); finish() }
-            .addOnFailureListener { Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_LONG).show() }
+        collection.document(register.toString())
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    Toast.makeText(this, "El ID automatico ya existe. Intentando generar otro ID.", Toast.LENGTH_SHORT).show()
+                    loadNextRegister()
+                } else {
+                    saveRegister(data)
+                }
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_LONG).show()
+            }
+    }
+
+    private fun saveRegister(data: PurchaseModel) {
+        collection.document(data.register.toString())
+            .set(data)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Registro creado correctamente", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error al guardar: ${exception.message}", Toast.LENGTH_LONG).show()
+            }
     }
 }

@@ -284,7 +284,7 @@
                             android:layout_height="56dp"
                             android:layout_weight="1"
                             android:layout_marginEnd="8dp"
-                            android:text="Cancelar" />
+                            android:backgroundTint="@color/black" android:text="Regresar" android:textAllCaps="false" android:textColor="@color/white" android:textSize="16sp" android:textStyle="bold" />
 
                         <Button
                             android:id="@+id/actionExecute"
@@ -292,7 +292,7 @@
                             android:layout_height="56dp"
                             android:layout_weight="1"
                             android:layout_marginStart="8dp"
-                            android:text="Guardar" />
+                            android:backgroundTint="@color/black" android:text="Actualizar" android:textAllCaps="false" android:textColor="@color/white" android:textSize="16sp" android:textStyle="bold" />
 
                     </LinearLayout>
 
@@ -314,3 +314,4 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

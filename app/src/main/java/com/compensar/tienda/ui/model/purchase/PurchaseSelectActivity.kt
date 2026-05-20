@@ -11,24 +11,23 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
+import com.compensar.tienda.model.PurchaseModel
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.google.firebase.firestore.FirebaseFirestore
-import com.compensar.tienda.model.PurchaseModel
 
 class PurchaseSelectActivity : AppCompatActivity() {
     private lateinit var actionReturn: TextView
     private lateinit var dataList: LinearLayout
     private lateinit var actionNew: LinearLayout
 
+    private val collection = FirebaseFirestore.getInstance().collection("purchase")
     private val db = FirebaseFirestore.getInstance()
-    private val collection = db.collection("purchase")
 
     private var productMap: Map<Long, String> = emptyMap()
     private var paymentMap: Map<Long, String> = emptyMap()
     private var gatewayMap: Map<Long, String> = emptyMap()
     private var userMap: Map<Long, String> = emptyMap()
     private var orderMap: Map<Long, String> = emptyMap()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,11 +39,7 @@ class PurchaseSelectActivity : AppCompatActivity() {
         actionNew = findViewById(R.id.actionNew)
 
         actionReturn.setOnClickListener { finish() }
-
-        actionNew.setOnClickListener {
-            val intent = Intent(this, PurchaseCreateActivity::class.java)
-            startActivity(intent)
-        }
+        actionNew.setOnClickListener { startActivity(Intent(this, PurchaseCreateActivity::class.java)) }
 
         loadDataBase()
     }
@@ -62,124 +57,98 @@ class PurchaseSelectActivity : AppCompatActivity() {
         loadProducts {
             loadPayments {
                 loadGateways {
-                    loadUsers { loadOrders(onComplete) }
+                    loadUsers {
+                        loadOrders(onComplete)
+                    }
                 }
             }
         }
     }
 
     private fun loadProducts(onComplete: () -> Unit) {
-        db.collection("product")
-            .get()
+        db.collection("product").get()
             .addOnSuccessListener { result ->
                 productMap = result.documents.mapNotNull { document ->
                     val register = document.getLong("register") ?: return@mapNotNull null
-                    val description = document.getString("name") ?: "Sin Informacion"
-                    register to description
+                    register to (document.getString("name") ?: "Sin Informacion")
                 }.toMap()
-
                 onComplete()
             }
-            .addOnFailureListener { exception ->
-                exception.printStackTrace()
+            .addOnFailureListener {
                 productMap = emptyMap()
                 onComplete()
             }
     }
 
     private fun loadPayments(onComplete: () -> Unit) {
-        db.collection("payment")
-            .get()
+        db.collection("payment").get()
             .addOnSuccessListener { result ->
                 paymentMap = result.documents.mapNotNull { document ->
                     val register = document.getLong("register") ?: return@mapNotNull null
-                    val description = document.getString("name") ?: "Sin Informacion"
-                    register to description
+                    register to (document.getString("name") ?: "Sin Informacion")
                 }.toMap()
-
                 onComplete()
             }
-            .addOnFailureListener { exception ->
-                exception.printStackTrace()
+            .addOnFailureListener {
                 paymentMap = emptyMap()
                 onComplete()
             }
     }
 
     private fun loadGateways(onComplete: () -> Unit) {
-        db.collection("gateway")
-            .get()
+        db.collection("gateway").get()
             .addOnSuccessListener { result ->
                 gatewayMap = result.documents.mapNotNull { document ->
                     val register = document.getLong("register") ?: return@mapNotNull null
-                    val description = document.getString("name") ?: "Sin Informacion"
-                    register to description
+                    register to (document.getString("name") ?: "Sin Informacion")
                 }.toMap()
-
                 onComplete()
             }
-            .addOnFailureListener { exception ->
-                exception.printStackTrace()
+            .addOnFailureListener {
                 gatewayMap = emptyMap()
                 onComplete()
             }
     }
 
     private fun loadUsers(onComplete: () -> Unit) {
-        db.collection("user")
-            .get()
+        db.collection("user").get()
             .addOnSuccessListener { result ->
                 userMap = result.documents.mapNotNull { document ->
                     val register = document.getLong("register") ?: return@mapNotNull null
-                    val description = document.getString("email") ?: "Sin Informacion"
-                    register to description
+                    register to (document.getString("email") ?: "Sin Informacion")
                 }.toMap()
-
                 onComplete()
             }
-            .addOnFailureListener { exception ->
-                exception.printStackTrace()
+            .addOnFailureListener {
                 userMap = emptyMap()
                 onComplete()
             }
     }
 
     private fun loadOrders(onComplete: () -> Unit) {
-        db.collection("order")
-            .get()
+        db.collection("order").get()
             .addOnSuccessListener { result ->
                 orderMap = result.documents.mapNotNull { document ->
                     val register = document.getLong("register") ?: return@mapNotNull null
-                    val description = document.getString("reference") ?: "Orden $register"
-                    register to description
+                    register to (document.getString("reference") ?: "Orden $register")
                 }.toMap()
-
                 onComplete()
             }
-            .addOnFailureListener { exception ->
-                exception.printStackTrace()
+            .addOnFailureListener {
                 orderMap = emptyMap()
                 onComplete()
             }
     }
 
-
     private fun loadItems() {
-        collection
-            .get()
+        collection.get()
             .addOnSuccessListener { result ->
                 dataList.removeAllViews()
 
-                val items = result.documents.mapNotNull { document ->
-                    document.toObject(PurchaseModel::class.java)
-                }.sortedBy { it.register }
+                val items = result.documents.mapNotNull { it.toObject(PurchaseModel::class.java) }
+                    .sortedBy { it.register }
 
-                items.forEach { data ->
-                    dataList.addView(loadCard(data))
-                }
-            }
-            .addOnFailureListener { exception ->
-                exception.printStackTrace()
+                items.forEach { dataList.addView(loadCard(it)) }
             }
     }
 
@@ -188,7 +157,6 @@ class PurchaseSelectActivity : AppCompatActivity() {
             radius = dp(18).toFloat()
             cardElevation = dp(6).toFloat()
             setCardBackgroundColor(getColor(R.color.white))
-
             layoutParams = LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
@@ -205,19 +173,15 @@ class PurchaseSelectActivity : AppCompatActivity() {
 
         val textContainer = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            layoutParams = LinearLayout.LayoutParams(
-                0,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                1f
-            )
+            layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
         }
 
         addText(textContainer, "Registro: ${data.register}")
-        addText(textContainer, "Cantidad: ${data.amount}")
-        addText(textContainer, "Valor: ${data.value}")
-        addText(textContainer, "Total: ${data.total}")
+        addText(textContainer, "Cantidad: ${data.amount ?: 0}")
+        addText(textContainer, "Valor: ${data.value ?: 0.0}")
+        addText(textContainer, "Total: ${data.total ?: 0.0}")
         addText(textContainer, "Producto: ${label(productMap, data.idProduct)}")
-        addText(textContainer, "Medio Pago: ${label(paymentMap, data.idMethod)}")
+        addText(textContainer, "Metodo Pago: ${label(paymentMap, data.idMethod)}")
         addText(textContainer, "Pasarela: ${label(gatewayMap, data.idGangway)}")
         addText(textContainer, "Usuario: ${label(userMap, data.idUser)}")
         addText(textContainer, "Orden: ${label(orderMap, data.idOrder)}")
@@ -236,11 +200,8 @@ class PurchaseSelectActivity : AppCompatActivity() {
             layoutParams = LinearLayout.LayoutParams(dp(28), dp(28)).apply {
                 setMargins(0, 0, 0, dp(16))
             }
-
             setOnClickListener {
-                val intent = Intent(this@PurchaseSelectActivity, PurchaseUpdateActivity::class.java)
-                intent.putExtra("register", data.register)
-                startActivity(intent)
+                startActivity(Intent(this@PurchaseSelectActivity, PurchaseUpdateActivity::class.java).putExtra("register", data.register))
             }
         }
 
@@ -249,11 +210,8 @@ class PurchaseSelectActivity : AppCompatActivity() {
             layoutParams = LinearLayout.LayoutParams(dp(28), dp(28)).apply {
                 setMargins(0, 0, 0, dp(16))
             }
-
             setOnClickListener {
-                val intent = Intent(this@PurchaseSelectActivity, PurchaseDeleteActivity::class.java)
-                intent.putExtra("register", data.register)
-                startActivity(intent)
+                startActivity(Intent(this@PurchaseSelectActivity, PurchaseDeleteActivity::class.java).putExtra("register", data.register))
             }
         }
 
@@ -262,7 +220,6 @@ class PurchaseSelectActivity : AppCompatActivity() {
 
         mainRow.addView(textContainer)
         mainRow.addView(buttonContainer)
-
         cardView.addView(mainRow)
 
         return cardView
@@ -276,14 +233,12 @@ class PurchaseSelectActivity : AppCompatActivity() {
             setTypeface(null, Typeface.BOLD)
             setPadding(0, dp(6), 0, 0)
         }
-
         container.addView(textView)
     }
 
     private fun label(map: Map<Long, String>, id: Long): String {
         return map[id] ?: "Sin Informacion"
     }
-
 
     private fun dp(value: Int): Int {
         return (value * resources.displayMetrics.density).toInt()

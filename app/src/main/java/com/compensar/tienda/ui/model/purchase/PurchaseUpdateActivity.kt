@@ -2,7 +2,12 @@ package com.compensar.tienda.ui.model.purchase
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.Spinner
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
 import com.compensar.tienda.model.PurchaseModel
@@ -33,7 +38,9 @@ class PurchaseUpdateActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.model_purchase_update)
         SessionNavigation.bindProfile(this)
+
         register = intent.getLongExtra("register", 0)
+
         initViews()
         initEvents()
         loadRegister()
@@ -55,21 +62,42 @@ class PurchaseUpdateActivity : AppCompatActivity() {
     }
 
     private fun initEvents() {
-        actionHome.setOnClickListener { startActivity(Intent(this, DashboardAdminActivity::class.java)); finish() }
+        actionHome.setOnClickListener {
+            startActivity(Intent(this, DashboardAdminActivity::class.java))
+            finish()
+        }
+
         actionReturn.setOnClickListener { finish() }
         actionCancel.setOnClickListener { finish() }
-        actionExecute.setOnClickListener { save() }
+        actionExecute.setOnClickListener { actionOperate() }
     }
 
     private fun loadRegister() {
-        collection.document(register.toString()).get().addOnSuccessListener { document ->
-            currentData = document.toObject(PurchaseModel::class.java)
-            showRegister()
+        if (register <= 0) {
+            Toast.makeText(this, "Registro no valido", Toast.LENGTH_SHORT).show()
+            finish()
+            return
         }
+
+        collection.document(register.toString())
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    currentData = document.toObject(PurchaseModel::class.java)
+                    showRegister()
+                } else {
+                    Toast.makeText(this, "No se encontro el registro", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_LONG).show()
+            }
     }
 
     private fun showRegister() {
         val data = currentData ?: return
+
         fieldAmount.setText(data.amount?.toString() ?: "")
         fieldValue.setText(data.value?.toString() ?: "")
         fieldTotal.setText(data.total?.toString() ?: "")
@@ -80,29 +108,38 @@ class PurchaseUpdateActivity : AppCompatActivity() {
         FirestoreSelectHelper.load(this, fieldIdOrder, "order", listOf("reference", "address"), data.idOrder)
     }
 
-    private fun save() {
+    private fun actionOperate() {
         val idProduct = FirestoreSelectHelper.getSelectedId(fieldIdProduct)
+        val idMethod = FirestoreSelectHelper.getSelectedId(fieldIdMethod)
+        val idGangway = FirestoreSelectHelper.getSelectedId(fieldIdGangway)
         val idUser = FirestoreSelectHelper.getSelectedId(fieldIdUser)
         val idOrder = FirestoreSelectHelper.getSelectedId(fieldIdOrder)
-        if (idProduct == null || idUser == null || idOrder == null) {
-            Toast.makeText(this, "Debe seleccionar producto, usuario y orden", Toast.LENGTH_SHORT).show()
+
+        if (idProduct == null || idMethod == null || idGangway == null || idUser == null || idOrder == null) {
+            Toast.makeText(this, "Debe seleccionar producto, metodo, pasarela, usuario y orden", Toast.LENGTH_SHORT).show()
             return
         }
 
         val data = PurchaseModel(
             register = register,
-            amount = fieldAmount.text.toString().toIntOrNull(),
-            value = fieldValue.text.toString().toDoubleOrNull(),
-            total = fieldTotal.text.toString().toDoubleOrNull(),
+            amount = fieldAmount.text.toString().trim().toIntOrNull(),
+            value = fieldValue.text.toString().trim().toDoubleOrNull(),
+            total = fieldTotal.text.toString().trim().toDoubleOrNull(),
             idProduct = idProduct,
-            idMethod = FirestoreSelectHelper.getSelectedId(fieldIdMethod) ?: 0L,
-            idGangway = FirestoreSelectHelper.getSelectedId(fieldIdGangway) ?: 0L,
+            idMethod = idMethod,
+            idGangway = idGangway,
             idUser = idUser,
             idOrder = idOrder
         )
 
-        collection.document(register.toString()).set(data)
-            .addOnSuccessListener { Toast.makeText(this, "Compra actualizada", Toast.LENGTH_SHORT).show(); finish() }
-            .addOnFailureListener { Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_LONG).show() }
+        collection.document(register.toString())
+            .set(data)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Registro actualizado correctamente", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error al actualizar: ${exception.message}", Toast.LENGTH_LONG).show()
+            }
     }
 }
