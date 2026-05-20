@@ -62,7 +62,7 @@ class HomeCategoryActivity : AppCompatActivity() {
     }
 
     private fun initEvents() {
-        btnCart.setOnClickListener { startActivity(Intent(this, BuyerCartShopActivity::class.java)) }
+        btnCart.setOnClickListener { SessionNavigation.openCartOrLogin(this) }
         actionHome.setOnClickListener { startActivity(Intent(this, HomeProductActivity::class.java)); finish() }
         actionCategory.setOnClickListener { }
         actionShopping.setOnClickListener { startActivity(Intent(this, BuyerShoppingActivity::class.java)) }

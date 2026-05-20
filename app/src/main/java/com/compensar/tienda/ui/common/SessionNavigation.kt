@@ -13,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
+import com.compensar.tienda.ui.buyer.BuyerCartShopActivity
 import com.compensar.tienda.ui.home.HomeLoginActivity
 import com.compensar.tienda.ui.home.HomeProductActivity
 import com.compensar.tienda.ui.profile.ProfileAdminActivity
@@ -84,13 +85,24 @@ object SessionNavigation {
         val actionShopping = activity.findViewById<LinearLayout?>(R.id.actionShopping)
         val actionAddress = activity.findViewById<LinearLayout?>(R.id.actionAddress)
 
-        val isBuyerLogged = SessionManager.getRole(activity) == 3L
+        val isBuyerLogged = isLoggedIn(activity) && SessionManager.getRole(activity) == 3L
         val visibility = if (isBuyerLogged) View.VISIBLE else View.GONE
 
         actionShopping?.visibility = visibility
         actionAddress?.visibility = visibility
         actionShopping?.isEnabled = isBuyerLogged
         actionAddress?.isEnabled = isBuyerLogged
+        actionShopping?.isClickable = isBuyerLogged
+        actionAddress?.isClickable = isBuyerLogged
+    }
+
+    fun openCartOrLogin(activity: AppCompatActivity) {
+        val intent = if (isLoggedIn(activity)) {
+            Intent(activity, BuyerCartShopActivity::class.java)
+        } else {
+            Intent(activity, HomeLoginActivity::class.java)
+        }
+        activity.startActivity(intent)
     }
 
     private fun isLoggedIn(activity: AppCompatActivity): Boolean {

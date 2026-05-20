@@ -20,7 +20,6 @@ import com.compensar.tienda.R
 import com.compensar.tienda.domain.model.CategoryModel
 import com.compensar.tienda.domain.model.ProductModel
 import com.compensar.tienda.ui.buyer.BuyerAddressActivity
-import com.compensar.tienda.ui.buyer.BuyerCartShopActivity
 import com.compensar.tienda.ui.buyer.BuyerShoppingActivity
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.google.firebase.firestore.FirebaseFirestore
@@ -30,9 +29,13 @@ class HomeProductActivity : AppCompatActivity() {
     private lateinit var btnCart: TextView
     private lateinit var txtViewAll: TextView
     private lateinit var productGrid: GridLayout
+    private lateinit var btnPreviousProducts: TextView
+    private lateinit var btnNextProducts: TextView
 
     private lateinit var categoryOne: LinearLayout
     private lateinit var categoryTwo: LinearLayout
+    private lateinit var iconCategoryOne: ImageView
+    private lateinit var iconCategoryTwo: ImageView
     private lateinit var txtCategoryOne: TextView
     private lateinit var txtCategoryTwo: TextView
 
@@ -61,6 +64,12 @@ class HomeProductActivity : AppCompatActivity() {
         loadProducts()
     }
 
+    override fun onResume() {
+        super.onResume()
+        SessionNavigation.applyBuyerInferiorVisibility(this)
+        SessionNavigation.applyBuyerSuperiorVisibility(this)
+    }
+
     private fun applyWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -73,9 +82,13 @@ class HomeProductActivity : AppCompatActivity() {
         btnCart = findViewById(R.id.btnCart)
         txtViewAll = findViewById(R.id.txtViewAll)
         productGrid = findViewById(R.id.productGrid)
+        btnPreviousProducts = findViewById(R.id.btnPreviousProducts)
+        btnNextProducts = findViewById(R.id.btnNextProducts)
 
         categoryOne = findViewById(R.id.categoryOne)
         categoryTwo = findViewById(R.id.categoryTwo)
+        iconCategoryOne = findViewById(R.id.iconCategoryOne)
+        iconCategoryTwo = findViewById(R.id.iconCategoryTwo)
         txtCategoryOne = findViewById(R.id.txtCategoryOne)
         txtCategoryTwo = findViewById(R.id.txtCategoryTwo)
 
@@ -88,11 +101,25 @@ class HomeProductActivity : AppCompatActivity() {
 
     private fun initEvents() {
         btnCart.setOnClickListener {
-            startActivity(Intent(this, BuyerCartShopActivity::class.java))
+            SessionNavigation.openCartOrLogin(this)
         }
 
         txtViewAll.setOnClickListener {
             startActivity(Intent(this, HomeCategoryActivity::class.java))
+        }
+
+        btnPreviousProducts.setOnClickListener {
+            if (page > 0) {
+                page--
+                renderProducts()
+            }
+        }
+
+        btnNextProducts.setOnClickListener {
+            if ((page + 1) * pageSize < products.size) {
+                page++
+                renderProducts()
+            }
         }
 
         actionHome.setOnClickListener { }
@@ -135,8 +162,20 @@ class HomeProductActivity : AppCompatActivity() {
         categories.take(2).forEachIndexed { index, category ->
             val view = if (index == 0) categoryOne else categoryTwo
             val text = if (index == 0) txtCategoryOne else txtCategoryTwo
+            val image = if (index == 0) iconCategoryOne else iconCategoryTwo
 
             text.text = (category.name ?: "Categoría").uppercase()
+
+            if (!category.storefire.isNullOrBlank()) {
+                Glide.with(this)
+                    .load(category.storefire)
+                    .placeholder(R.mipmap.ic_launcher)
+                    .error(R.mipmap.ic_launcher)
+                    .into(image)
+            } else {
+                image.setImageResource(R.mipmap.ic_launcher)
+            }
+
             view.visibility = View.VISIBLE
             view.setOnClickListener {
                 openCategory(category)
@@ -175,6 +214,7 @@ class HomeProductActivity : AppCompatActivity() {
         productGrid.removeAllViews()
 
         if (products.isEmpty()) {
+            productGrid.rowCount = 1
             productGrid.addView(
                 TextView(this).apply {
                     text = "No hay productos disponibles"
@@ -184,25 +224,36 @@ class HomeProductActivity : AppCompatActivity() {
                     setPadding(0, dp(24), 0, dp(24))
                 }
             )
-            txtViewAll.text = "VER TODO"
+            updatePaginationButtons()
             return
         }
 
         val start = page * pageSize
         val end = minOf(start + pageSize, products.size)
-        products.subList(start, end).forEach { product ->
+        val visibleProducts = products.subList(start, end)
+
+        productGrid.rowCount = ((visibleProducts.size + 1) / 2).coerceAtLeast(1)
+        visibleProducts.forEach { product ->
             productGrid.addView(productCard(product))
         }
 
-        txtViewAll.text = if (end < products.size) "VER MÁS" else "VER TODO"
-        txtViewAll.setOnClickListener {
-            if ((page + 1) * pageSize < products.size) {
-                page++
-                renderProducts()
-            } else {
-                startActivity(Intent(this, HomeCategoryActivity::class.java))
-            }
-        }
+        updatePaginationButtons()
+    }
+
+    private fun updatePaginationButtons() {
+        val hasMoreThanOnePage = products.size > pageSize
+        val hasPrevious = page > 0
+        val hasNext = (page + 1) * pageSize < products.size
+
+        btnPreviousProducts.visibility = if (hasMoreThanOnePage) View.VISIBLE else View.GONE
+        btnNextProducts.visibility = if (hasMoreThanOnePage) View.VISIBLE else View.GONE
+
+        btnPreviousProducts.isEnabled = hasPrevious
+        btnNextProducts.isEnabled = hasNext
+        btnPreviousProducts.alpha = if (hasPrevious) 1f else 0.35f
+        btnNextProducts.alpha = if (hasNext) 1f else 0.35f
+
+        txtViewAll.text = "VER TODO"
     }
 
     private fun productCard(product: ProductModel): LinearLayout {
@@ -224,7 +275,11 @@ class HomeProductActivity : AppCompatActivity() {
         }
 
         if (!product.storefire.isNullOrBlank()) {
-            Glide.with(this).load(product.storefire).placeholder(R.mipmap.ic_launcher).into(image)
+            Glide.with(this)
+                .load(product.storefire)
+                .placeholder(R.mipmap.ic_launcher)
+                .error(R.mipmap.ic_launcher)
+                .into(image)
         } else {
             image.setImageResource(R.mipmap.ic_launcher)
         }

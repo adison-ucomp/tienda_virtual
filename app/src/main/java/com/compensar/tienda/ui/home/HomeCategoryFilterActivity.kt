@@ -71,7 +71,7 @@ class HomeCategoryFilterActivity : AppCompatActivity() {
 
     private fun initEvents() {
         btnBack.setOnClickListener { finish() }
-        btnCart.setOnClickListener { startActivity(Intent(this, BuyerCartShopActivity::class.java)) }
+        btnCart.setOnClickListener { SessionNavigation.openCartOrLogin(this) }
         actionHome.setOnClickListener { startActivity(Intent(this, HomeProductActivity::class.java)); finish() }
         actionCategory.setOnClickListener { startActivity(Intent(this, HomeCategoryActivity::class.java)); finish() }
         actionShopping.setOnClickListener { startActivity(Intent(this, BuyerShoppingActivity::class.java)) }
