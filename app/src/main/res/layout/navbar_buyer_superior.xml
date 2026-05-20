@@ -9,14 +9,18 @@
     android:paddingStart="20dp"
     android:paddingEnd="20dp">
 
-    <!-- <TextView
+    <TextView
         android:id="@+id/btnMenu"
         android:layout_width="48dp"
         android:layout_height="48dp"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:focusable="true"
         android:gravity="center"
         android:text="☰"
         android:textColor="#111111"
-        android:textSize="28sp" /> -->
+        android:textSize="28sp"
+        android:visibility="gone" />
 
     <include
         android:id="@+id/includeNavbarLogo"

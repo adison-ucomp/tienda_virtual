@@ -13,8 +13,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
-import com.compensar.tienda.ui.home.HomeProductActivity
 import com.compensar.tienda.ui.home.HomeLoginActivity
+import com.compensar.tienda.ui.home.HomeProductActivity
 import com.compensar.tienda.ui.profile.ProfileAdminActivity
 import com.compensar.tienda.ui.profile.ProfileBuyerActivity
 import com.compensar.tienda.ui.profile.ProfileSellerActivity
@@ -25,6 +25,7 @@ object SessionNavigation {
     fun bindProfile(activity: AppCompatActivity) {
         bindProfileByRole(activity)
         bindSharedMenu(activity)
+        applyBuyerSuperiorVisibility(activity)
     }
 
     private fun bindProfileByRole(activity: AppCompatActivity) {
@@ -47,16 +48,36 @@ object SessionNavigation {
     }
 
     private fun bindSharedMenu(activity: AppCompatActivity) {
-        val adminMenu = activity.findViewById<TextView?>(R.id.btnMenu)
+        val buyerMenu = activity.findViewById<TextView?>(R.id.btnMenu)
         val sellerMenu = activity.findViewById<TextView?>(R.id.actionMenu)
+        val isLogged = isLoggedIn(activity)
+
+        buyerMenu?.visibility = if (isLogged) View.VISIBLE else View.GONE
+        buyerMenu?.isEnabled = isLogged
+        buyerMenu?.isClickable = isLogged
+
+        sellerMenu?.visibility = if (isLogged) View.VISIBLE else View.GONE
+        sellerMenu?.isEnabled = isLogged
+        sellerMenu?.isClickable = isLogged
 
         val listener = {
-            val intent = Intent(activity, ProfileShareActivity::class.java)
-            activity.startActivity(intent)
+            if (isLoggedIn(activity)) {
+                val intent = Intent(activity, ProfileShareActivity::class.java)
+                activity.startActivity(intent)
+            }
         }
 
-        adminMenu?.setOnClickListener { listener() }
+        buyerMenu?.setOnClickListener { listener() }
         sellerMenu?.setOnClickListener { listener() }
+    }
+
+    fun applyBuyerSuperiorVisibility(activity: AppCompatActivity) {
+        val btnMenu = activity.findViewById<TextView?>(R.id.btnMenu)
+        val isLogged = isLoggedIn(activity)
+
+        btnMenu?.visibility = if (isLogged) View.VISIBLE else View.GONE
+        btnMenu?.isEnabled = isLogged
+        btnMenu?.isClickable = isLogged
     }
 
     fun applyBuyerInferiorVisibility(activity: AppCompatActivity) {
@@ -70,6 +91,10 @@ object SessionNavigation {
         actionAddress?.visibility = visibility
         actionShopping?.isEnabled = isBuyerLogged
         actionAddress?.isEnabled = isBuyerLogged
+    }
+
+    private fun isLoggedIn(activity: AppCompatActivity): Boolean {
+        return SessionManager.getRegister(activity) > 0L && SessionManager.getRole(activity) > 0L
     }
 
     fun showProfileShareDrawer(activity: AppCompatActivity) {

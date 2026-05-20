@@ -31,6 +31,7 @@ class BuyerShoppingActivity : AppCompatActivity() {
         initViews()
         SessionNavigation.applyBuyerInferiorVisibility(this)
         initEvents()
+        SessionNavigation.bindProfile(this)
     }
 
     private fun applyWindowInsets() {
