@@ -6,8 +6,8 @@ import com.compensar.tienda.data.remote.fire.default.PaymentDefault
 import com.compensar.tienda.data.remote.fire.default.ProductDefault
 import com.compensar.tienda.data.remote.fire.default.RoleDefault
 import com.compensar.tienda.data.remote.fire.default.UserDefault
-import com.compensar.tienda.domain.model.UbicationModel
-import com.compensar.tienda.domain.model.ShipmentModel
+import com.compensar.tienda.model.UbicationModel
+import com.compensar.tienda.model.ShipmentModel
 import com.google.firebase.firestore.FirebaseFirestore
 
 class DefaultFire {

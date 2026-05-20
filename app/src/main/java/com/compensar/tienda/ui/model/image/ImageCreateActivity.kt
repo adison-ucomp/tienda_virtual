@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.bumptech.glide.Glide
-import com.compensar.tienda.domain.model.ImageModel
+import com.compensar.tienda.model.ImageModel
 import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
 import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
 import com.google.firebase.firestore.FirebaseFirestore

@@ -10,7 +10,7 @@ import com.compensar.tienda.R
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.compensar.tienda.domain.model.RoleModel
+import com.compensar.tienda.model.RoleModel
 
 class RoleCreateActivity : AppCompatActivity() {
     private lateinit var actionReturn: TextView

@@ -8,18 +8,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
 import com.compensar.tienda.ui.model.common.ImagePreviewHelper
 import com.compensar.tienda.ui.common.SessionNavigation
-import com.compensar.tienda.domain.model.ShopModel
-import com.compensar.tienda.ui.model.shop.ShopCreateActivity
-import com.compensar.tienda.ui.model.shop.ShopDeleteActivity
-import com.compensar.tienda.ui.model.shop.ShopUpdateActivity
+import com.compensar.tienda.model.ShopModel
 import com.google.firebase.firestore.FirebaseFirestore
 
 class AdminShopListActivity : AppCompatActivity() {

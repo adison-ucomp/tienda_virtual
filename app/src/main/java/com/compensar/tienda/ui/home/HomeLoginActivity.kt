@@ -15,7 +15,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
 import com.compensar.tienda.ui.common.SessionNavigation
-import com.compensar.tienda.domain.model.UserModel
+import com.compensar.tienda.model.UserModel
 import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
 import com.compensar.tienda.ui.dashboard.DashboardSellerActivity
 import com.compensar.tienda.ui.register.RegisterBuyerActivity

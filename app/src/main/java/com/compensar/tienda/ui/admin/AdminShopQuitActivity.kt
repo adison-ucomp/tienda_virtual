@@ -4,16 +4,12 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.model.common.ImagePreviewHelper
 import com.compensar.tienda.ui.model.common.FirestoreRelationLabelHelper
-import com.compensar.tienda.domain.model.ShopModel
+import com.compensar.tienda.model.ShopModel
 import com.google.firebase.firestore.FirebaseFirestore
 
 class AdminShopQuitActivity : AppCompatActivity() {

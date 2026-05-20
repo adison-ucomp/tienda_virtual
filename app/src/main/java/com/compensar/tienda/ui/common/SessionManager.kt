@@ -1,7 +1,7 @@
 package com.compensar.tienda.ui.common
 
 import android.content.Context
-import com.compensar.tienda.domain.model.UserModel
+import com.compensar.tienda.model.UserModel
 
 object SessionManager {
 

@@ -1,6 +1,6 @@
 package com.compensar.tienda.data.remote.fire.default
 
-import com.compensar.tienda.domain.model.ProductModel
+import com.compensar.tienda.model.ProductModel
 
 object ProductDefault {
 

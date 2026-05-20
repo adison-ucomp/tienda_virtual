@@ -14,7 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
-import com.compensar.tienda.domain.model.AddressModel
+import com.compensar.tienda.model.AddressModel
 import com.compensar.tienda.ui.common.SessionManager
 import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
 import com.google.android.gms.location.FusedLocationProviderClient

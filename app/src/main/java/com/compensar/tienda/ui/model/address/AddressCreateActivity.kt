@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
-import com.compensar.tienda.domain.model.AddressModel
+import com.compensar.tienda.model.AddressModel
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
 import com.compensar.tienda.ui.model.common.FirestoreSelectHelper

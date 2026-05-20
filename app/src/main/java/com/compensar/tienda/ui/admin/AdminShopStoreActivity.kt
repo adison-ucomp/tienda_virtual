@@ -1,6 +1,5 @@
 package com.compensar.tienda.ui.admin
 
-import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -10,15 +9,12 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.compensar.tienda.R
 import com.compensar.tienda.ui.common.SessionNavigation
-import com.compensar.tienda.domain.model.ShopModel
+import com.compensar.tienda.model.ShopModel
 import com.compensar.tienda.ui.model.common.FirebaseStorageImageHelper
 import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
 import android.widget.ImageView

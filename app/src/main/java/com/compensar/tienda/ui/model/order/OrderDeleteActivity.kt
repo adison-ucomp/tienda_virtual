@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
-import com.compensar.tienda.domain.model.OrderModel
+import com.compensar.tienda.model.OrderModel
 import com.google.firebase.firestore.FirebaseFirestore
 
 class OrderDeleteActivity : AppCompatActivity() {

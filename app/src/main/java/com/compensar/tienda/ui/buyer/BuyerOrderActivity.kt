@@ -12,8 +12,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.compensar.tienda.R
-import com.compensar.tienda.domain.model.OrderModel
-import com.compensar.tienda.domain.model.PurchaseModel
+import com.compensar.tienda.model.OrderModel
+import com.compensar.tienda.model.PurchaseModel
 import com.google.firebase.firestore.FirebaseFirestore
 
 class BuyerOrderActivity : AppCompatActivity() {

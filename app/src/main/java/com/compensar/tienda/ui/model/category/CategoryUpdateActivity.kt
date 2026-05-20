@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.bumptech.glide.Glide
-import com.compensar.tienda.domain.model.CategoryModel
+import com.compensar.tienda.model.CategoryModel
 import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import android.graphics.Bitmap
@@ -83,7 +83,7 @@ class CategoryUpdateActivity : AppCompatActivity() {
         actionReturn.setOnClickListener {
             finish()
         }
-        
+
         actionCancel.setOnClickListener {
             finish()
         }

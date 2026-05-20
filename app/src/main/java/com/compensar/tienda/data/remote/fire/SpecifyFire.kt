@@ -1,6 +1,6 @@
 package com.compensar.tienda.data.remote.fire
 
-import com.compensar.tienda.domain.model.SpecifyModel
+import com.compensar.tienda.model.SpecifyModel
 
 class SpecifyFire : BaseFire<SpecifyModel>(
     collectionName = "specify",

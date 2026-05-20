@@ -14,7 +14,7 @@ import com.compensar.tienda.R
 import com.compensar.tienda.ui.model.common.ImagePreviewHelper
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.google.firebase.firestore.FirebaseFirestore
-import com.compensar.tienda.domain.model.UserModel
+import com.compensar.tienda.model.UserModel
 import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
 
 class UserSelectActivity : AppCompatActivity() {

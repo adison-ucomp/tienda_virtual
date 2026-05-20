@@ -1,6 +1,6 @@
 package com.compensar.tienda.data.remote.fire
 
-import com.compensar.tienda.domain.model.AddressModel
+import com.compensar.tienda.model.AddressModel
 
 class AddressFire : BaseFire<AddressModel>(
     collectionName = "address",

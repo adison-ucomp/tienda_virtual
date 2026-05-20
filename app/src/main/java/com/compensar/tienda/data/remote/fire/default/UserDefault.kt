@@ -1,6 +1,6 @@
 package com.compensar.tienda.data.remote.fire.default
 
-import com.compensar.tienda.domain.model.UserModel
+import com.compensar.tienda.model.UserModel
 import java.security.MessageDigest
 
 object UserDefault {

@@ -1,6 +1,6 @@
 package com.compensar.tienda.data.remote.fire
 
-import com.compensar.tienda.domain.model.GatewayModel
+import com.compensar.tienda.model.GatewayModel
 
 class GatewayFire : BaseFire<GatewayModel>(
     collectionName = "gateway",

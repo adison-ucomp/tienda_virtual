@@ -13,9 +13,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
-import com.compensar.tienda.domain.model.CategoryModel
+import com.compensar.tienda.model.CategoryModel
 import com.compensar.tienda.ui.buyer.BuyerAddressActivity
-import com.compensar.tienda.ui.buyer.BuyerCartShopActivity
 import com.compensar.tienda.ui.buyer.BuyerShoppingActivity
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.google.firebase.firestore.FirebaseFirestore

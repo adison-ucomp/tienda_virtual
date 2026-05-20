@@ -1,6 +1,6 @@
 package com.compensar.tienda.data.remote.fire
 
-import com.compensar.tienda.domain.model.ImageModel
+import com.compensar.tienda.model.ImageModel
 
 class ImageFire : BaseFire<ImageModel>(
     collectionName = "image",

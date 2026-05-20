@@ -3,7 +3,6 @@ package com.compensar.tienda.ui.buyer
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
-import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.enableEdgeToEdge
@@ -12,7 +11,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
-import com.compensar.tienda.domain.model.OrderModel
+import com.compensar.tienda.model.OrderModel
 import com.compensar.tienda.ui.common.SessionManager
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.home.HomeCategoryActivity

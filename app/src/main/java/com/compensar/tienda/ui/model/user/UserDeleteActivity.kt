@@ -7,12 +7,11 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.model.common.ImagePreviewHelper
 import com.compensar.tienda.ui.model.common.FirestoreRelationLabelHelper
-import com.compensar.tienda.domain.model.UserModel
+import com.compensar.tienda.model.UserModel
 import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
 import com.google.firebase.firestore.FirebaseFirestore
 

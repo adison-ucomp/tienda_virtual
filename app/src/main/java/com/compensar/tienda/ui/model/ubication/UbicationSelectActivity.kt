@@ -9,7 +9,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
-import com.compensar.tienda.domain.model.UbicationModel
+import com.compensar.tienda.model.UbicationModel
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.google.firebase.firestore.FirebaseFirestore
 

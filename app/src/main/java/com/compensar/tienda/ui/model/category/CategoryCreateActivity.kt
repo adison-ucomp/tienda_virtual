@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.bumptech.glide.Glide
-import com.compensar.tienda.domain.model.CategoryModel
+import com.compensar.tienda.model.CategoryModel
 import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -29,7 +29,7 @@ class CategoryCreateActivity : AppCompatActivity() {
     private lateinit var actionExecute: Button
     private lateinit var actionGallery: Button
     private lateinit var actionCamera: Button
-    
+
     private lateinit var fieldName: EditText
     private lateinit var fieldStorefire: EditText
     private lateinit var imagePreview: ImageView
@@ -82,7 +82,7 @@ class CategoryCreateActivity : AppCompatActivity() {
         actionReturn.setOnClickListener {
             finish()
         }
-        
+
         actionCancel.setOnClickListener {
             finish()
         }

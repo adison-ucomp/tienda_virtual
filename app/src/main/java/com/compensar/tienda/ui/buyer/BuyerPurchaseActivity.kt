@@ -14,9 +14,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
-import com.compensar.tienda.domain.model.AddressModel
+import com.compensar.tienda.model.AddressModel
 import com.compensar.tienda.ui.common.CartManager
-import com.compensar.tienda.ui.common.CartReservationManager
 import com.compensar.tienda.ui.common.SessionManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap

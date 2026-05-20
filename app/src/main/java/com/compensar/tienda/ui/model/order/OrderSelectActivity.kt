@@ -1,7 +1,6 @@
 package com.compensar.tienda.ui.model.order
 
 import android.content.Intent
-import android.graphics.Typeface
 import android.os.Bundle
 import android.view.Gravity
 import android.view.ViewGroup
@@ -9,7 +8,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
-import com.compensar.tienda.domain.model.OrderModel
+import com.compensar.tienda.model.OrderModel
 import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
 import com.google.firebase.firestore.FirebaseFirestore
 

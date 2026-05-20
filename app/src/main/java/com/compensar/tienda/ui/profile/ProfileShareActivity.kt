@@ -11,7 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.compensar.tienda.R
-import com.compensar.tienda.domain.model.UserModel
+import com.compensar.tienda.model.UserModel
 import com.compensar.tienda.ui.common.SessionManager
 import com.compensar.tienda.ui.home.HomeProductActivity
 import com.google.firebase.firestore.FirebaseFirestore

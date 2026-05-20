@@ -1,6 +1,6 @@
 package com.compensar.tienda.data.remote.fire.default
 
-import com.compensar.tienda.domain.model.EmailModel
+import com.compensar.tienda.model.EmailModel
 
 /**
  * El modelo de configuración SMTP ya no se inicializa en Firestore.

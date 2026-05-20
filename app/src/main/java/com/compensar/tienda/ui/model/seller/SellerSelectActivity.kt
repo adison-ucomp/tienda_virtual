@@ -13,7 +13,7 @@ import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.google.firebase.firestore.FirebaseFirestore
-import com.compensar.tienda.domain.model.SellerModel
+import com.compensar.tienda.model.SellerModel
 
 class SellerSelectActivity : AppCompatActivity() {
     private lateinit var actionReturn: TextView

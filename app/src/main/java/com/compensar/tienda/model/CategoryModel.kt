@@ -1,4 +1,4 @@
-package com.compensar.tienda.domain.model
+package com.compensar.tienda.model
 
 data class CategoryModel(
     val register: Long = 0,

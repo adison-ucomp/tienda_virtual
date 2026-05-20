@@ -10,7 +10,7 @@ import com.compensar.tienda.R
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.compensar.tienda.domain.model.PaymentModel
+import com.compensar.tienda.model.PaymentModel
 
 class PaymentCreateActivity : AppCompatActivity() {
     private lateinit var actionReturn: TextView

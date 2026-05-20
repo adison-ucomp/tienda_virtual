@@ -1,6 +1,6 @@
 package com.compensar.tienda.data.remote.fire
 
-import com.compensar.tienda.domain.model.RoleModel
+import com.compensar.tienda.model.RoleModel
 
 class RoleFire : BaseFire<RoleModel>(
     collectionName = "role",

@@ -2,7 +2,6 @@ package com.compensar.tienda.ui.home
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -10,8 +9,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.compensar.tienda.R
-import com.compensar.tienda.domain.model.ImageModel
-import com.compensar.tienda.domain.model.ProductModel
+import com.compensar.tienda.model.ImageModel
+import com.compensar.tienda.model.ProductModel
 import com.compensar.tienda.ui.buyer.BuyerCartShopActivity
 import com.compensar.tienda.ui.common.CartItem
 import com.compensar.tienda.ui.common.CartManager

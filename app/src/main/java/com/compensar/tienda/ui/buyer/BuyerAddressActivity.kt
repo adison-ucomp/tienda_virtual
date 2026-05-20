@@ -14,7 +14,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
-import com.compensar.tienda.domain.model.AddressModel
+import com.compensar.tienda.model.AddressModel
 import com.compensar.tienda.ui.common.SessionManager
 import com.google.firebase.firestore.FirebaseFirestore
 

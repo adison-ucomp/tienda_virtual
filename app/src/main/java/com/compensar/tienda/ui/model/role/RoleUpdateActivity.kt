@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.google.firebase.firestore.FirebaseFirestore
-import com.compensar.tienda.domain.model.RoleModel
+import com.compensar.tienda.model.RoleModel
 
 class RoleUpdateActivity : AppCompatActivity() {
     private lateinit var actionReturn: TextView

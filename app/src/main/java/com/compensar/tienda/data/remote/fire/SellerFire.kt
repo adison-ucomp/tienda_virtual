@@ -1,6 +1,6 @@
 package com.compensar.tienda.data.remote.fire
 
-import com.compensar.tienda.domain.model.SellerModel
+import com.compensar.tienda.model.SellerModel
 
 class SellerFire : BaseFire<SellerModel>(
     collectionName = "seller",
