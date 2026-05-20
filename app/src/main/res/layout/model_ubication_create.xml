@@ -41,6 +41,7 @@
             android:padding="16dp">
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/header"
                 android:layout_width="match_parent"
                 android:layout_height="110dp"
                 app:cardCornerRadius="16dp"
@@ -53,6 +54,11 @@
                     android:orientation="vertical"
                     android:gravity="center_vertical"
                     android:padding="20dp">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_nuevo" />
 
                     <TextView
                         android:layout_width="wrap_content"

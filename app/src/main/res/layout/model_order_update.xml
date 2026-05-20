@@ -8,8 +8,10 @@
     android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.model.order.OrderUpdateActivity">
 
+    <!-- Navbar superior -->
     <include
         android:id="@+id/includeSuperior"
         layout="@layout/navbar_admin_return"
@@ -19,6 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Contenido principal -->
     <ScrollView
         android:id="@+id/scrollOrderUpdateActivity"
         android:layout_width="0dp"
@@ -55,7 +58,7 @@
                     <ImageView
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:src="@drawable/ic_users" />
+                        android:src="@drawable/ic_edit" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"

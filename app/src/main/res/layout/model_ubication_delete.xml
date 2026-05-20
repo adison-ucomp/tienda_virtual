@@ -41,6 +41,7 @@
             android:padding="16dp">
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/header"
                 android:layout_width="match_parent"
                 android:layout_height="110dp"
                 app:cardCornerRadius="16dp"
@@ -54,13 +55,18 @@
                     android:gravity="center_vertical"
                     android:padding="20dp">
 
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_delete" />
+
                     <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Eliminar tipo de dirección"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Eliminar tipo de dirección"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black" />
 
                     <TextView
                         android:layout_width="wrap_content"

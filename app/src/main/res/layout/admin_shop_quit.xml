@@ -11,6 +11,7 @@
     android:orientation="vertical"
     tools:context=".ui.admin.AdminShopQuitActivity">
 
+    <!-- Navbar superior -->
     <include
         android:id="@+id/includeSuperior"
         layout="@layout/navbar_admin_return"
@@ -20,6 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Contenido principal -->
     <ScrollView
         android:id="@+id/scrollShopDelete"
         android:layout_width="0dp"
@@ -50,8 +52,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:padding="20dp"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:padding="20dp">
 
                     <ImageView
                         android:layout_width="50dp"
@@ -263,6 +265,7 @@
 
     </ScrollView>
 
+    <!-- Menú inferior -->
     <include
         android:id="@+id/includeInferior"
         layout="@layout/navbar_admin_inferior"
