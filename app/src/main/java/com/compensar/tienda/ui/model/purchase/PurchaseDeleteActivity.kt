@@ -26,6 +26,7 @@ class PurchaseDeleteActivity : AppCompatActivity() {
     private lateinit var fieldIdMethod: TextView
     private lateinit var fieldIdGangway: TextView
     private lateinit var fieldIdUser: TextView
+    private lateinit var fieldIdOrder: TextView
 
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("purchase")
@@ -59,6 +60,7 @@ class PurchaseDeleteActivity : AppCompatActivity() {
         fieldIdMethod = findViewById(R.id.fieldIdMethod)
         fieldIdGangway = findViewById(R.id.fieldIdGangway)
         fieldIdUser = findViewById(R.id.fieldIdUser)
+        fieldIdOrder = findViewById(R.id.fieldIdOrder)
     }
 
     private fun initEvents() {
@@ -103,6 +105,7 @@ class PurchaseDeleteActivity : AppCompatActivity() {
         FirestoreRelationLabelHelper.load(fieldIdMethod, "payment", current.idMethod, listOf("name"))
         FirestoreRelationLabelHelper.load(fieldIdGangway, "gateway", current.idGangway, listOf("name"))
         FirestoreRelationLabelHelper.load(fieldIdUser, "user", current.idUser, listOf("email"))
+        FirestoreRelationLabelHelper.load(fieldIdOrder, "order", current.idOrder, listOf("reference", "address"))
     }
 
     private fun actionOperate() {

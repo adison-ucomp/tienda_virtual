@@ -27,6 +27,7 @@ class PurchaseSelectActivity : AppCompatActivity() {
     private var paymentMap: Map<Long, String> = emptyMap()
     private var gatewayMap: Map<Long, String> = emptyMap()
     private var userMap: Map<Long, String> = emptyMap()
+    private var orderMap: Map<Long, String> = emptyMap()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,7 +62,7 @@ class PurchaseSelectActivity : AppCompatActivity() {
         loadProducts {
             loadPayments {
                 loadGateways {
-                    loadUsers(onComplete)
+                    loadUsers { loadOrders(onComplete) }
                 }
             }
         }
@@ -143,6 +144,25 @@ class PurchaseSelectActivity : AppCompatActivity() {
             }
     }
 
+    private fun loadOrders(onComplete: () -> Unit) {
+        db.collection("order")
+            .get()
+            .addOnSuccessListener { result ->
+                orderMap = result.documents.mapNotNull { document ->
+                    val register = document.getLong("register") ?: return@mapNotNull null
+                    val description = document.getString("reference") ?: "Orden $register"
+                    register to description
+                }.toMap()
+
+                onComplete()
+            }
+            .addOnFailureListener { exception ->
+                exception.printStackTrace()
+                orderMap = emptyMap()
+                onComplete()
+            }
+    }
+
 
     private fun loadItems() {
         collection
@@ -202,6 +222,7 @@ class PurchaseSelectActivity : AppCompatActivity() {
         addText(textContainer, "Medio Pago: ${label(paymentMap, data.idMethod)}")
         addText(textContainer, "Pasarela: ${label(gatewayMap, data.idGangway)}")
         addText(textContainer, "Usuario: ${label(userMap, data.idUser)}")
+        addText(textContainer, "Orden: ${label(orderMap, data.idOrder)}")
 
         val buttonContainer = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL

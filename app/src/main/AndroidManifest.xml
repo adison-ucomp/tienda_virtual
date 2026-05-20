@@ -22,6 +22,10 @@
 
         <activity android:name=".ui.home.HomeSpecifyActivity" android:exported="false" />
         <activity android:name=".ui.home.HomeCategoryFilterActivity" android:exported="false" />
+        <activity android:name=".ui.model.order.OrderCreateActivity" android:exported="false" />
+        <activity android:name=".ui.model.order.OrderDeleteActivity" android:exported="false" />
+        <activity android:name=".ui.model.order.OrderSelectActivity" android:exported="false" />
+        <activity android:name=".ui.model.order.OrderUpdateActivity" android:exported="false" />
         <activity android:name=".ui.model.ubication.UbicationCreateActivity" android:exported="false" />
         <activity android:name=".ui.model.ubication.UbicationDeleteActivity" android:exported="false" />
         <activity android:name=".ui.model.ubication.UbicationSelectActivity" android:exported="false" />

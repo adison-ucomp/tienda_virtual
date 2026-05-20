@@ -15,6 +15,7 @@ import com.compensar.tienda.domain.model.ProductModel
 import com.compensar.tienda.ui.buyer.BuyerCartShopActivity
 import com.compensar.tienda.ui.common.CartItem
 import com.compensar.tienda.ui.common.CartManager
+import com.compensar.tienda.ui.common.CartReservationManager
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -29,6 +30,6 @@ class HomeDetailActivity : AppCompatActivity() {
     private fun loadProduct(){ if(productRegister<=0)return; FirebaseFirestore.getInstance().collection("product").document(productRegister.toString()).get().addOnSuccessListener{ doc-> product=doc.toObject(ProductModel::class.java); showProduct(); loadImages() } }
     private fun showProduct(){ val p=product?:return; txtName.text=p.name?:"Producto"; txtPrice.text="$ ${String.format("%,.0f", p.price)}"; txtDetail.text=p.detail?:"Sin descripción"; if(!p.storefire.isNullOrBlank()) Glide.with(this).load(p.storefire).placeholder(R.drawable.ic_shops).into(imgProduct) else imgProduct.setImageResource(R.drawable.ic_shops) }
     private fun loadImages(){ FirebaseFirestore.getInstance().collection("image").whereEqualTo("idProduct",productRegister).get().addOnSuccessListener{ result -> relatedImages.removeAllViews(); result.documents.mapNotNull{it.toObject(ImageModel::class.java)}.forEach{ img -> val view=ImageView(this).apply{layoutParams=LinearLayout.LayoutParams(dp(78),dp(78)).apply{setMargins(0,0,dp(10),0)};scaleType=ImageView.ScaleType.CENTER_CROP;setBackgroundColor(0xFFF7F8FA.toInt())}; if(!img.storefire.isNullOrBlank()) Glide.with(this).load(img.storefire).into(view); relatedImages.addView(view) } } }
-    private fun addToCart(openCart:Boolean){ val p=product?:return; CartManager.add(this, CartItem(p.register,p.name?:"Producto",p.detail?:"",p.price,p.storefire?:"",1)); Toast.makeText(this,"Producto agregado al carrito",Toast.LENGTH_SHORT).show(); if(openCart) startActivity(Intent(this,BuyerCartShopActivity::class.java)) }
+    private fun addToCart(openCart:Boolean){ val p=product?:return; val existing=CartManager.getItems(this).firstOrNull{it.register==p.register}; val item=existing ?: CartItem(p.register,p.name?:"Producto",p.detail?:"",p.price,p.storefire?:"",0); CartReservationManager.reserveQuantity(this,item,item.quantity+1,onSuccess={ Toast.makeText(this,"Producto agregado al carrito",Toast.LENGTH_SHORT).show(); if(openCart) startActivity(Intent(this,BuyerCartShopActivity::class.java)) },onError={ message -> Toast.makeText(this,message,Toast.LENGTH_LONG).show() }) }
     private fun dp(v:Int)=(v*resources.displayMetrics.density).toInt()
 }

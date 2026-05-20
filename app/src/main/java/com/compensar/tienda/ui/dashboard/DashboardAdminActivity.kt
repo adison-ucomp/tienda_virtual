@@ -12,6 +12,7 @@ import com.compensar.tienda.ui.model.address.AddressSelectActivity
 import com.compensar.tienda.ui.model.category.CategorySelectActivity
 import com.compensar.tienda.ui.model.gateway.GatewaySelectActivity
 import com.compensar.tienda.ui.model.image.ImageSelectActivity
+import com.compensar.tienda.ui.model.order.OrderSelectActivity
 import com.compensar.tienda.ui.model.payment.PaymentSelectActivity
 import com.compensar.tienda.ui.model.product.ProductSelectActivity
 import com.compensar.tienda.ui.model.purchase.PurchaseSelectActivity
@@ -31,6 +32,7 @@ class DashboardAdminActivity : AppCompatActivity() {
     private lateinit var cardCategory: CardView
     private lateinit var cardGateway: CardView
     private lateinit var cardImage: CardView
+    private lateinit var cardOrder: CardView
     private lateinit var cardPayment: CardView
     private lateinit var cardProduct: CardView
     private lateinit var cardPurchase: CardView
@@ -58,6 +60,7 @@ class DashboardAdminActivity : AppCompatActivity() {
         cardCategory = findViewById(R.id.cardCategory)
         cardGateway = findViewById(R.id.cardGateway)
         cardImage = findViewById(R.id.cardImage)
+        cardOrder = findViewById(R.id.cardOrder)
         cardPayment = findViewById(R.id.cardPayment)
         cardProduct = findViewById(R.id.cardProduct)
         cardPurchase = findViewById(R.id.cardPurchase)
@@ -101,6 +104,11 @@ class DashboardAdminActivity : AppCompatActivity() {
 
         cardImage.setOnClickListener {
             val intent = Intent(this, ImageSelectActivity::class.java)
+            startActivity(intent)
+        }
+
+        cardOrder.setOnClickListener {
+            val intent = Intent(this, OrderSelectActivity::class.java)
             startActivity(intent)
         }
 

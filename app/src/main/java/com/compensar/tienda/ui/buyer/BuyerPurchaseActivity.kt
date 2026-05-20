@@ -16,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
 import com.compensar.tienda.domain.model.AddressModel
 import com.compensar.tienda.ui.common.CartManager
+import com.compensar.tienda.ui.common.CartReservationManager
 import com.compensar.tienda.ui.common.SessionManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -23,8 +24,13 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
+import java.util.UUID
 
 class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -43,6 +49,7 @@ class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private val addresses = mutableListOf<AddressModel>()
     private var googleMap: GoogleMap? = null
+    private var selectedAddress: AddressModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,9 +94,7 @@ class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
             startActivity(Intent(this, BuyerAddressActivity::class.java))
         }
 
-        btnConfirmPurchase.setOnClickListener {
-            Toast.makeText(this, "Compra lista para pasarela de pagos", Toast.LENGTH_SHORT).show()
-        }
+        btnConfirmPurchase.setOnClickListener { confirmPurchase() }
 
         spnAddresses.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: android.view.View?, position: Int, id: Long) {
@@ -163,6 +168,7 @@ class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun selectAddress(address: AddressModel) {
+        selectedAddress = address
         val label = address.label?.takeIf { it.isNotBlank() } ?: "Dirección"
         val value = address.address?.takeIf { it.isNotBlank() } ?: "Sin dirección"
 
@@ -188,6 +194,105 @@ class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         } catch (_: Exception) {
         }
+    }
+
+
+    private fun confirmPurchase() {
+        val userRegister = SessionManager.getRegister(this)
+        val items = CartManager.getItems(this)
+        val address = selectedAddress
+
+        if (userRegister <= 0) {
+            Toast.makeText(this, "Debes iniciar sesión", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (items.isEmpty()) {
+            Toast.makeText(this, "No hay productos para comprar", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (address == null || address.address.isNullOrBlank()) {
+            Toast.makeText(this, "Selecciona una dirección", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        btnConfirmPurchase.isEnabled = false
+        btnConfirmPurchase.text = "Procesando..."
+
+        val db = FirebaseFirestore.getInstance()
+        val subtotal = CartManager.subtotal(this)
+        val reference = UUID.randomUUID().toString().replace("-", "").take(12).uppercase()
+
+        db.collection("order")
+            .orderBy("register", Query.Direction.DESCENDING)
+            .limit(1)
+            .get()
+            .addOnSuccessListener { orderResult ->
+                val orderRegister = (orderResult.documents.firstOrNull()?.getLong("register") ?: 0L) + 1L
+                val orderData = mapOf(
+                    "register" to orderRegister,
+                    "address" to address.address,
+                    "reference" to reference,
+                    "total" to subtotal,
+                    "idUser" to userRegister
+                )
+
+                db.collection("purchase")
+                    .orderBy("register", Query.Direction.DESCENDING)
+                    .limit(1)
+                    .get()
+                    .addOnSuccessListener { purchaseResult ->
+                        val firstPurchaseRegister = (purchaseResult.documents.firstOrNull()?.getLong("register") ?: 0L) + 1L
+                        db.runBatch { batch ->
+                            batch.set(db.collection("order").document(orderRegister.toString()), orderData)
+
+                            val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+                            val hour = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
+
+                            items.forEachIndexed { index, item ->
+                                val purchaseRegister = firstPurchaseRegister + index
+                                val productRef = db.collection("product").document(item.register.toString())
+                                val reservationRef = db.collection("cart_reservation").document("${userRegister}_${item.register}")
+                                batch.set(db.collection("purchase").document(purchaseRegister.toString()), mapOf(
+                                    "register" to purchaseRegister,
+                                    "date" to date,
+                                    "hour" to hour,
+                                    "amount" to item.quantity,
+                                    "value" to item.price,
+                                    "total" to item.price * item.quantity,
+                                    "idProduct" to item.register,
+                                    "idMethod" to 0L,
+                                    "idGangway" to 0L,
+                                    "idUser" to userRegister,
+                                    "idOrder" to orderRegister
+                                ))
+                                batch.update(productRef, mapOf(
+                                    "stock" to FieldValue.increment(-item.quantity.toLong()),
+                                    "reservedStock" to FieldValue.increment(-item.quantity.toLong())
+                                ))
+                                batch.delete(reservationRef)
+                            }
+                        }.addOnSuccessListener {
+                            CartManager.clear(this)
+                            Toast.makeText(this, "Compra registrada. Orden: $reference", Toast.LENGTH_LONG).show()
+                            startActivity(Intent(this, BuyerShoppingActivity::class.java))
+                            finish()
+                        }.addOnFailureListener { exception ->
+                            btnConfirmPurchase.isEnabled = true
+                            btnConfirmPurchase.text = "Confirmar compra"
+                            Toast.makeText(this, "Error al confirmar: ${exception.message}", Toast.LENGTH_LONG).show()
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        btnConfirmPurchase.isEnabled = true
+                        btnConfirmPurchase.text = "Confirmar compra"
+                        Toast.makeText(this, "Error generando compras: ${exception.message}", Toast.LENGTH_LONG).show()
+                    }
+            }
+            .addOnFailureListener { exception ->
+                btnConfirmPurchase.isEnabled = true
+                btnConfirmPurchase.text = "Confirmar compra"
+                Toast.makeText(this, "Error generando orden: ${exception.message}", Toast.LENGTH_LONG).show()
+            }
     }
 
     private fun renderSummary() {

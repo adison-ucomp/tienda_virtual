@@ -32,6 +32,7 @@ class PurchaseCreateActivity : AppCompatActivity() {
     private lateinit var fieldIdMethod: Spinner
     private lateinit var fieldIdGangway: Spinner
     private lateinit var fieldIdUser: Spinner
+    private lateinit var fieldIdOrder: Spinner
 
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("purchase")
@@ -64,6 +65,7 @@ class PurchaseCreateActivity : AppCompatActivity() {
         fieldIdMethod = findViewById(R.id.fieldIdMethod)
         fieldIdGangway = findViewById(R.id.fieldIdGangway)
         fieldIdUser = findViewById(R.id.fieldIdUser)
+        fieldIdOrder = findViewById(R.id.fieldIdOrder)
     }
 
     private fun initEvents() {
@@ -110,6 +112,14 @@ class PurchaseCreateActivity : AppCompatActivity() {
             labelFields = listOf("names", "srnms", "email"),
             selectedId = 0
         )
+
+        FirestoreSelectHelper.load(
+            context = this,
+            spinner = fieldIdOrder,
+            collectionName = "order",
+            labelFields = listOf("reference", "address"),
+            selectedId = 0
+        )
     }
 
     private fun actionOperate() {
@@ -133,6 +143,7 @@ class PurchaseCreateActivity : AppCompatActivity() {
         val idMethod = FirestoreSelectHelper.getSelectedId(fieldIdMethod)
         val idGangway = FirestoreSelectHelper.getSelectedId(fieldIdGangway)
         val idUser = FirestoreSelectHelper.getSelectedId(fieldIdUser)
+        val idOrder = FirestoreSelectHelper.getSelectedId(fieldIdOrder)
 
         if (idProduct == null) {
             Toast.makeText(this, "Debe seleccionar una opción válida", Toast.LENGTH_SHORT).show()
@@ -150,6 +161,10 @@ class PurchaseCreateActivity : AppCompatActivity() {
             Toast.makeText(this, "Debe seleccionar una opción válida", Toast.LENGTH_SHORT).show()
             return
         }
+        if (idOrder == null) {
+            Toast.makeText(this, "Debe seleccionar una orden válida", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         val data = PurchaseModel(
             register = register,
@@ -161,7 +176,8 @@ class PurchaseCreateActivity : AppCompatActivity() {
             idProduct = idProduct,
             idMethod = idMethod,
             idGangway = idGangway,
-            idUser = idUser
+            idUser = idUser,
+            idOrder = idOrder
         )
 
         collection.document(register.toString())
