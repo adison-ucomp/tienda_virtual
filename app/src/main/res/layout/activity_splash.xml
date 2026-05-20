@@ -4,12 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    android:background="@color/white"
+    android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
-    tools:context=".ui.SplashActivity"
-    android:background="@color/white">
+    tools:context=".ui.SplashActivity">
 
     <ImageView
         android:id="@+id/imgLogoSplash"

@@ -2,10 +2,10 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/navbarBuyerSuperior"
-    android:layout_width="match_parent"
-    android:layout_height="64dp"
     android:background="#FFFFFF"
     android:gravity="center_vertical"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
     android:orientation="horizontal"
     android:paddingStart="20dp"
     android:paddingEnd="20dp">

@@ -4,12 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:background="#DFF3F1"
     android:fitsSystemWindows="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.dashboard.DashboardSellerActivity">
 
+    <!-- Navbar superior -->
     <include
         android:id="@+id/includeSuperior"
         layout="@layout/navbar_seller_superior"
@@ -19,6 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Contenido principal -->
     <ScrollView
         android:id="@+id/scrollDashboardSeller"
         android:layout_width="0dp"
