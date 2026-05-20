@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="@color/background_layout"
     tools:context=".ui.buyer.BuyerShoppingActivity">
 
     <!-- Navbar superior -->
@@ -24,7 +24,6 @@
         android:id="@+id/scrollShopping"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#FFFFFF"
         android:fillViewport="true"
         app:layout_constraintTop_toBottomOf="@id/includeHomeNavbar"
         app:layout_constraintBottom_toTopOf="@id/includeHomeInferior"
