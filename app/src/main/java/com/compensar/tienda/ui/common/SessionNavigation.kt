@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.Gravity
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.LinearLayout
@@ -56,6 +57,19 @@ object SessionNavigation {
 
         adminMenu?.setOnClickListener { listener() }
         sellerMenu?.setOnClickListener { listener() }
+    }
+
+    fun applyBuyerInferiorVisibility(activity: AppCompatActivity) {
+        val actionShopping = activity.findViewById<LinearLayout?>(R.id.actionShopping)
+        val actionAddress = activity.findViewById<LinearLayout?>(R.id.actionAddress)
+
+        val isBuyerLogged = SessionManager.getRole(activity) == 3L
+        val visibility = if (isBuyerLogged) View.VISIBLE else View.GONE
+
+        actionShopping?.visibility = visibility
+        actionAddress?.visibility = visibility
+        actionShopping?.isEnabled = isBuyerLogged
+        actionAddress?.isEnabled = isBuyerLogged
     }
 
     fun showProfileShareDrawer(activity: AppCompatActivity) {

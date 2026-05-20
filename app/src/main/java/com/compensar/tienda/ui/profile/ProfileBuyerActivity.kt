@@ -36,6 +36,7 @@ class ProfileBuyerActivity : AppCompatActivity() {
         SessionNavigation.bindProfile(this)
 
         initViews()
+        SessionNavigation.applyBuyerInferiorVisibility(this)
         initEvents()
         loadSession()
     }

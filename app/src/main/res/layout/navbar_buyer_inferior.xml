@@ -60,6 +60,7 @@
 
     <LinearLayout
         android:id="@+id/actionShopping"
+        android:visibility="gone"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -85,6 +86,7 @@
 
     <LinearLayout
         android:id="@+id/actionAddress"
+        android:visibility="gone"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"

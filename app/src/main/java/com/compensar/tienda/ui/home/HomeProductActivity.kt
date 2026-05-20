@@ -37,6 +37,7 @@ class HomeProductActivity : AppCompatActivity() {
 
         applyWindowInsets()
         initViews()
+        SessionNavigation.applyBuyerInferiorVisibility(this)
         initEvents()
         SessionNavigation.bindProfile(this)
     }

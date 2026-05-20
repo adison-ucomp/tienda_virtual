@@ -2,8 +2,6 @@ package com.compensar.tienda.ui.home
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.method.HideReturnsTransformationMethod
-import android.text.method.PasswordTransformationMethod
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -16,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
+import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.domain.model.UserModel
 import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
 import com.compensar.tienda.ui.dashboard.DashboardSellerActivity
@@ -41,12 +40,10 @@ class HomeLoginActivity : AppCompatActivity() {
 
     private lateinit var fieldEmail: EditText
     private lateinit var fieldPassword: EditText
-    private lateinit var btnShowPassword: TextView
     private lateinit var actionExecute: Button
     private lateinit var loaderLogin: ProgressBar
 
     private var isLoginLoading = false
-    private var isPasswordVisible = false
 
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("user")
@@ -58,6 +55,7 @@ class HomeLoginActivity : AppCompatActivity() {
 
         applyWindowInsets()
         initViews()
+        SessionNavigation.applyBuyerInferiorVisibility(this)
         initEvents()
     }
 
@@ -88,7 +86,6 @@ class HomeLoginActivity : AppCompatActivity() {
 
         fieldEmail = findViewById(R.id.fieldEmail)
         fieldPassword = findViewById(R.id.fieldPassword)
-        btnShowPassword = findViewById(R.id.btnShowPassword)
         actionExecute = findViewById(R.id.actionExecute)
         loaderLogin = findViewById(R.id.loaderLogin)
     }
@@ -135,34 +132,11 @@ class HomeLoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        btnShowPassword.setOnClickListener {
-            togglePasswordVisibility(
-                field = fieldPassword,
-                button = btnShowPassword
-            )
-        }
-
         actionExecute.setOnClickListener {
             if (!isLoginLoading) {
                 actionLogin()
             }
         }
-    }
-
-    private fun togglePasswordVisibility(
-        field: EditText,
-        button: TextView
-    ) {
-        isPasswordVisible = !isPasswordVisible
-
-        field.transformationMethod = if (isPasswordVisible) {
-            HideReturnsTransformationMethod.getInstance()
-        } else {
-            PasswordTransformationMethod.getInstance()
-        }
-
-        field.setSelection(field.text.length)
-        button.text = if (isPasswordVisible) "◌" else "◉"
     }
 
     private fun actionLogin() {
@@ -231,7 +205,6 @@ class HomeLoginActivity : AppCompatActivity() {
         actionExecute.isEnabled = !isLoading
         fieldEmail.isEnabled = !isLoading
         fieldPassword.isEnabled = !isLoading
-        btnShowPassword.isEnabled = !isLoading
         actRestore.isEnabled = !isLoading
         actionBuyer.isEnabled = !isLoading
         actionSeller.isEnabled = !isLoading

@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
+import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.buyer.BuyerAddressActivity
 import com.compensar.tienda.ui.buyer.BuyerShoppingActivity
 
@@ -33,6 +34,7 @@ class HomeCategoryActivity : AppCompatActivity() {
 
         applyWindowInsets()
         initViews()
+        SessionNavigation.applyBuyerInferiorVisibility(this)
         initEvents()
     }
 
