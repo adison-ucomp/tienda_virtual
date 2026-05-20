@@ -2,6 +2,8 @@ package com.compensar.tienda.ui.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -23,9 +25,13 @@ class HomePasswordActivity : AppCompatActivity() {
     private lateinit var btnContinue: Button
     private lateinit var txtNewPassword: EditText
     private lateinit var txtConfirmPassword: EditText
+    private lateinit var btnShowNewPassword: TextView
+    private lateinit var btnShowConfirmPassword: TextView
     private lateinit var loaderPassword: ProgressBar
 
     private var isPasswordLoading = false
+    private var isNewPasswordVisible = false
+    private var isConfirmPasswordVisible = false
 
     private val db = FirebaseFirestore.getInstance()
     private val userCollection = db.collection("user")
@@ -69,6 +75,8 @@ class HomePasswordActivity : AppCompatActivity() {
         btnContinue = findViewById(R.id.btnContinue)
         txtNewPassword = findViewById(R.id.txtNewPassword)
         txtConfirmPassword = findViewById(R.id.txtConfirmPassword)
+        btnShowNewPassword = findViewById(R.id.btnShowNewPassword)
+        btnShowConfirmPassword = findViewById(R.id.btnShowConfirmPassword)
         loaderPassword = findViewById(R.id.loaderPassword)
     }
 
@@ -81,11 +89,46 @@ class HomePasswordActivity : AppCompatActivity() {
             goToLogin()
         }
 
+        btnShowNewPassword.setOnClickListener {
+            isNewPasswordVisible = togglePasswordVisibility(
+                field = txtNewPassword,
+                button = btnShowNewPassword,
+                isVisible = isNewPasswordVisible
+            )
+        }
+
+        btnShowConfirmPassword.setOnClickListener {
+            isConfirmPasswordVisible = togglePasswordVisibility(
+                field = txtConfirmPassword,
+                button = btnShowConfirmPassword,
+                isVisible = isConfirmPasswordVisible
+            )
+        }
+
         btnContinue.setOnClickListener {
             if (!isPasswordLoading) {
                 actionUpdatePassword()
             }
         }
+    }
+
+    private fun togglePasswordVisibility(
+        field: EditText,
+        button: TextView,
+        isVisible: Boolean
+    ): Boolean {
+        val newVisibleState = !isVisible
+
+        field.transformationMethod = if (newVisibleState) {
+            HideReturnsTransformationMethod.getInstance()
+        } else {
+            PasswordTransformationMethod.getInstance()
+        }
+
+        field.setSelection(field.text.length)
+        button.text = if (newVisibleState) "◌" else "◉"
+
+        return newVisibleState
     }
 
     private fun validateToken() {
@@ -206,6 +249,8 @@ class HomePasswordActivity : AppCompatActivity() {
         btnBackLogin.isEnabled = !isLoading
         txtNewPassword.isEnabled = !isLoading
         txtConfirmPassword.isEnabled = !isLoading
+        btnShowNewPassword.isEnabled = !isLoading
+        btnShowConfirmPassword.isEnabled = !isLoading
         loaderPassword.visibility = if (isLoading) View.VISIBLE else View.GONE
         btnContinue.text = if (isLoading) "Guardando..." else "Continuar"
     }

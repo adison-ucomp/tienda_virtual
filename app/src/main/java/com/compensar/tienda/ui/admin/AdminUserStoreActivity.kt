@@ -3,6 +3,8 @@ package com.compensar.tienda.ui.admin
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.util.Patterns
 import android.view.View
 import android.widget.AdapterView
@@ -37,6 +39,7 @@ class AdminUserStoreActivity : AppCompatActivity() {
     private lateinit var fieldSurnames: EditText
     private lateinit var fieldEmail: EditText
     private lateinit var fieldPassword: EditText
+    private lateinit var btnShowPassword: TextView
     private lateinit var fieldStorefire: EditText
     private lateinit var imagePreview: ImageView
     private lateinit var fieldIdRole: Spinner
@@ -51,6 +54,7 @@ class AdminUserStoreActivity : AppCompatActivity() {
     private val sellerCollection = db.collection("seller")
 
     private var generatedRegister: Long? = null
+    private var isPasswordVisible = false
 
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uploadImageFromGallery(uri)
@@ -84,6 +88,7 @@ class AdminUserStoreActivity : AppCompatActivity() {
         fieldSurnames = findViewById(R.id.fieldSurnames)
         fieldEmail = findViewById(R.id.fieldEmail)
         fieldPassword = findViewById(R.id.fieldPassword)
+        btnShowPassword = findViewById(R.id.btnShowPassword)
         fieldStorefire = findViewById(R.id.fieldStorefire)
         imagePreview = findViewById(R.id.imagePreview)
         fieldIdRole = findViewById(R.id.fieldIdRole)
@@ -99,6 +104,9 @@ class AdminUserStoreActivity : AppCompatActivity() {
         actionCancel.setOnClickListener { finish() }
         actionGallery.setOnClickListener { galleryLauncher.launch("image/*") }
         actionCamera.setOnClickListener { cameraLauncher.launch(null) }
+        btnShowPassword.setOnClickListener {
+            togglePasswordVisibility()
+        }
         actionExecute.setOnClickListener { actionOperate() }
 
         fieldIdRole.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -110,6 +118,19 @@ class AdminUserStoreActivity : AppCompatActivity() {
                 configureSellerFields(false)
             }
         }
+    }
+
+    private fun togglePasswordVisibility() {
+        isPasswordVisible = !isPasswordVisible
+
+        fieldPassword.transformationMethod = if (isPasswordVisible) {
+            HideReturnsTransformationMethod.getInstance()
+        } else {
+            PasswordTransformationMethod.getInstance()
+        }
+
+        fieldPassword.setSelection(fieldPassword.text.length)
+        btnShowPassword.text = if (isPasswordVisible) "◌" else "◉"
     }
 
     private fun loadSelectors() {

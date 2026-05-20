@@ -2,6 +2,8 @@ package com.compensar.tienda.ui.model.user
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
@@ -38,6 +40,7 @@ class UserCreateActivity : AppCompatActivity() {
     private lateinit var fieldSurnames: EditText
     private lateinit var fieldEmail: EditText
     private lateinit var fieldPassword: EditText
+    private lateinit var btnShowPassword: TextView
     private lateinit var fieldStorefire: EditText
     private lateinit var imagePreview: ImageView
     private lateinit var fieldIdRole: Spinner
@@ -46,6 +49,7 @@ class UserCreateActivity : AppCompatActivity() {
     private val collection = db.collection("user")
 
     private var generatedRegister: Long? = null
+    private var isPasswordVisible = false
 
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uploadImageFromGallery(uri)
@@ -80,6 +84,7 @@ class UserCreateActivity : AppCompatActivity() {
         fieldSurnames = findViewById(R.id.fieldSurnames)
         fieldEmail = findViewById(R.id.fieldEmail)
         fieldPassword = findViewById(R.id.fieldPassword)
+        btnShowPassword = findViewById(R.id.btnShowPassword)
         fieldStorefire = findViewById(R.id.fieldStorefire)
         imagePreview = findViewById(R.id.imagePreview)
         fieldIdRole = findViewById(R.id.fieldIdRole)
@@ -102,7 +107,24 @@ class UserCreateActivity : AppCompatActivity() {
             cameraLauncher.launch(null)
         }
 
+        btnShowPassword.setOnClickListener {
+            togglePasswordVisibility()
+        }
+
         actionExecute.setOnClickListener { actionOperate() }
+    }
+
+    private fun togglePasswordVisibility() {
+        isPasswordVisible = !isPasswordVisible
+
+        fieldPassword.transformationMethod = if (isPasswordVisible) {
+            HideReturnsTransformationMethod.getInstance()
+        } else {
+            PasswordTransformationMethod.getInstance()
+        }
+
+        fieldPassword.setSelection(fieldPassword.text.length)
+        btnShowPassword.text = if (isPasswordVisible) "◌" else "◉"
     }
 
     private fun loadSelectors() {
