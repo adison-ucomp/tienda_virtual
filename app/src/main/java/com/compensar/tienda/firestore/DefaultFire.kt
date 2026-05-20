@@ -1,6 +1,11 @@
-package com.compensar.tienda.default
+package com.compensar.tienda.firestore
 
 import android.util.Log
+import com.compensar.tienda.default.CategoryDefault
+import com.compensar.tienda.default.PaymentDefault
+import com.compensar.tienda.default.ProductDefault
+import com.compensar.tienda.default.RoleDefault
+import com.compensar.tienda.default.UserDefault
 import com.compensar.tienda.model.UbicationModel
 import com.compensar.tienda.model.ShipmentModel
 import com.google.firebase.firestore.FirebaseFirestore

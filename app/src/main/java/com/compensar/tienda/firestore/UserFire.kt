@@ -1,4 +1,4 @@
-package com.compensar.tienda.default
+package com.compensar.tienda.firestore
 
 import com.compensar.tienda.model.UserModel
 

@@ -6,7 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
-import com.compensar.tienda.default.DefaultFire
+import com.compensar.tienda.firestore.DefaultFire
 import com.compensar.tienda.ui.home.HomeProductActivity
 
 class SplashActivity : AppCompatActivity() {
