@@ -3,14 +3,16 @@ package com.compensar.tienda.ui.buyer
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
+import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.bumptech.glide.Glide
 import com.compensar.tienda.R
+import com.compensar.tienda.domain.model.OrderModel
 import com.compensar.tienda.ui.common.SessionManager
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.home.HomeCategoryActivity
@@ -27,6 +29,7 @@ class BuyerShoppingActivity : AppCompatActivity() {
     private lateinit var shoppingContent: LinearLayout
 
     private val db = FirebaseFirestore.getInstance()
+    private var shipmentMap: Map<Long, String> = emptyMap()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +65,7 @@ class BuyerShoppingActivity : AppCompatActivity() {
         actionHome.setOnClickListener { startActivity(Intent(this, HomeProductActivity::class.java)); finish() }
         actionCategory.setOnClickListener { startActivity(Intent(this, HomeCategoryActivity::class.java)); finish() }
         actionShopping.setOnClickListener { loadShopping() }
-        actionAddress.setOnClickListener { startActivity(Intent(this, BuyerAddressActivity::class.java)); finish() }
+        actionAddress.setOnClickListener { startActivity(Intent(this, BuyerAddressActivity::class.java)) }
         actionAccount.setOnClickListener { SessionNavigation.openProfileOrLogin(this) }
     }
 
@@ -78,59 +81,122 @@ class BuyerShoppingActivity : AppCompatActivity() {
         shoppingContent.removeAllViews()
         keepTitle.forEach { shoppingContent.addView(it) }
 
-        db.collection("order")
-            .whereEqualTo("idUser", userRegister)
-            .get()
-            .addOnSuccessListener { orders ->
-                val data = orders.documents.sortedByDescending { it.getLong("register") ?: 0L }
-                if (data.isEmpty()) {
-                    shoppingContent.addView(TextView(this).apply {
-                        text = "No tienes compras registradas"
-                        textSize = 15f
-                        setTextColor(0xFF747A8C.toInt())
-                        setPadding(0, dp(34), 0, dp(34))
-                    })
-                    return@addOnSuccessListener
-                }
-                data.forEach { order ->
-                    val orderRegister = order.getLong("register") ?: 0L
-                    db.collection("purchase").whereEqualTo("idOrder", orderRegister).get().addOnSuccessListener { purchases ->
-                        val first = purchases.documents.firstOrNull()
-                        val productId = first?.getLong("idProduct") ?: 0L
-                        if (productId > 0) {
-                            db.collection("product").document(productId.toString()).get().addOnSuccessListener { product ->
-                                shoppingContent.addView(orderCard(
-                                    reference = order.getString("reference") ?: "ORD-$orderRegister",
-                                    date = first?.getString("date") ?: "",
-                                    name = product.getString("name") ?: "Compra",
-                                    image = product.getString("storefire") ?: "",
-                                    total = order.getDouble("total") ?: 0.0
-                                ))
-                            }
-                        } else {
-                            shoppingContent.addView(orderCard(order.getString("reference") ?: "ORD-$orderRegister", "", "Compra", "", order.getDouble("total") ?: 0.0))
-                        }
+        loadShipments {
+            db.collection("order")
+                .whereEqualTo("idUser", userRegister)
+                .get()
+                .addOnSuccessListener { orders ->
+                    val data = orders.documents.mapNotNull { it.toObject(OrderModel::class.java) }
+                        .sortedByDescending { it.register }
+
+                    if (data.isEmpty()) {
+                        shoppingContent.addView(TextView(this).apply {
+                            text = "No tienes compras registradas"
+                            textSize = 15f
+                            setTextColor(0xFF747A8C.toInt())
+                            setPadding(0, dp(34), 0, dp(34))
+                        })
+                        return@addOnSuccessListener
+                    }
+
+                    data.forEach { order ->
+                        shoppingContent.addView(orderCard(order))
                     }
                 }
-            }
-            .addOnFailureListener { Toast.makeText(this, "Error cargando compras: ${it.message}", Toast.LENGTH_LONG).show() }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Error cargando compras: ${it.message}", Toast.LENGTH_LONG).show()
+                }
+        }
     }
 
-    private fun orderCard(reference: String, date: String, name: String, image: String, total: Double): LinearLayout {
-        return LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { setMargins(0, dp(34), 0, 0) }
-            val img = ImageView(this@BuyerShoppingActivity).apply {
-                layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(210))
-                setBackgroundColor(0xFFE0F2F1.toInt())
-                scaleType = ImageView.ScaleType.CENTER_CROP
-                if (image.isNotBlank()) Glide.with(this@BuyerShoppingActivity).load(image).placeholder(R.mipmap.ic_launcher).into(this) else setImageResource(R.mipmap.ic_launcher)
+    private fun loadShipments(onComplete: () -> Unit) {
+        db.collection("shipment").get()
+            .addOnSuccessListener { result ->
+                shipmentMap = result.documents.mapNotNull { doc ->
+                    val register = doc.getLong("register") ?: return@mapNotNull null
+                    register to (doc.getString("name") ?: "Estado $register")
+                }.toMap()
+                onComplete()
             }
-            val status = TextView(this@BuyerShoppingActivity).apply { text = "●  PROCESANDO        $date"; textSize = 10f; setTypeface(null, Typeface.BOLD); setTextColor(0xFF111111.toInt()); setPadding(0, dp(12), 0, 0) }
-            val info = TextView(this@BuyerShoppingActivity).apply { text = "$name\n$ ${String.format("%,.0f", total)}"; textSize = 16f; setTextColor(0xFF111111.toInt()); setPadding(0, dp(8), 0, 0) }
-            val code = TextView(this@BuyerShoppingActivity).apply { text = "#$reference"; textSize = 12f; setTextColor(0xFF747A8C.toInt()); setPadding(0, dp(8), 0, 0) }
-            addView(img); addView(status); addView(info); addView(code)
+            .addOnFailureListener {
+                shipmentMap = emptyMap()
+                onComplete()
+            }
+    }
+
+    private fun orderCard(order: OrderModel): CardView {
+        val card = CardView(this).apply {
+            radius = dp(16).toFloat()
+            cardElevation = dp(4).toFloat()
+            setCardBackgroundColor(0xFFFFFFFF.toInt())
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            ).apply {
+                setMargins(0, dp(18), 0, 0)
+            }
         }
+
+        val box = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(dp(16), dp(16), dp(16), dp(16))
+        }
+
+        val statusName = shipmentMap[order.idShipment] ?: "Pendiente"
+
+        box.addView(TextView(this).apply {
+            text = "#${order.reference ?: "ORD-${order.register}"}"
+            textSize = 18f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(0xFF111111.toInt())
+        })
+
+        box.addView(TextView(this).apply {
+            text = "Estado: $statusName"
+            textSize = 13f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(0xFF1E66F5.toInt())
+            setPadding(0, dp(8), 0, 0)
+        })
+
+        box.addView(TextView(this).apply {
+            text = "Total: $ ${String.format("%,.0f", order.total ?: 0.0)}"
+            textSize = 15f
+            setTextColor(0xFF111111.toInt())
+            setPadding(0, dp(8), 0, 0)
+        })
+
+        box.addView(TextView(this).apply {
+            text = "Fecha: ${order.date ?: ""}   Hora: ${order.hour ?: ""}"
+            textSize = 13f
+            setTextColor(0xFF4B5060.toInt())
+            setPadding(0, dp(6), 0, 0)
+        })
+
+        box.addView(TextView(this).apply {
+            text = "Dirección: ${order.address ?: ""}"
+            textSize = 13f
+            setTextColor(0xFF4B5060.toInt())
+            setPadding(0, dp(6), 0, dp(12))
+        })
+
+        val btn = Button(this).apply {
+            text = "Consultar"
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                dp(48)
+            )
+            setOnClickListener {
+                startActivity(
+                    Intent(this@BuyerShoppingActivity, BuyerOrderActivity::class.java)
+                        .putExtra("orderRegister", order.register)
+                )
+            }
+        }
+
+        box.addView(btn)
+        card.addView(box)
+        return card
     }
 
     private fun dp(value: Int) = (value * resources.displayMetrics.density).toInt()

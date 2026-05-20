@@ -18,6 +18,7 @@ import com.compensar.tienda.ui.model.product.ProductSelectActivity
 import com.compensar.tienda.ui.model.purchase.PurchaseSelectActivity
 import com.compensar.tienda.ui.model.role.RoleSelectActivity
 import com.compensar.tienda.ui.model.seller.SellerSelectActivity
+import com.compensar.tienda.ui.model.shipment.ShipmentSelectActivity
 import com.compensar.tienda.ui.model.shop.ShopSelectActivity
 import com.compensar.tienda.ui.model.specify.SpecifySelectActivity
 import com.compensar.tienda.ui.model.user.UserSelectActivity
@@ -38,6 +39,7 @@ class DashboardAdminActivity : AppCompatActivity() {
     private lateinit var cardPurchase: CardView
     private lateinit var cardRole: CardView
     private lateinit var cardSeller: CardView
+    private lateinit var cardShipment: CardView
     private lateinit var cardShop: CardView
     private lateinit var cardSpecify: CardView
     private lateinit var cardUbication: CardView
@@ -66,6 +68,7 @@ class DashboardAdminActivity : AppCompatActivity() {
         cardPurchase = findViewById(R.id.cardPurchase)
         cardRole = findViewById(R.id.cardRole)
         cardSeller = findViewById(R.id.cardSeller)
+        cardShipment = findViewById(R.id.cardShipment)
         cardShop = findViewById(R.id.cardShop)
         cardSpecify = findViewById(R.id.cardSpecify)
         cardUbication = findViewById(R.id.cardUbication)
@@ -134,6 +137,11 @@ class DashboardAdminActivity : AppCompatActivity() {
 
         cardSeller.setOnClickListener {
             val intent = Intent(this, SellerSelectActivity::class.java)
+            startActivity(intent)
+        }
+
+        cardShipment.setOnClickListener {
+            val intent = Intent(this, ShipmentSelectActivity::class.java)
             startActivity(intent)
         }
 

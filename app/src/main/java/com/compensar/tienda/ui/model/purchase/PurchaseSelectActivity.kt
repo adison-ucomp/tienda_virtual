@@ -213,8 +213,6 @@ class PurchaseSelectActivity : AppCompatActivity() {
         }
 
         addText(textContainer, "Registro: ${data.register}")
-        addText(textContainer, "Fecha: ${data.date ?: ""}")
-        addText(textContainer, "Hora: ${data.hour ?: ""}")
         addText(textContainer, "Cantidad: ${data.amount}")
         addText(textContainer, "Valor: ${data.value}")
         addText(textContainer, "Total: ${data.total}")

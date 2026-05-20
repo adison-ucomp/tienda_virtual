@@ -7,6 +7,7 @@ import com.compensar.tienda.data.remote.fire.default.ProductDefault
 import com.compensar.tienda.data.remote.fire.default.RoleDefault
 import com.compensar.tienda.data.remote.fire.default.UserDefault
 import com.compensar.tienda.domain.model.UbicationModel
+import com.compensar.tienda.domain.model.ShipmentModel
 import com.google.firebase.firestore.FirebaseFirestore
 
 class DefaultFire {
@@ -23,12 +24,17 @@ class DefaultFire {
                     onSuccess = {
                         createUbications(
                             onSuccess = {
-                                createPayments(
+                                createShipments(
                                     onSuccess = {
-                                        createUsers(
+                                        createPayments(
                                             onSuccess = {
-                                                createProducts(
-                                                    onSuccess = onSuccess,
+                                                createUsers(
+                                                    onSuccess = {
+                                                        createProducts(
+                                                            onSuccess = onSuccess,
+                                                            onFailure = onFailure
+                                                        )
+                                                    },
                                                     onFailure = onFailure
                                                 )
                                             },
@@ -86,6 +92,23 @@ class DefaultFire {
                 UbicationModel(register = 3, name = "Apartamento"),
                 UbicationModel(register = 4, name = "Hotel"),
                 UbicationModel(register = 5, name = "Otro")
+            ),
+            getRegister = { it.register },
+            onSuccess = onSuccess,
+            onFailure = onFailure
+        )
+    }
+
+    private fun createShipments(
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        createMissingDocuments(
+            collectionName = "shipment",
+            data = listOf(
+                ShipmentModel(register = 1, name = "Pendiente"),
+                ShipmentModel(register = 2, name = "Enviado"),
+                ShipmentModel(register = 3, name = "Entregado")
             ),
             getRegister = { it.register },
             onSuccess = onSuccess,

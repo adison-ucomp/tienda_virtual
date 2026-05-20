@@ -20,6 +20,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TiendaVirtual">
 
+        <activity android:name=".ui.model.shipment.ShipmentUpdateActivity" android:exported="false" />
+        <activity android:name=".ui.model.shipment.ShipmentSelectActivity" android:exported="false" />
+        <activity android:name=".ui.model.shipment.ShipmentDeleteActivity" android:exported="false" />
+        <activity android:name=".ui.model.shipment.ShipmentCreateActivity" android:exported="false" />
+        <activity android:name=".ui.buyer.BuyerOrderActivity" android:exported="false" />
         <activity android:name=".ui.home.HomeSpecifyActivity" android:exported="false" />
         <activity android:name=".ui.home.HomeCategoryFilterActivity" android:exported="false" />
         <activity android:name=".ui.model.order.OrderCreateActivity" android:exported="false" />

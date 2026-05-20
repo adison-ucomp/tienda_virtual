@@ -5,5 +5,8 @@ data class OrderModel(
     val address: String? = null,
     val reference: String? = null,
     val total: Double? = null,
+    val date: String? = null,
+    val hour: String? = null,
+    val idShipment: Long = 0,
     val idUser: Long = 0
 )

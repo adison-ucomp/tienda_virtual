@@ -61,7 +61,16 @@ object CartReservationManager {
             }
             safeNewQuantity
         }.addOnSuccessListener { finalQuantity ->
-            CartManager.setQuantity(context, item.register, finalQuantity)
+            if (finalQuantity <= 0) {
+                CartManager.setQuantity(context, item.register, 0)
+            } else {
+                val exists = CartManager.getItems(context).any { it.register == item.register }
+                if (exists) {
+                    CartManager.setQuantity(context, item.register, finalQuantity)
+                } else {
+                    CartManager.add(context, item.copy(quantity = finalQuantity))
+                }
+            }
             onSuccess(finalQuantity)
         }.addOnFailureListener { exception ->
             onError(exception.message ?: "No fue posible reservar stock")

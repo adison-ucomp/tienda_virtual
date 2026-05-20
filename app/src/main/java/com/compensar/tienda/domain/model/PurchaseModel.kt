@@ -2,8 +2,6 @@ package com.compensar.tienda.domain.model
 
 data class PurchaseModel(
     val register: Long = 0,
-    val date: String? = null,
-    val hour: String? = null,
     val amount: Int? = null,
     val value: Double? = null,
     val total: Double? = null,

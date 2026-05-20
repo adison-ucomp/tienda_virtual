@@ -16,7 +16,6 @@ import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
 import com.compensar.tienda.domain.model.AddressModel
 import com.compensar.tienda.ui.common.SessionManager
-import com.compensar.tienda.ui.home.HomeProductActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
 class BuyerAddressActivity : AppCompatActivity() {
@@ -32,7 +31,7 @@ class BuyerAddressActivity : AppCompatActivity() {
     override fun onResume(){ super.onResume(); loadUbicationsThenAddresses() }
     private fun applyWindowInsets(){ ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)){v,insets-> val b=insets.getInsets(WindowInsetsCompat.Type.systemBars()); v.setPadding(b.left,b.top,b.right,b.bottom); insets } }
     private fun initViews(){ btnBack=findViewById(R.id.btnBack); btnNew=findViewById(R.id.btnAddressNew); addressList=findViewById(R.id.addressList) }
-    private fun initEvents(){ btnBack.setOnClickListener{ startActivity(Intent(this, HomeProductActivity::class.java)); finish() }; btnNew.setOnClickListener{ startActivity(Intent(this, BuyerMapsActivity::class.java)) } }
+    private fun initEvents(){ btnBack.setOnClickListener{ finish() }; btnNew.setOnClickListener{ startActivity(Intent(this, BuyerMapsActivity::class.java)) } }
     private fun loadUbicationsThenAddresses(){ db.collection("ubication").get().addOnSuccessListener{ result -> ubicationNames.clear(); result.documents.forEach{doc-> ubicationNames[doc.getLong("register")?:0L]=doc.getString("name")?:"" }; loadAddresses() }.addOnFailureListener{ loadAddresses() } }
     private fun loadAddresses(){ val user=SessionManager.getRegister(this); addressList.removeAllViews(); if(user<=0){ addEmpty("Debes iniciar sesión para ver tus direcciones"); return }; db.collection("address").whereEqualTo("idUser", user).get().addOnSuccessListener{ result -> addressList.removeAllViews(); val items=result.documents.mapNotNull{it.toObject(AddressModel::class.java)}.sortedBy{it.register}; if(items.isEmpty()) addEmpty("No tienes direcciones registradas"); items.forEach{ addressList.addView(card(it)) } }.addOnFailureListener{ e -> addEmpty("Error cargando direcciones: ${e.message}") } }
     private fun addEmpty(text:String){ val view=TextView(this).apply{this.text=text;textSize=15f;setTextColor(getColor(R.color.black));gravity=Gravity.CENTER;setPadding(0,dp(30),0,dp(30))}; addressList.addView(view) }

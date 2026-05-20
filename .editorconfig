@@ -1,0 +1,88 @@
+# EditorConfig para proyecto Android/Kotlin
+# https://editorconfig.org
+
+root = true
+
+# Configuración general
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+tab_width = 4
+
+# Kotlin
+[*.{kt,kts}]
+indent_style = space
+indent_size = 4
+continuation_indent_size = 4
+max_line_length = 120
+ij_kotlin_code_style_defaults = KOTLIN_OFFICIAL
+
+# Java
+[*.java]
+indent_style = space
+indent_size = 4
+continuation_indent_size = 4
+max_line_length = 120
+
+# XML Android layouts, drawables, manifest, values
+[*.xml]
+indent_style = space
+indent_size = 4
+continuation_indent_size = 4
+max_line_length = 160
+
+# Gradle
+[*.gradle]
+indent_style = space
+indent_size = 4
+max_line_length = 120
+
+[*.gradle.kts]
+indent_style = space
+indent_size = 4
+max_line_length = 120
+
+# JSON
+[*.json]
+indent_style = space
+indent_size = 2
+max_line_length = 120
+
+# YAML
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+max_line_length = 120
+
+# Markdown
+[*.md]
+trim_trailing_whitespace = false
+max_line_length = off
+
+# Properties
+[*.properties]
+indent_style = space
+indent_size = 4
+
+# Git ignore / env / config simple
+[*.{gitignore,env}]
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# ProGuard / R8
+[*.pro]
+indent_style = space
+indent_size = 4
+max_line_length = 120
+
+# SQL si en algún momento manejas scripts
+[*.sql]
+indent_style = space
+indent_size = 4
+max_line_length = 120

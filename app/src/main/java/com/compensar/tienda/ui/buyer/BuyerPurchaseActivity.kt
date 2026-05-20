@@ -228,11 +228,17 @@ class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
             .get()
             .addOnSuccessListener { orderResult ->
                 val orderRegister = (orderResult.documents.firstOrNull()?.getLong("register") ?: 0L) + 1L
+                val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+                val hour = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
+
                 val orderData = mapOf(
                     "register" to orderRegister,
                     "address" to address.address,
                     "reference" to reference,
                     "total" to subtotal,
+                    "date" to date,
+                    "hour" to hour,
+                    "idShipment" to 1L,
                     "idUser" to userRegister
                 )
 
@@ -245,8 +251,6 @@ class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
                         db.runBatch { batch ->
                             batch.set(db.collection("order").document(orderRegister.toString()), orderData)
 
-                            val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-                            val hour = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
 
                             items.forEachIndexed { index, item ->
                                 val purchaseRegister = firstPurchaseRegister + index
@@ -254,8 +258,6 @@ class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
                                 val reservationRef = db.collection("cart_reservation").document("${userRegister}_${item.register}")
                                 batch.set(db.collection("purchase").document(purchaseRegister.toString()), mapOf(
                                     "register" to purchaseRegister,
-                                    "date" to date,
-                                    "hour" to hour,
                                     "amount" to item.quantity,
                                     "value" to item.price,
                                     "total" to item.price * item.quantity,

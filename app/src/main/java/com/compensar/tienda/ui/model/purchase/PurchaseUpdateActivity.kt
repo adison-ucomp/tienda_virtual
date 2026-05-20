@@ -2,18 +2,13 @@ package com.compensar.tienda.ui.model.purchase
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.Spinner
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
-import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.domain.model.PurchaseModel
-import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
+import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
+import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
 import com.google.firebase.firestore.FirebaseFirestore
 
 class PurchaseUpdateActivity : AppCompatActivity() {
@@ -21,9 +16,6 @@ class PurchaseUpdateActivity : AppCompatActivity() {
     private lateinit var actionReturn: TextView
     private lateinit var actionCancel: Button
     private lateinit var actionExecute: Button
-
-    private lateinit var fieldDate: EditText
-    private lateinit var fieldHour: EditText
     private lateinit var fieldAmount: EditText
     private lateinit var fieldValue: EditText
     private lateinit var fieldTotal: EditText
@@ -33,9 +25,7 @@ class PurchaseUpdateActivity : AppCompatActivity() {
     private lateinit var fieldIdUser: Spinner
     private lateinit var fieldIdOrder: Spinner
 
-    private val db = FirebaseFirestore.getInstance()
-    private val collection = db.collection("purchase")
-
+    private val collection = FirebaseFirestore.getInstance().collection("purchase")
     private var register: Long = 0
     private var currentData: PurchaseModel? = null
 
@@ -43,9 +33,7 @@ class PurchaseUpdateActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.model_purchase_update)
         SessionNavigation.bindProfile(this)
-
         register = intent.getLongExtra("register", 0)
-
         initViews()
         initEvents()
         loadRegister()
@@ -56,9 +44,6 @@ class PurchaseUpdateActivity : AppCompatActivity() {
         actionReturn = findViewById(R.id.actionReturn)
         actionCancel = findViewById(R.id.actionCancel)
         actionExecute = findViewById(R.id.actionExecute)
-
-        fieldDate = findViewById(R.id.fieldDate)
-        fieldHour = findViewById(R.id.fieldHour)
         fieldAmount = findViewById(R.id.fieldAmount)
         fieldValue = findViewById(R.id.fieldValue)
         fieldTotal = findViewById(R.id.fieldTotal)
@@ -70,151 +55,54 @@ class PurchaseUpdateActivity : AppCompatActivity() {
     }
 
     private fun initEvents() {
-        actionHome.setOnClickListener {
-            val intent = Intent(this, DashboardAdminActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-
+        actionHome.setOnClickListener { startActivity(Intent(this, DashboardAdminActivity::class.java)); finish() }
         actionReturn.setOnClickListener { finish() }
         actionCancel.setOnClickListener { finish() }
-        actionExecute.setOnClickListener { actionOperate() }
+        actionExecute.setOnClickListener { save() }
     }
 
     private fun loadRegister() {
-        if (register <= 0) {
-            Toast.makeText(this, "Registro no válido", Toast.LENGTH_SHORT).show()
-            finish()
-            return
+        collection.document(register.toString()).get().addOnSuccessListener { document ->
+            currentData = document.toObject(PurchaseModel::class.java)
+            showRegister()
         }
-
-        collection.document(register.toString())
-            .get()
-            .addOnSuccessListener { document ->
-                if (document.exists()) {
-                    currentData = document.toObject(PurchaseModel::class.java)
-                    showRegister()
-                } else {
-                    Toast.makeText(this, "No se encontró el registro", Toast.LENGTH_SHORT).show()
-                    finish()
-                }
-            }
-            .addOnFailureListener { exception ->
-                Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_LONG).show()
-                exception.printStackTrace()
-            }
     }
 
     private fun showRegister() {
-        val currentData = currentData ?: return
-        fieldDate.setText(currentData.date?.toString() ?: "")
-        fieldHour.setText(currentData.hour?.toString() ?: "")
-        fieldAmount.setText(currentData.amount?.toString() ?: "")
-        fieldValue.setText(currentData.value?.toString() ?: "")
-        fieldTotal.setText(currentData.total?.toString() ?: "")
-
-        FirestoreSelectHelper.load(
-            context = this,
-            spinner = fieldIdProduct,
-            collectionName = "product",
-            labelFields = listOf("name"),
-            selectedId = currentData.idProduct
-        )
-
-        FirestoreSelectHelper.load(
-            context = this,
-            spinner = fieldIdMethod,
-            collectionName = "payment",
-            labelFields = listOf("name"),
-            selectedId = currentData.idMethod
-        )
-
-        FirestoreSelectHelper.load(
-            context = this,
-            spinner = fieldIdGangway,
-            collectionName = "gateway",
-            labelFields = listOf("name"),
-            selectedId = currentData.idGangway
-        )
-
-        FirestoreSelectHelper.load(
-            context = this,
-            spinner = fieldIdUser,
-            collectionName = "user",
-            labelFields = listOf("names", "srnms", "email"),
-            selectedId = currentData.idUser
-        )
-
-        FirestoreSelectHelper.load(
-            context = this,
-            spinner = fieldIdOrder,
-            collectionName = "order",
-            labelFields = listOf("reference", "address"),
-            selectedId = currentData.idOrder
-        )
+        val data = currentData ?: return
+        fieldAmount.setText(data.amount?.toString() ?: "")
+        fieldValue.setText(data.value?.toString() ?: "")
+        fieldTotal.setText(data.total?.toString() ?: "")
+        FirestoreSelectHelper.load(this, fieldIdProduct, "product", listOf("name"), data.idProduct)
+        FirestoreSelectHelper.load(this, fieldIdMethod, "payment", listOf("name"), data.idMethod)
+        FirestoreSelectHelper.load(this, fieldIdGangway, "gateway", listOf("name"), data.idGangway)
+        FirestoreSelectHelper.load(this, fieldIdUser, "user", listOf("names", "srnms", "email"), data.idUser)
+        FirestoreSelectHelper.load(this, fieldIdOrder, "order", listOf("reference", "address"), data.idOrder)
     }
 
-    private fun actionOperate() {
-        val currentData = currentData ?: return
-
-        val date = fieldDate.text.toString().trim().ifEmpty { null }
-        val hour = fieldHour.text.toString().trim().ifEmpty { null }
-        val amount = fieldAmount.text.toString().trim().toIntOrNull()
-        val value = fieldValue.text.toString().trim().toDoubleOrNull()
-        val total = fieldTotal.text.toString().trim().toDoubleOrNull()
-
-
-
+    private fun save() {
         val idProduct = FirestoreSelectHelper.getSelectedId(fieldIdProduct)
-        val idMethod = FirestoreSelectHelper.getSelectedId(fieldIdMethod)
-        val idGangway = FirestoreSelectHelper.getSelectedId(fieldIdGangway)
         val idUser = FirestoreSelectHelper.getSelectedId(fieldIdUser)
         val idOrder = FirestoreSelectHelper.getSelectedId(fieldIdOrder)
-
-        if (idProduct == null) {
-            Toast.makeText(this, "Debe seleccionar una opción válida", Toast.LENGTH_SHORT).show()
-            return
-        }
-        if (idMethod == null) {
-            Toast.makeText(this, "Debe seleccionar una opción válida", Toast.LENGTH_SHORT).show()
-            return
-        }
-        if (idGangway == null) {
-            Toast.makeText(this, "Debe seleccionar una opción válida", Toast.LENGTH_SHORT).show()
-            return
-        }
-        if (idUser == null) {
-            Toast.makeText(this, "Debe seleccionar una opción válida", Toast.LENGTH_SHORT).show()
-            return
-        }
-        if (idOrder == null) {
-            Toast.makeText(this, "Debe seleccionar una orden válida", Toast.LENGTH_SHORT).show()
+        if (idProduct == null || idUser == null || idOrder == null) {
+            Toast.makeText(this, "Debe seleccionar producto, usuario y orden", Toast.LENGTH_SHORT).show()
             return
         }
 
         val data = PurchaseModel(
             register = register,
-            date = date,
-            hour = hour,
-            amount = amount,
-            value = value,
-            total = total,
+            amount = fieldAmount.text.toString().toIntOrNull(),
+            value = fieldValue.text.toString().toDoubleOrNull(),
+            total = fieldTotal.text.toString().toDoubleOrNull(),
             idProduct = idProduct,
-            idMethod = idMethod,
-            idGangway = idGangway,
+            idMethod = FirestoreSelectHelper.getSelectedId(fieldIdMethod) ?: 0L,
+            idGangway = FirestoreSelectHelper.getSelectedId(fieldIdGangway) ?: 0L,
             idUser = idUser,
             idOrder = idOrder
         )
 
-        collection.document(register.toString())
-            .set(data)
-            .addOnSuccessListener {
-                Toast.makeText(this, "Registro actualizado correctamente", Toast.LENGTH_SHORT).show()
-                finish()
-            }
-            .addOnFailureListener { exception ->
-                Toast.makeText(this, "Error al actualizar: ${exception.message}", Toast.LENGTH_LONG).show()
-                exception.printStackTrace()
-            }
+        collection.document(register.toString()).set(data)
+            .addOnSuccessListener { Toast.makeText(this, "Compra actualizada", Toast.LENGTH_SHORT).show(); finish() }
+            .addOnFailureListener { Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_LONG).show() }
     }
 }

@@ -17,8 +17,6 @@ class PurchaseDeleteActivity : AppCompatActivity() {
     private lateinit var actionExecute: Button
 
     private lateinit var fieldRegister: TextView
-    private lateinit var fieldDate: TextView
-    private lateinit var fieldHour: TextView
     private lateinit var fieldAmount: TextView
     private lateinit var fieldValue: TextView
     private lateinit var fieldTotal: TextView
@@ -51,8 +49,6 @@ class PurchaseDeleteActivity : AppCompatActivity() {
         actionCancel = findViewById(R.id.actionCancel)
         actionExecute = findViewById(R.id.actionExecute)
         fieldRegister = findViewById(R.id.fieldRegister)
-        fieldDate = findViewById(R.id.fieldDate)
-        fieldHour = findViewById(R.id.fieldHour)
         fieldAmount = findViewById(R.id.fieldAmount)
         fieldValue = findViewById(R.id.fieldValue)
         fieldTotal = findViewById(R.id.fieldTotal)
@@ -96,8 +92,6 @@ class PurchaseDeleteActivity : AppCompatActivity() {
     private fun showRegister() {
         val current = data ?: return
         fieldRegister.text = current.register.toString()
-        fieldDate.text = current.date.toString()
-        fieldHour.text = current.hour.toString()
         fieldAmount.text = current.amount.toString()
         fieldValue.text = current.value.toString()
         fieldTotal.text = current.total.toString()
