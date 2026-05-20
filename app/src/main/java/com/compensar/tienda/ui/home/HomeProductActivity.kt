@@ -133,7 +133,7 @@ class HomeProductActivity : AppCompatActivity() {
             startActivity(Intent(this, BuyerAddressActivity::class.java))
         }
         actionAccount.setOnClickListener {
-            startActivity(Intent(this, HomeLoginActivity::class.java))
+            SessionNavigation.openProfileOrLogin(this)
         }
     }
 

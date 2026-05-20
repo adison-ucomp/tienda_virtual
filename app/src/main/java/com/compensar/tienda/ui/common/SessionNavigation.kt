@@ -33,19 +33,24 @@ object SessionNavigation {
         val actionAccount = activity.findViewById<LinearLayout?>(R.id.actionAccount)
         val navProfile = activity.findViewById<LinearLayout?>(R.id.navProfile)
 
-        val listener = {
-            val intent = when (SessionManager.getRole(activity)) {
-                1L -> Intent(activity, ProfileAdminActivity::class.java)
-                2L -> Intent(activity, ProfileSellerActivity::class.java)
-                3L -> Intent(activity, ProfileBuyerActivity::class.java)
-                else -> Intent(activity, HomeLoginActivity::class.java)
-            }
-
-            activity.startActivity(intent)
+        actionAccount?.setOnClickListener {
+            openProfileOrLogin(activity)
         }
 
-        actionAccount?.setOnClickListener { listener() }
-        navProfile?.setOnClickListener { listener() }
+        navProfile?.setOnClickListener {
+            openProfileOrLogin(activity)
+        }
+    }
+
+    fun openProfileOrLogin(activity: AppCompatActivity) {
+        val intent = when (SessionManager.getRole(activity)) {
+            1L -> Intent(activity, ProfileAdminActivity::class.java)
+            2L -> Intent(activity, ProfileSellerActivity::class.java)
+            3L -> Intent(activity, ProfileBuyerActivity::class.java)
+            else -> Intent(activity, HomeLoginActivity::class.java)
+        }
+
+        activity.startActivity(intent)
     }
 
     private fun bindSharedMenu(activity: AppCompatActivity) {

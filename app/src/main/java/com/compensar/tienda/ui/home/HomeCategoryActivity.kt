@@ -67,7 +67,7 @@ class HomeCategoryActivity : AppCompatActivity() {
         actionCategory.setOnClickListener { }
         actionShopping.setOnClickListener { startActivity(Intent(this, BuyerShoppingActivity::class.java)) }
         actionAddress.setOnClickListener { startActivity(Intent(this, BuyerAddressActivity::class.java)) }
-        actionAccount.setOnClickListener { startActivity(Intent(this, HomeLoginActivity::class.java)) }
+        actionAccount.setOnClickListener { SessionNavigation.openProfileOrLogin(this) }
     }
 
     private fun loadCategories() {

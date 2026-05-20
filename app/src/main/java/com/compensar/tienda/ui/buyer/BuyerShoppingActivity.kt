@@ -79,9 +79,7 @@ class BuyerShoppingActivity : AppCompatActivity() {
         }
 
         actionAccount.setOnClickListener {
-            val intent = Intent(this, HomeLoginActivity::class.java)
-            startActivity(intent)
-            finish()
+            SessionNavigation.openProfileOrLogin(this)
         }
     }
 }

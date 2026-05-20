@@ -76,7 +76,7 @@ class HomeCategoryFilterActivity : AppCompatActivity() {
         actionCategory.setOnClickListener { startActivity(Intent(this, HomeCategoryActivity::class.java)); finish() }
         actionShopping.setOnClickListener { startActivity(Intent(this, BuyerShoppingActivity::class.java)) }
         actionAddress.setOnClickListener { startActivity(Intent(this, BuyerAddressActivity::class.java)) }
-        actionAccount.setOnClickListener { startActivity(Intent(this, HomeLoginActivity::class.java)) }
+        actionAccount.setOnClickListener { SessionNavigation.openProfileOrLogin(this) }
     }
 
     private fun loadProducts() {
