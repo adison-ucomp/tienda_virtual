@@ -9,7 +9,6 @@
     android:background="#FFFFFF"
     tools:context=".ui.buyer.BuyerPurchaseActivity">
 
-    <!-- Navbar superior con botón regresar -->
     <LinearLayout
         android:id="@+id/purchaseNavbarContainer"
         android:layout_width="0dp"
@@ -59,7 +58,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Contenido principal -->
     <ScrollView
         android:id="@+id/scrollPurchase"
         android:layout_width="0dp"
@@ -81,7 +79,6 @@
             android:paddingEnd="24dp"
             android:paddingBottom="30dp">
 
-            <!-- Dirección de envío -->
             <LinearLayout
                 android:id="@+id/addressHeader"
                 android:layout_width="match_parent"
@@ -110,33 +107,37 @@
 
             </LinearLayout>
 
-            <!-- Mapa temporal -->
+            <TextView
+                android:id="@+id/txtAddressListTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="Selecciona una dirección"
+                android:textColor="#747A8C"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spnAddresses"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                android:background="#F7F8FA"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp" />
+
             <FrameLayout
                 android:id="@+id/mapContainer"
                 android:layout_width="match_parent"
-                android:layout_height="92dp"
+                android:layout_height="170dp"
                 android:layout_marginTop="18dp"
                 android:background="#DDF2EB">
 
-                <TextView
-                    android:id="@+id/txtMapFake"
+                <fragment
+                    android:id="@+id/mapFragment"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="Bogotá"
-                    android:textColor="#151A1D"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/iconMapPin"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="●"
-                    android:textColor="#111111"
-                    android:textSize="28sp" />
+                    android:layout_height="match_parent" />
 
             </FrameLayout>
 
@@ -145,7 +146,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="22dp"
-                android:text="Calle 85 # 11-53, Apartamento 402"
+                android:text="Sin dirección seleccionada"
                 android:textColor="#111111"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -155,7 +156,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Chapinero, Bogotá, D.C."
+                android:text=""
                 android:textColor="#747A8C"
                 android:textSize="13sp" />
 
@@ -164,7 +165,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Juan Pérez · 300 123 4567"
+                android:text=""
                 android:textColor="#747A8C"
                 android:textSize="13sp" />
 
@@ -175,190 +176,6 @@
                 android:layout_marginTop="36dp"
                 android:background="#EEEEEE" />
 
-            <!-- Método de pago -->
-            <TextView
-                android:id="@+id/txtPaymentTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="34dp"
-                android:text="Método de Pago"
-                android:textColor="#111111"
-                android:textSize="17sp"
-                android:textStyle="bold" />
-
-            <!-- Tarjeta -->
-            <LinearLayout
-                android:id="@+id/paymentCreditCard"
-                android:layout_width="match_parent"
-                android:layout_height="74dp"
-                android:layout_marginTop="22dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/iconCreditCard"
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    android:gravity="center"
-                    android:text="▭"
-                    android:textColor="#4B5060"
-                    android:textSize="24sp" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="14dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/txtCreditCardTitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Tarjeta de Crédito"
-                        android:textColor="#111111"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/txtCreditCardDetail"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="Visa terminada en •••• 4242"
-                        android:textColor="#747A8C"
-                        android:textSize="12sp" />
-
-                </LinearLayout>
-
-                <RadioButton
-                    android:id="@+id/radioCreditCard"
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    android:buttonTint="#0047B3"
-                    android:checked="true" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#EEEEEE" />
-
-            <!-- Transferencia -->
-            <LinearLayout
-                android:id="@+id/paymentTransfer"
-                android:layout_width="match_parent"
-                android:layout_height="74dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/iconTransfer"
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    android:gravity="center"
-                    android:text="▥"
-                    android:textColor="#4B5060"
-                    android:textSize="22sp" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="14dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/txtTransferTitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Transferencia Bancaria"
-                        android:textColor="#111111"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/txtTransferDetail"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="PSE"
-                        android:textColor="#747A8C"
-                        android:textSize="12sp" />
-
-                </LinearLayout>
-
-                <RadioButton
-                    android:id="@+id/radioTransfer"
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    android:buttonTint="#0047B3" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#EEEEEE" />
-
-            <!-- Efectivo -->
-            <LinearLayout
-                android:id="@+id/paymentCash"
-                android:layout_width="match_parent"
-                android:layout_height="74dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/iconCash"
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    android:gravity="center"
-                    android:text="▣"
-                    android:textColor="#4B5060"
-                    android:textSize="22sp" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="14dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/txtCashTitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Efectivo"
-                        android:textColor="#111111"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/txtCashDetail"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="Efecty o Baloto"
-                        android:textColor="#747A8C"
-                        android:textSize="12sp" />
-
-                </LinearLayout>
-
-                <RadioButton
-                    android:id="@+id/radioCash"
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    android:buttonTint="#0047B3" />
-
-            </LinearLayout>
-
-            <View
-                android:id="@+id/dividerPayment"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="26dp"
-                android:background="#EEEEEE" />
-
-            <!-- Resumen -->
             <TextView
                 android:id="@+id/txtSummaryTitle"
                 android:layout_width="match_parent"
@@ -378,10 +195,11 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/txtProductsLabel"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Productos (2)"
+                    android:text="Productos (0)"
                     android:textColor="#747A8C"
                     android:textSize="13sp" />
 
@@ -389,7 +207,7 @@
                     android:id="@+id/txtProductsValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="$ 145.000"
+                    android:text="$ 0"
                     android:textColor="#111111"
                     android:textSize="13sp" />
 
@@ -414,7 +232,7 @@
                     android:id="@+id/txtShippingValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Gratis"
+                    android:text="$ 0"
                     android:textColor="#111111"
                     android:textSize="13sp" />
 
@@ -431,7 +249,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="IVA (19%)"
+                    android:text="IVA"
                     android:textColor="#747A8C"
                     android:textSize="13sp" />
 
@@ -439,7 +257,7 @@
                     android:id="@+id/txtTaxesValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="$ 27.550"
+                    android:text="$ 0"
                     android:textColor="#111111"
                     android:textSize="13sp" />
 
@@ -449,7 +267,6 @@
 
     </ScrollView>
 
-    <!-- Barra inferior -->
     <LinearLayout
         android:id="@+id/bottomPurchaseAction"
         android:layout_width="0dp"
@@ -486,7 +303,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="$ 172.550"
+                android:text="$ 0"
                 android:textColor="#111111"
                 android:textSize="20sp"
                 android:textStyle="bold" />

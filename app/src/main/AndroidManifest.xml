@@ -19,6 +19,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TiendaVirtual">
+
+        <activity android:name=".ui.home.HomeSpecifyActivity" android:exported="false" />
+        <activity android:name=".ui.home.HomeCategoryFilterActivity" android:exported="false" />
+        <activity android:name=".ui.model.ubication.UbicationCreateActivity" android:exported="false" />
+        <activity android:name=".ui.model.ubication.UbicationDeleteActivity" android:exported="false" />
+        <activity android:name=".ui.model.ubication.UbicationSelectActivity" android:exported="false" />
+        <activity android:name=".ui.model.ubication.UbicationUpdateActivity" android:exported="false" />
         <activity
             android:name=".ui.setting.SettingAdminActivity"
             android:exported="false" />

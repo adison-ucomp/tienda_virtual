@@ -8,13 +8,15 @@
     android:orientation="horizontal">
 
     <LinearLayout
-        android:id="@+id/categoryTechnology"
+        android:id="@+id/categoryOne"
         android:layout_width="110dp"
         android:layout_height="100dp"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <TextView
+            android:id="@+id/iconCategoryOne"
             android:layout_width="58dp"
             android:layout_height="58dp"
             android:background="#FFFFFF"
@@ -24,10 +26,13 @@
             android:textSize="24sp" />
 
         <TextView
+            android:id="@+id/txtCategoryOne"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="TECNOLOGIA"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="CATEGORÍA"
             android:textColor="#111111"
             android:textSize="11sp"
             android:textStyle="bold" />
@@ -35,14 +40,16 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/categorySport"
+        android:id="@+id/categoryTwo"
         android:layout_width="110dp"
         android:layout_height="100dp"
         android:layout_marginStart="20dp"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <TextView
+            android:id="@+id/iconCategoryTwo"
             android:layout_width="58dp"
             android:layout_height="58dp"
             android:background="#FFFFFF"
@@ -52,10 +59,13 @@
             android:textSize="22sp" />
 
         <TextView
+            android:id="@+id/txtCategoryTwo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="DEPORTE"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="CATEGORÍA"
             android:textColor="#111111"
             android:textSize="11sp"
             android:textStyle="bold" />

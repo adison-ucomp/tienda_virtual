@@ -20,6 +20,7 @@ import com.compensar.tienda.ui.model.seller.SellerSelectActivity
 import com.compensar.tienda.ui.model.shop.ShopSelectActivity
 import com.compensar.tienda.ui.model.specify.SpecifySelectActivity
 import com.compensar.tienda.ui.model.user.UserSelectActivity
+import com.compensar.tienda.ui.model.ubication.UbicationSelectActivity
 
 class DashboardAdminActivity : AppCompatActivity() {
 
@@ -37,6 +38,7 @@ class DashboardAdminActivity : AppCompatActivity() {
     private lateinit var cardSeller: CardView
     private lateinit var cardShop: CardView
     private lateinit var cardSpecify: CardView
+    private lateinit var cardUbication: CardView
     private lateinit var cardUser: CardView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,6 +65,7 @@ class DashboardAdminActivity : AppCompatActivity() {
         cardSeller = findViewById(R.id.cardSeller)
         cardShop = findViewById(R.id.cardShop)
         cardSpecify = findViewById(R.id.cardSpecify)
+        cardUbication = findViewById(R.id.cardUbication)
         cardUser = findViewById(R.id.cardUser)
     }
 
@@ -133,6 +136,11 @@ class DashboardAdminActivity : AppCompatActivity() {
 
         cardSpecify.setOnClickListener {
             val intent = Intent(this, SpecifySelectActivity::class.java)
+            startActivity(intent)
+        }
+
+        cardUbication.setOnClickListener {
+            val intent = Intent(this, UbicationSelectActivity::class.java)
             startActivity(intent)
         }
 
