@@ -2,13 +2,14 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:background="@color/background_layout"
     android:fitsSystemWindows="true"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".ui.model.purchase.PurchaseCreateActivity">
 
-    <!-- Navbar superior -->
     <include
         android:id="@+id/includeSuperior"
         layout="@layout/navbar_admin_return"
@@ -18,9 +19,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Contenido principal -->
     <ScrollView
-        android:id="@+id/scrollPurchaseCreate"
+        android:id="@+id/scrollPurchaseCreateActivity"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
@@ -86,7 +86,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardPurchaseCreate"
+                android:id="@+id/cardPurchaseCreateActivity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
@@ -135,8 +135,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="Valor unitario"
+                        android:layout_marginTop="20dp"
+                        android:text="Valor"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -147,7 +147,7 @@
                         android:layout_height="56dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/bg_button"
-                        android:hint="Valor unitario"
+                        android:hint="Valor"
                         android:inputType="numberDecimal"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
@@ -158,8 +158,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="Total producto"
+                        android:layout_marginTop="20dp"
+                        android:text="Total"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -170,7 +170,7 @@
                         android:layout_height="56dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/bg_button"
-                        android:hint="Total producto"
+                        android:hint="Total"
                         android:inputType="numberDecimal"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
@@ -181,43 +181,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="Producto"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <Spinner
-                        android:id="@+id/fieldIdProduct"
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:layout_marginTop="8dp"
-                        android:background="@drawable/bg_button"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="Método de pago"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <Spinner
-                        android:id="@+id/fieldIdMethod"
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:layout_marginTop="8dp"
-                        android:background="@drawable/bg_button"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="20dp"
                         android:text="Pasarela"
                         android:textColor="@color/black"
                         android:textSize="16sp"
@@ -229,13 +193,49 @@
                         android:layout_height="56dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/bg_button"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp" />
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="20dp"
+                        android:text="Referencia"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <Spinner
+                        android:id="@+id/fieldIdOrder"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_button"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="Producto"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <Spinner
+                        android:id="@+id/fieldIdProduct"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_button"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
                         android:text="Usuario"
                         android:textColor="@color/black"
                         android:textSize="16sp"
@@ -247,69 +247,59 @@
                         android:layout_height="56dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/bg_button"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="Orden"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <Spinner
-                        android:id="@+id/fieldIdOrder"
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:layout_marginTop="8dp"
-                        android:background="@drawable/bg_button"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp" />
-
-                    <LinearLayout
-                        android:id="@+id/buttonContainer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="24dp">
-
-                        <Button
-                            android:id="@+id/actionCancel"
-                            android:layout_width="0dp"
-                            android:layout_height="56dp"
-                            android:layout_weight="1"
-                            android:layout_marginEnd="8dp"
-                            android:backgroundTint="@color/black" android:text="Regresar" android:textAllCaps="false" android:textColor="@color/white" android:textSize="16sp" android:textStyle="bold" />
-
-                        <Button
-                            android:id="@+id/actionExecute"
-                            android:layout_width="0dp"
-                            android:layout_height="56dp"
-                            android:layout_weight="1"
-                            android:layout_marginStart="8dp"
-                            android:backgroundTint="@color/black" android:text="Guardar" android:textAllCaps="false" android:textColor="@color/white" android:textSize="16sp" android:textStyle="bold" />
-
-                    </LinearLayout>
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp" />
 
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
 
+            <LinearLayout
+                android:id="@+id/buttonContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/actionCancel"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="@color/black"
+                    android:text="Regresar"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/actionExecute"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="@color/black"
+                    android:text="Guardar"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </ScrollView>
 
-    <!-- Menú inferior -->
     <include
         android:id="@+id/includeInferior"
         layout="@layout/navbar_admin_inferior"
         android:layout_width="0dp"
-        android:layout_height="72dp"
+        android:layout_height="76dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

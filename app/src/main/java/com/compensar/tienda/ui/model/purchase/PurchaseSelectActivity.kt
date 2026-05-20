@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
@@ -23,11 +24,10 @@ class PurchaseSelectActivity : AppCompatActivity() {
     private val collection = FirebaseFirestore.getInstance().collection("purchase")
     private val db = FirebaseFirestore.getInstance()
 
-    private var productMap: Map<Long, String> = emptyMap()
-    private var paymentMap: Map<Long, String> = emptyMap()
     private var gatewayMap: Map<Long, String> = emptyMap()
-    private var userMap: Map<Long, String> = emptyMap()
     private var orderMap: Map<Long, String> = emptyMap()
+    private var productMap: Map<Long, String> = emptyMap()
+    private var userMap: Map<Long, String> = emptyMap()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,8 +40,6 @@ class PurchaseSelectActivity : AppCompatActivity() {
 
         actionReturn.setOnClickListener { finish() }
         actionNew.setOnClickListener { startActivity(Intent(this, PurchaseCreateActivity::class.java)) }
-
-        loadDataBase()
     }
 
     override fun onResume() {
@@ -49,106 +47,54 @@ class PurchaseSelectActivity : AppCompatActivity() {
         loadReferenceData { loadItems() }
     }
 
-    private fun loadDataBase() {
-        loadReferenceData { loadItems() }
-    }
-
     private fun loadReferenceData(onComplete: () -> Unit) {
-        loadProducts {
-            loadPayments {
-                loadGateways {
-                    loadUsers {
-                        loadOrders(onComplete)
+        loadCollection("gateway", listOf("name")) { gateways ->
+            gatewayMap = gateways
+            loadCollection("order", listOf("reference")) { orders ->
+                orderMap = orders
+                loadCollection("product", listOf("name")) { products ->
+                    productMap = products
+                    loadCollection("user", listOf("names", "srnms", "email")) { users ->
+                        userMap = users
+                        onComplete()
                     }
                 }
             }
         }
     }
 
-    private fun loadProducts(onComplete: () -> Unit) {
-        db.collection("product").get()
+    private fun loadCollection(collectionName: String, fields: List<String>, onComplete: (Map<Long, String>) -> Unit) {
+        db.collection(collectionName).get()
             .addOnSuccessListener { result ->
-                productMap = result.documents.mapNotNull { document ->
+                val data = result.documents.mapNotNull { document ->
                     val register = document.getLong("register") ?: return@mapNotNull null
-                    register to (document.getString("name") ?: "Sin Informacion")
+                    val label = fields.mapNotNull { document.get(it)?.toString()?.trim() }
+                        .filter { it.isNotEmpty() }
+                        .joinToString(" ")
+                    register to label.ifEmpty { "Registro: $register" }
                 }.toMap()
-                onComplete()
+                onComplete(data)
             }
-            .addOnFailureListener {
-                productMap = emptyMap()
-                onComplete()
-            }
-    }
-
-    private fun loadPayments(onComplete: () -> Unit) {
-        db.collection("payment").get()
-            .addOnSuccessListener { result ->
-                paymentMap = result.documents.mapNotNull { document ->
-                    val register = document.getLong("register") ?: return@mapNotNull null
-                    register to (document.getString("name") ?: "Sin Informacion")
-                }.toMap()
-                onComplete()
-            }
-            .addOnFailureListener {
-                paymentMap = emptyMap()
-                onComplete()
-            }
-    }
-
-    private fun loadGateways(onComplete: () -> Unit) {
-        db.collection("gateway").get()
-            .addOnSuccessListener { result ->
-                gatewayMap = result.documents.mapNotNull { document ->
-                    val register = document.getLong("register") ?: return@mapNotNull null
-                    register to (document.getString("name") ?: "Sin Informacion")
-                }.toMap()
-                onComplete()
-            }
-            .addOnFailureListener {
-                gatewayMap = emptyMap()
-                onComplete()
-            }
-    }
-
-    private fun loadUsers(onComplete: () -> Unit) {
-        db.collection("user").get()
-            .addOnSuccessListener { result ->
-                userMap = result.documents.mapNotNull { document ->
-                    val register = document.getLong("register") ?: return@mapNotNull null
-                    register to (document.getString("email") ?: "Sin Informacion")
-                }.toMap()
-                onComplete()
-            }
-            .addOnFailureListener {
-                userMap = emptyMap()
-                onComplete()
-            }
-    }
-
-    private fun loadOrders(onComplete: () -> Unit) {
-        db.collection("order").get()
-            .addOnSuccessListener { result ->
-                orderMap = result.documents.mapNotNull { document ->
-                    val register = document.getLong("register") ?: return@mapNotNull null
-                    register to (document.getString("reference") ?: "Orden $register")
-                }.toMap()
-                onComplete()
-            }
-            .addOnFailureListener {
-                orderMap = emptyMap()
-                onComplete()
-            }
+            .addOnFailureListener { onComplete(emptyMap()) }
     }
 
     private fun loadItems() {
         collection.get()
             .addOnSuccessListener { result ->
                 dataList.removeAllViews()
-
-                val items = result.documents.mapNotNull { it.toObject(PurchaseModel::class.java) }
-                    .sortedBy { it.register }
-
+                val items = result.documents.mapNotNull { it.toObject(PurchaseModel::class.java) }.sortedBy { it.register }
+                if (items.isEmpty()) {
+                    dataList.addView(TextView(this).apply {
+                        text = "Sin compras registradas"
+                        gravity = Gravity.CENTER
+                        setPadding(0, dp(40), 0, dp(40))
+                    })
+                }
                 items.forEach { dataList.addView(loadCard(it)) }
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_LONG).show()
+                exception.printStackTrace()
             }
     }
 
@@ -157,10 +103,7 @@ class PurchaseSelectActivity : AppCompatActivity() {
             radius = dp(18).toFloat()
             cardElevation = dp(6).toFloat()
             setCardBackgroundColor(getColor(R.color.white))
-            layoutParams = LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            ).apply {
+            layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
                 setMargins(dp(4), 0, dp(4), dp(16))
             }
         }
@@ -180,26 +123,20 @@ class PurchaseSelectActivity : AppCompatActivity() {
         addText(textContainer, "Cantidad: ${data.amount ?: 0}")
         addText(textContainer, "Valor: ${data.value ?: 0.0}")
         addText(textContainer, "Total: ${data.total ?: 0.0}")
-        addText(textContainer, "Producto: ${label(productMap, data.idProduct)}")
-        addText(textContainer, "Metodo Pago: ${label(paymentMap, data.idMethod)}")
         addText(textContainer, "Pasarela: ${label(gatewayMap, data.idGangway)}")
+        addText(textContainer, "Referencia: ${label(orderMap, data.idOrder)}")
+        addText(textContainer, "Producto: ${label(productMap, data.idProduct)}")
         addText(textContainer, "Usuario: ${label(userMap, data.idUser)}")
-        addText(textContainer, "Orden: ${label(orderMap, data.idOrder)}")
 
         val buttonContainer = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER
-            layoutParams = LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
+            layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT)
         }
 
         val btnEdit = ImageView(this).apply {
             setImageResource(R.drawable.ic_edit)
-            layoutParams = LinearLayout.LayoutParams(dp(28), dp(28)).apply {
-                setMargins(0, 0, 0, dp(16))
-            }
+            layoutParams = LinearLayout.LayoutParams(dp(28), dp(28)).apply { setMargins(0, 0, 0, dp(16)) }
             setOnClickListener {
                 startActivity(Intent(this@PurchaseSelectActivity, PurchaseUpdateActivity::class.java).putExtra("register", data.register))
             }
@@ -207,9 +144,7 @@ class PurchaseSelectActivity : AppCompatActivity() {
 
         val btnQuit = ImageView(this).apply {
             setImageResource(R.drawable.ic_delete)
-            layoutParams = LinearLayout.LayoutParams(dp(28), dp(28)).apply {
-                setMargins(0, 0, 0, dp(16))
-            }
+            layoutParams = LinearLayout.LayoutParams(dp(28), dp(28)).apply { setMargins(0, 0, 0, dp(16)) }
             setOnClickListener {
                 startActivity(Intent(this@PurchaseSelectActivity, PurchaseDeleteActivity::class.java).putExtra("register", data.register))
             }
@@ -217,30 +152,23 @@ class PurchaseSelectActivity : AppCompatActivity() {
 
         buttonContainer.addView(btnEdit)
         buttonContainer.addView(btnQuit)
-
         mainRow.addView(textContainer)
         mainRow.addView(buttonContainer)
         cardView.addView(mainRow)
-
         return cardView
     }
 
-    private fun addText(container: LinearLayout, value: String, color: Int = R.color.black) {
-        val textView = TextView(this).apply {
+    private fun addText(container: LinearLayout, value: String) {
+        container.addView(TextView(this).apply {
             text = value
             textSize = 14f
-            setTextColor(getColor(color))
+            setTextColor(getColor(R.color.black))
             setTypeface(null, Typeface.BOLD)
             setPadding(0, dp(6), 0, 0)
-        }
-        container.addView(textView)
+        })
     }
 
-    private fun label(map: Map<Long, String>, id: Long): String {
-        return map[id] ?: "Sin Informacion"
-    }
+    private fun label(map: Map<Long, String>, id: Long): String = map[id] ?: "Sin Información"
 
-    private fun dp(value: Int): Int {
-        return (value * resources.displayMetrics.density).toInt()
-    }
+    private fun dp(value: Int): Int = (value * resources.displayMetrics.density).toInt()
 }

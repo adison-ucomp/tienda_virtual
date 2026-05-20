@@ -1,12 +1,17 @@
 package com.compensar.tienda.ui.model.order
 
+import android.content.Intent
 import android.os.Bundle
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
 import com.compensar.tienda.model.OrderModel
 import com.compensar.tienda.ui.common.SessionNavigation
-import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
+import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import java.text.SimpleDateFormat
@@ -15,98 +20,126 @@ import java.util.Locale
 import java.util.UUID
 
 class OrderCreateActivity : AppCompatActivity() {
+    private lateinit var actionHome: LinearLayout
     private lateinit var actionReturn: TextView
     private lateinit var actionCancel: Button
     private lateinit var actionExecute: Button
-    private lateinit var fieldAddress: EditText
+
     private lateinit var fieldReference: EditText
+    private lateinit var fieldAddress: EditText
     private lateinit var fieldTotal: EditText
     private lateinit var fieldDate: EditText
     private lateinit var fieldHour: EditText
-    private lateinit var fieldIdShipment: Spinner
-    private lateinit var fieldIdUser: Spinner
 
     private val collection = FirebaseFirestore.getInstance().collection("order")
-    private var generatedRegister: Long = 0
+    private var generatedRegister: Long? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.model_order_create)
         SessionNavigation.bindProfile(this)
+
         initViews()
+        initDefaultValues()
         initEvents()
         loadNextRegister()
-        FirestoreSelectHelper.load(this, fieldIdShipment, "shipment", listOf("name"), 1)
-        FirestoreSelectHelper.load(this, fieldIdUser, "user", listOf("names", "srnms", "email"), 0)
     }
 
     private fun initViews() {
+        actionHome = findViewById(R.id.actionHome)
         actionReturn = findViewById(R.id.actionReturn)
         actionCancel = findViewById(R.id.actionCancel)
         actionExecute = findViewById(R.id.actionExecute)
-        fieldAddress = findViewById(R.id.fieldAddress)
         fieldReference = findViewById(R.id.fieldReference)
+        fieldAddress = findViewById(R.id.fieldAddress)
         fieldTotal = findViewById(R.id.fieldTotal)
         fieldDate = findViewById(R.id.fieldDate)
         fieldHour = findViewById(R.id.fieldHour)
-        fieldIdShipment = findViewById(R.id.fieldIdShipment)
-        fieldIdUser = findViewById(R.id.fieldIdUser)
+    }
 
+    private fun initDefaultValues() {
         fieldReference.setText(UUID.randomUUID().toString().replace("-", "").take(12).uppercase())
         fieldDate.setText(SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date()))
         fieldHour.setText(SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date()))
     }
 
     private fun initEvents() {
+        actionHome.setOnClickListener {
+            startActivity(Intent(this, DashboardAdminActivity::class.java))
+            finish()
+        }
         actionReturn.setOnClickListener { finish() }
         actionCancel.setOnClickListener { finish() }
-        actionExecute.setOnClickListener { save() }
+        actionExecute.setOnClickListener { actionOperate() }
     }
 
     private fun loadNextRegister() {
         actionExecute.isEnabled = false
         collection.orderBy("register", Query.Direction.DESCENDING).limit(1).get()
-            .addOnSuccessListener {
-                generatedRegister = (it.documents.firstOrNull()?.getLong("register") ?: 0L) + 1L
+            .addOnSuccessListener { result ->
+                generatedRegister = (result.documents.firstOrNull()?.getLong("register") ?: 0L) + 1L
                 actionExecute.isEnabled = true
             }
-            .addOnFailureListener { actionExecute.isEnabled = true }
+            .addOnFailureListener { exception ->
+                generatedRegister = null
+                actionExecute.isEnabled = true
+                Toast.makeText(this, "Error al generar ID automático: ${exception.message}", Toast.LENGTH_LONG).show()
+                exception.printStackTrace()
+            }
     }
 
-    private fun save() {
-        if (generatedRegister <= 0) {
-            Toast.makeText(this, "No fue posible generar el ID automatico", Toast.LENGTH_SHORT).show()
+    private fun actionOperate() {
+        val register = generatedRegister
+        if (register == null || register <= 0) {
+            Toast.makeText(this, "No fue posible generar el ID automático", Toast.LENGTH_SHORT).show()
             loadNextRegister()
             return
         }
 
-        val idUser = FirestoreSelectHelper.getSelectedId(fieldIdUser)
-        val idShipment = FirestoreSelectHelper.getSelectedId(fieldIdShipment)
-        if (idUser == null) {
-            Toast.makeText(this, "Debe seleccionar usuario", Toast.LENGTH_SHORT).show()
-            return
-        }
-        if (idShipment == null) {
-            Toast.makeText(this, "Debe seleccionar estado", Toast.LENGTH_SHORT).show()
+        val reference = fieldReference.text.toString().trim()
+        val address = fieldAddress.text.toString().trim()
+        val total = fieldTotal.text.toString().trim().toDoubleOrNull()
+        val date = fieldDate.text.toString().trim()
+        val hour = fieldHour.text.toString().trim()
+
+        if (reference.isEmpty() || address.isEmpty() || total == null || date.isEmpty() || hour.isEmpty()) {
+            Toast.makeText(this, "Debes ingresar referencia, dirección, total, fecha y hora", Toast.LENGTH_SHORT).show()
             return
         }
 
         val data = OrderModel(
-            register = generatedRegister,
-            address = fieldAddress.text.toString().trim(),
-            reference = fieldReference.text.toString().trim(),
-            total = fieldTotal.text.toString().toDoubleOrNull(),
-            date = fieldDate.text.toString().trim(),
-            hour = fieldHour.text.toString().trim(),
-            idShipment = idShipment,
-            idUser = idUser
+            register = register,
+            reference = reference,
+            address = address,
+            total = total,
+            date = date,
+            hour = hour
         )
 
-        collection.document(generatedRegister.toString()).set(data)
+        collection.document(register.toString()).get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    Toast.makeText(this, "El ID automático ya existe. Intentando generar otro ID.", Toast.LENGTH_SHORT).show()
+                    loadNextRegister()
+                } else {
+                    saveRegister(data)
+                }
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_LONG).show()
+                exception.printStackTrace()
+            }
+    }
+
+    private fun saveRegister(data: OrderModel) {
+        collection.document(data.register.toString()).set(data)
             .addOnSuccessListener {
-                Toast.makeText(this, "Orden creada", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Registro creado correctamente", Toast.LENGTH_SHORT).show()
                 finish()
             }
-            .addOnFailureListener { Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_LONG).show() }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error al guardar: ${exception.message}", Toast.LENGTH_LONG).show()
+                exception.printStackTrace()
+            }
     }
 }

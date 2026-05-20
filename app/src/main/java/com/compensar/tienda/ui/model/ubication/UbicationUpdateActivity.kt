@@ -1,7 +1,10 @@
 package com.compensar.tienda.ui.model.ubication
 
 import android.os.Bundle
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
 import com.compensar.tienda.model.UbicationModel
@@ -16,6 +19,7 @@ class UbicationUpdateActivity : AppCompatActivity() {
 
     private val collection = FirebaseFirestore.getInstance().collection("ubication")
     private var register: Long = 0
+    private var data: UbicationModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +28,7 @@ class UbicationUpdateActivity : AppCompatActivity() {
         register = intent.getLongExtra("register", 0)
         initViews()
         initEvents()
-        load()
+        loadRegister()
     }
 
     private fun initViews() {
@@ -37,33 +41,54 @@ class UbicationUpdateActivity : AppCompatActivity() {
     private fun initEvents() {
         actionReturn.setOnClickListener { finish() }
         actionCancel.setOnClickListener { finish() }
-        actionExecute.setOnClickListener { update() }
+        actionExecute.setOnClickListener { actionOperate() }
     }
 
-    private fun load() {
+    private fun loadRegister() {
         if (register <= 0) {
-            Toast.makeText(this, "Registro no valido", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Registro no válido", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
-
         collection.document(register.toString()).get()
-            .addOnSuccessListener { fieldName.setText(it.getString("name") ?: "") }
-            .addOnFailureListener { Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_LONG).show() }
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    data = document.toObject(UbicationModel::class.java)
+                    showRegister()
+                } else {
+                    Toast.makeText(this, "No se encontró el registro", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_LONG).show()
+                exception.printStackTrace()
+            }
     }
 
-    private fun update() {
+    private fun showRegister() {
+        val current = data ?: return
+        fieldName.setText(current.name.orEmpty())
+    }
+
+    private fun actionOperate() {
+        if (register <= 0) {
+            Toast.makeText(this, "Registro no válido", Toast.LENGTH_SHORT).show()
+            return
+        }
         val name = fieldName.text.toString().trim()
         if (name.isEmpty()) {
             Toast.makeText(this, "Debes ingresar el nombre", Toast.LENGTH_SHORT).show()
             return
         }
-
-        collection.document(register.toString()).set(UbicationModel(register, name))
+        collection.document(register.toString()).set(UbicationModel(register = register, name = name))
             .addOnSuccessListener {
-                Toast.makeText(this, "Registro actualizado", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Registro actualizado correctamente", Toast.LENGTH_SHORT).show()
                 finish()
             }
-            .addOnFailureListener { Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_LONG).show() }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error al actualizar: ${exception.message}", Toast.LENGTH_LONG).show()
+                exception.printStackTrace()
+            }
     }
 }

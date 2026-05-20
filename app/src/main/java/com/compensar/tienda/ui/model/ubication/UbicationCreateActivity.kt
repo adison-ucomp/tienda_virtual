@@ -1,7 +1,10 @@
 package com.compensar.tienda.ui.model.ubication
 
 import android.os.Bundle
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
 import com.compensar.tienda.model.UbicationModel
@@ -16,7 +19,7 @@ class UbicationCreateActivity : AppCompatActivity() {
     private lateinit var fieldName: EditText
 
     private val collection = FirebaseFirestore.getInstance().collection("ubication")
-    private var generatedRegister: Long = 0
+    private var generatedRegister: Long? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,35 +40,63 @@ class UbicationCreateActivity : AppCompatActivity() {
     private fun initEvents() {
         actionReturn.setOnClickListener { finish() }
         actionCancel.setOnClickListener { finish() }
-        actionExecute.setOnClickListener { save() }
+        actionExecute.setOnClickListener { actionOperate() }
     }
 
     private fun loadNextRegister() {
         actionExecute.isEnabled = false
         collection.orderBy("register", Query.Direction.DESCENDING).limit(1).get()
-            .addOnSuccessListener {
-                generatedRegister = (it.documents.firstOrNull()?.getLong("register") ?: 0L) + 1L
+            .addOnSuccessListener { result ->
+                generatedRegister = (result.documents.firstOrNull()?.getLong("register") ?: 0L) + 1L
                 actionExecute.isEnabled = true
             }
-            .addOnFailureListener {
+            .addOnFailureListener { exception ->
+                generatedRegister = null
                 actionExecute.isEnabled = true
-                Toast.makeText(this, "No fue posible generar ID", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Error al generar ID automático: ${exception.message}", Toast.LENGTH_LONG).show()
+                exception.printStackTrace()
             }
     }
 
-    private fun save() {
+    private fun actionOperate() {
+        val register = generatedRegister
+        if (register == null || register <= 0) {
+            Toast.makeText(this, "No fue posible generar el ID automático", Toast.LENGTH_SHORT).show()
+            loadNextRegister()
+            return
+        }
+
         val name = fieldName.text.toString().trim()
         if (name.isEmpty()) {
             Toast.makeText(this, "Debes ingresar el nombre", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val data = UbicationModel(generatedRegister, name)
-        collection.document(generatedRegister.toString()).set(data)
+        val data = UbicationModel(register = register, name = name)
+        collection.document(register.toString()).get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    Toast.makeText(this, "El ID automático ya existe. Intentando generar otro ID.", Toast.LENGTH_SHORT).show()
+                    loadNextRegister()
+                } else {
+                    saveRegister(data)
+                }
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_LONG).show()
+                exception.printStackTrace()
+            }
+    }
+
+    private fun saveRegister(data: UbicationModel) {
+        collection.document(data.register.toString()).set(data)
             .addOnSuccessListener {
-                Toast.makeText(this, "Registro creado", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Registro creado correctamente", Toast.LENGTH_SHORT).show()
                 finish()
             }
-            .addOnFailureListener { Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_LONG).show() }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error al guardar: ${exception.message}", Toast.LENGTH_LONG).show()
+                exception.printStackTrace()
+            }
     }
 }

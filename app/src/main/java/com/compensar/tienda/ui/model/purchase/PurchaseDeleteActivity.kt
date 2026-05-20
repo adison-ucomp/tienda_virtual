@@ -20,14 +20,12 @@ class PurchaseDeleteActivity : AppCompatActivity() {
     private lateinit var fieldAmount: TextView
     private lateinit var fieldValue: TextView
     private lateinit var fieldTotal: TextView
-    private lateinit var fieldIdProduct: TextView
-    private lateinit var fieldIdMethod: TextView
     private lateinit var fieldIdGangway: TextView
-    private lateinit var fieldIdUser: TextView
     private lateinit var fieldIdOrder: TextView
+    private lateinit var fieldIdProduct: TextView
+    private lateinit var fieldIdUser: TextView
 
     private val collection = FirebaseFirestore.getInstance().collection("purchase")
-
     private var register: Long = 0
     private var data: PurchaseModel? = null
 
@@ -37,7 +35,6 @@ class PurchaseDeleteActivity : AppCompatActivity() {
         SessionNavigation.bindProfile(this)
 
         register = intent.getLongExtra("register", 0)
-
         initViews()
         initEvents()
         loadRegister()
@@ -51,11 +48,10 @@ class PurchaseDeleteActivity : AppCompatActivity() {
         fieldAmount = findViewById(R.id.fieldAmount)
         fieldValue = findViewById(R.id.fieldValue)
         fieldTotal = findViewById(R.id.fieldTotal)
-        fieldIdProduct = findViewById(R.id.fieldIdProduct)
-        fieldIdMethod = findViewById(R.id.fieldIdMethod)
         fieldIdGangway = findViewById(R.id.fieldIdGangway)
-        fieldIdUser = findViewById(R.id.fieldIdUser)
         fieldIdOrder = findViewById(R.id.fieldIdOrder)
+        fieldIdProduct = findViewById(R.id.fieldIdProduct)
+        fieldIdUser = findViewById(R.id.fieldIdUser)
     }
 
     private fun initEvents() {
@@ -66,24 +62,24 @@ class PurchaseDeleteActivity : AppCompatActivity() {
 
     private fun loadRegister() {
         if (register <= 0) {
-            Toast.makeText(this, "Registro no valido", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Registro no válido", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
 
-        collection.document(register.toString())
-            .get()
+        collection.document(register.toString()).get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
                     data = document.toObject(PurchaseModel::class.java)
                     showRegister()
                 } else {
-                    Toast.makeText(this, "No se encontro el registro", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "No se encontró el registro", Toast.LENGTH_SHORT).show()
                     finish()
                 }
             }
             .addOnFailureListener { exception ->
                 Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_LONG).show()
+                exception.printStackTrace()
             }
     }
 
@@ -93,27 +89,26 @@ class PurchaseDeleteActivity : AppCompatActivity() {
         fieldAmount.text = current.amount?.toString() ?: "-"
         fieldValue.text = current.value?.toString() ?: "-"
         fieldTotal.text = current.total?.toString() ?: "-"
-        FirestoreRelationLabelHelper.load(fieldIdProduct, "product", current.idProduct, listOf("name"))
-        FirestoreRelationLabelHelper.load(fieldIdMethod, "payment", current.idMethod, listOf("name"))
         FirestoreRelationLabelHelper.load(fieldIdGangway, "gateway", current.idGangway, listOf("name"))
-        FirestoreRelationLabelHelper.load(fieldIdUser, "user", current.idUser, listOf("email"))
-        FirestoreRelationLabelHelper.load(fieldIdOrder, "order", current.idOrder, listOf("reference", "address"))
+        FirestoreRelationLabelHelper.load(fieldIdOrder, "order", current.idOrder, listOf("reference"))
+        FirestoreRelationLabelHelper.load(fieldIdProduct, "product", current.idProduct, listOf("name"))
+        FirestoreRelationLabelHelper.load(fieldIdUser, "user", current.idUser, listOf("names", "srnms", "email"))
     }
 
     private fun actionOperate() {
         if (register <= 0) {
-            Toast.makeText(this, "Registro no valido", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Registro no válido", Toast.LENGTH_SHORT).show()
             return
         }
 
-        collection.document(register.toString())
-            .delete()
+        collection.document(register.toString()).delete()
             .addOnSuccessListener {
                 Toast.makeText(this, "Registro eliminado correctamente", Toast.LENGTH_SHORT).show()
                 finish()
             }
             .addOnFailureListener { exception ->
                 Toast.makeText(this, "Error al eliminar: ${exception.message}", Toast.LENGTH_LONG).show()
+                exception.printStackTrace()
             }
     }
 }

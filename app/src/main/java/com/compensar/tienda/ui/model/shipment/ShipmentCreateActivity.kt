@@ -18,9 +18,7 @@ class ShipmentCreateActivity : AppCompatActivity() {
     private lateinit var actionExecute: Button
     private lateinit var fieldName: EditText
 
-    private val db = FirebaseFirestore.getInstance()
-    private val collection = db.collection("shipment")
-
+    private val collection = FirebaseFirestore.getInstance().collection("shipment")
     private var generatedRegister: Long? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,41 +45,38 @@ class ShipmentCreateActivity : AppCompatActivity() {
 
     private fun loadNextRegister() {
         actionExecute.isEnabled = false
-
-        collection
-            .orderBy("register", Query.Direction.DESCENDING)
-            .limit(1)
-            .get()
+        collection.orderBy("register", Query.Direction.DESCENDING).limit(1).get()
             .addOnSuccessListener { result ->
-                val lastRegister = result.documents.firstOrNull()?.getLong("register") ?: 0L
-                generatedRegister = lastRegister + 1L
+                generatedRegister = (result.documents.firstOrNull()?.getLong("register") ?: 0L) + 1L
                 actionExecute.isEnabled = true
             }
             .addOnFailureListener { exception ->
                 generatedRegister = null
                 actionExecute.isEnabled = true
-                Toast.makeText(this, "Error al generar ID automatico: ${exception.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Error al generar ID automático: ${exception.message}", Toast.LENGTH_LONG).show()
+                exception.printStackTrace()
             }
     }
 
     private fun actionOperate() {
         val register = generatedRegister
         if (register == null || register <= 0) {
-            Toast.makeText(this, "No fue posible generar el ID automatico", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "No fue posible generar el ID automático", Toast.LENGTH_SHORT).show()
             loadNextRegister()
             return
         }
 
-        val data = ShipmentModel(
-            register = register,
-            name = fieldName.text.toString().trim().ifEmpty { null }
-        )
+        val name = fieldName.text.toString().trim()
+        if (name.isEmpty()) {
+            Toast.makeText(this, "Debes ingresar el nombre", Toast.LENGTH_SHORT).show()
+            return
+        }
 
-        collection.document(register.toString())
-            .get()
+        val data = ShipmentModel(register = register, name = name)
+        collection.document(register.toString()).get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
-                    Toast.makeText(this, "El ID automatico ya existe. Intentando generar otro ID.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "El ID automático ya existe. Intentando generar otro ID.", Toast.LENGTH_SHORT).show()
                     loadNextRegister()
                 } else {
                     saveRegister(data)
@@ -89,18 +84,19 @@ class ShipmentCreateActivity : AppCompatActivity() {
             }
             .addOnFailureListener { exception ->
                 Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_LONG).show()
+                exception.printStackTrace()
             }
     }
 
     private fun saveRegister(data: ShipmentModel) {
-        collection.document(data.register.toString())
-            .set(data)
+        collection.document(data.register.toString()).set(data)
             .addOnSuccessListener {
                 Toast.makeText(this, "Registro creado correctamente", Toast.LENGTH_SHORT).show()
                 finish()
             }
             .addOnFailureListener { exception ->
                 Toast.makeText(this, "Error al guardar: ${exception.message}", Toast.LENGTH_LONG).show()
+                exception.printStackTrace()
             }
     }
 }

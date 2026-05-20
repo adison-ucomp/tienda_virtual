@@ -17,9 +17,7 @@ class ShipmentUpdateActivity : AppCompatActivity() {
     private lateinit var actionExecute: Button
     private lateinit var fieldName: EditText
 
-    private val db = FirebaseFirestore.getInstance()
-    private val collection = db.collection("shipment")
-
+    private val collection = FirebaseFirestore.getInstance().collection("shipment")
     private var register: Long = 0
     private var data: ShipmentModel? = null
 
@@ -30,7 +28,7 @@ class ShipmentUpdateActivity : AppCompatActivity() {
         register = intent.getLongExtra("register", 0)
         initViews()
         initEvents()
-        load()
+        loadRegister()
     }
 
     private fun initViews() {
@@ -46,51 +44,51 @@ class ShipmentUpdateActivity : AppCompatActivity() {
         actionExecute.setOnClickListener { actionOperate() }
     }
 
-    private fun load() {
+    private fun loadRegister() {
         if (register <= 0) {
-            Toast.makeText(this, "Registro no valido", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Registro no válido", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
-
         collection.document(register.toString()).get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
                     data = document.toObject(ShipmentModel::class.java)
                     showRegister()
                 } else {
-                    Toast.makeText(this, "No se encontro el registro", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "No se encontró el registro", Toast.LENGTH_SHORT).show()
                     finish()
                 }
             }
             .addOnFailureListener { exception ->
                 Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_LONG).show()
+                exception.printStackTrace()
             }
     }
 
     private fun showRegister() {
         val current = data ?: return
-        fieldName.setText(current.name.toString())
+        fieldName.setText(current.name.orEmpty())
     }
 
     private fun actionOperate() {
         if (register <= 0) {
-            Toast.makeText(this, "Registro no valido", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Registro no válido", Toast.LENGTH_SHORT).show()
             return
         }
-
-        val updatedData = ShipmentModel(
-            register = register,
-            name = fieldName.text.toString().trim().ifEmpty { null }
-        )
-
-        collection.document(register.toString()).set(updatedData)
+        val name = fieldName.text.toString().trim()
+        if (name.isEmpty()) {
+            Toast.makeText(this, "Debes ingresar el nombre", Toast.LENGTH_SHORT).show()
+            return
+        }
+        collection.document(register.toString()).set(ShipmentModel(register = register, name = name))
             .addOnSuccessListener {
                 Toast.makeText(this, "Registro actualizado correctamente", Toast.LENGTH_SHORT).show()
                 finish()
             }
             .addOnFailureListener { exception ->
                 Toast.makeText(this, "Error al actualizar: ${exception.message}", Toast.LENGTH_LONG).show()
+                exception.printStackTrace()
             }
     }
 }
