@@ -2,7 +2,7 @@ package com.compensar.tienda.ui.profile
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -54,6 +54,18 @@ class ProfileBuyerActivity : AppCompatActivity() {
 
         cardBuyerShopping = findViewById(R.id.cardBuyerShopping)
         cardBuyerAddress = findViewById(R.id.cardBuyerAddress)
+
+        /*
+         * En profile_buyer se usa navbar_buyer_return, que internamente incluye
+         * navbar_buyer_superior. Por eso el carrito del navbar superior debe
+         * ocultarse solo en esta vista, para dejar visible únicamente la flecha
+         * de retorno.
+         */
+        findViewById<TextView?>(R.id.btnCart)?.apply {
+            visibility = View.GONE
+            isEnabled = false
+            isClickable = false
+        }
     }
 
     private fun initEvents() {
