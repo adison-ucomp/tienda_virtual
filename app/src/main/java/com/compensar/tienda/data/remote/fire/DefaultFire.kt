@@ -1,10 +1,12 @@
 package com.compensar.tienda.data.remote.fire
 
+import android.util.Log
 import com.compensar.tienda.data.remote.fire.default.CategoryDefault
 import com.compensar.tienda.data.remote.fire.default.PaymentDefault
 import com.compensar.tienda.data.remote.fire.default.ProductDefault
 import com.compensar.tienda.data.remote.fire.default.RoleDefault
 import com.compensar.tienda.data.remote.fire.default.UserDefault
+import com.compensar.tienda.domain.model.UbicationModel
 import com.google.firebase.firestore.FirebaseFirestore
 
 class DefaultFire {
@@ -19,13 +21,16 @@ class DefaultFire {
             onSuccess = {
                 createCategories(
                     onSuccess = {
-                        createPayments(
+                        createUbications(
                             onSuccess = {
-                                createUsers(
+                                createPayments(
                                     onSuccess = {
-                                        createProducts(
+                                        createUsers(
                                             onSuccess = {
-                                                onSuccess()
+                                                createProducts(
+                                                    onSuccess = onSuccess,
+                                                    onFailure = onFailure
+                                                )
                                             },
                                             onFailure = onFailure
                                         )
@@ -47,110 +52,155 @@ class DefaultFire {
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        val batch = db.batch()
-
-        RoleDefault.getAll().forEach { role ->
-            val document = db.collection("role")
-                .document(role.register.toString())
-
-            batch.set(document, role)
-        }
-
-        batch.commit()
-            .addOnSuccessListener {
-                onSuccess()
-            }
-            .addOnFailureListener { exception ->
-                onFailure(exception)
-            }
+        createMissingDocuments(
+            collectionName = "role",
+            data = RoleDefault.getAll(),
+            getRegister = { it.register },
+            onSuccess = onSuccess,
+            onFailure = onFailure
+        )
     }
 
     private fun createCategories(
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        val batch = db.batch()
+        createMissingDocuments(
+            collectionName = "category",
+            data = CategoryDefault.getAll(),
+            getRegister = { it.register },
+            onSuccess = onSuccess,
+            onFailure = onFailure
+        )
+    }
 
-        CategoryDefault.getAll().forEach { category ->
-            val document = db.collection("category")
-                .document(category.register.toString())
-
-            batch.set(document, category)
-        }
-
-        batch.commit()
-            .addOnSuccessListener {
-                onSuccess()
-            }
-            .addOnFailureListener { exception ->
-                onFailure(exception)
-            }
+    private fun createUbications(
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        createMissingDocuments(
+            collectionName = "ubication",
+            data = listOf(
+                UbicationModel(register = 1, name = "Casa"),
+                UbicationModel(register = 2, name = "Oficina"),
+                UbicationModel(register = 3, name = "Apartamento"),
+                UbicationModel(register = 4, name = "Hotel"),
+                UbicationModel(register = 5, name = "Otro")
+            ),
+            getRegister = { it.register },
+            onSuccess = onSuccess,
+            onFailure = onFailure
+        )
     }
 
     private fun createPayments(
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        val batch = db.batch()
-
-        PaymentDefault.getAll().forEach { payment ->
-            val document = db.collection("payment")
-                .document(payment.register.toString())
-
-            batch.set(document, payment)
-        }
-
-        batch.commit()
-            .addOnSuccessListener {
-                onSuccess()
-            }
-            .addOnFailureListener { exception ->
-                onFailure(exception)
-            }
+        createMissingDocuments(
+            collectionName = "payment",
+            data = PaymentDefault.getAll(),
+            getRegister = { it.register },
+            onSuccess = onSuccess,
+            onFailure = onFailure
+        )
     }
 
     private fun createUsers(
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        val batch = db.batch()
-
-        UserDefault.getAll().forEach { user ->
-            val document = db.collection("user")
-                .document(user.register.toString())
-
-            batch.set(document, user)
-        }
-
-        batch.commit()
-            .addOnSuccessListener {
-                onSuccess()
-            }
-            .addOnFailureListener { exception ->
-                onFailure(exception)
-            }
+        createMissingDocuments(
+            collectionName = "user",
+            data = UserDefault.getAll(),
+            getRegister = { it.register },
+            onSuccess = onSuccess,
+            onFailure = onFailure
+        )
     }
 
     private fun createProducts(
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        val batch = db.batch()
-
-        ProductDefault.getAll().forEach { product ->
-            val document = db.collection("product")
-                .document(product.register.toString())
-
-            batch.set(document, product)
-        }
-
-        batch.commit()
-            .addOnSuccessListener {
-                onSuccess()
-            }
-            .addOnFailureListener { exception ->
-                onFailure(exception)
-            }
+        createMissingDocuments(
+            collectionName = "product",
+            data = ProductDefault.getAll(),
+            getRegister = { it.register },
+            onSuccess = onSuccess,
+            onFailure = onFailure
+        )
     }
 
+    /**
+     * Crea solamente los documentos por defecto que no existen.
+     *
+     * Antes se usaba batch.set(...) en cada inicio de la app, por eso Firestore
+     * volvía a sobrescribir la información por defecto. Con este método primero
+     * se consulta cada documento y solo se crea cuando no existe.
+     */
+    private fun <T : Any> createMissingDocuments(
+        collectionName: String,
+        data: List<T>,
+        getRegister: (T) -> Long,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        if (data.isEmpty()) {
+            onSuccess()
+            return
+        }
+
+        val collection = db.collection(collectionName)
+        var completed = 0
+        var finishedWithError = false
+
+        fun completeOne() {
+            if (finishedWithError) return
+
+            completed++
+
+            if (completed == data.size) {
+                onSuccess()
+            }
+        }
+
+        fun fail(exception: Exception) {
+            if (finishedWithError) return
+
+            finishedWithError = true
+            onFailure(exception)
+        }
+
+        data.forEach { item ->
+            val register = getRegister(item)
+            val document = collection.document(register.toString())
+
+            document.get()
+                .addOnSuccessListener { snapshot ->
+                    if (snapshot.exists()) {
+                        Log.d(
+                            "DEFAULT_FIRE",
+                            "Documento existente, no se sobrescribe: $collectionName/$register"
+                        )
+                        completeOne()
+                    } else {
+                        document.set(item)
+                            .addOnSuccessListener {
+                                Log.d(
+                                    "DEFAULT_FIRE",
+                                    "Documento por defecto creado: $collectionName/$register"
+                                )
+                                completeOne()
+                            }
+                            .addOnFailureListener { exception ->
+                                fail(exception)
+                            }
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    fail(exception)
+                }
+        }
+    }
 }

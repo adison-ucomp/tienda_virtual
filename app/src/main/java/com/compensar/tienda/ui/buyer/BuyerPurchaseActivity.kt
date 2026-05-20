@@ -24,7 +24,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import java.util.Locale
 
 class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -127,11 +126,10 @@ class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
         FirebaseFirestore.getInstance()
             .collection("address")
             .whereEqualTo("idUser", userRegister)
-            .orderBy("register", Query.Direction.ASCENDING)
             .get()
             .addOnSuccessListener { result ->
                 addresses.clear()
-                addresses.addAll(result.documents.mapNotNull { it.toObject(AddressModel::class.java) })
+                addresses.addAll(result.documents.mapNotNull { it.toObject(AddressModel::class.java) }.sortedBy { it.register })
 
                 if (addresses.isEmpty()) {
                     txtAddress.text = "No tienes direcciones registradas"
