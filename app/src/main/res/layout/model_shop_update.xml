@@ -109,6 +109,7 @@
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:gravity="center" />
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -151,7 +152,7 @@
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp" />
 
-                                    <TextView
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
@@ -159,6 +160,7 @@
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
+
                     <EditText
                         android:id="@+id/fieldStorefire"
                         android:layout_width="match_parent"
@@ -215,8 +217,7 @@
 
                     </LinearLayout>
 
-
-</LinearLayout>
+                </LinearLayout>
 
             </androidx.cardview.widget.CardView>
 

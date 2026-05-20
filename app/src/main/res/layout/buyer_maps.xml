@@ -8,7 +8,7 @@
     android:background="@color/background_layout"
     tools:context=".ui.buyer.BuyerMapsActivity">
 
-    
+
     <LinearLayout
         android:id="@+id/mapsNavbarContainer"
         android:layout_width="0dp"
@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
-        
+
         <TextView
             android:id="@+id/btnBack"
             android:layout_width="48dp"
@@ -31,7 +31,7 @@
             android:textColor="#111111"
             android:textSize="28sp"
             android:textStyle="bold" />
-        
+
         <TextView
             android:id="@+id/txtMapsTitle"
             android:layout_width="0dp"
@@ -42,11 +42,11 @@
             android:textColor="#111111"
             android:textSize="18sp"
             android:textStyle="bold" />
-        
+
         <Space
             android:layout_width="48dp"
             android:layout_height="48dp" />
-    
+
     </LinearLayout>
 
     <ScrollView
@@ -89,7 +89,7 @@
                     android:textColor="#151A1D"
                     android:textColorHint="#747A8C"
                     android:textSize="14sp" />
-                
+
                 <TextView
                     android:id="@+id/btnSearchAddress"
                     android:layout_width="56dp"
@@ -98,7 +98,7 @@
                     android:text="⌕"
                     android:textSize="24sp"
                     android:textColor="#111111" />
-            
+
             </LinearLayout>
 
             <FrameLayout
@@ -107,13 +107,13 @@
                 android:layout_height="360dp"
                 android:layout_marginTop="18dp"
                 android:background="#F7F8FA">
-                
+
                 <fragment
                     android:id="@+id/mapFragment"
                     android:name="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
-                
+
                 <TextView
                     android:id="@+id/btnUseCurrentLocation"
                     android:layout_width="wrap_content"
@@ -129,7 +129,7 @@
                     android:text="⌾  Usar mi ubicación actual"
                     android:textColor="#111111"
                     android:textSize="13sp" />
-            
+
             </FrameLayout>
 
             <TextView
@@ -139,7 +139,7 @@
                 android:text="Ubicación"
                 android:textColor="#4B5060"
                 android:textSize="14sp" />
-            
+
             <Spinner
                 android:id="@+id/spnUbication"
                 android:layout_width="match_parent"
@@ -148,7 +148,7 @@
                 android:background="#F7F8FA"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp" />
-            
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -156,7 +156,7 @@
                 android:text="Dirección"
                 android:textColor="#4B5060"
                 android:textSize="14sp" />
-            
+
             <EditText
                 android:id="@+id/txtAddressDetail"
                 android:layout_width="match_parent"
@@ -170,7 +170,7 @@
                 android:textColor="#151A1D"
                 android:textColorHint="#8C91A0"
                 android:textSize="14sp" />
-            
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -178,7 +178,7 @@
                 android:text="Etiqueta"
                 android:textColor="#4B5060"
                 android:textSize="14sp" />
-            
+
             <EditText
                 android:id="@+id/txtLabel"
                 android:layout_width="match_parent"
@@ -193,9 +193,9 @@
                 android:textColor="#151A1D"
                 android:textColorHint="#8C91A0"
                 android:textSize="14sp" />
-        
+
         </LinearLayout>
-    
+
     </ScrollView>
 
     <LinearLayout
@@ -208,7 +208,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
-        
+
         <Button
             android:id="@+id/btnSaveAddress"
             android:layout_width="match_parent"
