@@ -268,7 +268,7 @@ class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
                                 ))
                                 batch.update(productRef, mapOf(
                                     "stock" to FieldValue.increment(-item.quantity.toLong()),
-                                    "reservedStock" to FieldValue.increment(-item.quantity.toLong())
+                                    "reserved" to FieldValue.increment(-item.quantity.toLong())
                                 ))
                                 batch.delete(reservationRef)
                             }

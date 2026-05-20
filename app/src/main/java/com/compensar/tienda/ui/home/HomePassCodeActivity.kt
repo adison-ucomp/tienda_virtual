@@ -142,7 +142,7 @@ class HomePassCodeActivity : AppCompatActivity() {
                 }
 
                 resetCollection.document(token)
-                    .update("codeValidated", true)
+                    .update("validate", true)
                     .addOnSuccessListener {
                         val intent = Intent(this, HomePasswordActivity::class.java)
                         intent.putExtra("token", token)

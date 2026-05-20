@@ -125,10 +125,10 @@ class HomeRestoreActivity : AppCompatActivity() {
             "token" to token,
             "code" to code,
             "email" to email,
-            "userRegister" to user.register,
+            "idUser" to user.register,
             "createdAt" to now,
             "expiresAt" to expiresAt,
-            "codeValidated" to false,
+            "validate" to false,
             "used" to false
         )
 

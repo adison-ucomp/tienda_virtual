@@ -133,7 +133,7 @@ class BuyerCartShopActivity : AppCompatActivity() {
         val listener = FirebaseFirestore.getInstance().collection("product").document(item.register.toString())
             .addSnapshotListener { snapshot, _ ->
                 val stock = (snapshot?.getLong("stock") ?: 0L).toInt()
-                val reserved = (snapshot?.getLong("reservedStock") ?: 0L).toInt()
+                val reserved = (snapshot?.getLong("reserved") ?: 0L).toInt()
                 val available = (stock - reserved).coerceAtLeast(0)
                 target.text = "Quedan disponibles: $available"
             }

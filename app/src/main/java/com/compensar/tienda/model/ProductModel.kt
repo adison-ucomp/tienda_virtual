@@ -5,6 +5,7 @@ data class ProductModel(
     val name: String? = null,
     val detail: String? = null,
     val stock: Int = 0,
+    val reserved: Int = 0,
     val price: Double = 0.0,
     val storefire: String? = null,
     val idCategory: Long = 0,

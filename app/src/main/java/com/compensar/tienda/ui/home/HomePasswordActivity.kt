@@ -148,9 +148,9 @@ class HomePasswordActivity : AppCompatActivity() {
                 }
 
                 val used = document.getBoolean("used") ?: false
-                val codeValidated = document.getBoolean("codeValidated") ?: false
+                val validate = document.getBoolean("validate") ?: false
                 val expiresAt = document.getLong("expiresAt") ?: 0
-                val register = document.getLong("userRegister") ?: 0
+                val register = document.getLong("idUser") ?: 0
 
                 if (used) {
                     btnContinue.isEnabled = false
@@ -164,7 +164,7 @@ class HomePasswordActivity : AppCompatActivity() {
                     return@addOnSuccessListener
                 }
 
-                if (!codeValidated) {
+                if (!validate) {
                     btnContinue.isEnabled = false
                     Toast.makeText(this, "Primero debes validar el código enviado al correo", Toast.LENGTH_LONG).show()
                     return@addOnSuccessListener

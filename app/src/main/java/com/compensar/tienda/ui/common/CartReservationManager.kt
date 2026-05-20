@@ -31,7 +31,7 @@ object CartReservationManager {
             if (!productSnapshot.exists()) throw Exception("Producto no encontrado")
 
             val stock = (productSnapshot.getLong("stock") ?: 0L).toInt()
-            val reservedStock = (productSnapshot.getLong("reservedStock") ?: 0L).toInt()
+            val reservedStock = (productSnapshot.getLong("reserved") ?: 0L).toInt()
             val reservationSnapshot = transaction.get(reservationRef)
             val currentUserReserved = if (reservationSnapshot.exists()) {
                 (reservationSnapshot.getLong("quantity") ?: 0L).toInt()
@@ -45,7 +45,7 @@ object CartReservationManager {
             }
 
             val diff = safeNewQuantity - currentUserReserved
-            transaction.update(productRef, "reservedStock", FieldValue.increment(diff.toLong()))
+            transaction.update(productRef, "reserved", FieldValue.increment(diff.toLong()))
 
             if (safeNewQuantity <= 0) {
                 transaction.delete(reservationRef)
@@ -87,7 +87,7 @@ object CartReservationManager {
                 val snapshot = transaction.get(reservationRef)
                 val quantity = if (snapshot.exists()) (snapshot.getLong("quantity") ?: 0L).toInt() else 0
                 if (quantity > 0) {
-                    transaction.update(productRef, "reservedStock", FieldValue.increment(-quantity.toLong()))
+                    transaction.update(productRef, "reserved", FieldValue.increment(-quantity.toLong()))
                     transaction.delete(reservationRef)
                 }
             }
