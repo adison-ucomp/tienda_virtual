@@ -11,6 +11,7 @@
     android:orientation="vertical"
     tools:context=".ui.model.user.UserUpdateActivity">
 
+    <!-- Navbar superior -->
     <include
         android:id="@+id/includeSuperior"
         layout="@layout/navbar_admin_return"
@@ -20,6 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Contenido principal -->
     <ScrollView
         android:id="@+id/scrollUserUpdate"
         android:layout_width="0dp"
@@ -328,6 +330,7 @@
 
     </ScrollView>
 
+    <!-- Menú inferior -->
     <include
         android:id="@+id/includeInferior"
         layout="@layout/navbar_admin_inferior"
