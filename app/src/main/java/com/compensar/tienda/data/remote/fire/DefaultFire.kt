@@ -1,11 +1,11 @@
 package com.compensar.tienda.data.remote.fire
 
 import android.util.Log
-import com.compensar.tienda.data.remote.fire.default.CategoryDefault
-import com.compensar.tienda.data.remote.fire.default.PaymentDefault
-import com.compensar.tienda.data.remote.fire.default.ProductDefault
-import com.compensar.tienda.data.remote.fire.default.RoleDefault
-import com.compensar.tienda.data.remote.fire.default.UserDefault
+import com.compensar.tienda.default.CategoryDefault
+import com.compensar.tienda.default.PaymentDefault
+import com.compensar.tienda.default.ProductDefault
+import com.compensar.tienda.default.RoleDefault
+import com.compensar.tienda.default.UserDefault
 import com.compensar.tienda.model.UbicationModel
 import com.compensar.tienda.model.ShipmentModel
 import com.google.firebase.firestore.FirebaseFirestore
