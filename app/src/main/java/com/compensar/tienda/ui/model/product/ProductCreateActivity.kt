@@ -185,6 +185,7 @@ class ProductCreateActivity : AppCompatActivity() {
             name = name,
             detail = detail,
             stock = stock,
+            reserved = 0,
             price = price,
             storefire = storefire,
             idCategory = idCategory,
