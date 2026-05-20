@@ -1,4 +1,4 @@
-package com.compensar.tienda.data.remote.fire
+package com.compensar.tienda.default
 
 import com.compensar.tienda.model.UserModel
 
