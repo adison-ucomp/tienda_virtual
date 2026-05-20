@@ -286,7 +286,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Gestiona las direcciones registradas"
+                            android:text="@string/model_category_detail"
                             android:textSize="15sp"
                             android:textColor="@color/subtitle"
                             android:layout_marginTop="8dp" />
@@ -428,7 +428,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Ordenes"
+                            android:text="@string/model_order_title"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black"/>
@@ -436,7 +436,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Gestiona las órdenes de compra"
+                            android:text="@string/model_order_detail"
                             android:textSize="15sp"
                             android:textColor="@color/subtitle"
                             android:layout_marginTop="8dp"/>
