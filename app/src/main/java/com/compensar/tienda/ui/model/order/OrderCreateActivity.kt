@@ -5,6 +5,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
 import com.compensar.tienda.model.OrderModel
+import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -31,6 +32,7 @@ class OrderCreateActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.model_order_create)
+        SessionNavigation.bindProfile(this)
         initViews()
         initEvents()
         loadNextRegister()
@@ -72,6 +74,12 @@ class OrderCreateActivity : AppCompatActivity() {
     }
 
     private fun save() {
+        if (generatedRegister <= 0) {
+            Toast.makeText(this, "No fue posible generar el ID automatico", Toast.LENGTH_SHORT).show()
+            loadNextRegister()
+            return
+        }
+
         val idUser = FirestoreSelectHelper.getSelectedId(fieldIdUser)
         val idShipment = FirestoreSelectHelper.getSelectedId(fieldIdShipment)
         if (idUser == null) {

@@ -7,7 +7,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Navbar superior -->
     <include
         android:id="@+id/includeSuperior"
         layout="@layout/navbar_admin_return"
@@ -17,7 +16,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Contenido principal -->
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -45,27 +43,9 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Dirección"
-                android:textStyle="bold"
-                android:textColor="@color/black" />
-
-            <EditText
-                android:id="@+id/fieldAddress"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:background="@drawable/bg_button"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:layout_marginTop="8dp"
-                android:hint="Dirección" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:text="Referencia"
                 android:textStyle="bold"
-                android:textColor="@color/black"
-                android:layout_marginTop="16dp" />
+                android:textColor="@color/black" />
 
             <EditText
                 android:id="@+id/fieldReference"
@@ -76,6 +56,43 @@
                 android:paddingEnd="16dp"
                 android:layout_marginTop="8dp"
                 android:hint="Referencia" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Direccion"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginTop="16dp" />
+
+            <EditText
+                android:id="@+id/fieldAddress"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/bg_button"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:layout_marginTop="8dp"
+                android:hint="Direccion" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Total"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginTop="16dp" />
+
+            <EditText
+                android:id="@+id/fieldTotal"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/bg_button"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:layout_marginTop="8dp"
+                android:inputType="numberDecimal"
+                android:hint="Total" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -112,25 +129,6 @@
                 android:paddingEnd="16dp"
                 android:layout_marginTop="8dp"
                 android:hint="HH:mm:ss" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Total"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:layout_marginTop="16dp" />
-
-            <EditText
-                android:id="@+id/fieldTotal"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:background="@drawable/bg_button"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:layout_marginTop="8dp"
-                android:inputType="numberDecimal"
-                android:hint="Total" />
 
             <TextView
                 android:layout_width="match_parent"

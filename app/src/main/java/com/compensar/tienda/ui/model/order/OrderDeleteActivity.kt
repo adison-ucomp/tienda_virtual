@@ -1,10 +1,13 @@
 package com.compensar.tienda.ui.model.order
 
 import android.os.Bundle
-import android.widget.*
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
 import com.compensar.tienda.model.OrderModel
+import com.compensar.tienda.ui.common.SessionNavigation
 import com.google.firebase.firestore.FirebaseFirestore
 
 class OrderDeleteActivity : AppCompatActivity() {
@@ -19,30 +22,69 @@ class OrderDeleteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.model_order_delete)
+        SessionNavigation.bindProfile(this)
         register = intent.getLongExtra("register", 0)
+        initViews()
+        initEvents()
+        load()
+    }
+
+    private fun initViews() {
         actionReturn = findViewById(R.id.actionReturn)
         actionCancel = findViewById(R.id.actionCancel)
         actionExecute = findViewById(R.id.actionExecute)
         txtInfo = findViewById(R.id.txtInfo)
+    }
+
+    private fun initEvents() {
         actionReturn.setOnClickListener { finish() }
         actionCancel.setOnClickListener { finish() }
-        actionExecute.setOnClickListener { delete() }
-        load()
+        actionExecute.setOnClickListener { actionOperate() }
     }
 
     private fun load() {
-        collection.document(register.toString()).get().addOnSuccessListener {
-            val data = it.toObject(OrderModel::class.java)
-            txtInfo.text = "Registro: ${data?.register}\nReferencia: ${data?.reference}\nFecha: ${data?.date}\nHora: ${data?.hour}\nDirección: ${data?.address}\nTotal: ${data?.total}\nEstado: ${data?.idShipment}\nUsuario: ${data?.idUser}"
+        if (register <= 0) {
+            Toast.makeText(this, "Registro no valido", Toast.LENGTH_SHORT).show()
+            finish()
+            return
         }
+
+        collection.document(register.toString()).get()
+            .addOnSuccessListener { document ->
+                if (!document.exists()) {
+                    Toast.makeText(this, "No se encontro el registro", Toast.LENGTH_SHORT).show()
+                    finish()
+                    return@addOnSuccessListener
+                }
+
+                val data = document.toObject(OrderModel::class.java)
+                txtInfo.text = "Registro: ${data?.register}\n" +
+                    "Referencia: ${data?.reference}\n" +
+                    "Direccion: ${data?.address}\n" +
+                    "Total: ${data?.total}\n" +
+                    "Fecha: ${data?.date}\n" +
+                    "Hora: ${data?.hour}\n" +
+                    "Estado: ${data?.idShipment}\n" +
+                    "Usuario: ${data?.idUser}"
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_LONG).show()
+            }
     }
 
-    private fun delete() {
+    private fun actionOperate() {
+        if (register <= 0) {
+            Toast.makeText(this, "Registro no valido", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         collection.document(register.toString()).delete()
             .addOnSuccessListener {
                 Toast.makeText(this, "Orden eliminada", Toast.LENGTH_SHORT).show()
                 finish()
             }
-            .addOnFailureListener { Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_LONG).show() }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_LONG).show()
+            }
     }
 }
