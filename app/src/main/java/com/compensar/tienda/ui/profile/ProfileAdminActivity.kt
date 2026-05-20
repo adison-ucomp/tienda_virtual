@@ -7,12 +7,15 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import com.bumptech.glide.Glide
 import com.compensar.tienda.R
 import com.compensar.tienda.model.UserModel
+import com.compensar.tienda.ui.admin.AdminShopListActivity
 import com.compensar.tienda.ui.common.SessionManager
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
+import com.compensar.tienda.ui.model.category.CategorySelectActivity
 import com.compensar.tienda.ui.setting.SettingAdminActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -28,6 +31,8 @@ class ProfileAdminActivity : AppCompatActivity() {
     private lateinit var textEmail: TextView
     private lateinit var textNumberCategories: TextView
     private lateinit var textNumberShops: TextView
+    private lateinit var cardCategories: CardView
+    private lateinit var cardShops: CardView
 
     private val db = FirebaseFirestore.getInstance()
 
@@ -60,6 +65,8 @@ class ProfileAdminActivity : AppCompatActivity() {
         textEmail = findViewById(R.id.txtEmail)
         textNumberCategories = findViewById(R.id.txtNumberCategories)
         textNumberShops = findViewById(R.id.txtShops)
+        cardCategories = ((textNumberCategories.parent as View).parent as CardView)
+        cardShops = ((textNumberShops.parent as View).parent as CardView)
     }
 
     private fun initEvents() {
@@ -79,6 +86,16 @@ class ProfileAdminActivity : AppCompatActivity() {
 
         actionEditProfile.setOnClickListener {
             val intent = Intent(this, SettingAdminActivity::class.java)
+            startActivity(intent)
+        }
+
+        cardCategories.setOnClickListener {
+            val intent = Intent(this, CategorySelectActivity::class.java)
+            startActivity(intent)
+        }
+
+        cardShops.setOnClickListener {
+            val intent = Intent(this, AdminShopListActivity::class.java)
             startActivity(intent)
         }
     }
