@@ -1,7 +1,10 @@
 package com.compensar.tienda.ui.model.shipment
 
 import android.os.Bundle
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
 import com.compensar.tienda.model.ShipmentModel
@@ -15,8 +18,10 @@ class ShipmentCreateActivity : AppCompatActivity() {
     private lateinit var actionExecute: Button
     private lateinit var fieldName: EditText
 
-    private val collection = FirebaseFirestore.getInstance().collection("shipment")
-    private var generatedRegister: Long = 0
+    private val db = FirebaseFirestore.getInstance()
+    private val collection = db.collection("shipment")
+
+    private var generatedRegister: Long? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,35 +42,65 @@ class ShipmentCreateActivity : AppCompatActivity() {
     private fun initEvents() {
         actionReturn.setOnClickListener { finish() }
         actionCancel.setOnClickListener { finish() }
-        actionExecute.setOnClickListener { save() }
+        actionExecute.setOnClickListener { actionOperate() }
     }
 
     private fun loadNextRegister() {
         actionExecute.isEnabled = false
-        collection.orderBy("register", Query.Direction.DESCENDING).limit(1).get()
-            .addOnSuccessListener {
-                generatedRegister = (it.documents.firstOrNull()?.getLong("register") ?: 0L) + 1L
+
+        collection
+            .orderBy("register", Query.Direction.DESCENDING)
+            .limit(1)
+            .get()
+            .addOnSuccessListener { result ->
+                val lastRegister = result.documents.firstOrNull()?.getLong("register") ?: 0L
+                generatedRegister = lastRegister + 1L
                 actionExecute.isEnabled = true
             }
-            .addOnFailureListener {
+            .addOnFailureListener { exception ->
+                generatedRegister = null
                 actionExecute.isEnabled = true
-                Toast.makeText(this, "No fue posible generar ID", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Error al generar ID automatico: ${exception.message}", Toast.LENGTH_LONG).show()
             }
     }
 
-    private fun save() {
-        val name = fieldName.text.toString().trim()
-        if (name.isEmpty()) {
-            Toast.makeText(this, "Debes ingresar el nombre", Toast.LENGTH_SHORT).show()
+    private fun actionOperate() {
+        val register = generatedRegister
+        if (register == null || register <= 0) {
+            Toast.makeText(this, "No fue posible generar el ID automatico", Toast.LENGTH_SHORT).show()
+            loadNextRegister()
             return
         }
 
-        val data = ShipmentModel(generatedRegister, name)
-        collection.document(generatedRegister.toString()).set(data)
+        val data = ShipmentModel(
+            register = register,
+            name = fieldName.text.toString().trim().ifEmpty { null }
+        )
+
+        collection.document(register.toString())
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    Toast.makeText(this, "El ID automatico ya existe. Intentando generar otro ID.", Toast.LENGTH_SHORT).show()
+                    loadNextRegister()
+                } else {
+                    saveRegister(data)
+                }
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_LONG).show()
+            }
+    }
+
+    private fun saveRegister(data: ShipmentModel) {
+        collection.document(data.register.toString())
+            .set(data)
             .addOnSuccessListener {
-                Toast.makeText(this, "Estado creado", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Registro creado correctamente", Toast.LENGTH_SHORT).show()
                 finish()
             }
-            .addOnFailureListener { Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_LONG).show() }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error al guardar: ${exception.message}", Toast.LENGTH_LONG).show()
+            }
     }
 }

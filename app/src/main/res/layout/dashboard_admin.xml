@@ -728,7 +728,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Estados de Compra"
+                            android:text="@string/model_shipment_title"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
@@ -736,7 +736,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Gestiona los estados de envío"
+                            android:text="@string/model_shipment_detail"
                             android:textSize="15sp"
                             android:textColor="@color/subtitle"
                             android:layout_marginTop="8dp" />
@@ -848,7 +848,7 @@
             </androidx.cardview.widget.CardView>
 
 
-            <!-- Modulo Tipo de Direcciones -->
+            <!-- Modulo Ubicaciones -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardUbication"
                 android:layout_width="match_parent"
@@ -879,7 +879,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Tipos de dirección"
+                            android:text="@string/model_ubication_title"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
@@ -887,7 +887,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Casa, oficina, apartamento, hotel u otro"
+                            android:text="@string/model_ubication_detail"
                             android:textSize="15sp"
                             android:textColor="@color/subtitle"
                             android:layout_marginTop="8dp" />

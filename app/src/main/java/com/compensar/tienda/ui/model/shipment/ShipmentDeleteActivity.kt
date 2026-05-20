@@ -1,9 +1,12 @@
 package com.compensar.tienda.ui.model.shipment
 
 import android.os.Bundle
-import android.widget.*
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
+import com.compensar.tienda.model.ShipmentModel
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -14,8 +17,11 @@ class ShipmentDeleteActivity : AppCompatActivity() {
     private lateinit var fieldRegister: TextView
     private lateinit var fieldName: TextView
 
-    private val collection = FirebaseFirestore.getInstance().collection("shipment")
+    private val db = FirebaseFirestore.getInstance()
+    private val collection = db.collection("shipment")
+
     private var register: Long = 0
+    private var data: ShipmentModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +44,7 @@ class ShipmentDeleteActivity : AppCompatActivity() {
     private fun initEvents() {
         actionReturn.setOnClickListener { finish() }
         actionCancel.setOnClickListener { finish() }
-        actionExecute.setOnClickListener { delete() }
+        actionExecute.setOnClickListener { actionOperate() }
     }
 
     private fun load() {
@@ -48,18 +54,41 @@ class ShipmentDeleteActivity : AppCompatActivity() {
             return
         }
 
-        fieldRegister.text = register.toString()
-        collection.document(register.toString()).get()
-            .addOnSuccessListener { fieldName.text = it.getString("name") ?: "" }
-            .addOnFailureListener { Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_LONG).show() }
+        collection.document(register.toString())
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    data = document.toObject(ShipmentModel::class.java)
+                    showRegister()
+                } else {
+                    Toast.makeText(this, "No se encontro el registro", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_LONG).show()
+            }
     }
 
-    private fun delete() {
+    private fun showRegister() {
+        val current = data ?: return
+        fieldRegister.text = current.register.toString()
+        fieldName.text = current.name.toString()
+    }
+
+    private fun actionOperate() {
+        if (register <= 0) {
+            Toast.makeText(this, "Registro no valido", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         collection.document(register.toString()).delete()
             .addOnSuccessListener {
-                Toast.makeText(this, "Estado eliminado", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Registro eliminado correctamente", Toast.LENGTH_SHORT).show()
                 finish()
             }
-            .addOnFailureListener { Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_LONG).show() }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error al eliminar: ${exception.message}", Toast.LENGTH_LONG).show()
+            }
     }
 }

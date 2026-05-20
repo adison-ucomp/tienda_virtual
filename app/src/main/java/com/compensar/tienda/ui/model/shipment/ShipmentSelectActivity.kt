@@ -5,7 +5,9 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.view.Gravity
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
@@ -18,7 +20,8 @@ class ShipmentSelectActivity : AppCompatActivity() {
     private lateinit var actionNew: LinearLayout
     private lateinit var dataList: LinearLayout
 
-    private val collection = FirebaseFirestore.getInstance().collection("shipment")
+    private val db = FirebaseFirestore.getInstance()
+    private val collection = db.collection("shipment")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,50 +35,42 @@ class ShipmentSelectActivity : AppCompatActivity() {
         actionReturn.setOnClickListener { finish() }
         actionNew.setOnClickListener { startActivity(Intent(this, ShipmentCreateActivity::class.java)) }
 
-        ensureDefaults()
+        loadDataBase()
     }
 
     override fun onResume() {
         super.onResume()
-        load()
+        loadDataBase()
     }
 
-    private fun ensureDefaults() {
-        val defaults = listOf("Pendiente", "Enviado", "Entregado")
-        defaults.forEachIndexed { index, name ->
-            val register = (index + 1).toLong()
-            collection.document(register.toString()).get()
-                .addOnSuccessListener {
-                    if (!it.exists()) {
-                        collection.document(register.toString()).set(ShipmentModel(register, name))
-                    }
-                }
-        }
-        load()
-    }
-
-    private fun load() {
+    private fun loadDataBase() {
         collection.get()
             .addOnSuccessListener { result ->
                 dataList.removeAllViews()
-                result.documents
-                    .mapNotNull { it.toObject(ShipmentModel::class.java) }
+                val items = result.documents
+                    .mapNotNull { document -> document.toObject(ShipmentModel::class.java) }
                     .sortedBy { it.register }
-                    .forEach { dataList.addView(card(it)) }
+
+                items.forEach { data ->
+                    dataList.addView(loadCard(data))
+                }
             }
-            .addOnFailureListener { Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_LONG).show() }
+            .addOnFailureListener { exception ->
+                exception.printStackTrace()
+            }
     }
 
-    private fun card(data: ShipmentModel): CardView {
+    private fun loadCard(data: ShipmentModel): CardView {
         val card = CardView(this).apply {
-            radius = dp(16).toFloat()
-            cardElevation = dp(4).toFloat()
+            radius = dp(18).toFloat()
+            cardElevation = dp(6).toFloat()
             setCardBackgroundColor(getColor(R.color.white))
+
             layoutParams = LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             ).apply {
-                setMargins(0, 0, 0, dp(12))
+                setMargins(dp(4), 0, dp(4), dp(16))
             }
         }
 
@@ -85,17 +80,43 @@ class ShipmentSelectActivity : AppCompatActivity() {
             setPadding(dp(16), dp(16), dp(16), dp(16))
         }
 
-        val txt = TextView(this).apply {
-            text = "${data.register}. ${data.name ?: ""}"
-            textSize = 16f
+        val textContainer = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
+        }
+
+        val txtRegister = TextView(this).apply {
+            text = "Registro: ${data.register}"
+            textSize = 14f
             setTypeface(null, Typeface.BOLD)
             setTextColor(getColor(R.color.black))
-            layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
+            setPadding(0, dp(6), 0, 0)
+        }
+        textContainer.addView(txtRegister)
+
+        val txtName = TextView(this).apply {
+            text = "Nombre: ${data.name ?: ""}"
+            textSize = 14f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(getColor(R.color.black))
+            setPadding(0, dp(6), 0, 0)
+        }
+        textContainer.addView(txtName)
+
+        val buttonContainer = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            gravity = Gravity.CENTER
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
         }
 
         val edit = ImageView(this).apply {
             setImageResource(R.drawable.ic_edit)
-            layoutParams = LinearLayout.LayoutParams(dp(28), dp(28))
+            layoutParams = LinearLayout.LayoutParams(dp(28), dp(28)).apply {
+                setMargins(0, 0, 0, dp(16))
+            }
             setOnClickListener {
                 startActivity(
                     Intent(this@ShipmentSelectActivity, ShipmentUpdateActivity::class.java)
@@ -107,7 +128,7 @@ class ShipmentSelectActivity : AppCompatActivity() {
         val del = ImageView(this).apply {
             setImageResource(R.drawable.ic_delete)
             layoutParams = LinearLayout.LayoutParams(dp(28), dp(28)).apply {
-                setMargins(dp(16), 0, 0, 0)
+                setMargins(0, 0, 0, dp(16))
             }
             setOnClickListener {
                 startActivity(
@@ -117,9 +138,11 @@ class ShipmentSelectActivity : AppCompatActivity() {
             }
         }
 
-        row.addView(txt)
-        row.addView(edit)
-        row.addView(del)
+        buttonContainer.addView(edit)
+        buttonContainer.addView(del)
+
+        row.addView(textContainer)
+        row.addView(buttonContainer)
         card.addView(row)
         return card
     }

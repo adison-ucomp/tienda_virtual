@@ -1,7 +1,10 @@
 package com.compensar.tienda.ui.model.shipment
 
 import android.os.Bundle
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
 import com.compensar.tienda.model.ShipmentModel
@@ -14,8 +17,11 @@ class ShipmentUpdateActivity : AppCompatActivity() {
     private lateinit var actionExecute: Button
     private lateinit var fieldName: EditText
 
-    private val collection = FirebaseFirestore.getInstance().collection("shipment")
+    private val db = FirebaseFirestore.getInstance()
+    private val collection = db.collection("shipment")
+
     private var register: Long = 0
+    private var data: ShipmentModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +43,7 @@ class ShipmentUpdateActivity : AppCompatActivity() {
     private fun initEvents() {
         actionReturn.setOnClickListener { finish() }
         actionCancel.setOnClickListener { finish() }
-        actionExecute.setOnClickListener { update() }
+        actionExecute.setOnClickListener { actionOperate() }
     }
 
     private fun load() {
@@ -48,22 +54,43 @@ class ShipmentUpdateActivity : AppCompatActivity() {
         }
 
         collection.document(register.toString()).get()
-            .addOnSuccessListener { fieldName.setText(it.getString("name") ?: "") }
-            .addOnFailureListener { Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_LONG).show() }
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    data = document.toObject(ShipmentModel::class.java)
+                    showRegister()
+                } else {
+                    Toast.makeText(this, "No se encontro el registro", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_LONG).show()
+            }
     }
 
-    private fun update() {
-        val name = fieldName.text.toString().trim()
-        if (name.isEmpty()) {
-            Toast.makeText(this, "Debes ingresar el nombre", Toast.LENGTH_SHORT).show()
+    private fun showRegister() {
+        val current = data ?: return
+        fieldName.setText(current.name.toString())
+    }
+
+    private fun actionOperate() {
+        if (register <= 0) {
+            Toast.makeText(this, "Registro no valido", Toast.LENGTH_SHORT).show()
             return
         }
 
-        collection.document(register.toString()).set(ShipmentModel(register, name))
+        val updatedData = ShipmentModel(
+            register = register,
+            name = fieldName.text.toString().trim().ifEmpty { null }
+        )
+
+        collection.document(register.toString()).set(updatedData)
             .addOnSuccessListener {
-                Toast.makeText(this, "Estado actualizado", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Registro actualizado correctamente", Toast.LENGTH_SHORT).show()
                 finish()
             }
-            .addOnFailureListener { Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_LONG).show() }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error al actualizar: ${exception.message}", Toast.LENGTH_LONG).show()
+            }
     }
 }
