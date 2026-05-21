@@ -15,7 +15,6 @@ import com.compensar.tienda.model.SpecifyModel
 import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
 import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 
 class SpecifyCreateActivity : AppCompatActivity() {
     private lateinit var actionHome: LinearLayout
@@ -127,14 +126,13 @@ class SpecifyCreateActivity : AppCompatActivity() {
         actionExecute.isEnabled = false
 
         collection
-            .orderBy("register", Query.Direction.DESCENDING)
-            .limit(1)
             .get()
             .addOnSuccessListener { result ->
-                val lastRegister = result.documents
-                    .firstOrNull()
-                    ?.getLong("register")
-                    ?: 0L
+                val lastRegister = result.documents.maxOfOrNull { document ->
+                    val byField = document.getLong("register") ?: 0L
+                    val byDocId = document.id.toLongOrNull() ?: 0L
+                    maxOf(byField, byDocId)
+                } ?: 0L
 
                 generatedRegister = lastRegister + 1L
                 actionExecute.isEnabled = true
