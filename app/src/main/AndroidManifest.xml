@@ -20,6 +20,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TiendaVirtual">
         <activity
+            android:name=".ui.report.ReportDataSaleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.admin.AdminReportFileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.admin.AdminReportDataActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.model.module.ModuleUpdateActivity"
             android:exported="false" />
         <activity
