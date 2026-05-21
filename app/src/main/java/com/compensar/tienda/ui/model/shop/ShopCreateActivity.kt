@@ -16,7 +16,7 @@ import com.compensar.tienda.ui.model.common.ModuleView
 import com.bumptech.glide.Glide
 import com.compensar.tienda.model.ShopModel
 import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
-import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
+import com.compensar.tienda.ui.admin.AdminDashboardActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import android.graphics.Bitmap
@@ -84,7 +84,7 @@ class ShopCreateActivity : AppCompatActivity() {
 
     private fun initEvents() {
         actionHome.setOnClickListener {
-            val intent = Intent(this, DashboardAdminActivity::class.java)
+            val intent = Intent(this, AdminDashboardActivity::class.java)
             startActivity(intent)
             finish()
         }

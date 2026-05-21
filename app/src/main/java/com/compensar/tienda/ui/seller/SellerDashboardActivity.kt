@@ -1,4 +1,4 @@
-package com.compensar.tienda.ui.dashboard
+package com.compensar.tienda.ui.seller
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -8,11 +8,11 @@ import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
 import com.compensar.tienda.ui.common.SessionNavigation
 
-class DashboardSellerActivity : AppCompatActivity() {
+class SellerDashboardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.dashboard_seller)
+        setContentView(R.layout.seller_dashboard)
         SessionNavigation.bindProfile(this)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

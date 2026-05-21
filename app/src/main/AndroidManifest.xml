@@ -62,7 +62,7 @@
             android:name=".ui.home.HomeSpecifyActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.home.HomeCategoryFilterActivity"
+            android:name=".ui.home.HomeFilteringActivity"
             android:exported="false" />
         <activity
             android:name=".ui.model.order.OrderCreateActivity"
@@ -119,10 +119,10 @@
             android:name=".ui.profile.ProfileShareActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.dashboard.DashboardSellerActivity"
+            android:name=".ui.seller.SellerDashboardActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.dashboard.DashboardAdminActivity"
+            android:name=".ui.admin.AdminDashboardActivity"
             android:exported="false" />
         <activity
             android:name=".ui.buyer.BuyerMapsActivity"

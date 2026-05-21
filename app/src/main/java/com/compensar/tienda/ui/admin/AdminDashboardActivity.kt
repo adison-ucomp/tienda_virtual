@@ -1,4 +1,4 @@
-package com.compensar.tienda.ui.dashboard
+package com.compensar.tienda.ui.admin
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,9 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
 import com.compensar.tienda.model.ModuleModel
-import com.compensar.tienda.ui.admin.AdminReportDataActivity
-import com.compensar.tienda.ui.admin.AdminShopListActivity
-import com.compensar.tienda.ui.admin.AdminUserListActivity
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.model.address.AddressSelectActivity
 import com.compensar.tienda.ui.model.category.CategorySelectActivity
@@ -30,7 +27,7 @@ import com.compensar.tienda.ui.model.ubication.UbicationSelectActivity
 import com.compensar.tienda.ui.model.user.UserSelectActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
-class DashboardAdminActivity : AppCompatActivity() {
+class AdminDashboardActivity : AppCompatActivity() {
 
     private lateinit var dataShop: CardView
     private lateinit var dataUser: CardView
@@ -60,7 +57,7 @@ class DashboardAdminActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.dashboard_admin)
+        setContentView(R.layout.admin_dashboard)
         SessionNavigation.bindProfile(this)
 
         initViews()
@@ -95,22 +92,38 @@ class DashboardAdminActivity : AppCompatActivity() {
         cardUser = findViewById(R.id.cardUser)
         cardReport = findViewById(R.id.cardReport)
 
-        moduleViews["module"] = ModuleDashboardItem(cardModule, findViewById(R.id.titleModule), findViewById(R.id.detailModule), "Modulos")
-        moduleViews["address"] = ModuleDashboardItem(cardAddress, findViewById(R.id.titleAddress), findViewById(R.id.detailAddress), "Direcciones")
-        moduleViews["category"] = ModuleDashboardItem(cardCategory, findViewById(R.id.titleCategory), findViewById(R.id.detailCategory), "Categorias")
-        moduleViews["gateway"] = ModuleDashboardItem(cardGateway, findViewById(R.id.titleGateway), findViewById(R.id.detailGateway), "Pasarelas")
-        moduleViews["image"] = ModuleDashboardItem(cardImage, findViewById(R.id.titleImage), findViewById(R.id.detailImage), "Imágenes")
-        moduleViews["order"] = ModuleDashboardItem(cardOrder, findViewById(R.id.titleOrder), findViewById(R.id.detailOrder), "Ordenes")
-        moduleViews["payment"] = ModuleDashboardItem(cardPayment, findViewById(R.id.titlePayment), findViewById(R.id.detailPayment), "Pagos")
-        moduleViews["product"] = ModuleDashboardItem(cardProduct, findViewById(R.id.titleProduct), findViewById(R.id.detailProduct), "Productos")
-        moduleViews["purchase"] = ModuleDashboardItem(cardPurchase, findViewById(R.id.titlePurchase), findViewById(R.id.detailPurchase), "Compras")
-        moduleViews["role"] = ModuleDashboardItem(cardRole, findViewById(R.id.titleRole), findViewById(R.id.detailRole), "Roles")
-        moduleViews["seller"] = ModuleDashboardItem(cardSeller, findViewById(R.id.titleSeller), findViewById(R.id.detailSeller), "Vendedores")
-        moduleViews["shipment"] = ModuleDashboardItem(cardShipment, findViewById(R.id.titleShipment), findViewById(R.id.detailShipment), "Envios")
-        moduleViews["shop"] = ModuleDashboardItem(cardShop, findViewById(R.id.titleShop), findViewById(R.id.detailShop), "Tiendas")
-        moduleViews["specify"] = ModuleDashboardItem(cardSpecify, findViewById(R.id.titleSpecify), findViewById(R.id.detailSpecify), "Especifaciones")
-        moduleViews["ubication"] = ModuleDashboardItem(cardUbication, findViewById(R.id.titleUbication), findViewById(R.id.detailUbication), "Ubicaciones")
-        moduleViews["user"] = ModuleDashboardItem(cardUser, findViewById(R.id.titleUser), findViewById(R.id.detailUser), "Usuarios")
+        moduleViews["module"] = ModuleDashboardItem(cardModule, findViewById(R.id.titleModule), findViewById(
+            R.id.detailModule), "Modulos")
+        moduleViews["address"] = ModuleDashboardItem(cardAddress, findViewById(R.id.titleAddress), findViewById(
+            R.id.detailAddress), "Direcciones")
+        moduleViews["category"] = ModuleDashboardItem(cardCategory, findViewById(R.id.titleCategory), findViewById(
+            R.id.detailCategory), "Categorias")
+        moduleViews["gateway"] = ModuleDashboardItem(cardGateway, findViewById(R.id.titleGateway), findViewById(
+            R.id.detailGateway), "Pasarelas")
+        moduleViews["image"] = ModuleDashboardItem(cardImage, findViewById(R.id.titleImage), findViewById(
+            R.id.detailImage), "Imágenes")
+        moduleViews["order"] = ModuleDashboardItem(cardOrder, findViewById(R.id.titleOrder), findViewById(
+            R.id.detailOrder), "Ordenes")
+        moduleViews["payment"] = ModuleDashboardItem(cardPayment, findViewById(R.id.titlePayment), findViewById(
+            R.id.detailPayment), "Pagos")
+        moduleViews["product"] = ModuleDashboardItem(cardProduct, findViewById(R.id.titleProduct), findViewById(
+            R.id.detailProduct), "Productos")
+        moduleViews["purchase"] = ModuleDashboardItem(cardPurchase, findViewById(R.id.titlePurchase), findViewById(
+            R.id.detailPurchase), "Compras")
+        moduleViews["role"] = ModuleDashboardItem(cardRole, findViewById(R.id.titleRole), findViewById(
+            R.id.detailRole), "Roles")
+        moduleViews["seller"] = ModuleDashboardItem(cardSeller, findViewById(R.id.titleSeller), findViewById(
+            R.id.detailSeller), "Vendedores")
+        moduleViews["shipment"] = ModuleDashboardItem(cardShipment, findViewById(R.id.titleShipment), findViewById(
+            R.id.detailShipment), "Envios")
+        moduleViews["shop"] = ModuleDashboardItem(cardShop, findViewById(R.id.titleShop), findViewById(
+            R.id.detailShop), "Tiendas")
+        moduleViews["specify"] = ModuleDashboardItem(cardSpecify, findViewById(R.id.titleSpecify), findViewById(
+            R.id.detailSpecify), "Especifaciones")
+        moduleViews["ubication"] = ModuleDashboardItem(cardUbication, findViewById(R.id.titleUbication), findViewById(
+            R.id.detailUbication), "Ubicaciones")
+        moduleViews["user"] = ModuleDashboardItem(cardUser, findViewById(R.id.titleUser), findViewById(
+            R.id.detailUser), "Usuarios")
     }
 
     private fun initEvents() {

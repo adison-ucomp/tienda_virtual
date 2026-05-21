@@ -16,7 +16,7 @@ import com.compensar.tienda.ui.model.common.ModuleView
 import com.bumptech.glide.Glide
 import com.compensar.tienda.model.ImageModel
 import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
-import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
+import com.compensar.tienda.ui.admin.AdminDashboardActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import android.graphics.Bitmap
 import android.net.Uri
@@ -82,7 +82,7 @@ class ImageUpdateActivity : AppCompatActivity() {
 
     private fun initEvents() {
         actionHome.setOnClickListener {
-            val intent = Intent(this, DashboardAdminActivity::class.java)
+            val intent = Intent(this, AdminDashboardActivity::class.java)
             startActivity(intent)
             finish()
         }

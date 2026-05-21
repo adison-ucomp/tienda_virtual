@@ -13,7 +13,7 @@ import com.compensar.tienda.ui.model.common.ModuleView
 import com.compensar.tienda.ui.model.common.ImagePreviewHelper
 import com.compensar.tienda.ui.model.common.FirestoreRelationLabelHelper
 import com.compensar.tienda.model.UserModel
-import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
+import com.compensar.tienda.ui.admin.AdminDashboardActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
 class UserDeleteActivity : AppCompatActivity() {
@@ -65,7 +65,7 @@ class UserDeleteActivity : AppCompatActivity() {
 
     private fun initEvents() {
         actionHome.setOnClickListener {
-            val intent = Intent(this, DashboardAdminActivity::class.java)
+            val intent = Intent(this, AdminDashboardActivity::class.java)
             startActivity(intent)
             finish()
         }

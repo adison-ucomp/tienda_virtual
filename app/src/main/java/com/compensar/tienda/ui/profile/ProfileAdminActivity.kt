@@ -14,7 +14,7 @@ import com.compensar.tienda.model.UserModel
 import com.compensar.tienda.ui.admin.AdminShopListActivity
 import com.compensar.tienda.ui.common.SessionManager
 import com.compensar.tienda.ui.common.SessionNavigation
-import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
+import com.compensar.tienda.ui.admin.AdminDashboardActivity
 import com.compensar.tienda.ui.model.category.CategorySelectActivity
 import com.compensar.tienda.ui.setting.SettingAdminActivity
 import com.google.firebase.firestore.FirebaseFirestore
@@ -75,7 +75,7 @@ class ProfileAdminActivity : AppCompatActivity() {
         }
 
         actionHome.setOnClickListener {
-            val intent = Intent(this, DashboardAdminActivity::class.java)
+            val intent = Intent(this, AdminDashboardActivity::class.java)
             startActivity(intent)
             finish()
         }

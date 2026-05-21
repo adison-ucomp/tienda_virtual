@@ -2,15 +2,13 @@ package com.compensar.tienda.ui.profile
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
 import com.compensar.tienda.ui.common.SessionManager
 import com.compensar.tienda.ui.common.SessionNavigation
-import com.compensar.tienda.ui.dashboard.DashboardSellerActivity
-import com.compensar.tienda.ui.home.HomeProductActivity
+import com.compensar.tienda.ui.seller.SellerDashboardActivity
 import com.compensar.tienda.ui.model.product.ProductSelectActivity
 import com.compensar.tienda.ui.model.purchase.PurchaseSelectActivity
 
@@ -52,7 +50,7 @@ class ProfileSellerActivity : AppCompatActivity() {
         }
 
         navHome.setOnClickListener {
-            val intent = Intent(this, DashboardSellerActivity::class.java)
+            val intent = Intent(this, SellerDashboardActivity::class.java)
             startActivity(intent)
             finish()
         }

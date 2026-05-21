@@ -16,7 +16,7 @@ import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.model.common.SelectSearchHelper
 import com.google.firebase.firestore.FirebaseFirestore
 import com.compensar.tienda.model.UserModel
-import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
+import com.compensar.tienda.ui.admin.AdminDashboardActivity
 
 class UserSelectActivity : AppCompatActivity() {
     private lateinit var actionHome: LinearLayout
@@ -42,7 +42,7 @@ class UserSelectActivity : AppCompatActivity() {
         actionNew = findViewById(R.id.actionNew)
 
         actionHome.setOnClickListener {
-            val intent = Intent(this, DashboardAdminActivity::class.java)
+            val intent = Intent(this, AdminDashboardActivity::class.java)
             startActivity(intent)
             finish()
         }

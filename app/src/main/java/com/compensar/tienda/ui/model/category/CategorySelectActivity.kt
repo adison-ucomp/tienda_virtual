@@ -15,7 +15,7 @@ import com.compensar.tienda.ui.model.common.ImagePreviewHelper
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.model.common.SelectSearchHelper
 import com.compensar.tienda.model.CategoryModel
-import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
+import com.compensar.tienda.ui.admin.AdminDashboardActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
 class CategorySelectActivity : AppCompatActivity() {
@@ -39,7 +39,7 @@ class CategorySelectActivity : AppCompatActivity() {
         actionNew = findViewById(R.id.actionNew)
 
         actionHome.setOnClickListener {
-            val intent = Intent(this, DashboardAdminActivity::class.java)
+            val intent = Intent(this, AdminDashboardActivity::class.java)
             startActivity(intent)
             finish()
         }

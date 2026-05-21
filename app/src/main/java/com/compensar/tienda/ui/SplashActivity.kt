@@ -8,8 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
 import com.compensar.tienda.firestore.DefaultFire
 import com.compensar.tienda.ui.common.SessionManager
-import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
-import com.compensar.tienda.ui.dashboard.DashboardSellerActivity
+import com.compensar.tienda.ui.admin.AdminDashboardActivity
+import com.compensar.tienda.ui.seller.SellerDashboardActivity
 import com.compensar.tienda.ui.home.HomeProductActivity
 
 class SplashActivity : AppCompatActivity() {
@@ -54,10 +54,10 @@ class SplashActivity : AppCompatActivity() {
                     Intent(this, HomeProductActivity::class.java)
                 }
                 SessionManager.getRole(this) == 1L -> {
-                    Intent(this, DashboardAdminActivity::class.java)
+                    Intent(this, AdminDashboardActivity::class.java)
                 }
                 SessionManager.getRole(this) == 2L -> {
-                    Intent(this, DashboardSellerActivity::class.java)
+                    Intent(this, SellerDashboardActivity::class.java)
                 }
                 SessionManager.getRole(this) == 3L -> {
                     Intent(this, HomeProductActivity::class.java)

@@ -13,7 +13,7 @@ import com.compensar.tienda.R
 import com.compensar.tienda.model.PurchaseModel
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.model.common.ModuleView
-import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
+import com.compensar.tienda.ui.admin.AdminDashboardActivity
 import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -66,7 +66,7 @@ class PurchaseCreateActivity : AppCompatActivity() {
 
     private fun initEvents() {
         actionHome.setOnClickListener {
-            startActivity(Intent(this, DashboardAdminActivity::class.java))
+            startActivity(Intent(this, AdminDashboardActivity::class.java))
             finish()
         }
         actionReturn.setOnClickListener { finish() }

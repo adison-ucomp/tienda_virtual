@@ -14,7 +14,7 @@ import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.model.common.ModuleView
 import com.bumptech.glide.Glide
 import com.compensar.tienda.model.CategoryModel
-import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
+import com.compensar.tienda.ui.admin.AdminDashboardActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import android.graphics.Bitmap
 import android.net.Uri
@@ -80,7 +80,7 @@ class CategoryUpdateActivity : AppCompatActivity() {
 
     private fun initEvents() {
         actionHome.setOnClickListener {
-            val intent = Intent(this, DashboardAdminActivity::class.java)
+            val intent = Intent(this, AdminDashboardActivity::class.java)
             startActivity(intent)
             finish()
         }

@@ -160,7 +160,7 @@ class HomeCategoryActivity : AppCompatActivity() {
 
             setOnClickListener {
                 startActivity(
-                    Intent(this@HomeCategoryActivity, HomeCategoryFilterActivity::class.java)
+                    Intent(this@HomeCategoryActivity, HomeFilteringActivity::class.java)
                         .putExtra("categoryRegister", category.register)
                         .putExtra("categoryName", category.name ?: "Categoría")
                 )

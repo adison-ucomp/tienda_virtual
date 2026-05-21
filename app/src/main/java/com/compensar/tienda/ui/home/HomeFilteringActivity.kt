@@ -18,7 +18,7 @@ import com.compensar.tienda.ui.buyer.BuyerShoppingActivity
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.google.firebase.firestore.FirebaseFirestore
 
-class HomeCategoryFilterActivity : AppCompatActivity() {
+class HomeFilteringActivity : AppCompatActivity() {
 
     private lateinit var btnBack: TextView
     private lateinit var btnCart: TextView
@@ -36,7 +36,7 @@ class HomeCategoryFilterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.category_filter)
+        setContentView(R.layout.home_filtering)
         categoryRegister = intent.getLongExtra("categoryRegister", 0)
         categoryName = intent.getStringExtra("categoryName") ?: "Categoría"
         applyWindowInsets()

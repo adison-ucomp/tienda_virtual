@@ -253,7 +253,7 @@ class HomeProductActivity : AppCompatActivity() {
 
     private fun openCategory(category: CategoryModel) {
         startActivity(
-            Intent(this, HomeCategoryFilterActivity::class.java)
+            Intent(this, HomeFilteringActivity::class.java)
                 .putExtra("categoryRegister", category.register)
                 .putExtra("categoryName", category.name ?: "Categoría")
         )

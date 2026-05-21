@@ -16,8 +16,8 @@ import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.model.UserModel
-import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
-import com.compensar.tienda.ui.dashboard.DashboardSellerActivity
+import com.compensar.tienda.ui.admin.AdminDashboardActivity
+import com.compensar.tienda.ui.seller.SellerDashboardActivity
 import com.compensar.tienda.ui.register.RegisterBuyerActivity
 import com.compensar.tienda.ui.register.RegisterSellerActivity
 import com.compensar.tienda.ui.buyer.BuyerAddressActivity
@@ -214,8 +214,8 @@ class HomeLoginActivity : AppCompatActivity() {
 
     private fun redirectByRole(user: UserModel) {
         val intent = when (user.idRole) {
-            1L -> Intent(this, DashboardAdminActivity::class.java)
-            2L -> Intent(this, DashboardSellerActivity::class.java)
+            1L -> Intent(this, AdminDashboardActivity::class.java)
+            2L -> Intent(this, SellerDashboardActivity::class.java)
             3L -> Intent(this, HomeProductActivity::class.java)
             else -> null
         }
