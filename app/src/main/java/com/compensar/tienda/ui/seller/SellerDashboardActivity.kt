@@ -156,9 +156,9 @@ class SellerDashboardActivity : AppCompatActivity() {
         lastMonths.forEach { month ->
             val total = totalsByMonth[month] ?: 0.0
             val height = if (maxTotal > 0.0 && total > 0.0) {
-                (28 + ((total / maxTotal) * 74)).roundToInt()
+                (42 + ((total / maxTotal) * 96)).roundToInt()
             } else {
-                28
+                42
             }
 
             val column = LinearLayout(this)
@@ -294,7 +294,7 @@ class SellerDashboardActivity : AppCompatActivity() {
         button.setTextColor(Color.WHITE)
         button.textSize = 12f
         button.setTypeface(null, android.graphics.Typeface.BOLD)
-        button.setBackgroundColor(Color.parseColor("#111827"))
+        button.setBackgroundResource(R.drawable.bg_button_dark)
         button.setOnClickListener {
             val intent = Intent(this, SellerOrderShowActivity::class.java)
             intent.putExtra("register", item.order.register)

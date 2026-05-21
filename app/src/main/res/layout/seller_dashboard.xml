@@ -76,7 +76,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardSalesSummary"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="340dp"
                 android:layout_marginTop="44dp"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="20dp"
@@ -140,7 +140,7 @@
                         android:id="@+id/chartContainer"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_marginTop="22dp"
+                        android:layout_marginTop="18dp"
                         android:layout_weight="1"
                         android:gravity="bottom"
                         android:orientation="horizontal"
