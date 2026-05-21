@@ -3,14 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
+    android:background="@color/background_layout"
     android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#FFFFFF">
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/topBar"
+        android:background="#FFFFFF"
         android:layout_width="0dp"
         android:layout_height="64dp"
         android:gravity="center_vertical"
@@ -59,4 +60,14 @@
             android:orientation="vertical" android:padding="20dp"/>
 
     </ScrollView>
+
+    <include
+        android:id="@+id/includeHomeInferior"
+        layout="@layout/navbar_buyer_inferior"
+        android:layout_width="0dp"
+        android:layout_height="76dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
