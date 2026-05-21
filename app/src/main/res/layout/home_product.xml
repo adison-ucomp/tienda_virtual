@@ -43,14 +43,65 @@
             android:paddingBottom="24dp">
 
             <!-- Buscador -->
-            <include
-                android:id="@+id/includeHomeSearch"
-                layout="@layout/home_search" />
+            <LinearLayout
+                android:id="@+id/layoutSearch"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="18dp"
+                android:background="#F7F7F7">
+
+                <ImageView
+                    android:id="@+id/actionSearch"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_search" />
+
+                <EditText
+                    android:id="@+id/fieldSearch"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:background="@android:color/transparent"
+                    android:hint="Buscar..."
+                    android:singleLine="true"
+                    android:inputType="text"
+                    android:imeOptions="actionSearch"
+                    android:textColor="#111111"
+                    android:textColorHint="#BDBDBD"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/actionClean"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_marginStart="8dp"
+                    android:alpha="0.65"
+                    android:src="@drawable/ic_delete"
+                    android:visibility="gone" />
+
+            </LinearLayout>
 
             <!-- Categorías -->
-            <include
-                android:id="@+id/includeHomeCategory"
-                layout="@layout/home_filtering" />
+            <HorizontalScrollView
+                android:id="@+id/scrollHomeCategory"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_marginTop="30dp"
+                android:fillViewport="true"
+                android:overScrollMode="never"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/homeCategoryContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" />
+
+            </HorizontalScrollView>
 
             <!-- Sugerencias -->
             <LinearLayout

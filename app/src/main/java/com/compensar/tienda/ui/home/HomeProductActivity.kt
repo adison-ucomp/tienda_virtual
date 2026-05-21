@@ -6,11 +6,15 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.inputmethod.EditorInfo
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -31,13 +35,10 @@ class HomeProductActivity : AppCompatActivity() {
     private lateinit var productGrid: GridLayout
     private lateinit var btnPreviousProducts: TextView
     private lateinit var btnNextProducts: TextView
-
-    private lateinit var categoryOne: LinearLayout
-    private lateinit var categoryTwo: LinearLayout
-    private lateinit var iconCategoryOne: ImageView
-    private lateinit var iconCategoryTwo: ImageView
-    private lateinit var txtCategoryOne: TextView
-    private lateinit var txtCategoryTwo: TextView
+    private lateinit var fieldSearch: EditText
+    private lateinit var actionSearch: ImageView
+    private lateinit var actionClean: ImageView
+    private lateinit var homeCategoryContainer: LinearLayout
 
     private lateinit var actionHome: LinearLayout
     private lateinit var actionCategory: LinearLayout
@@ -46,6 +47,7 @@ class HomeProductActivity : AppCompatActivity() {
     private lateinit var actionAccount: LinearLayout
 
     private val products = mutableListOf<ProductModel>()
+    private val filteredProducts = mutableListOf<ProductModel>()
     private val categories = mutableListOf<CategoryModel>()
     private var page = 0
     private val pageSize = 10
@@ -84,13 +86,12 @@ class HomeProductActivity : AppCompatActivity() {
         productGrid = findViewById(R.id.productGrid)
         btnPreviousProducts = findViewById(R.id.btnPreviousProducts)
         btnNextProducts = findViewById(R.id.btnNextProducts)
+        fieldSearch = findViewById(R.id.fieldSearch)
+        actionSearch = findViewById(R.id.actionSearch)
+        actionClean = findViewById(R.id.actionClean)
+        homeCategoryContainer = findViewById(R.id.homeCategoryContainer)
 
-        categoryOne = findViewById(R.id.categoryOne)
-        categoryTwo = findViewById(R.id.categoryTwo)
-        iconCategoryOne = findViewById(R.id.iconCategoryOne)
-        iconCategoryTwo = findViewById(R.id.iconCategoryTwo)
-        txtCategoryOne = findViewById(R.id.txtCategoryOne)
-        txtCategoryTwo = findViewById(R.id.txtCategoryTwo)
+        actionSearch.alpha = 0.45f
 
         actionHome = findViewById(R.id.actionHome)
         actionCategory = findViewById(R.id.actionCategory)
@@ -107,6 +108,42 @@ class HomeProductActivity : AppCompatActivity() {
         txtViewAll.setOnClickListener {
             startActivity(Intent(this, HomeCategoryActivity::class.java))
         }
+
+        actionSearch.setOnClickListener {
+            searchProducts()
+        }
+
+        actionClean.setOnClickListener {
+            clearSearch()
+        }
+
+        fieldSearch.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                searchProducts()
+                true
+            } else {
+                false
+            }
+        }
+
+        fieldSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(text: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {
+                val hasText = !text.isNullOrBlank()
+                actionSearch.alpha = if (hasText) 1f else 0.45f
+                actionClean.visibility = if (hasText) View.VISIBLE else View.GONE
+
+                if (!hasText && filteredProducts.size != products.size) {
+                    filteredProducts.clear()
+                    filteredProducts.addAll(products)
+                    page = 0
+                    renderProducts()
+                }
+            }
+
+            override fun afterTextChanged(editable: Editable?) {}
+        })
 
         btnPreviousProducts.setOnClickListener {
             if (page > 0) {
@@ -156,31 +193,62 @@ class HomeProductActivity : AppCompatActivity() {
     }
 
     private fun renderHomeCategories() {
-        categoryOne.visibility = View.GONE
-        categoryTwo.visibility = View.GONE
+        homeCategoryContainer.removeAllViews()
 
-        categories.take(2).forEachIndexed { index, category ->
-            val view = if (index == 0) categoryOne else categoryTwo
-            val text = if (index == 0) txtCategoryOne else txtCategoryTwo
-            val image = if (index == 0) iconCategoryOne else iconCategoryTwo
+        if (categories.isEmpty()) {
+            return
+        }
 
-            text.text = (category.name ?: "Categoría").uppercase()
+        categories.forEachIndexed { index, category ->
+            homeCategoryContainer.addView(categoryCard(category, index))
+        }
+    }
 
-            if (!category.storefire.isNullOrBlank()) {
-                Glide.with(this)
-                    .load(category.storefire)
-                    .placeholder(R.mipmap.ic_launcher)
-                    .error(R.mipmap.ic_launcher)
-                    .into(image)
-            } else {
-                image.setImageResource(R.mipmap.ic_launcher)
+    private fun categoryCard(category: CategoryModel, index: Int): LinearLayout {
+        val card = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            gravity = Gravity.CENTER
+            layoutParams = LinearLayout.LayoutParams(dp(110), ViewGroup.LayoutParams.MATCH_PARENT).apply {
+                if (index > 0) {
+                    marginStart = dp(20)
+                }
             }
-
-            view.visibility = View.VISIBLE
-            view.setOnClickListener {
+            setOnClickListener {
                 openCategory(category)
             }
         }
+
+        val image = ImageView(this).apply {
+            layoutParams = LinearLayout.LayoutParams(dp(58), dp(58))
+            setBackgroundColor(0xFFFFFFFF.toInt())
+            contentDescription = "Imagen de categoría"
+            setPadding(dp(8), dp(8), dp(8), dp(8))
+            scaleType = ImageView.ScaleType.CENTER_INSIDE
+        }
+
+        if (!category.storefire.isNullOrBlank()) {
+            Glide.with(this)
+                .load(category.storefire)
+                .placeholder(R.mipmap.ic_launcher)
+                .error(R.mipmap.ic_launcher)
+                .into(image)
+        } else {
+            image.setImageResource(R.mipmap.ic_launcher)
+        }
+
+        val name = TextView(this).apply {
+            text = (category.name ?: "Categoría").uppercase()
+            setTextColor(0xFF111111.toInt())
+            textSize = 11f
+            setTypeface(null, Typeface.BOLD)
+            gravity = Gravity.CENTER
+            maxLines = 1
+            setPadding(0, dp(10), 0, 0)
+        }
+
+        card.addView(image)
+        card.addView(name)
+        return card
     }
 
     private fun openCategory(category: CategoryModel) {
@@ -202,6 +270,8 @@ class HomeProductActivity : AppCompatActivity() {
                         .mapNotNull { it.toObject(ProductModel::class.java) }
                         .sortedBy { it.register }
                 )
+                filteredProducts.clear()
+                filteredProducts.addAll(products)
                 page = 0
                 renderProducts()
             }
@@ -210,14 +280,48 @@ class HomeProductActivity : AppCompatActivity() {
             }
     }
 
+    private fun searchProducts() {
+        val query = fieldSearch.text.toString().trim()
+
+        if (query.isBlank()) {
+            Toast.makeText(this, "Debe escribir el nombre del producto para buscar", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        filteredProducts.clear()
+        filteredProducts.addAll(
+            products.filter { product ->
+                product.name.orEmpty().contains(query, ignoreCase = true)
+            }
+        )
+
+        page = 0
+        actionClean.visibility = View.VISIBLE
+        renderProducts()
+    }
+
+    private fun clearSearch() {
+        fieldSearch.setText("")
+        filteredProducts.clear()
+        filteredProducts.addAll(products)
+        page = 0
+        actionClean.visibility = View.GONE
+        actionSearch.alpha = 0.45f
+        renderProducts()
+    }
+
     private fun renderProducts() {
         productGrid.removeAllViews()
 
-        if (products.isEmpty()) {
+        if (filteredProducts.isEmpty()) {
             productGrid.rowCount = 1
             productGrid.addView(
                 TextView(this).apply {
-                    text = "No hay productos disponibles"
+                    text = if (fieldSearch.text.toString().trim().isBlank()) {
+                        "No hay productos disponibles"
+                    } else {
+                        "No se encontraron productos"
+                    }
                     textSize = 15f
                     gravity = Gravity.CENTER
                     setTextColor(0xFF747A8C.toInt())
@@ -229,8 +333,8 @@ class HomeProductActivity : AppCompatActivity() {
         }
 
         val start = page * pageSize
-        val end = minOf(start + pageSize, products.size)
-        val visibleProducts = products.subList(start, end)
+        val end = minOf(start + pageSize, filteredProducts.size)
+        val visibleProducts = filteredProducts.subList(start, end)
 
         productGrid.rowCount = ((visibleProducts.size + 1) / 2).coerceAtLeast(1)
         visibleProducts.forEach { product ->
@@ -241,9 +345,9 @@ class HomeProductActivity : AppCompatActivity() {
     }
 
     private fun updatePaginationButtons() {
-        val hasMoreThanOnePage = products.size > pageSize
+        val hasMoreThanOnePage = filteredProducts.size > pageSize
         val hasPrevious = page > 0
-        val hasNext = (page + 1) * pageSize < products.size
+        val hasNext = (page + 1) * pageSize < filteredProducts.size
 
         btnPreviousProducts.visibility = if (hasMoreThanOnePage) View.VISIBLE else View.GONE
         btnNextProducts.visibility = if (hasMoreThanOnePage) View.VISIBLE else View.GONE
