@@ -128,7 +128,8 @@ class DefaultFire {
             data = listOf(
                 ShipmentModel(register = 1, name = "Pendiente"),
                 ShipmentModel(register = 2, name = "Enviado"),
-                ShipmentModel(register = 3, name = "Entregado")
+                ShipmentModel(register = 3, name = "Entregado"),
+                ShipmentModel(register = 4, name = "Rechazado")
             ),
             getRegister = { it.register },
             onSuccess = onSuccess,
