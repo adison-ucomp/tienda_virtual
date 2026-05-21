@@ -634,12 +634,6 @@ class ReportDataSaleActivity : AppCompatActivity() {
         val logoY = pageHeight - 72f
         canvas.drawBitmap(logo, logoX, logoY, paint)
 
-        paint.style = Paint.Style.FILL
-        paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-        paint.textSize = 14f
-        paint.color = Color.BLACK
-        val footerText = "EMPTIO"
-        canvas.drawText(footerText, (pageWidth - paint.measureText(footerText)) / 2f, pageHeight - 24f, paint)
     }
 
     private fun truncatePdfText(value: String): String {
