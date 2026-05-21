@@ -1,59 +1,146 @@
 <resources>
+    <!-- APP -->
     <string name="app_name">EMPTIO</string>
     <string name="splash_welcome">¡Bienvenidos!</string>
 
-
-    <string name="text_splash_welcome">¡Bienvenidos!</string>
-    <string name="dash_admin_gestion_usu">Gestionar Usuarios</string>
-    <string name="dash_admin_sub_gestion_usu">Administra los usuarios del sistema</string>
-    <string name="dash_admin_gestion_tiendas">Gestionar Tiendas</string>
-    <string name="dash_admin_sub_gestion_tiendas">Controla las tiendas registradas</string>
-    <string name="dash_admin_gestion_rol">Gestionar Roles</string>
-    <string name="dash_admin_sub_gestion_rol">Administra permisos y roles</string>
-    <string name="dash_admin_reportes">Ver Reportes</string>
-    <string name="dash_admin_sub_reportes">Consulta estadísticas y ventas</string>
+    <!-- GENERAL -->
     <string name="home">Inicio</string>
     <string name="profile">Perfil</string>
-    <string name="dash_admin_new_user">Nuevo Usuario</string>
-    <string name="dash_admin_create_new_user">Crear nuevo usuario</string>
-    <string name="rol">Rol</string>
-    <string name="enter_rol">Ingrese el rol</string>
-    <string name="name">Nombre</string>
-    <string name="enter_name">Ingrese el nombre</string>
-    <string name="surname">Apellido</string>
-    <string name="enter_surname">Ingrese el apellido</string>
-    <string name="email">Correo</string>
-    <string name="enter_email">Ingrese el correo</string>
-    <string name="password">Contraseña</string>
-    <string name="enter_password">Ingrese la contraseña</string>
-    <string name="dash_admin_create_user">Crear Usuario</string>
-    <string name="change_photo">Cambiar foto</string>
-    <string name="personal_info">Información Personal</string>
-    <string name="full_name">Nombre Completo</string>
-    <string name="save_changes">Guardar Cambios</string>
-    <string name="edit_user">Editar Usuario</string>
-    <string name="update_user_info">Actualiza la información del usuario</string>
     <string name="search">Buscar...</string>
-    <string name="neww">"Nuevo "</string>
-    <string name="edit_profile">Editar Perfil</string>
-    <string name="categories">Categorías</string>
+    <string name="neww">Nuevo</string>
     <string name="settings">Configuración</string>
     <string name="support">Soporte</string>
     <string name="logout">Cerrar Sesión</string>
+    <string name="download">Descargar</string>
+    <string name="export">Exportar</string>
+    <string name="pdf">PDF</string>
+    <string name="excel">Excel</string>
+    <string name="all">Todos</string>
+
+    <!-- FORMULARIOS -->
+    <string name="name">Nombre</string>
+    <string name="surname">Apellido</string>
+    <string name="full_name">Nombre Completo</string>
+    <string name="email">Correo</string>
+    <string name="password">Contraseña</string>
+    <string name="rol">Rol</string>
+    <string name="nit">NIT</string>
+    <string name="company">Empresa</string>
+    <string name="address">Dirección</string>
+
+    <!-- HINTS -->
+    <string name="enter_name">Ingrese el nombre</string>
+    <string name="enter_surname">Ingrese el apellido</string>
+    <string name="enter_email">Ingrese el correo</string>
+    <string name="enter_password">Ingrese la contraseña</string>
+    <string name="enter_rol">Ingrese el rol</string>
+    <string name="enter_nit">Ingrese el NIT</string>
+    <string name="enter_address">Ingrese la dirección</string>
+    <string name="enter_company">Ingrese la empresa</string>
+
+    <!-- PERFIL -->
+    <string name="edit_profile">Editar Perfil</string>
+    <string name="change_photo">Cambiar foto</string>
+    <string name="personal_info">Información Personal</string>
+    <string name="save_changes">Guardar Cambios</string>
+
+    <!-- ADMIN DASHBOARD -->
+    <string name="dash_admin_gestion_usu">Gestionar Usuarios</string>
+    <string name="dash_admin_sub_gestion_usu">Administra los usuarios del sistema</string>
+
+    <string name="dash_admin_gestion_tiendas">Gestionar Tiendas</string>
+    <string name="dash_admin_sub_gestion_tiendas">Controla las tiendas registradas</string>
+
+    <string name="dash_admin_gestion_rol">Gestionar Roles</string>
+    <string name="dash_admin_sub_gestion_rol">Administra permisos y roles</string>
+
+    <string name="dash_admin_reportes">Ver Reportes</string>
+    <string name="dash_admin_sub_reportes">Consulta estadísticas y ventas</string>
+
+    <!-- ADMIN USUARIOS -->
+    <string name="dash_admin_new_user">Nuevo Usuario</string>
+    <string name="dash_admin_create_new_user">Crear nuevo usuario</string>
+    <string name="dash_admin_create_user">Crear Usuario</string>
+
+    <string name="edit_user">Editar Usuario</string>
+    <string name="update_user_info">Actualiza la información del usuario</string>
+
+    <!-- ADMIN TIENDAS -->
     <string name="dash_admin_edit_shop">Editar Tienda</string>
     <string name="dash_admin_edit_info">Actualiza la información de las tiendas</string>
-    <string name="dash_admin_nit">NIT</string>
-    <string name="dash_admin_company">Empresa</string>
-    <string name="dash_admin_adress">Dirección</string>
+
+    <!-- REPORTES -->
+    <string name="general_activity">Actividad General</string>
+    <string name="export_reports">Exportar Reportes</string>
     <string name="users">Usuarios</string>
     <string name="shops">Tiendas</string>
-    <string name="general_activity">Actividad General</string>
+    <string name="categories">Categorías</string>
+
+    <!-- SELLER -->
+    <string name="seller">Vendedor</string>
+    <string name="shop">Tienda</string>
+    <string name="update_info_seller">Actualiza la información de tu tienda</string>
+
+    <!-- DASHBOARD SELLER -->
+    <string name="resume_v">Resumen de Ventas</string>
+    <string name="inventory">Inventario</string>
+    <string name="available_products">Productos disponibles</string>
+
+    <!-- PEDIDOS -->
+    <string name="orders">Pedidos</string>
+    <string name="pending_orders">Pedidos Pendientes</string>
+    <string name="pending_order">Pedido pendiente</string>
+    <string name="orders_manag">Gestiona los pedidos recibidos</string>
+
+    <string name="total">TOTAL</string>
+    <string name="pending">Pendiente</string>
+
+    <string name="see_details">Ver detalles</string>
+    <string name="prepare">Preparar</string>
+    <string name="decline">Rechazar</string>
+    <string name="acept">Aceptar</string>
+
+    <string name="address_e">Dirección de envío</string>
+    <string name="pay_method">Método de pago</string>
+
+    <!-- PRODUCTOS -->
+    <string name="products">Productos</string>
+    <string name="my_products">Mis Productos</string>
+
+    <string name="new_product">Nuevo Producto</string>
+    <string name="add_product">Agrega un producto a tu tienda</string>
+
+    <string name="edit_product">Editar Producto</string>
+    <string name="edit_info_product">Modifica la información del producto</string>
+
+    <string name="upload_image">Subir Imagen</string>
+
+    <string name="category">Categoría</string>
+    <string name="technology">Tecnología</string>
+    <string name="sport">Deporte</string>
+
+    <string name="name_product">Nombre producto</string>
+
+    <string name="price">Precio</string>
+    <string name="price_0">$0</string>
+
+    <string name="stock">Stock</string>
+    <string name="zero">0</string>
+
+    <string name="description">Descripción</string>
+    <string name="product_description">Describe el producto...</string>
+
+    <string name="save_product">Guardar Producto</string>
+
+
+
+
+
     <string name="report_data_sale">Reporte de Ventas</string>
-    <string name="export_reports">Exportar Reportes</string>
-    <string name="pdf">PDF</string>
-    <string name="download">Descargar</string>
-    <string name="excel">Excel</string>
-    <string name="export">Exportar</string>
+
+
+
+
 
     <string name="filter_sellers">Vendedores</string>
     <string name="filter_shops">Tiendas</string>
@@ -65,6 +152,10 @@
     <string name="sales_report_result">Resultado del Reporte</string>
     <string name="sold_products">Productos Vendidos</string>
     <string name="total">Total</string>
+
+
+
+
 
     <!-- Modelo Direcciones -->
     <string name="register_edit">Actualiza la información del registro</string>

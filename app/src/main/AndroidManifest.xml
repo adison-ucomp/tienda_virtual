@@ -20,6 +20,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TiendaVirtual">
         <activity
+            android:name=".ui.seller.SellerOrderShowActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.seller.SellerOrderListActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.report.ReportDataSaleActivity"
             android:exported="false" />
         <activity
