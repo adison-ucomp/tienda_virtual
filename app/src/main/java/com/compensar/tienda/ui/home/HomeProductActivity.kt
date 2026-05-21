@@ -153,7 +153,7 @@ class HomeProductActivity : AppCompatActivity() {
         }
 
         btnNextProducts.setOnClickListener {
-            if ((page + 1) * pageSize < products.size) {
+            if ((page + 1) * pageSize < filteredProducts.size) {
                 page++
                 renderProducts()
             }
@@ -374,8 +374,8 @@ class HomeProductActivity : AppCompatActivity() {
             layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(170))
             setBackgroundColor(0xFFF7F7F7.toInt())
             contentDescription = "Imagen del producto"
-            setPadding(dp(18), dp(18), dp(18), dp(18))
-            scaleType = ImageView.ScaleType.CENTER_INSIDE
+            setPadding(dp(6), dp(6), dp(6), dp(6))
+            scaleType = ImageView.ScaleType.FIT_CENTER
         }
 
         if (!product.storefire.isNullOrBlank()) {

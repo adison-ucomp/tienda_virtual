@@ -5,6 +5,7 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.view.Gravity
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -12,6 +13,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.bumptech.glide.Glide
 import com.compensar.tienda.R
 import com.compensar.tienda.model.CategoryModel
 import com.compensar.tienda.ui.buyer.BuyerAddressActivity
@@ -112,13 +114,22 @@ class HomeCategoryActivity : AppCompatActivity() {
             orientation = LinearLayout.HORIZONTAL
             setPadding(dp(24), 0, dp(24), 0)
 
-            val icon = TextView(this@HomeCategoryActivity).apply {
+            val icon = ImageView(this@HomeCategoryActivity).apply {
                 layoutParams = LinearLayout.LayoutParams(dp(58), dp(58))
                 setBackgroundColor(0xFFFFFFFF.toInt())
-                gravity = Gravity.CENTER
-                text = "▣"
-                setTextColor(0xFF151A1D.toInt())
-                textSize = 24f
+                contentDescription = category.name ?: "Categoría"
+                scaleType = ImageView.ScaleType.CENTER_CROP
+                setPadding(dp(8), dp(8), dp(8), dp(8))
+
+                if (category.storefire.isNullOrBlank()) {
+                    setImageResource(R.drawable.ic_category)
+                } else {
+                    Glide.with(this@HomeCategoryActivity)
+                        .load(category.storefire)
+                        .placeholder(R.drawable.ic_category)
+                        .error(R.drawable.ic_category)
+                        .into(this)
+                }
             }
 
             val texts = LinearLayout(this@HomeCategoryActivity).apply {
