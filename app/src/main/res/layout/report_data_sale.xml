@@ -171,17 +171,39 @@
 
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/actionSearch"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="52dp"
-                        android:layout_marginTop="22dp"
-                        android:background="@drawable/bg_edittext"
-                        android:gravity="center"
-                        android:text="@string/search_data"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black" />
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="22dp">
+
+                        <TextView
+                            android:id="@+id/actionSearch"
+                            android:layout_width="0dp"
+                            android:layout_height="52dp"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/bg_edittext"
+                            android:gravity="center"
+                            android:text="@string/search_data"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:id="@+id/actionClean"
+                            android:layout_width="0dp"
+                            android:layout_height="52dp"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            android:background="@drawable/bg_edittext"
+                            android:gravity="center"
+                            android:text="@string/clean_data"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 

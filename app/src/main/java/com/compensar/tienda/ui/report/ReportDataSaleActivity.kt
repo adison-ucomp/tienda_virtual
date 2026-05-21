@@ -1,6 +1,10 @@
 package com.compensar.tienda.ui.report
 
 import android.content.ContentValues
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.pdf.PdfDocument
@@ -42,6 +46,7 @@ class ReportDataSaleActivity : AppCompatActivity() {
     private lateinit var inputDateFrom: EditText
     private lateinit var inputDateTo: EditText
     private lateinit var actionSearch: TextView
+    private lateinit var actionClean: TextView
     private lateinit var cardResult: CardView
     private lateinit var dataResult: LinearLayout
     private lateinit var textTotalProducts: TextView
@@ -80,6 +85,7 @@ class ReportDataSaleActivity : AppCompatActivity() {
         inputDateFrom = findViewById(R.id.inputDateFrom)
         inputDateTo = findViewById(R.id.inputDateTo)
         actionSearch = findViewById(R.id.actionSearch)
+        actionClean = findViewById(R.id.actionClean)
         cardResult = findViewById(R.id.cardResult)
         dataResult = findViewById(R.id.dataResult)
         textTotalProducts = findViewById(R.id.textTotalProducts)
@@ -131,6 +137,10 @@ class ReportDataSaleActivity : AppCompatActivity() {
 
         actionSearch.setOnClickListener {
             generateReport()
+        }
+
+        actionClean.setOnClickListener {
+            cleanReport()
         }
 
         cardPdf.setOnClickListener {
@@ -374,6 +384,27 @@ class ReportDataSaleActivity : AppCompatActivity() {
         }
     }
 
+    private fun cleanReport() {
+        inputDateFrom.text.clear()
+        inputDateTo.text.clear()
+        reportRows = emptyList()
+        totalProducts = 0
+        totalMoney = 0.0
+        dataResult.removeAllViews()
+        cardResult.visibility = View.GONE
+        setExportEnabled(false)
+
+        if (!isSellerSession && sellerOptions.isNotEmpty()) {
+            spinnerSeller.setSelection(0)
+        }
+
+        if (shopOptions.isNotEmpty()) {
+            spinnerShop.setSelection(0)
+        }
+
+        Toast.makeText(this, "Filtros limpiados", Toast.LENGTH_SHORT).show()
+    }
+
     private fun renderReport() {
         dataResult.removeAllViews()
         cardResult.visibility = View.VISIBLE
@@ -453,42 +484,79 @@ class ReportDataSaleActivity : AppCompatActivity() {
 
     private fun exportPdf() {
         val document = PdfDocument()
-        val pageInfo = PdfDocument.PageInfo.Builder(595, 842, 1).create()
+        val pageWidth = 595
+        val pageHeight = 842
+        val pageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, 1).create()
         val page = document.startPage(pageInfo)
         val canvas = page.canvas
         val paint = Paint().apply {
-            textSize = 14f
-            color = android.graphics.Color.BLACK
+            isAntiAlias = true
+            textSize = 12f
+            color = Color.BLACK
         }
 
-        var y = 40f
-        paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-        canvas.drawText("Reporte de Ventas", 40f, y, paint)
+        val logo = BitmapFactory.decodeResource(resources, R.drawable.logo_app)
+        val headerLogo = Bitmap.createScaledBitmap(logo, dp(42), dp(42), true)
+        val footerLogo = Bitmap.createScaledBitmap(logo, dp(28), dp(28), true)
+        val margin = 40f
+        var y = 46f
 
-        y += 32f
-        paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+        paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+        paint.textSize = 22f
+        canvas.drawText("EMPTIO", margin, y, paint)
+        canvas.drawBitmap(headerLogo, pageWidth - margin - headerLogo.width, 20f, paint)
+
+        y = 105f
+        paint.textSize = 18f
+        val title = "Reporte de Ventas"
+        canvas.drawText(title, (pageWidth - paint.measureText(title)) / 2f, y, paint)
+
+        y += 34f
+        val headers = if (isSellerSession) {
+            listOf("Tienda", "Productos Vendidos", "Total")
+        } else {
+            listOf("Vendedor", "Tienda", "Productos Vendidos", "Total")
+        }
+        val widths = if (isSellerSession) {
+            listOf(220f, 150f, 145f)
+        } else {
+            listOf(135f, 135f, 145f, 100f)
+        }
+
+        y = drawPdfTableRow(canvas, paint, margin, y, widths, headers, true)
 
         reportRows.forEach { row ->
-            val text = if (isSellerSession) {
-                "${row.shopName} | ${row.products} | ${moneyFormat.format(row.total)}"
+            if (y > 700f) {
+                return@forEach
+            }
+
+            val values = if (isSellerSession) {
+                listOf(
+                    row.shopName,
+                    row.products.toString(),
+                    moneyFormat.format(row.total)
+                )
             } else {
-                "${row.sellerName} | ${row.shopName} | ${row.products} | ${moneyFormat.format(row.total)}"
+                listOf(
+                    row.sellerName,
+                    row.shopName,
+                    row.products.toString(),
+                    moneyFormat.format(row.total)
+                )
             }
 
-            canvas.drawText(text.take(90), 40f, y, paint)
-            y += 22f
-
-            if (y > 790f) {
-                y = 790f
-            }
+            y = drawPdfTableRow(canvas, paint, margin, y, widths, values, false)
         }
 
-        y += 28f
+        y += 24f
+        paint.style = Paint.Style.FILL
         paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-        canvas.drawText("Productos Vendidos: $totalProducts", 40f, y, paint)
+        paint.textSize = 13f
+        canvas.drawText("Productos Vendidos: $totalProducts", margin, y, paint)
         y += 22f
-        canvas.drawText("Total: ${moneyFormat.format(totalMoney)}", 40f, y, paint)
+        canvas.drawText("Total: ${moneyFormat.format(totalMoney)}", margin, y, paint)
 
+        drawPdfFooter(canvas, paint, pageWidth, pageHeight, footerLogo)
         document.finishPage(page)
 
         try {
@@ -513,6 +581,72 @@ class ReportDataSaleActivity : AppCompatActivity() {
             Toast.makeText(this, "No fue posible generar el PDF", Toast.LENGTH_SHORT).show()
         } finally {
             document.close()
+            headerLogo.recycle()
+            footerLogo.recycle()
+        }
+    }
+
+    private fun drawPdfTableRow(
+        canvas: Canvas,
+        paint: Paint,
+        xStart: Float,
+        yStart: Float,
+        widths: List<Float>,
+        values: List<String>,
+        isHeader: Boolean
+    ): Float {
+        val rowHeight = 30f
+        var x = xStart
+
+        paint.style = Paint.Style.STROKE
+        paint.strokeWidth = 1f
+        paint.color = Color.BLACK
+
+        values.forEachIndexed { index, value ->
+            val width = widths[index]
+            canvas.drawRect(x, yStart, x + width, yStart + rowHeight, paint)
+
+            paint.style = Paint.Style.FILL
+            paint.typeface = Typeface.create(
+                Typeface.DEFAULT,
+                if (isHeader) Typeface.BOLD else Typeface.NORMAL
+            )
+            paint.textSize = if (isHeader) 10.5f else 10f
+            paint.color = Color.BLACK
+            canvas.drawText(truncatePdfText(value), x + 6f, yStart + 20f, paint)
+
+            paint.style = Paint.Style.STROKE
+            x += width
+        }
+
+        paint.style = Paint.Style.FILL
+        return yStart + rowHeight
+    }
+
+    private fun drawPdfFooter(
+        canvas: Canvas,
+        paint: Paint,
+        pageWidth: Int,
+        pageHeight: Int,
+        logo: Bitmap
+    ) {
+        val logoX = (pageWidth - logo.width) / 2f
+        val logoY = pageHeight - 72f
+        canvas.drawBitmap(logo, logoX, logoY, paint)
+
+        paint.style = Paint.Style.FILL
+        paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+        paint.textSize = 14f
+        paint.color = Color.BLACK
+        val footerText = "EMPTIO"
+        canvas.drawText(footerText, (pageWidth - paint.measureText(footerText)) / 2f, pageHeight - 24f, paint)
+    }
+
+    private fun truncatePdfText(value: String): String {
+        return if (value.length > 20) {
+            value.take(17) + "..."
+        } else {
+            value
         }
     }
 

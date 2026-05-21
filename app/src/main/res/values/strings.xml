@@ -60,6 +60,7 @@
     <string name="date_from">Fecha Desde</string>
     <string name="date_to">Fecha Hasta</string>
     <string name="search_data">Buscar Datos</string>
+    <string name="clean_data">Limpiar</string>
     <string name="all">Todos</string>
     <string name="sales_report_result">Resultado del Reporte</string>
     <string name="sold_products">Productos Vendidos</string>
