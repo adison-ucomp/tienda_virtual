@@ -5,7 +5,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlin.math.max
 
-object CartReservationManager {
+object ReserveManager {
     private val db = FirebaseFirestore.getInstance()
 
     private fun reservationId(userRegister: Long, productRegister: Long): String = "${userRegister}_${productRegister}"

@@ -1,4 +1,4 @@
-package com.compensar.tienda.ui.seller
+package com.compensar.tienda.ui.common
 
 import android.content.Context
 import com.compensar.tienda.model.OrderModel
@@ -8,7 +8,6 @@ import com.compensar.tienda.model.SellerModel
 import com.compensar.tienda.model.ShipmentModel
 import com.compensar.tienda.model.ShopModel
 import com.compensar.tienda.model.UserModel
-import com.compensar.tienda.ui.common.SessionManager
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.NumberFormat
 import java.util.Calendar
@@ -55,24 +54,28 @@ object SellerDataHelper {
 
                         db.collection("product").get()
                             .addOnSuccessListener { productSnapshot ->
-                                val allProducts = productSnapshot.documents.mapNotNull { it.toObject(ProductModel::class.java) }
+                                val allProducts = productSnapshot.documents.mapNotNull { it.toObject(
+                                    ProductModel::class.java) }
                                 val sellerProducts = allProducts.filter { it.idShop in shopRegisters }
                                 val productRegisters = sellerProducts.map { it.register }.toSet()
 
                                 db.collection("purchase").get()
                                     .addOnSuccessListener { purchaseSnapshot ->
-                                        val allPurchases = purchaseSnapshot.documents.mapNotNull { it.toObject(PurchaseModel::class.java) }
+                                        val allPurchases = purchaseSnapshot.documents.mapNotNull { it.toObject(
+                                            PurchaseModel::class.java) }
                                         val sellerPurchases = allPurchases.filter { it.idProduct in productRegisters }
 
                                         db.collection("order").get()
                                             .addOnSuccessListener { orderSnapshot ->
-                                                val allOrders = orderSnapshot.documents.mapNotNull { it.toObject(OrderModel::class.java) }
+                                                val allOrders = orderSnapshot.documents.mapNotNull { it.toObject(
+                                                    OrderModel::class.java) }
                                                 val orderRegisters = sellerPurchases.map { it.idOrder }.toSet()
                                                 val sellerOrders = allOrders.filter { it.register in orderRegisters }
 
                                                 db.collection("user").get()
                                                     .addOnSuccessListener { userSnapshot ->
-                                                        val allUsers = userSnapshot.documents.mapNotNull { it.toObject(UserModel::class.java) }
+                                                        val allUsers = userSnapshot.documents.mapNotNull { it.toObject(
+                                                            UserModel::class.java) }
 
                                                         db.collection("shipment").get()
                                                             .addOnSuccessListener { shipmentSnapshot ->

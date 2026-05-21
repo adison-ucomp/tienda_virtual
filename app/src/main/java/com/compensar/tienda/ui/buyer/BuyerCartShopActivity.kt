@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide
 import com.compensar.tienda.R
 import com.compensar.tienda.ui.common.CartItem
 import com.compensar.tienda.ui.common.CartManager
-import com.compensar.tienda.ui.common.CartReservationManager
+import com.compensar.tienda.ui.common.ReserveManager
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 
@@ -141,7 +141,7 @@ class BuyerCartShopActivity : AppCompatActivity() {
     }
 
     private fun updateQuantity(item: CartItem, quantity: Int) {
-        CartReservationManager.reserveQuantity(this, item, quantity, onSuccess = {
+        ReserveManager.reserveQuantity(this, item, quantity, onSuccess = {
             render()
         }, onError = { message ->
             Toast.makeText(this, message, Toast.LENGTH_LONG).show()
