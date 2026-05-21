@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
 import com.compensar.tienda.model.ModuleModel
+import com.compensar.tienda.ui.admin.AdminReportDataActivity
 import com.compensar.tienda.ui.admin.AdminShopListActivity
 import com.compensar.tienda.ui.admin.AdminUserListActivity
 import com.compensar.tienda.ui.common.SessionNavigation
@@ -50,6 +51,7 @@ class DashboardAdminActivity : AppCompatActivity() {
     private lateinit var cardSpecify: CardView
     private lateinit var cardUbication: CardView
     private lateinit var cardUser: CardView
+    private lateinit var cardReport: CardView
 
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("module")
@@ -91,6 +93,7 @@ class DashboardAdminActivity : AppCompatActivity() {
         cardSpecify = findViewById(R.id.cardSpecify)
         cardUbication = findViewById(R.id.cardUbication)
         cardUser = findViewById(R.id.cardUser)
+        cardReport = findViewById(R.id.cardReport)
 
         moduleViews["module"] = ModuleDashboardItem(cardModule, findViewById(R.id.titleModule), findViewById(R.id.detailModule), "Modulos")
         moduleViews["address"] = ModuleDashboardItem(cardAddress, findViewById(R.id.titleAddress), findViewById(R.id.detailAddress), "Direcciones")
@@ -198,6 +201,11 @@ class DashboardAdminActivity : AppCompatActivity() {
 
         cardUser.setOnClickListener {
             val intent = Intent(this, UserSelectActivity::class.java)
+            startActivity(intent)
+        }
+
+        cardReport.setOnClickListener {
+            val intent = Intent(this, AdminReportDataActivity::class.java)
             startActivity(intent)
         }
     }

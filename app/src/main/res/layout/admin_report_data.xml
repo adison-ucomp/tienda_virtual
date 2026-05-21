@@ -181,14 +181,17 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/general_activity"
+                    android:text="@string/report_data_sale"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="@color/black"/>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/cardReportSale"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:layout_marginTop="20dp"
                     app:cardCornerRadius="20dp"
                     app:cardElevation="0dp"

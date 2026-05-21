@@ -23,7 +23,7 @@
 
     <!-- Contenido principal -->
     <ScrollView
-        android:id="@+id/scrollShopUpdate"
+        android:id="@+id/scrollReportDataSale"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
@@ -39,6 +39,219 @@
             android:orientation="vertical"
             android:padding="16dp">
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardFilter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/report_data_sale"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black" />
+
+                    <LinearLayout
+                        android:id="@+id/containerSeller"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="18dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/filter_sellers"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black" />
+
+                        <Spinner
+                            android:id="@+id/spinnerSeller"
+                            android:layout_width="match_parent"
+                            android:layout_height="52dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@drawable/bg_edittext"
+                            android:paddingStart="12dp"
+                            android:paddingEnd="12dp" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/filter_shops"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="18dp" />
+
+                    <Spinner
+                        android:id="@+id/spinnerShop"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_edittext"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="18dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="8dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/date_from"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/black" />
+
+                            <EditText
+                                android:id="@+id/inputDateFrom"
+                                android:layout_width="match_parent"
+                                android:layout_height="52dp"
+                                android:layout_marginTop="8dp"
+                                android:background="@drawable/bg_edittext"
+                                android:hint="AAAA-MM-DD"
+                                android:inputType="date"
+                                android:paddingStart="14dp"
+                                android:paddingEnd="14dp"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/date_to"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/black" />
+
+                            <EditText
+                                android:id="@+id/inputDateTo"
+                                android:layout_width="match_parent"
+                                android:layout_height="52dp"
+                                android:layout_marginTop="8dp"
+                                android:background="@drawable/bg_edittext"
+                                android:hint="AAAA-MM-DD"
+                                android:inputType="date"
+                                android:paddingStart="14dp"
+                                android:paddingEnd="14dp"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/actionSearch"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="22dp"
+                        android:background="@drawable/bg_edittext"
+                        android:gravity="center"
+                        android:text="@string/search_data"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardResult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:visibility="gone"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sales_report_result"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black" />
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp">
+
+                        <LinearLayout
+                            android:id="@+id/dataResult"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical" />
+
+                    </HorizontalScrollView>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@color/background_layout" />
+
+                    <TextView
+                        android:id="@+id/textTotalProducts"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="16dp" />
+
+                    <TextView
+                        android:id="@+id/textTotalMoney"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="8dp" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -46,7 +259,7 @@
                 android:textSize="22sp"
                 android:textStyle="bold"
                 android:textColor="@color/black"
-                android:layout_marginTop="24dp"/>
+                android:layout_marginTop="24dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -56,10 +269,14 @@
                 android:layout_marginBottom="30dp">
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/cardPdf"
                     android:layout_width="0dp"
                     android:layout_height="190dp"
                     android:layout_weight="1"
                     android:layout_marginEnd="8dp"
+                    android:alpha="0.45"
+                    android:clickable="true"
+                    android:focusable="true"
                     app:cardCornerRadius="24dp"
                     app:cardElevation="0dp"
                     app:cardBackgroundColor="@color/white">
@@ -74,7 +291,7 @@
                         <ImageView
                             android:layout_width="70dp"
                             android:layout_height="70dp"
-                            android:src="@drawable/ic_pdf"/>
+                            android:src="@drawable/ic_pdf" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -83,7 +300,7 @@
                             android:textSize="22sp"
                             android:textStyle="bold"
                             android:textColor="@color/black"
-                            android:layout_marginTop="16dp"/>
+                            android:layout_marginTop="16dp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -91,17 +308,21 @@
                             android:text="@string/download"
                             android:textColor="@color/subtitle"
                             android:textSize="13sp"
-                            android:layout_marginTop="6dp"/>
+                            android:layout_marginTop="6dp" />
 
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/cardExcel"
                     android:layout_width="0dp"
                     android:layout_height="190dp"
                     android:layout_weight="1"
                     android:layout_marginStart="8dp"
+                    android:alpha="0.45"
+                    android:clickable="true"
+                    android:focusable="true"
                     app:cardCornerRadius="24dp"
                     app:cardElevation="0dp"
                     app:cardBackgroundColor="@color/white">
@@ -116,7 +337,7 @@
                         <ImageView
                             android:layout_width="70dp"
                             android:layout_height="70dp"
-                            android:src="@drawable/ic_excel"/>
+                            android:src="@drawable/ic_excel" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -125,7 +346,7 @@
                             android:textSize="22sp"
                             android:textStyle="bold"
                             android:textColor="@color/black"
-                            android:layout_marginTop="16dp"/>
+                            android:layout_marginTop="16dp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -133,7 +354,7 @@
                             android:text="@string/export"
                             android:textColor="@color/subtitle"
                             android:textSize="13sp"
-                            android:layout_marginTop="6dp"/>
+                            android:layout_marginTop="6dp" />
 
                     </LinearLayout>
 

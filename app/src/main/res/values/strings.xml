@@ -48,12 +48,22 @@
     <string name="users">Usuarios</string>
     <string name="shops">Tiendas</string>
     <string name="general_activity">Actividad General</string>
+    <string name="report_data_sale">Reporte de Ventas</string>
     <string name="export_reports">Exportar Reportes</string>
     <string name="pdf">PDF</string>
     <string name="download">Descargar</string>
     <string name="excel">Excel</string>
     <string name="export">Exportar</string>
 
+    <string name="filter_sellers">Vendedores</string>
+    <string name="filter_shops">Tiendas</string>
+    <string name="date_from">Fecha Desde</string>
+    <string name="date_to">Fecha Hasta</string>
+    <string name="search_data">Buscar Datos</string>
+    <string name="all">Todos</string>
+    <string name="sales_report_result">Resultado del Reporte</string>
+    <string name="sold_products">Productos Vendidos</string>
+    <string name="total">Total</string>
 
     <!-- Modelo Direcciones -->
     <string name="register_edit">Actualiza la información del registro</string>
