@@ -13,6 +13,7 @@ import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
 import com.compensar.tienda.ui.model.common.ImagePreviewHelper
 import com.compensar.tienda.ui.common.SessionNavigation
+import com.compensar.tienda.ui.model.common.SelectSearchHelper
 import com.google.firebase.firestore.FirebaseFirestore
 import com.compensar.tienda.model.ShopModel
 
@@ -23,6 +24,7 @@ class ShopSelectActivity : AppCompatActivity() {
 
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("shop")
+    private var searchQuery: String = ""
 
     private var sellerMap: Map<Long, String> = emptyMap()
 
@@ -42,6 +44,18 @@ class ShopSelectActivity : AppCompatActivity() {
             val intent = Intent(this, ShopCreateActivity::class.java)
             startActivity(intent)
         }
+
+        SelectSearchHelper.bind(
+            this,
+            onSearch = { query ->
+                searchQuery = query
+                loadDataBase()
+            },
+            onClean = {
+                searchQuery = ""
+                loadDataBase()
+            }
+        )
 
         loadDataBase()
     }
@@ -87,7 +101,7 @@ class ShopSelectActivity : AppCompatActivity() {
 
                 val items = result.documents.mapNotNull { document ->
                     document.toObject(ShopModel::class.java)
-                }.sortedBy { it.register }
+                }.filter { SelectSearchHelper.matches(it, searchQuery) }.sortedBy { it.register }
 
                 items.forEach { data ->
                     dataList.addView(loadCard(data))

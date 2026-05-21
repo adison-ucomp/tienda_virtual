@@ -13,6 +13,7 @@ import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
 import com.compensar.tienda.model.AddressModel
 import com.compensar.tienda.ui.common.SessionNavigation
+import com.compensar.tienda.ui.model.common.SelectSearchHelper
 import com.google.firebase.firestore.FirebaseFirestore
 
 class AddressSelectActivity : AppCompatActivity() {
@@ -22,6 +23,7 @@ class AddressSelectActivity : AppCompatActivity() {
 
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("address")
+    private var searchQuery: String = ""
 
     private var userMap: Map<Long, String> = emptyMap()
     private var ubicationMap: Map<Long, String> = emptyMap()
@@ -37,6 +39,18 @@ class AddressSelectActivity : AppCompatActivity() {
 
         actionReturn.setOnClickListener { finish() }
         actionNew.setOnClickListener { startActivity(Intent(this, AddressCreateActivity::class.java)) }
+
+        SelectSearchHelper.bind(
+            this,
+            onSearch = { query ->
+                searchQuery = query
+                loadDataBase()
+            },
+            onClean = {
+                searchQuery = ""
+                loadDataBase()
+            }
+        )
         loadDataBase()
     }
 
@@ -74,6 +88,7 @@ class AddressSelectActivity : AppCompatActivity() {
         collection.get().addOnSuccessListener { result ->
             dataList.removeAllViews()
             result.documents.mapNotNull { it.toObject(AddressModel::class.java) }
+                .filter { SelectSearchHelper.matches(it, searchQuery) }
                 .sortedBy { it.register }
                 .forEach { dataList.addView(loadCard(it)) }
         }

@@ -13,6 +13,7 @@ import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
 import com.compensar.tienda.model.ShipmentModel
 import com.compensar.tienda.ui.common.SessionNavigation
+import com.compensar.tienda.ui.model.common.SelectSearchHelper
 import com.google.firebase.firestore.FirebaseFirestore
 
 class ShipmentSelectActivity : AppCompatActivity() {
@@ -22,6 +23,7 @@ class ShipmentSelectActivity : AppCompatActivity() {
 
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("shipment")
+    private var searchQuery: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +36,18 @@ class ShipmentSelectActivity : AppCompatActivity() {
 
         actionReturn.setOnClickListener { finish() }
         actionNew.setOnClickListener { startActivity(Intent(this, ShipmentCreateActivity::class.java)) }
+
+        SelectSearchHelper.bind(
+            this,
+            onSearch = { query ->
+                searchQuery = query
+                loadDataBase()
+            },
+            onClean = {
+                searchQuery = ""
+                loadDataBase()
+            }
+        )
 
         loadDataBase()
     }
@@ -49,6 +63,7 @@ class ShipmentSelectActivity : AppCompatActivity() {
                 dataList.removeAllViews()
                 val items = result.documents
                     .mapNotNull { document -> document.toObject(ShipmentModel::class.java) }
+                    .filter { SelectSearchHelper.matches(it, searchQuery) }
                     .sortedBy { it.register }
 
                 items.forEach { data ->

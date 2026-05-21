@@ -107,7 +107,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="InformaciÃ³n del Registro"
+                        android:text="Información del Registro"
                         android:textColor="@color/black"
                         android:textSize="20sp"
                         android:textStyle="bold"

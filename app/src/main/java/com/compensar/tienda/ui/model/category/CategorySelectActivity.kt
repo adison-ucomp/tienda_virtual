@@ -13,6 +13,7 @@ import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
 import com.compensar.tienda.ui.model.common.ImagePreviewHelper
 import com.compensar.tienda.ui.common.SessionNavigation
+import com.compensar.tienda.ui.model.common.SelectSearchHelper
 import com.compensar.tienda.model.CategoryModel
 import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
 import com.google.firebase.firestore.FirebaseFirestore
@@ -25,6 +26,7 @@ class CategorySelectActivity : AppCompatActivity() {
 
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("category")
+    private var searchQuery: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +53,18 @@ class CategorySelectActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        SelectSearchHelper.bind(
+            this,
+            onSearch = { query ->
+                searchQuery = query
+                loadDataBase()
+            },
+            onClean = {
+                searchQuery = ""
+                loadDataBase()
+            }
+        )
+
         loadDataBase()
     }
 
@@ -67,7 +81,7 @@ class CategorySelectActivity : AppCompatActivity() {
 
                 val categories = result.documents.mapNotNull { document ->
                     document.toObject(CategoryModel::class.java)
-                }.sortedBy { it.register }
+                }.filter { SelectSearchHelper.matches(it, searchQuery) }.sortedBy { it.register }
 
                 categories.forEach { category ->
                     dataList.addView(loadCard(category))

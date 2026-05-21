@@ -13,6 +13,7 @@ import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
 import com.compensar.tienda.ui.model.common.ImagePreviewHelper
 import com.compensar.tienda.ui.common.SessionNavigation
+import com.compensar.tienda.ui.model.common.SelectSearchHelper
 import com.google.firebase.firestore.FirebaseFirestore
 import com.compensar.tienda.model.UserModel
 import com.compensar.tienda.ui.dashboard.DashboardAdminActivity
@@ -25,6 +26,7 @@ class UserSelectActivity : AppCompatActivity() {
 
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("user")
+    private var searchQuery: String = ""
 
     private var roleMap: Map<Long, String> = emptyMap()
 
@@ -51,6 +53,18 @@ class UserSelectActivity : AppCompatActivity() {
             val intent = Intent(this, UserCreateActivity::class.java)
             startActivity(intent)
         }
+
+        SelectSearchHelper.bind(
+            this,
+            onSearch = { query ->
+                searchQuery = query
+                loadDataBase()
+            },
+            onClean = {
+                searchQuery = ""
+                loadDataBase()
+            }
+        )
 
         loadDataBase()
     }
@@ -96,7 +110,7 @@ class UserSelectActivity : AppCompatActivity() {
 
                 val items = result.documents.mapNotNull { document ->
                     document.toObject(UserModel::class.java)
-                }.sortedBy { it.register }
+                }.filter { SelectSearchHelper.matches(it, searchQuery) }.sortedBy { it.register }
 
                 items.forEach { data ->
                     dataList.addView(loadCard(data))

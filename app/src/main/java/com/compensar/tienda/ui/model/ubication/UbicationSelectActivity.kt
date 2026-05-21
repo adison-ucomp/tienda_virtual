@@ -11,6 +11,7 @@ import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
 import com.compensar.tienda.model.UbicationModel
 import com.compensar.tienda.ui.common.SessionNavigation
+import com.compensar.tienda.ui.model.common.SelectSearchHelper
 import com.google.firebase.firestore.FirebaseFirestore
 
 class UbicationSelectActivity : AppCompatActivity() {
@@ -19,6 +20,7 @@ class UbicationSelectActivity : AppCompatActivity() {
     private lateinit var dataList: LinearLayout
 
     private val collection = FirebaseFirestore.getInstance().collection("ubication")
+    private var searchQuery: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +33,18 @@ class UbicationSelectActivity : AppCompatActivity() {
 
         actionReturn.setOnClickListener { finish() }
         actionNew.setOnClickListener { startActivity(Intent(this, UbicationCreateActivity::class.java)) }
+
+        SelectSearchHelper.bind(
+            this,
+            onSearch = { query ->
+                searchQuery = query
+                load()
+            },
+            onClean = {
+                searchQuery = ""
+                load()
+            }
+        )
 
         ensureDefaults()
     }
@@ -60,6 +74,7 @@ class UbicationSelectActivity : AppCompatActivity() {
                 dataList.removeAllViews()
                 result.documents
                     .mapNotNull { it.toObject(UbicationModel::class.java) }
+                    .filter { SelectSearchHelper.matches(it, searchQuery) }
                     .sortedBy { it.register }
                     .forEach { dataList.addView(card(it)) }
             }

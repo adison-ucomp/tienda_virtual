@@ -14,6 +14,7 @@ import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
 import com.compensar.tienda.model.PurchaseModel
 import com.compensar.tienda.ui.common.SessionNavigation
+import com.compensar.tienda.ui.model.common.SelectSearchHelper
 import com.google.firebase.firestore.FirebaseFirestore
 
 class PurchaseSelectActivity : AppCompatActivity() {
@@ -22,6 +23,7 @@ class PurchaseSelectActivity : AppCompatActivity() {
     private lateinit var actionNew: LinearLayout
 
     private val collection = FirebaseFirestore.getInstance().collection("purchase")
+    private var searchQuery: String = ""
     private val db = FirebaseFirestore.getInstance()
 
     private var gatewayMap: Map<Long, String> = emptyMap()
@@ -40,6 +42,18 @@ class PurchaseSelectActivity : AppCompatActivity() {
 
         actionReturn.setOnClickListener { finish() }
         actionNew.setOnClickListener { startActivity(Intent(this, PurchaseCreateActivity::class.java)) }
+
+        SelectSearchHelper.bind(
+            this,
+            onSearch = { query ->
+                searchQuery = query
+                loadItems()
+            },
+            onClean = {
+                searchQuery = ""
+                loadItems()
+            }
+        )
     }
 
     override fun onResume() {
@@ -82,7 +96,7 @@ class PurchaseSelectActivity : AppCompatActivity() {
         collection.get()
             .addOnSuccessListener { result ->
                 dataList.removeAllViews()
-                val items = result.documents.mapNotNull { it.toObject(PurchaseModel::class.java) }.sortedBy { it.register }
+                val items = result.documents.mapNotNull { it.toObject(PurchaseModel::class.java) }.filter { SelectSearchHelper.matches(it, searchQuery) }.sortedBy { it.register }
                 if (items.isEmpty()) {
                     dataList.addView(TextView(this).apply {
                         text = "Sin compras registradas"

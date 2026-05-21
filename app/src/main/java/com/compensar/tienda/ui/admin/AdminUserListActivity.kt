@@ -13,6 +13,7 @@ import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
 import com.compensar.tienda.ui.model.common.ImagePreviewHelper
 import com.compensar.tienda.ui.common.SessionNavigation
+import com.compensar.tienda.ui.model.common.SelectSearchHelper
 import com.compensar.tienda.model.UserModel
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -23,6 +24,7 @@ class AdminUserListActivity : AppCompatActivity() {
 
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("user")
+    private var searchQuery: String = ""
 
     private var roleMap: Map<Long, String> = emptyMap()
 
@@ -41,6 +43,18 @@ class AdminUserListActivity : AppCompatActivity() {
             val intent = Intent(this, AdminUserStoreActivity::class.java)
             startActivity(intent)
         }
+
+        SelectSearchHelper.bind(
+            this,
+            onSearch = { query ->
+                searchQuery = query
+                loadDataBase()
+            },
+            onClean = {
+                searchQuery = ""
+                loadDataBase()
+            }
+        )
 
         loadDataBase()
     }
@@ -86,7 +100,7 @@ class AdminUserListActivity : AppCompatActivity() {
 
                 val items = result.documents.mapNotNull { document ->
                     document.toObject(UserModel::class.java)
-                }.sortedBy { it.register }
+                }.filter { SelectSearchHelper.matches(it, searchQuery) }.sortedBy { it.register }
 
                 items.forEach { data ->
                     dataList.addView(loadCard(data))

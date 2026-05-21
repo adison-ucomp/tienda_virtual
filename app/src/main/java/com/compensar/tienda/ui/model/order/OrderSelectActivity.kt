@@ -14,6 +14,7 @@ import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
 import com.compensar.tienda.model.OrderModel
 import com.compensar.tienda.ui.common.SessionNavigation
+import com.compensar.tienda.ui.model.common.SelectSearchHelper
 import com.google.firebase.firestore.FirebaseFirestore
 
 class OrderSelectActivity : AppCompatActivity() {
@@ -22,6 +23,7 @@ class OrderSelectActivity : AppCompatActivity() {
     private lateinit var actionNew: LinearLayout
 
     private val collection = FirebaseFirestore.getInstance().collection("order")
+    private var searchQuery: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +36,18 @@ class OrderSelectActivity : AppCompatActivity() {
 
         actionReturn.setOnClickListener { finish() }
         actionNew.setOnClickListener { startActivity(Intent(this, OrderCreateActivity::class.java)) }
+
+        SelectSearchHelper.bind(
+            this,
+            onSearch = { query ->
+                searchQuery = query
+                loadItems()
+            },
+            onClean = {
+                searchQuery = ""
+                loadItems()
+            }
+        )
     }
 
     override fun onResume() {
@@ -45,7 +59,7 @@ class OrderSelectActivity : AppCompatActivity() {
         collection.get()
             .addOnSuccessListener { result ->
                 dataList.removeAllViews()
-                val items = result.documents.mapNotNull { it.toObject(OrderModel::class.java) }.sortedBy { it.register }
+                val items = result.documents.mapNotNull { it.toObject(OrderModel::class.java) }.filter { SelectSearchHelper.matches(it, searchQuery) }.sortedBy { it.register }
                 if (items.isEmpty()) {
                     dataList.addView(TextView(this).apply {
                         text = "Sin órdenes registradas"

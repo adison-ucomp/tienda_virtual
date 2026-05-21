@@ -112,12 +112,25 @@
 
                     <EditText
                         android:id="@+id/fieldSearch"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:background="@android:color/transparent"
                         android:hint="@string/search"
+                        android:singleLine="true"
+                        android:inputType="text"
+                        android:imeOptions="actionSearch"
                         android:textColorHint="@color/hint" />
+
+                    <ImageView
+                        android:id="@+id/actionClean"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_marginStart="8dp"
+                        android:alpha="0.65"
+                        android:src="@drawable/ic_delete"
+                        android:visibility="gone" />
 
                 </LinearLayout>
 
