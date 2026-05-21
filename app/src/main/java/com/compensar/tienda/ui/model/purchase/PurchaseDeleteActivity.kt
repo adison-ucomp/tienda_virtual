@@ -8,10 +8,12 @@ import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
 import com.compensar.tienda.model.PurchaseModel
 import com.compensar.tienda.ui.common.SessionNavigation
+import com.compensar.tienda.ui.model.common.ModuleView
 import com.compensar.tienda.ui.model.common.FirestoreRelationLabelHelper
 import com.google.firebase.firestore.FirebaseFirestore
 
 class PurchaseDeleteActivity : AppCompatActivity() {
+    private lateinit var titleHeader: TextView
     private lateinit var actionReturn: TextView
     private lateinit var actionCancel: Button
     private lateinit var actionExecute: Button
@@ -41,9 +43,12 @@ class PurchaseDeleteActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
+        titleHeader = findViewById(R.id.titleHeader)
         actionReturn = findViewById(R.id.actionReturn)
         actionCancel = findViewById(R.id.actionCancel)
         actionExecute = findViewById(R.id.actionExecute)
+
+        ModuleView.bindTitle(titleHeader, "Eliminar", "purchase", "Compras")
         fieldRegister = findViewById(R.id.fieldRegister)
         fieldAmount = findViewById(R.id.fieldAmount)
         fieldValue = findViewById(R.id.fieldValue)

@@ -20,6 +20,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TiendaVirtual">
         <activity
+            android:name=".ui.model.module.ModuleUpdateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.module.ModuleSelectActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.module.ModuleDeleteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.module.ModuleCreateActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.TestActivity"
             android:exported="false" />
         <activity

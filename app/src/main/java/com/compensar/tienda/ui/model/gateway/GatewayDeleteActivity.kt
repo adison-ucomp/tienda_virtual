@@ -7,10 +7,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
 import com.compensar.tienda.ui.common.SessionNavigation
+import com.compensar.tienda.ui.model.common.ModuleView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.compensar.tienda.model.GatewayModel
 
 class GatewayDeleteActivity : AppCompatActivity() {
+    private lateinit var titleHeader: TextView
     private lateinit var actionReturn: TextView
     private lateinit var actionCancel: Button
     private lateinit var actionExecute: Button
@@ -37,9 +39,12 @@ class GatewayDeleteActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
+        titleHeader = findViewById(R.id.titleHeader)
         actionReturn = findViewById(R.id.actionReturn)
         actionCancel = findViewById(R.id.actionCancel)
         actionExecute = findViewById(R.id.actionExecute)
+
+        ModuleView.bindTitle(titleHeader, "Eliminar", "gateway", "Pasarelas")
         fieldRegister = findViewById(R.id.fieldRegister)
         fieldName = findViewById(R.id.fieldName)
     }

@@ -2,6 +2,7 @@ package com.compensar.tienda.firestore
 
 import android.util.Log
 import com.compensar.tienda.default.CategoryDefault
+import com.compensar.tienda.default.ModuleDefault
 import com.compensar.tienda.default.PaymentDefault
 import com.compensar.tienda.default.ProductDefault
 import com.compensar.tienda.default.RoleDefault
@@ -18,20 +19,25 @@ class DefaultFire {
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        createRoles(
+        createModules(
             onSuccess = {
-                createCategories(
+                createRoles(
                     onSuccess = {
-                        createUbications(
+                        createCategories(
                             onSuccess = {
-                                createShipments(
+                                createUbications(
                                     onSuccess = {
-                                        createPayments(
+                                        createShipments(
                                             onSuccess = {
-                                                createUsers(
+                                                createPayments(
                                                     onSuccess = {
-                                                        createProducts(
-                                                            onSuccess = onSuccess,
+                                                        createUsers(
+                                                            onSuccess = {
+                                                                createProducts(
+                                                                    onSuccess = onSuccess,
+                                                                    onFailure = onFailure
+                                                                )
+                                                            },
                                                             onFailure = onFailure
                                                         )
                                                     },
@@ -50,6 +56,20 @@ class DefaultFire {
                     onFailure = onFailure
                 )
             },
+            onFailure = onFailure
+        )
+    }
+
+
+    private fun createModules(
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        createMissingDocuments(
+            collectionName = "module",
+            data = ModuleDefault.getAll(),
+            getRegister = { it.register },
+            onSuccess = onSuccess,
             onFailure = onFailure
         )
     }

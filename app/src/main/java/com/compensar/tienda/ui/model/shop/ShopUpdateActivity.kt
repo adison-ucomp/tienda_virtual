@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
 import com.compensar.tienda.ui.common.SessionNavigation
+import com.compensar.tienda.ui.model.common.ModuleView
 import com.bumptech.glide.Glide
 import com.compensar.tienda.model.ShopModel
 import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
@@ -25,6 +26,7 @@ import com.compensar.tienda.ui.model.common.FirebaseStorageImageHelper
 
 class ShopUpdateActivity : AppCompatActivity() {
     private lateinit var actionHome: LinearLayout
+    private lateinit var titleHeader: TextView
     private lateinit var actionReturn: TextView
     private lateinit var actionCancel: Button
     private lateinit var actionExecute: Button
@@ -65,9 +67,12 @@ class ShopUpdateActivity : AppCompatActivity() {
 
     private fun initViews() {
         actionHome = findViewById(R.id.actionHome)
+        titleHeader = findViewById(R.id.titleHeader)
         actionReturn = findViewById(R.id.actionReturn)
         actionCancel = findViewById(R.id.actionCancel)
         actionExecute = findViewById(R.id.actionExecute)
+
+        ModuleView.bindTitle(titleHeader, "Actualizar", "shop", "Tiendas")
         actionGallery = findViewById(R.id.actionGallery)
         actionCamera = findViewById(R.id.actionCamera)
 

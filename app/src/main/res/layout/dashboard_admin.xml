@@ -198,7 +198,59 @@
 
 
             <!-- Modulo Direcciones -->
-            <androidx.cardview.widget.CardView
+                        <!-- Modulo Modulos -->
+<androidx.cardview.widget.CardView
+                android:id="@+id/cardModule"
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:padding="20dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/ic_module" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginStart="16dp">
+
+                        <TextView
+                            android:id="@+id/titleModule"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Gestionar Modulos"
+                            android:textSize="28sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:id="@+id/detailModule"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="-"
+                            android:textSize="15sp"
+                            android:textColor="@color/subtitle"
+                            android:layout_marginTop="8dp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+<androidx.cardview.widget.CardView
                 android:id="@+id/cardAddress"
                 android:layout_width="match_parent"
                 android:layout_height="170dp"
@@ -217,7 +269,7 @@
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:src="@drawable/ic_report" />
+                        android:src="@drawable/ic_module" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -226,17 +278,19 @@
                         android:layout_marginStart="16dp">
 
                         <TextView
+                            android:id="@+id/titleAddress"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_address_title"
+                            android:text="Gestionar Direcciones"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
 
                         <TextView
+                            android:id="@+id/detailAddress"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_address_detail"
+                            android:text="-"
                             android:textSize="15sp"
                             android:textColor="@color/subtitle"
                             android:layout_marginTop="8dp" />
@@ -267,7 +321,7 @@
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:src="@drawable/ic_report" />
+                        android:src="@drawable/ic_module" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -276,17 +330,19 @@
                         android:layout_marginStart="16dp">
 
                         <TextView
+                            android:id="@+id/titleCategory"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_category_title"
+                            android:text="Gestionar Categorias"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
 
                         <TextView
+                            android:id="@+id/detailCategory"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_category_detail"
+                            android:text="-"
                             android:textSize="15sp"
                             android:textColor="@color/subtitle"
                             android:layout_marginTop="8dp" />
@@ -317,7 +373,7 @@
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:src="@drawable/ic_report" />
+                        android:src="@drawable/ic_module" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -326,17 +382,19 @@
                         android:layout_marginStart="16dp">
 
                         <TextView
+                            android:id="@+id/titleGateway"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_gateway_title"
+                            android:text="Gestionar Pasarelas"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
 
                         <TextView
+                            android:id="@+id/detailGateway"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_gateway_detail"
+                            android:text="-"
                             android:textSize="15sp"
                             android:textColor="@color/subtitle"
                             android:layout_marginTop="8dp" />
@@ -367,7 +425,7 @@
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:src="@drawable/ic_report" />
+                        android:src="@drawable/ic_module" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -376,17 +434,19 @@
                         android:layout_marginStart="16dp">
 
                         <TextView
+                            android:id="@+id/titleImage"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_image_title"
+                            android:text="Gestionar Imágenes"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
 
                         <TextView
+                            android:id="@+id/detailImage"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_image_detail"
+                            android:text="-"
                             android:textSize="15sp"
                             android:textColor="@color/subtitle"
                             android:layout_marginTop="8dp" />
@@ -417,7 +477,7 @@
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:src="@drawable/ic_report" />
+                        android:src="@drawable/ic_module" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -426,17 +486,19 @@
                         android:layout_marginStart="16dp">
 
                         <TextView
+                            android:id="@+id/titleOrder"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_order_title"
+                            android:text="Gestionar Ordenes"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black"/>
 
                         <TextView
+                            android:id="@+id/detailOrder"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_order_detail"
+                            android:text="-"
                             android:textSize="15sp"
                             android:textColor="@color/subtitle"
                             android:layout_marginTop="8dp"/>
@@ -467,7 +529,7 @@
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:src="@drawable/ic_report" />
+                        android:src="@drawable/ic_module" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -476,17 +538,19 @@
                         android:layout_marginStart="16dp">
 
                         <TextView
+                            android:id="@+id/titlePayment"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_payment_title"
+                            android:text="Gestionar Pagos"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
 
                         <TextView
+                            android:id="@+id/detailPayment"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_payment_detail"
+                            android:text="-"
                             android:textSize="15sp"
                             android:textColor="@color/subtitle"
                             android:layout_marginTop="8dp" />
@@ -517,7 +581,7 @@
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:src="@drawable/ic_report" />
+                        android:src="@drawable/ic_module" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -526,17 +590,19 @@
                         android:layout_marginStart="16dp">
 
                         <TextView
+                            android:id="@+id/titleProduct"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_product_title"
+                            android:text="Gestionar Productos"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
 
                         <TextView
+                            android:id="@+id/detailProduct"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_product_detail"
+                            android:text="-"
                             android:textSize="15sp"
                             android:textColor="@color/subtitle"
                             android:layout_marginTop="8dp" />
@@ -567,7 +633,7 @@
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:src="@drawable/ic_report" />
+                        android:src="@drawable/ic_module" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -576,17 +642,19 @@
                         android:layout_marginStart="16dp">
 
                         <TextView
+                            android:id="@+id/titlePurchase"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_purchase_title"
+                            android:text="Gestionar Compras"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
 
                         <TextView
+                            android:id="@+id/detailPurchase"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_purchase_detail"
+                            android:text="-"
                             android:textSize="15sp"
                             android:textColor="@color/subtitle"
                             android:layout_marginTop="8dp" />
@@ -617,7 +685,7 @@
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:src="@drawable/ic_report" />
+                        android:src="@drawable/ic_module" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -626,17 +694,19 @@
                         android:layout_marginStart="16dp">
 
                         <TextView
+                            android:id="@+id/titleRole"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_role_title"
+                            android:text="Gestionar Roles"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
 
                         <TextView
+                            android:id="@+id/detailRole"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_role_detail"
+                            android:text="-"
                             android:textSize="15sp"
                             android:textColor="@color/subtitle"
                             android:layout_marginTop="8dp" />
@@ -667,7 +737,7 @@
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:src="@drawable/ic_report" />
+                        android:src="@drawable/ic_module" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -676,17 +746,19 @@
                         android:layout_marginStart="16dp">
 
                         <TextView
+                            android:id="@+id/titleSeller"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_seller_title"
+                            android:text="Gestionar Vendedores"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
 
                         <TextView
+                            android:id="@+id/detailSeller"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_seller_detail"
+                            android:text="-"
                             android:textSize="15sp"
                             android:textColor="@color/subtitle"
                             android:layout_marginTop="8dp" />
@@ -717,7 +789,7 @@
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:src="@drawable/ic_report" />
+                        android:src="@drawable/ic_module" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -726,17 +798,19 @@
                         android:layout_marginStart="16dp">
 
                         <TextView
+                            android:id="@+id/titleShipment"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_shipment_title"
+                            android:text="Gestionar Envios"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
 
                         <TextView
+                            android:id="@+id/detailShipment"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_shipment_detail"
+                            android:text="-"
                             android:textSize="15sp"
                             android:textColor="@color/subtitle"
                             android:layout_marginTop="8dp" />
@@ -767,7 +841,7 @@
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:src="@drawable/ic_shops" />
+                        android:src="@drawable/ic_module" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -776,17 +850,19 @@
                         android:layout_marginStart="16dp">
 
                         <TextView
+                            android:id="@+id/titleShop"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_shop_title"
+                            android:text="Gestionar Tiendas"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black"/>
 
                         <TextView
+                            android:id="@+id/detailShop"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_shop_detail"
+                            android:text="-"
                             android:textSize="15sp"
                             android:textColor="@color/subtitle"
                             android:layout_marginTop="8dp"/>
@@ -817,7 +893,7 @@
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:src="@drawable/ic_report" />
+                        android:src="@drawable/ic_module" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -826,17 +902,19 @@
                         android:layout_marginStart="16dp">
 
                         <TextView
+                            android:id="@+id/titleSpecify"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_specify_title"
+                            android:text="Gestionar Especifaciones"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
 
                         <TextView
+                            android:id="@+id/detailSpecify"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_specify_detail"
+                            android:text="-"
                             android:textSize="15sp"
                             android:textColor="@color/subtitle"
                             android:layout_marginTop="8dp" />
@@ -868,7 +946,7 @@
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:src="@drawable/ic_report" />
+                        android:src="@drawable/ic_module" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -877,17 +955,19 @@
                         android:layout_marginStart="16dp">
 
                         <TextView
+                            android:id="@+id/titleUbication"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_ubication_title"
+                            android:text="Gestionar Ubicaciones"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
 
                         <TextView
+                            android:id="@+id/detailUbication"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_ubication_detail"
+                            android:text="-"
                             android:textSize="15sp"
                             android:textColor="@color/subtitle"
                             android:layout_marginTop="8dp" />
@@ -918,7 +998,7 @@
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:src="@drawable/ic_users" />
+                        android:src="@drawable/ic_module" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -927,17 +1007,19 @@
                         android:layout_marginStart="16dp">
 
                         <TextView
+                            android:id="@+id/titleUser"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_user_title"
+                            android:text="Gestionar Usuarios"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black"/>
 
                         <TextView
+                            android:id="@+id/detailUser"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/model_user_detail"
+                            android:text="-"
                             android:textSize="15sp"
                             android:textColor="@color/subtitle"
                             android:layout_marginTop="8dp"/>

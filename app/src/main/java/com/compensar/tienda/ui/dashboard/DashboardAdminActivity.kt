@@ -2,16 +2,20 @@ package com.compensar.tienda.ui.dashboard
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
-import com.compensar.tienda.ui.common.SessionNavigation
-import com.compensar.tienda.ui.admin.AdminUserListActivity
+import com.compensar.tienda.model.ModuleModel
 import com.compensar.tienda.ui.admin.AdminShopListActivity
+import com.compensar.tienda.ui.admin.AdminUserListActivity
+import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.model.address.AddressSelectActivity
 import com.compensar.tienda.ui.model.category.CategorySelectActivity
 import com.compensar.tienda.ui.model.gateway.GatewaySelectActivity
 import com.compensar.tienda.ui.model.image.ImageSelectActivity
+import com.compensar.tienda.ui.model.module.ModuleSelectActivity
 import com.compensar.tienda.ui.model.order.OrderSelectActivity
 import com.compensar.tienda.ui.model.payment.PaymentSelectActivity
 import com.compensar.tienda.ui.model.product.ProductSelectActivity
@@ -21,14 +25,16 @@ import com.compensar.tienda.ui.model.seller.SellerSelectActivity
 import com.compensar.tienda.ui.model.shipment.ShipmentSelectActivity
 import com.compensar.tienda.ui.model.shop.ShopSelectActivity
 import com.compensar.tienda.ui.model.specify.SpecifySelectActivity
-import com.compensar.tienda.ui.model.user.UserSelectActivity
 import com.compensar.tienda.ui.model.ubication.UbicationSelectActivity
+import com.compensar.tienda.ui.model.user.UserSelectActivity
+import com.google.firebase.firestore.FirebaseFirestore
 
 class DashboardAdminActivity : AppCompatActivity() {
 
     private lateinit var dataShop: CardView
     private lateinit var dataUser: CardView
 
+    private lateinit var cardModule: CardView
     private lateinit var cardAddress: CardView
     private lateinit var cardCategory: CardView
     private lateinit var cardGateway: CardView
@@ -45,6 +51,11 @@ class DashboardAdminActivity : AppCompatActivity() {
     private lateinit var cardUbication: CardView
     private lateinit var cardUser: CardView
 
+    private val db = FirebaseFirestore.getInstance()
+    private val collection = db.collection("module")
+
+    private val moduleViews = mutableMapOf<String, ModuleDashboardItem>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dashboard_admin)
@@ -52,12 +63,19 @@ class DashboardAdminActivity : AppCompatActivity() {
 
         initViews()
         initEvents()
+        loadModules()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadModules()
     }
 
     private fun initViews() {
         dataShop = findViewById(R.id.dataShop)
         dataUser = findViewById(R.id.dataUser)
 
+        cardModule = findViewById(R.id.cardModule)
         cardAddress = findViewById(R.id.cardAddress)
         cardCategory = findViewById(R.id.cardCategory)
         cardGateway = findViewById(R.id.cardGateway)
@@ -73,6 +91,23 @@ class DashboardAdminActivity : AppCompatActivity() {
         cardSpecify = findViewById(R.id.cardSpecify)
         cardUbication = findViewById(R.id.cardUbication)
         cardUser = findViewById(R.id.cardUser)
+
+        moduleViews["module"] = ModuleDashboardItem(cardModule, findViewById(R.id.titleModule), findViewById(R.id.detailModule), "Modulos")
+        moduleViews["address"] = ModuleDashboardItem(cardAddress, findViewById(R.id.titleAddress), findViewById(R.id.detailAddress), "Direcciones")
+        moduleViews["category"] = ModuleDashboardItem(cardCategory, findViewById(R.id.titleCategory), findViewById(R.id.detailCategory), "Categorias")
+        moduleViews["gateway"] = ModuleDashboardItem(cardGateway, findViewById(R.id.titleGateway), findViewById(R.id.detailGateway), "Pasarelas")
+        moduleViews["image"] = ModuleDashboardItem(cardImage, findViewById(R.id.titleImage), findViewById(R.id.detailImage), "Imágenes")
+        moduleViews["order"] = ModuleDashboardItem(cardOrder, findViewById(R.id.titleOrder), findViewById(R.id.detailOrder), "Ordenes")
+        moduleViews["payment"] = ModuleDashboardItem(cardPayment, findViewById(R.id.titlePayment), findViewById(R.id.detailPayment), "Pagos")
+        moduleViews["product"] = ModuleDashboardItem(cardProduct, findViewById(R.id.titleProduct), findViewById(R.id.detailProduct), "Productos")
+        moduleViews["purchase"] = ModuleDashboardItem(cardPurchase, findViewById(R.id.titlePurchase), findViewById(R.id.detailPurchase), "Compras")
+        moduleViews["role"] = ModuleDashboardItem(cardRole, findViewById(R.id.titleRole), findViewById(R.id.detailRole), "Roles")
+        moduleViews["seller"] = ModuleDashboardItem(cardSeller, findViewById(R.id.titleSeller), findViewById(R.id.detailSeller), "Vendedores")
+        moduleViews["shipment"] = ModuleDashboardItem(cardShipment, findViewById(R.id.titleShipment), findViewById(R.id.detailShipment), "Envios")
+        moduleViews["shop"] = ModuleDashboardItem(cardShop, findViewById(R.id.titleShop), findViewById(R.id.detailShop), "Tiendas")
+        moduleViews["specify"] = ModuleDashboardItem(cardSpecify, findViewById(R.id.titleSpecify), findViewById(R.id.detailSpecify), "Especifaciones")
+        moduleViews["ubication"] = ModuleDashboardItem(cardUbication, findViewById(R.id.titleUbication), findViewById(R.id.detailUbication), "Ubicaciones")
+        moduleViews["user"] = ModuleDashboardItem(cardUser, findViewById(R.id.titleUser), findViewById(R.id.detailUser), "Usuarios")
     }
 
     private fun initEvents() {
@@ -86,9 +121,10 @@ class DashboardAdminActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-
-
-
+        cardModule.setOnClickListener {
+            val intent = Intent(this, ModuleSelectActivity::class.java)
+            startActivity(intent)
+        }
 
         cardAddress.setOnClickListener {
             val intent = Intent(this, AddressSelectActivity::class.java)
@@ -165,4 +201,38 @@ class DashboardAdminActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
+    private fun loadModules() {
+        collection
+            .get()
+            .addOnSuccessListener { result ->
+                val modules = result.documents.mapNotNull { document ->
+                    document.toObject(ModuleModel::class.java)
+                }
+
+                moduleViews.forEach { (key, item) ->
+                    val module = modules.firstOrNull { it.model == key }
+
+                    item.card.visibility = if (module?.state == false) {
+                        View.GONE
+                    } else {
+                        View.VISIBLE
+                    }
+
+                    val name = module?.name?.takeIf { it.isNotBlank() } ?: item.defaultName
+                    item.title.text = "Gestionar $name"
+                    item.detail.text = module?.detail?.takeIf { it.isNotBlank() } ?: ""
+                }
+            }
+            .addOnFailureListener { exception ->
+                exception.printStackTrace()
+            }
+    }
+
+    private data class ModuleDashboardItem(
+        val card: CardView,
+        val title: TextView,
+        val detail: TextView,
+        val defaultName: String
+    )
 }
