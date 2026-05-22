@@ -132,14 +132,16 @@ class OrderSelectActivity : AppCompatActivity() {
         return cardView
     }
 
-    private fun addText(container: LinearLayout, value: String) {
-        container.addView(TextView(this).apply {
+    private fun addText(container: LinearLayout, value: String): TextView {
+        val textView = TextView(this).apply {
             text = value
             textSize = 14f
             setTextColor(getColor(R.color.black))
             setTypeface(null, Typeface.BOLD)
             setPadding(0, dp(6), 0, 0)
-        })
+        }
+        container.addView(textView)
+        return textView
     }
 
     private fun dp(value: Int): Int = (value * resources.displayMetrics.density).toInt()
