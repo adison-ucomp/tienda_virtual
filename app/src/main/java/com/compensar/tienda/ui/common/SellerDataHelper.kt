@@ -47,12 +47,18 @@ object SellerDataHelper {
         db.collection("seller").get()
             .addOnSuccessListener { sellerSnapshot ->
                 val sellers = sellerSnapshot.documents.mapNotNull { it.toObject(SellerModel::class.java) }
-                val currentSeller = sellers.firstOrNull { it.idUser == userRegister }
+                val currentSellers = sellers.filter { seller ->
+                    seller.idUser == userRegister || seller.register == userRegister
+                }
+                val currentSeller = currentSellers.firstOrNull()
+                val sellerRegisters = currentSellers.map { it.register }.toSet()
 
                 db.collection("shop").get()
                     .addOnSuccessListener { shopSnapshot ->
                         val allShops = shopSnapshot.documents.mapNotNull { it.toObject(ShopModel::class.java) }
-                        val sellerShops = allShops.filter { it.idSeller == currentSeller?.register }
+                        val sellerShops = allShops.filter { shop ->
+                            shop.idSeller in sellerRegisters || shop.idSeller == userRegister
+                        }
                         val shopRegisters = sellerShops.map { it.register }.toSet()
 
                         db.collection("product").get()

@@ -143,7 +143,7 @@ class ShopSelectActivity : AppCompatActivity() {
 
         addText(textContainer, "Registro: ${data.register}")
         addText(textContainer, "Nombre: ${data.name ?: ""}")
-        addText(textContainer, "Vendedor: ${label(sellerMap, data.idSeller)}")
+        addText(textContainer, "Empresa: ${label(sellerMap, data.idSeller)}")
 
         val buttonContainer = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL

@@ -29,6 +29,7 @@ class SellerShopListActivity : AppCompatActivity() {
 
     private var sellerMap: Map<Long, String> = emptyMap()
     private var currentSellerRegister: Long = 0L
+    private var currentSellerRegisters: Set<Long> = emptySet()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,19 +81,26 @@ class SellerShopListActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { result ->
                 val userRegister = SessionManager.getRegister(this)
+                val registers = mutableSetOf<Long>()
                 currentSellerRegister = 0L
                 sellerMap = result.documents.mapNotNull { document ->
                     val register = document.getLong("register") ?: return@mapNotNull null
                     val idUser = document.getLong("idUser") ?: 0L
                     val description = document.getString("company") ?: document.getString("nit") ?: "Sin Informacion"
 
-                    if (idUser == userRegister) {
-                        currentSellerRegister = register
+                    if (idUser == userRegister || register == userRegister) {
+                        registers.add(register)
                     }
 
                     register to description
                 }.toMap()
 
+                if (registers.isEmpty() && userRegister > 0L) {
+                    registers.add(userRegister)
+                }
+
+                currentSellerRegisters = registers
+                currentSellerRegister = registers.firstOrNull() ?: 0L
                 onComplete()
             }
             .addOnFailureListener { exception ->
@@ -111,8 +119,9 @@ class SellerShopListActivity : AppCompatActivity() {
 
                 val items = result.documents.mapNotNull { document ->
                     document.toObject(ShopModel::class.java)
-                }.filter { it.idSeller == currentSellerRegister }
-                    .filter { SelectSearchHelper.matches(it, searchQuery) }
+                }.filter { shop ->
+                    shop.idSeller in currentSellerRegisters
+                }.filter { SelectSearchHelper.matches(it, searchQuery) }
                     .sortedBy { it.register }
 
                 items.forEach { data ->
@@ -155,7 +164,7 @@ class SellerShopListActivity : AppCompatActivity() {
 
         addText(textContainer, "Registro: ${data.register}")
         addText(textContainer, "Nombre: ${data.name ?: ""}")
-        addText(textContainer, "Vendedor: ${label(sellerMap, data.idSeller)}")
+        addText(textContainer, "Empresa: ${label(sellerMap, data.idSeller)}")
 
         val buttonContainer = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL

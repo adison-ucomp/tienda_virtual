@@ -86,12 +86,16 @@ class SellerShopStoreActivity : AppCompatActivity() {
     }
 
     private fun loadCurrentSeller() {
+        val userRegister = SessionManager.getRegister(this)
+
         db.collection("seller")
-            .whereEqualTo("idUser", SessionManager.getRegister(this))
-            .limit(1)
             .get()
             .addOnSuccessListener { result ->
-                currentSellerRegister = result.documents.firstOrNull()?.getLong("register") ?: 0L
+                currentSellerRegister = result.documents.firstOrNull { document ->
+                    val register = document.getLong("register") ?: 0L
+                    val idUser = document.getLong("idUser") ?: 0L
+                    idUser == userRegister || register == userRegister
+                }?.getLong("register") ?: userRegister
 
                 if (currentSellerRegister <= 0L) {
                     Toast.makeText(this, "No se encontró el vendedor de la sesión", Toast.LENGTH_SHORT).show()

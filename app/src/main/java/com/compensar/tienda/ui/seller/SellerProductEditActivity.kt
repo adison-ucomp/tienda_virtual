@@ -144,12 +144,16 @@ class SellerProductEditActivity : AppCompatActivity() {
     }
 
     private fun loadSellerShopSelector(selectedId: Long) {
+        val userRegister = SessionManager.getRegister(this)
+
         db.collection("seller")
-            .whereEqualTo("idUser", SessionManager.getRegister(this))
-            .limit(1)
             .get()
             .addOnSuccessListener { result ->
-                val sellerRegister = result.documents.firstOrNull()?.getLong("register") ?: 0L
+                val sellerRegister = result.documents.firstOrNull { document ->
+                    val register = document.getLong("register") ?: 0L
+                    val idUser = document.getLong("idUser") ?: 0L
+                    idUser == userRegister || register == userRegister
+                }?.getLong("register") ?: userRegister
 
                 FirestoreSelectHelper.load(
                     context = this,

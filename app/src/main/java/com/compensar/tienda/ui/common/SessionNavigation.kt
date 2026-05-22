@@ -30,6 +30,9 @@ import com.compensar.tienda.ui.profile.ProfileShareActivity
 import com.compensar.tienda.ui.seller.SellerProductListActivity
 import com.compensar.tienda.ui.seller.SellerOrderListActivity
 import com.compensar.tienda.ui.seller.SellerDashboardActivity
+import com.compensar.tienda.ui.setting.SettingAdminActivity
+import com.compensar.tienda.ui.setting.SettingBuyerActivity
+import com.compensar.tienda.ui.setting.SettingSellerActivity
 
 object SessionNavigation {
 
@@ -71,23 +74,20 @@ object SessionNavigation {
         }
 
         activity.findViewById<LinearLayout?>(R.id.navHome)?.setOnClickListener {
-            if (SessionManager.getRole(activity) == 2L) {
-                val intent = Intent(activity, SellerDashboardActivity::class.java)
-                activity.startActivity(intent)
+            if (SessionManager.getRole(activity) == 2L && activity !is SellerDashboardActivity) {
+                activity.startActivity(Intent(activity, SellerDashboardActivity::class.java))
             }
         }
 
         activity.findViewById<LinearLayout?>(R.id.navProducts)?.setOnClickListener {
             if (SessionManager.getRole(activity) == 2L && activity !is SellerProductListActivity) {
-                val intent = Intent(activity, SellerProductListActivity::class.java)
-                activity.startActivity(intent)
+                activity.startActivity(Intent(activity, SellerProductListActivity::class.java))
             }
         }
 
         activity.findViewById<LinearLayout?>(R.id.navOrders)?.setOnClickListener {
-            if (SessionManager.getRole(activity) == 2L) {
-                val intent = Intent(activity, SellerOrderListActivity::class.java)
-                activity.startActivity(intent)
+            if (SessionManager.getRole(activity) == 2L && activity !is SellerOrderListActivity) {
+                activity.startActivity(Intent(activity, SellerOrderListActivity::class.java))
             }
         }
     }
@@ -122,14 +122,22 @@ object SessionNavigation {
         }
 
         activity.findViewById<LinearLayout?>(R.id.actionShopping)?.setOnClickListener {
-            if (activity !is BuyerShoppingActivity) {
-                activity.startActivity(Intent(activity, BuyerShoppingActivity::class.java))
+            if (SessionManager.getRole(activity) == 3L) {
+                if (activity !is BuyerShoppingActivity) {
+                    activity.startActivity(Intent(activity, BuyerShoppingActivity::class.java))
+                }
+            } else {
+                activity.startActivity(Intent(activity, HomeLoginActivity::class.java))
             }
         }
 
         activity.findViewById<LinearLayout?>(R.id.actionAddress)?.setOnClickListener {
-            if (activity !is BuyerAddressActivity) {
-                activity.startActivity(Intent(activity, BuyerAddressActivity::class.java))
+            if (SessionManager.getRole(activity) == 3L) {
+                if (activity !is BuyerAddressActivity) {
+                    activity.startActivity(Intent(activity, BuyerAddressActivity::class.java))
+                }
+            } else {
+                activity.startActivity(Intent(activity, HomeLoginActivity::class.java))
             }
         }
     }
@@ -228,7 +236,14 @@ object SessionNavigation {
         }
 
         btnSettings.setOnClickListener {
-            Toast.makeText(activity, "Configuración", Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+            val intent = when (SessionManager.getRole(activity)) {
+                1L -> Intent(activity, SettingAdminActivity::class.java)
+                2L -> Intent(activity, SettingSellerActivity::class.java)
+                3L -> Intent(activity, SettingBuyerActivity::class.java)
+                else -> Intent(activity, HomeLoginActivity::class.java)
+            }
+            activity.startActivity(intent)
         }
 
         btnSupport.setOnClickListener {
