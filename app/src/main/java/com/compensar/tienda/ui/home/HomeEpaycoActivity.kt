@@ -20,6 +20,7 @@ import com.compensar.tienda.ui.common.SessionNavigation
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.SetOptions
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -158,13 +159,12 @@ class HomeEpaycoActivity : AppCompatActivity() {
 
     private fun processUrl(uri: Uri): Boolean {
         val isCustomResult = uri.scheme == "emptio" && uri.host == "epayco"
-        val isWebResult = uri.host?.contains("emptio", ignoreCase = true) == true &&
-            uri.path?.contains("epayco", ignoreCase = true) == true
 
-        if (isCustomResult || isWebResult) {
+        if (isCustomResult) {
             handleResult(uri)
             return true
         }
+
         return false
     }
 
@@ -172,10 +172,8 @@ class HomeEpaycoActivity : AppCompatActivity() {
         if (uri == null || savedResult) return
 
         val isCustomResult = uri.scheme == "emptio" && uri.host == "epayco"
-        val isWebResult = uri.host?.contains("emptio", ignoreCase = true) == true &&
-            uri.path?.contains("epayco", ignoreCase = true) == true
 
-        if (!isCustomResult && !isWebResult) return
+        if (!isCustomResult) return
 
         savedResult = true
         webEpayco.visibility = View.GONE
@@ -369,6 +367,13 @@ class HomeEpaycoActivity : AppCompatActivity() {
     }
 
     private fun normalizeState(uri: Uri): String {
+        uri.getQueryParameter("emptio_state")?.let { serverState ->
+            val cleanServerState = serverState.uppercase().trim()
+            if (cleanServerState == "APROBADO" || cleanServerState == "RECHAZADO") {
+                return cleanServerState
+            }
+        }
+
         val code = uri.getQueryParameter("x_cod_response")
             ?: uri.getQueryParameter("x_cod_respuesta")
             ?: uri.getQueryParameter("x_cod_transaction_state")
@@ -437,7 +442,8 @@ class HomeEpaycoActivity : AppCompatActivity() {
     private fun buildCheckoutHtml(): String {
         val amount = String.format(Locale.US, "%.0f", total)
         val testMode = if (EpaycoConfig.TEST_MODE) "true" else "false"
-        val responseUrl = "https://www.emptio.com/epayco/result"
+        val responseUrl = EpaycoConfig.RESPONSE_URL
+        val confirmationUrl = EpaycoConfig.CONFIRMATION_URL
         return """
             <!DOCTYPE html>
             <html>
@@ -470,7 +476,7 @@ class HomeEpaycoActivity : AppCompatActivity() {
                         lang: 'es',
                         external: 'false',
                         response: '$responseUrl',
-                        confirmation: '$responseUrl'
+                        confirmation: '$confirmationUrl'
                     };
                     function openCheckout() {
                         handler.open(data);

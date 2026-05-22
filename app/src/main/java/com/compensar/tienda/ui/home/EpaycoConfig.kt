@@ -17,6 +17,12 @@ object EpaycoConfig {
     val MAX_AMOUNT: Double?
         get() = BuildConfig.EPAYCO_MAX_AMOUNT.toDoubleOrNull()
 
+    val CONFIRMATION_URL: String
+        get() = BuildConfig.EPAYCO_CONFIRMATION_URL
+
+    val RESPONSE_URL: String
+        get() = BuildConfig.EPAYCO_RESPONSE_URL.ifBlank { CONFIRMATION_URL }
+
     fun validateAmount(total: Double): String? {
         if (total < MIN_AMOUNT) {
             return "El valor mínimo permitido para pagar con ePayco es $ ${String.format("%,.0f", MIN_AMOUNT)}."
