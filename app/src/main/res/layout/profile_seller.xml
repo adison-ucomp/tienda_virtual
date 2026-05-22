@@ -8,10 +8,8 @@
     android:layout_height="match_parent"
     android:background="@color/background_layout"
     android:fitsSystemWindows="true"
-    android:orientation="vertical"
     tools:context=".ui.profile.ProfileSellerActivity">
 
-    <!-- Navbar superior -->
     <include
         android:id="@+id/includeSuperior"
         layout="@layout/navbar_seller_return"
@@ -21,7 +19,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Contenido principal -->
     <ScrollView
         android:id="@+id/scrollUpdate"
         android:layout_width="0dp"
@@ -45,28 +42,28 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginTop="16dp"
-                android:src="@drawable/ic_profile"
+                android:background="@drawable/bg_circle"
                 android:scaleType="centerCrop"
-                android:background="@drawable/bg_circle"/>
+                android:src="@drawable/ic_profile" />
 
             <TextView
-                android:id="@+id/txtNameAdmin"
+                android:id="@+id/textName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:text="EMPTIO Business"
-                android:textSize="22sp"
-                android:textStyle="bold"
                 android:textColor="@color/black"
-                android:layout_marginTop="16dp"/>
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/txtEmail"
+                android:id="@+id/textEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="admin@emptio.com"
-                android:textSize="14sp"
+                android:layout_marginTop="6dp"
+                android:text="seller@emptio.com"
                 android:textColor="@color/subtitle"
-                android:layout_marginTop="6dp"/>
+                android:textSize="14sp" />
 
             <LinearLayout
                 android:id="@+id/btnEditProfile"
@@ -76,16 +73,15 @@
                 android:orientation="horizontal"
                 android:gravity="center"
                 android:paddingHorizontal="18dp"
-                android:background="@drawable/bg_button">
+                android:background="@drawable/bg_button_dark">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/edit_profile"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textSize="14sp"
-                    android:layout_marginStart="8dp"/>
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -96,10 +92,11 @@
                 android:layout_marginTop="24dp">
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/cardProducts"
                     android:layout_width="0dp"
                     android:layout_height="110dp"
                     android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginEnd="6dp"
                     app:cardCornerRadius="18dp"
                     app:cardElevation="0dp"
                     app:cardBackgroundColor="@color/white">
@@ -111,36 +108,37 @@
                         android:gravity="center">
 
                         <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:src="@drawable/ic_category"/>
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_product_color" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
                             android:text="Productos"
-                            android:textStyle="bold"
                             android:textColor="@color/black"
-                            android:layout_marginTop="10dp"/>
+                            android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/txtNumberCategories"
+                            android:id="@+id/textProductCount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="2"
-                            android:textSize="14sp"
+                            android:layout_marginTop="6dp"
+                            android:text="0"
                             android:textColor="@color/subtitle"
-                            android:layout_marginTop="6dp"/>
+                            android:textSize="14sp" />
 
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/cardOrders"
                     android:layout_width="0dp"
                     android:layout_height="110dp"
                     android:layout_weight="1"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginHorizontal="6dp"
                     app:cardCornerRadius="18dp"
                     app:cardElevation="0dp"
                     app:cardBackgroundColor="@color/white">
@@ -152,27 +150,68 @@
                         android:gravity="center">
 
                         <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:src="@drawable/ic_shops"
-                            android:outlineSpotShadowColor="@color/black"/>
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_order_color" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
                             android:text="Pedidos"
-                            android:textStyle="bold"
                             android:textColor="@color/black"
-                            android:layout_marginTop="10dp"/>
+                            android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/txtShops"
+                            android:id="@+id/textOrderCount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
                             android:text="0"
-                            android:textSize="14sp"
                             android:textColor="@color/subtitle"
-                            android:layout_marginTop="6dp"/>
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardShops"
+                    android:layout_width="0dp"
+                    android:layout_height="110dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="6dp"
+                    app:cardCornerRadius="18dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="@color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_shops" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="Tiendas"
+                            android:textColor="@color/black"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textShopCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="0"
+                            android:textColor="@color/subtitle"
+                            android:textSize="14sp" />
 
                     </LinearLayout>
 
@@ -184,7 +223,6 @@
 
     </ScrollView>
 
-    <!-- Menú inferior -->
     <include
         android:id="@+id/includeInferior"
         layout="@layout/navbar_seller_inferior"

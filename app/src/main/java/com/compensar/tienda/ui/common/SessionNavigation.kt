@@ -20,6 +20,9 @@ import com.compensar.tienda.ui.profile.ProfileAdminActivity
 import com.compensar.tienda.ui.profile.ProfileBuyerActivity
 import com.compensar.tienda.ui.profile.ProfileSellerActivity
 import com.compensar.tienda.ui.profile.ProfileShareActivity
+import com.compensar.tienda.ui.seller.SellerProductListActivity
+import com.compensar.tienda.ui.seller.SellerOrderListActivity
+import com.compensar.tienda.ui.seller.SellerDashboardActivity
 
 object SessionNavigation {
 
@@ -39,6 +42,27 @@ object SessionNavigation {
 
         navProfile?.setOnClickListener {
             openProfileOrLogin(activity)
+        }
+
+        activity.findViewById<LinearLayout?>(R.id.navHome)?.setOnClickListener {
+            if (SessionManager.getRole(activity) == 2L) {
+                val intent = Intent(activity, SellerDashboardActivity::class.java)
+                activity.startActivity(intent)
+            }
+        }
+
+        activity.findViewById<LinearLayout?>(R.id.navProducts)?.setOnClickListener {
+            if (SessionManager.getRole(activity) == 2L) {
+                val intent = Intent(activity, SellerProductListActivity::class.java)
+                activity.startActivity(intent)
+            }
+        }
+
+        activity.findViewById<LinearLayout?>(R.id.navOrders)?.setOnClickListener {
+            if (SessionManager.getRole(activity) == 2L) {
+                val intent = Intent(activity, SellerOrderListActivity::class.java)
+                activity.startActivity(intent)
+            }
         }
     }
 

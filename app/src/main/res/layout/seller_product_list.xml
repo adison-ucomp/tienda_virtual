@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_layout"
+    android:fitsSystemWindows="true"
     tools:context=".ui.seller.SellerProductListActivity">
 
-    <!-- Navbar superior -->
     <include
         android:id="@+id/includeSuperior"
         layout="@layout/navbar_seller_return"
@@ -17,175 +19,122 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Contenido principal -->
-    <ScrollView
-        android:id="@+id/scrollShopUpdate"
+    <FrameLayout
+        android:id="@+id/contentFrame"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:fillViewport="true"
-        android:background="@color/background_layout"
         app:layout_constraintTop_toBottomOf="@id/includeSuperior"
         app:layout_constraintBottom_toTopOf="@id/includeInferior"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <FrameLayout
+        <ScrollView
+            android:id="@+id/scrollProducts"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:background="@color/background_layout">
 
-            <ScrollView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fillViewport="true">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <LinearLayout
+                    android:id="@+id/layoutSearch"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+                    android:layout_height="55dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp"
+                    android:background="@drawable/bg_button_light">
 
+                    <ImageView
+                        android:id="@+id/actionSearch"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_search" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="55dp"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:paddingHorizontal="16dp"
-                        android:background="@drawable/bg_button_light">
-
-                        <ImageView
-                            android:layout_width="22dp"
-                            android:layout_height="22dp"
-                            android:src="@drawable/ic_search" />
-
-                        <EditText
-                            android:id="@+id/etSearch"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:background="@android:color/transparent"
-                            android:hint="@string/search"
-                            android:textColor="@color/black"
-                            android:textColorHint="@color/hint"/>
-
-                    </LinearLayout>
-
-
-                    <HorizontalScrollView
-                        android:layout_width="match_parent"
+                    <EditText
+                        android:id="@+id/fieldSearch"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:scrollbars="none">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="40dp"
-                                android:orientation="horizontal"
-                                android:gravity="center"
-                                android:paddingHorizontal="20dp"
-                                android:background="@drawable/bg_button_light">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/all"
-                                    android:textStyle="bold"
-                                    android:textColor="@color/black"/>
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="40dp"
-                                android:layout_marginStart="10dp"
-                                android:orientation="horizontal"
-                                android:gravity="center"
-                                android:paddingHorizontal="20dp"
-                                android:background="@drawable/bg_button_light">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/sport"
-                                    android:textColor="@color/black"/>
-
-                            </LinearLayout>
-
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="40dp"
-                                android:layout_marginStart="10dp"
-                                android:orientation="horizontal"
-                                android:gravity="center"
-                                android:paddingHorizontal="20dp"
-                                android:background="@drawable/bg_button_light">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/technology"
-                                    android:textColor="@color/black"/>
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                    </HorizontalScrollView>
-
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/my_products"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
+                        android:layout_weight="1"
+                        android:layout_marginStart="10dp"
+                        android:background="@android:color/transparent"
+                        android:hint="@string/search"
+                        android:imeOptions="actionSearch"
+                        android:inputType="text"
+                        android:singleLine="true"
                         android:textColor="@color/black"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginBottom="16dp"/>
+                        android:textColorHint="@color/hint" />
 
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerProducts"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:nestedScrollingEnabled="false"
-                        tools:listitem="@layout/item_product"/>
+                    <ImageView
+                        android:id="@+id/actionClean"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_marginStart="8dp"
+                        android:alpha="0.65"
+                        android:src="@drawable/ic_delete"
+                        android:visibility="gone" />
 
                 </LinearLayout>
 
-            </ScrollView>
+                <HorizontalScrollView
+                    android:id="@+id/categoryScroll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:scrollbars="none">
 
+                    <LinearLayout
+                        android:id="@+id/categoryList"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" />
 
-            <LinearLayout
-                android:id="@+id/btnAddProduct"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="20dp"
-                android:background="@drawable/bg_button_light"
-                android:gravity="center"
-                android:elevation="6dp">
+                </HorizontalScrollView>
 
-                <ImageView
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:src="@drawable/ic_nuevo"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="Mis Productos"
+                    android:textColor="@color/black"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/dataList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
 
             </LinearLayout>
 
-        </FrameLayout>
+        </ScrollView>
 
-    </ScrollView>
+        <LinearLayout
+            android:id="@+id/actionNew"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="20dp"
+            android:background="@drawable/bg_button_light"
+            android:elevation="6dp"
+            android:gravity="center">
 
-    <!-- Menú inferior -->
+            <ImageView
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:src="@drawable/ic_nuevo" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
     <include
         android:id="@+id/includeInferior"
         layout="@layout/navbar_seller_inferior"
