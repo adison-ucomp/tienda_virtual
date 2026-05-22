@@ -389,13 +389,27 @@
     </ScrollView>
 
     <!-- Menú inferior -->
-    <include
+    <FrameLayout
         android:id="@+id/includeInferior"
-        layout="@layout/navbar_admin_inferior"
         android:layout_width="0dp"
         android:layout_height="76dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <include
+            android:id="@+id/includeAdminInferior"
+            layout="@layout/navbar_admin_inferior"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <include
+            android:id="@+id/includeSellerInferior"
+            layout="@layout/navbar_seller_inferior"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

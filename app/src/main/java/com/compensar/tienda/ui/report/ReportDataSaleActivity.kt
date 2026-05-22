@@ -104,7 +104,21 @@ class ReportDataSaleActivity : AppCompatActivity() {
             View.VISIBLE
         }
 
+        configureInferiorNavbar()
         setExportEnabled(false)
+    }
+
+    private fun configureInferiorNavbar() {
+        val adminInferior = findViewById<View?>(R.id.includeAdminInferior)
+        val sellerInferior = findViewById<View?>(R.id.includeSellerInferior)
+
+        if (isSellerSession) {
+            adminInferior?.visibility = View.GONE
+            sellerInferior?.visibility = View.VISIBLE
+        } else {
+            adminInferior?.visibility = View.VISIBLE
+            sellerInferior?.visibility = View.GONE
+        }
     }
 
     private fun initEvents() {
