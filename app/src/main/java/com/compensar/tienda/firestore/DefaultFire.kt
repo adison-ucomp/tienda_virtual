@@ -12,6 +12,7 @@ import com.compensar.tienda.default.UserDefault
 import com.compensar.tienda.model.UbicationModel
 import com.compensar.tienda.model.ShipmentModel
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Source
 
 class DefaultFire {
 
@@ -261,12 +262,12 @@ class DefaultFire {
             val register = getRegister(item)
             val document = collection.document(register.toString())
 
-            document.get()
+            document.get(Source.SERVER)
                 .addOnSuccessListener { snapshot ->
                     if (snapshot.exists()) {
                         Log.d(
                             "DEFAULT_FIRE",
-                            "Documento existente, no se sobrescribe: $collectionName/$register"
+                            "Documento existente en servidor, no se sobrescribe: $collectionName/$register"
                         )
                         completeOne()
                     } else {

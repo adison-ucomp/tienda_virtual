@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
 import com.compensar.tienda.firestore.DefaultFire
@@ -33,16 +34,22 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
 
         createDefaultData()
-        goToHome()
     }
 
     private fun createDefaultData() {
         defaultDataFire.createDefault(
             onSuccess = {
                 println("Datos por defecto creados correctamente")
+                goToHome()
             },
             onFailure = { exception ->
                 exception.printStackTrace()
+                Toast.makeText(
+                    this,
+                    "No se pudieron crear los datos por defecto. Verifica internet y Firestore.",
+                    Toast.LENGTH_LONG
+                ).show()
+                goToHome()
             }
         )
     }
