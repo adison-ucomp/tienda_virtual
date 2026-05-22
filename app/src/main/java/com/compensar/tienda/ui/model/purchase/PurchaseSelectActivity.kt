@@ -26,7 +26,6 @@ class PurchaseSelectActivity : AppCompatActivity() {
     private var searchQuery: String = ""
     private val db = FirebaseFirestore.getInstance()
 
-    private var gatewayMap: Map<Long, String> = emptyMap()
     private var orderMap: Map<Long, String> = emptyMap()
     private var productMap: Map<Long, String> = emptyMap()
     private var userMap: Map<Long, String> = emptyMap()
@@ -62,9 +61,7 @@ class PurchaseSelectActivity : AppCompatActivity() {
     }
 
     private fun loadReferenceData(onComplete: () -> Unit) {
-        loadCollection("gateway", listOf("name")) { gateways ->
-            gatewayMap = gateways
-            loadCollection("order", listOf("reference")) { orders ->
+        loadCollection("order", listOf("reference")) { orders ->
                 orderMap = orders
                 loadCollection("product", listOf("name")) { products ->
                     productMap = products
@@ -74,7 +71,6 @@ class PurchaseSelectActivity : AppCompatActivity() {
                     }
                 }
             }
-        }
     }
 
     private fun loadCollection(collectionName: String, fields: List<String>, onComplete: (Map<Long, String>) -> Unit) {
@@ -137,7 +133,6 @@ class PurchaseSelectActivity : AppCompatActivity() {
         addText(textContainer, "Cantidad: ${data.amount ?: 0}")
         addText(textContainer, "Valor: ${data.value ?: 0.0}")
         addText(textContainer, "Total: ${data.total ?: 0.0}")
-        addText(textContainer, "Pasarela: ${label(gatewayMap, data.idGangway)}")
         addText(textContainer, "Referencia: ${label(orderMap, data.idOrder)}")
         addText(textContainer, "Producto: ${label(productMap, data.idProduct)}")
         addText(textContainer, "Usuario: ${label(userMap, data.idUser)}")

@@ -34,7 +34,9 @@ class OrderCreateActivity : AppCompatActivity() {
     private lateinit var fieldTotal: EditText
     private lateinit var fieldDate: EditText
     private lateinit var fieldHour: EditText
+    private lateinit var fieldIdTrade: Spinner
     private lateinit var fieldIdShop: Spinner
+    private lateinit var fieldIdPayment: Spinner
 
     private val collection = FirebaseFirestore.getInstance().collection("order")
     private var generatedRegister: Long? = null
@@ -64,7 +66,9 @@ class OrderCreateActivity : AppCompatActivity() {
         fieldTotal = findViewById(R.id.fieldTotal)
         fieldDate = findViewById(R.id.fieldDate)
         fieldHour = findViewById(R.id.fieldHour)
+        fieldIdTrade = findViewById(R.id.fieldIdTrade)
         fieldIdShop = findViewById(R.id.fieldIdShop)
+        fieldIdPayment = findViewById(R.id.fieldIdPayment)
     }
 
     private fun initDefaultValues() {
@@ -76,8 +80,22 @@ class OrderCreateActivity : AppCompatActivity() {
     private fun loadSelectors() {
         FirestoreSelectHelper.load(
             context = this,
+            spinner = fieldIdTrade,
+            collectionName = "trade",
+            labelFields = listOf("state", "register"),
+            selectedId = 0
+        )
+        FirestoreSelectHelper.load(
+            context = this,
             spinner = fieldIdShop,
             collectionName = "shop",
+            labelFields = listOf("name"),
+            selectedId = 0
+        )
+        FirestoreSelectHelper.load(
+            context = this,
+            spinner = fieldIdPayment,
+            collectionName = "payment",
             labelFields = listOf("name"),
             selectedId = 0
         )
@@ -121,10 +139,22 @@ class OrderCreateActivity : AppCompatActivity() {
         val total = fieldTotal.text.toString().trim().toDoubleOrNull()
         val date = fieldDate.text.toString().trim()
         val hour = fieldHour.text.toString().trim()
+        val idTrade = FirestoreSelectHelper.getSelectedId(fieldIdTrade)
         val idShop = FirestoreSelectHelper.getSelectedId(fieldIdShop)
+        val idPayment = FirestoreSelectHelper.getSelectedId(fieldIdPayment)
+
+        if (idTrade == null) {
+            Toast.makeText(this, "Debe seleccionar una transacción válida", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         if (idShop == null) {
             Toast.makeText(this, "Debe seleccionar una tienda válida", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (idPayment == null) {
+            Toast.makeText(this, "Debe seleccionar un método de pago válido", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -140,7 +170,9 @@ class OrderCreateActivity : AppCompatActivity() {
             total = total,
             date = date,
             hour = hour,
-            idShop = idShop
+            idTrade = idTrade,
+            idShop = idShop,
+            idPayment = idPayment
         )
 
         collection.document(register.toString()).get()

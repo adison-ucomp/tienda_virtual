@@ -13,7 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
-import com.compensar.tienda.model.EpaycoModel
+import com.compensar.tienda.model.TradeModel
 import com.compensar.tienda.ui.buyer.BuyerShoppingActivity
 import com.compensar.tienda.ui.common.CartManager
 import com.compensar.tienda.ui.common.SessionNavigation
@@ -31,12 +31,12 @@ class HomeEpaycoActivity : AppCompatActivity() {
     private lateinit var resultContainer: View
     private lateinit var txtReference: TextView
     private lateinit var txtState: TextView
+    private lateinit var txtShipmentState: TextView
     private lateinit var txtMessage: TextView
     private lateinit var txtTotal: TextView
     private lateinit var actionContinue: Button
 
     private val db = FirebaseFirestore.getInstance()
-    private var orderRegister: Long = 0
     private var userRegister: Long = 0
     private var reference: String = ""
     private var address: String = ""
@@ -65,7 +65,6 @@ class HomeEpaycoActivity : AppCompatActivity() {
     }
 
     private fun readExtras(intent: Intent?) {
-        orderRegister = intent?.getLongExtra("orderRegister", 0L) ?: 0L
         userRegister = intent?.getLongExtra("userRegister", 0L) ?: 0L
         reference = intent?.getStringExtra("reference").orEmpty()
         address = intent?.getStringExtra("address").orEmpty()
@@ -78,6 +77,7 @@ class HomeEpaycoActivity : AppCompatActivity() {
         resultContainer = findViewById(R.id.resultContainer)
         txtReference = findViewById(R.id.txtReference)
         txtState = findViewById(R.id.txtState)
+        txtShipmentState = findViewById(R.id.txtShipmentState)
         txtMessage = findViewById(R.id.txtMessage)
         txtTotal = findViewById(R.id.txtTotal)
         actionContinue = findViewById(R.id.actionContinue)
@@ -94,42 +94,38 @@ class HomeEpaycoActivity : AppCompatActivity() {
     @SuppressLint("SetJavaScriptEnabled")
     private fun loadCheckout() {
         if (reference.isBlank() || total <= 0.0 || userRegister <= 0 || address.isBlank()) {
-            showResult(
+            showLocalResult(
                 state = "ERROR",
-                message = "No fue posible cargar la información para iniciar el pago.",
-                apiJson = buildResultJson("ERROR", "Datos de pago incompletos"),
-                idOrder = 0L
+                shipmentState = "-",
+                message = "No fue posible cargar la información para iniciar el pago."
             )
             return
         }
 
         if (CartManager.getItems(this).isEmpty()) {
-            showResult(
+            showLocalResult(
                 state = "ERROR",
-                message = "No hay productos pendientes para pagar.",
-                apiJson = buildResultJson("ERROR", "Carrito vacío"),
-                idOrder = 0L
+                shipmentState = "-",
+                message = "No hay productos pendientes para pagar."
             )
             return
         }
 
         if (EpaycoConfig.PUBLIC_KEY == "EPAYCO_PUBLIC_KEY_AQUI") {
-            showResult(
+            showLocalResult(
                 state = "CONFIGURAR",
-                message = "Debes configurar la llave pública de ePayco en el archivo .env.local.",
-                apiJson = buildResultJson("CONFIGURAR", "Llave pública pendiente"),
-                idOrder = 0L
+                shipmentState = "-",
+                message = "Debes configurar la llave pública de ePayco en el archivo .env.local."
             )
             return
         }
 
         val amountMessage = EpaycoConfig.validateAmount(total)
         if (amountMessage != null) {
-            showResult(
+            showLocalResult(
                 state = "VALOR_NO_PERMITIDO",
-                message = amountMessage,
-                apiJson = buildResultJson("VALOR_NO_PERMITIDO", amountMessage),
-                idOrder = 0L
+                shipmentState = "-",
+                message = amountMessage
             )
             return
         }
@@ -181,217 +177,260 @@ class HomeEpaycoActivity : AppCompatActivity() {
 
         if (!isCustomResult && !isWebResult) return
 
-        val rawState = uri.getQueryParameter("status")
-            ?: uri.getQueryParameter("x_response")
-            ?: uri.getQueryParameter("x_response_reason_text")
-            ?: uri.getQueryParameter("estado")
-            ?: uri.getQueryParameter("state")
-            ?: "PENDIENTE"
-
-        val state = normalizeState(rawState)
-        val apiJson = JSONObject().apply {
-            put("reference", reference)
-            put("order", orderRegister)
-            put("total", total)
-            put("state", state)
-            put("uri", uri.toString())
-        }.toString()
-
         savedResult = true
         webEpayco.visibility = View.GONE
+        resultContainer.visibility = View.VISIBLE
+        txtReference.text = reference.ifBlank { "-" }
+        txtTotal.text = "$ ${String.format("%,.0f", total)}"
+        txtState.text = "PROCESANDO"
+        txtShipmentState.text = "PROCESANDO"
+        txtMessage.text = "Procesando respuesta de la pasarela..."
 
-        if (state == "APROBADO") {
-            createOrderAfterApproved(apiJson)
+        val state = normalizeState(uri)
+        val paymentMethod = uri.getQueryParameter("x_payment_method")
+            ?: uri.getQueryParameter("x_franchise")
+            ?: "PSE"
+        val apiJson = buildGatewayJson(uri, state, paymentMethod)
+
+        getPaymentId(paymentMethod) { idPayment ->
+            getShopIdFromCart { idShop ->
+                createTradeOrderAndPurchases(
+                    apiJson = apiJson,
+                    state = state,
+                    idGateway = 1L,
+                    idPayment = idPayment,
+                    idShop = idShop
+                )
+            }
+        }
+    }
+
+    private fun getPaymentId(paymentMethod: String, onComplete: (Long) -> Unit) {
+        db.collection("payment")
+            .get()
+            .addOnSuccessListener { result ->
+                val cleanMethod = paymentMethod.trim().uppercase()
+                val payment = result.documents.firstOrNull { document ->
+                    val name = document.getString("name").orEmpty().trim().uppercase()
+                    name == cleanMethod || cleanMethod.contains(name) || name.contains(cleanMethod)
+                }
+                onComplete(payment?.getLong("register") ?: 3L)
+            }
+            .addOnFailureListener { onComplete(3L) }
+    }
+
+    private fun getShopIdFromCart(onComplete: (Long) -> Unit) {
+        val firstProduct = CartManager.getItems(this).firstOrNull()
+        if (firstProduct == null) {
+            onComplete(0L)
             return
         }
 
-        showResult(
-            state = state,
-            message = messageForState(state),
-            apiJson = apiJson,
-            idOrder = 0L
-        )
+        db.collection("product")
+            .document(firstProduct.register.toString())
+            .get()
+            .addOnSuccessListener { document ->
+                onComplete(document.getLong("idShop") ?: 0L)
+            }
+            .addOnFailureListener { onComplete(0L) }
     }
 
-    private fun createOrderAfterApproved(apiJson: String) {
+    private fun createTradeOrderAndPurchases(
+        apiJson: String,
+        state: String,
+        idGateway: Long,
+        idPayment: Long,
+        idShop: Long
+    ) {
         val items = CartManager.getItems(this)
         if (items.isEmpty()) {
-            showResult(
+            showLocalResult(
                 state = "ERROR",
-                message = "El pago fue aprobado, pero no hay productos en el carrito para generar la orden.",
-                apiJson = buildResultJson("ERROR", "Carrito vacío después del pago"),
-                idOrder = 0L
+                shipmentState = "-",
+                message = "No hay productos en el carrito para generar la orden."
             )
             return
         }
 
-        txtReference.text = reference.ifBlank { "-" }
-        txtState.text = "PROCESANDO"
-        txtMessage.text = "Pago aprobado. Generando orden de compra..."
-        txtTotal.text = "$ ${String.format("%,.0f", total)}"
-        resultContainer.visibility = View.VISIBLE
+        val idShipment = if (state == "APROBADO") 1L else 4L
+        val shipmentState = if (idShipment == 1L) "PENDIENTE" else "RECHAZADO"
+        val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        val hour = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
 
-        db.collection("order")
+        db.collection("trade")
             .orderBy("register", Query.Direction.DESCENDING)
             .limit(1)
             .get()
-            .addOnSuccessListener { orderResult ->
-                orderRegister = (orderResult.documents.firstOrNull()?.getLong("register") ?: 0L) + 1L
-                val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-                val hour = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
-                val orderData = mapOf(
-                    "register" to orderRegister,
-                    "address" to address,
-                    "reference" to reference,
-                    "total" to total,
-                    "date" to date,
-                    "hour" to hour,
-                    "idShop" to 0L,
-                    "idShipment" to 1L,
-                    "idUser" to userRegister
-                )
-
-                db.collection("purchase")
+            .addOnSuccessListener { tradeResult ->
+                val tradeRegister = (tradeResult.documents.firstOrNull()?.getLong("register") ?: 0L) + 1L
+                db.collection("order")
                     .orderBy("register", Query.Direction.DESCENDING)
                     .limit(1)
                     .get()
-                    .addOnSuccessListener { purchaseResult ->
-                        val firstPurchaseRegister = (purchaseResult.documents.firstOrNull()?.getLong("register") ?: 0L) + 1L
-                        db.runBatch { batch ->
-                            batch.set(db.collection("order").document(orderRegister.toString()), orderData)
+                    .addOnSuccessListener { orderResult ->
+                        val orderRegister = (orderResult.documents.firstOrNull()?.getLong("register") ?: 0L) + 1L
+                        db.collection("purchase")
+                            .orderBy("register", Query.Direction.DESCENDING)
+                            .limit(1)
+                            .get()
+                            .addOnSuccessListener { purchaseResult ->
+                                val firstPurchaseRegister = (purchaseResult.documents.firstOrNull()?.getLong("register") ?: 0L) + 1L
+                                val finalJson = JSONObject(apiJson).apply {
+                                    put("trade", tradeRegister)
+                                    put("order", orderRegister)
+                                    put("shipment", shipmentState)
+                                }.toString()
 
-                            items.forEachIndexed { index, item ->
-                                val purchaseRegister = firstPurchaseRegister + index
-                                val productRef = db.collection("product").document(item.register.toString())
-                                val reservationRef = db.collection("cart_reservation").document("${userRegister}_${item.register}")
-                                batch.set(
-                                    db.collection("purchase").document(purchaseRegister.toString()),
-                                    mapOf(
-                                        "register" to purchaseRegister,
-                                        "amount" to item.quantity,
-                                        "value" to item.price,
-                                        "total" to item.price * item.quantity,
-                                        "idProduct" to item.register,
-                                        "idGangway" to 0L,
-                                        "idUser" to userRegister,
-                                        "idOrder" to orderRegister
+                                db.runBatch { batch ->
+                                    batch.set(
+                                        db.collection("trade").document(tradeRegister.toString()),
+                                        TradeModel(
+                                            register = tradeRegister,
+                                            api = finalJson,
+                                            state = state,
+                                            idGateway = idGateway,
+                                            idOrder = orderRegister
+                                        )
                                     )
-                                )
-                                batch.update(
-                                    productRef,
-                                    mapOf(
-                                        "stock" to FieldValue.increment(-item.quantity.toLong()),
-                                        "reserved" to FieldValue.increment(-item.quantity.toLong())
+
+                                    batch.set(
+                                        db.collection("order").document(orderRegister.toString()),
+                                        mapOf(
+                                            "register" to orderRegister,
+                                            "address" to address,
+                                            "reference" to reference,
+                                            "total" to total,
+                                            "date" to date,
+                                            "hour" to hour,
+                                            "idTrade" to tradeRegister,
+                                            "idShop" to idShop,
+                                            "idPayment" to idPayment,
+                                            "idShipment" to idShipment,
+                                            "idUser" to userRegister
+                                        )
                                     )
-                                )
-                                batch.delete(reservationRef)
+
+                                    items.forEachIndexed { index, item ->
+                                        val purchaseRegister = firstPurchaseRegister + index
+                                        batch.set(
+                                            db.collection("purchase").document(purchaseRegister.toString()),
+                                            mapOf(
+                                                "register" to purchaseRegister,
+                                                "amount" to item.quantity,
+                                                "value" to item.price,
+                                                "total" to item.price * item.quantity,
+                                                "idProduct" to item.register,
+                                                "idUser" to userRegister,
+                                                "idOrder" to orderRegister
+                                            )
+                                        )
+
+                                        if (state == "APROBADO") {
+                                            val productRef = db.collection("product").document(item.register.toString())
+                                            val reservationRef = db.collection("cart_reservation").document("${userRegister}_${item.register}")
+                                            batch.update(
+                                                productRef,
+                                                mapOf(
+                                                    "stock" to FieldValue.increment(-item.quantity.toLong()),
+                                                    "reserved" to FieldValue.increment(-item.quantity.toLong())
+                                                )
+                                            )
+                                            batch.delete(reservationRef)
+                                        }
+                                    }
+                                }.addOnSuccessListener {
+                                    if (state == "APROBADO") {
+                                        CartManager.clear(this)
+                                    }
+                                    showResult(
+                                        state = state,
+                                        shipmentState = shipmentState,
+                                        message = messageForState(state, shipmentState)
+                                    )
+                                }.addOnFailureListener { exception ->
+                                    showLocalResult(
+                                        state = "ERROR_ORDEN",
+                                        shipmentState = "-",
+                                        message = "No se pudo guardar la transacción y la orden: ${exception.message}"
+                                    )
+                                }
                             }
-                        }.addOnSuccessListener {
-                            CartManager.clear(this)
-                            val finalJson = JSONObject(apiJson).apply {
-                                put("order", orderRegister)
-                                put("generatedOrder", true)
-                            }.toString()
-                            showResult(
-                                state = "APROBADO",
-                                message = "El pago fue aprobado correctamente y la orden fue generada.",
-                                apiJson = finalJson,
-                                idOrder = orderRegister
-                            )
-                        }.addOnFailureListener { exception ->
-                            showResult(
-                                state = "ERROR_ORDEN",
-                                message = "El pago fue aprobado, pero no se pudo generar la orden: ${exception.message}",
-                                apiJson = buildResultJson("ERROR_ORDEN", exception.message ?: "Error generando orden"),
-                                idOrder = 0L
-                            )
-                        }
+                            .addOnFailureListener { exception ->
+                                showLocalResult("ERROR_ORDEN", "-", "No se pudo calcular la compra: ${exception.message}")
+                            }
                     }
                     .addOnFailureListener { exception ->
-                        showResult(
-                            state = "ERROR_ORDEN",
-                            message = "El pago fue aprobado, pero no se pudieron generar las compras: ${exception.message}",
-                            apiJson = buildResultJson("ERROR_ORDEN", exception.message ?: "Error generando compras"),
-                            idOrder = 0L
-                        )
+                        showLocalResult("ERROR_ORDEN", "-", "No se pudo calcular la orden: ${exception.message}")
                     }
             }
             .addOnFailureListener { exception ->
-                showResult(
-                    state = "ERROR_ORDEN",
-                    message = "El pago fue aprobado, pero no se pudo generar la orden: ${exception.message}",
-                    apiJson = buildResultJson("ERROR_ORDEN", exception.message ?: "Error generando orden"),
-                    idOrder = 0L
-                )
+                showLocalResult("ERROR_TRADE", "-", "No se pudo guardar la transacción: ${exception.message}")
             }
     }
 
-    private fun normalizeState(value: String): String {
-        val clean = value.uppercase().trim()
+    private fun normalizeState(uri: Uri): String {
+        val code = uri.getQueryParameter("x_cod_response")
+            ?: uri.getQueryParameter("x_cod_respuesta")
+            ?: uri.getQueryParameter("x_cod_transaction_state")
+
+        if (code == "1") return "APROBADO"
+        if (code in listOf("2", "3", "4", "6", "7", "8", "9", "10", "11")) return "RECHAZADO"
+
+        val raw = uri.getQueryParameter("x_response")
+            ?: uri.getQueryParameter("x_respuesta")
+            ?: uri.getQueryParameter("x_transaction_state")
+            ?: uri.getQueryParameter("x_response_reason_text")
+            ?: uri.getQueryParameter("status")
+            ?: uri.getQueryParameter("estado")
+            ?: uri.getQueryParameter("state")
+            ?: "RECHAZADO"
+
+        val clean = raw.uppercase().trim()
         return when {
             clean.contains("ACEPT") || clean.contains("APPROV") || clean.contains("APROB") || clean == "OK" -> "APROBADO"
             clean.contains("RECH") || clean.contains("DECLIN") || clean.contains("DENIED") -> "RECHAZADO"
-            clean.contains("CANCEL") -> "CANCELADO"
-            clean.contains("FAIL") || clean.contains("ERROR") -> "FALLIDO"
-            else -> clean.ifBlank { "PENDIENTE" }
+            clean.contains("CANCEL") || clean.contains("ABANDON") -> "RECHAZADO"
+            clean.contains("FAIL") || clean.contains("ERROR") || clean.contains("FONDOS") -> "RECHAZADO"
+            clean.contains("PEND") -> "RECHAZADO"
+            else -> clean.ifBlank { "RECHAZADO" }
         }
     }
 
-    private fun messageForState(state: String): String {
-        return when (state) {
-            "APROBADO" -> "El pago fue aprobado correctamente y la orden fue generada."
-            "RECHAZADO" -> "El pago fue rechazado por la pasarela. No se generó la orden de compra."
-            "CANCELADO" -> "El pago fue cancelado. No se generó la orden de compra."
-            "FALLIDO" -> "El pago no pudo ser procesado. No se generó la orden de compra."
-            "CONFIGURAR" -> "Configura la llave pública para iniciar el checkout."
-            else -> "La transacción quedó en estado $state. No se generó la orden de compra."
+    private fun messageForState(state: String, shipmentState: String): String {
+        return if (state == "APROBADO") {
+            "La transacción fue aprobada correctamente. La orden quedó en estado $shipmentState."
+        } else {
+            "La transacción quedó en estado $state. La orden quedó en estado $shipmentState."
         }
     }
 
-    private fun showResult(
-        state: String,
-        message: String,
-        apiJson: String,
-        idOrder: Long
-    ) {
+    private fun showLocalResult(state: String, shipmentState: String, message: String) {
         savedResult = true
         webEpayco.visibility = View.GONE
         resultContainer.visibility = View.VISIBLE
+        showResult(state, shipmentState, message)
+    }
+
+    private fun showResult(state: String, shipmentState: String, message: String) {
         txtReference.text = reference.ifBlank { "-" }
         txtState.text = state
+        txtShipmentState.text = shipmentState
         txtMessage.text = message
         txtTotal.text = "$ ${String.format("%,.0f", total)}"
-        saveEpayco(apiJson, state, idOrder)
     }
 
-    private fun saveEpayco(apiJson: String, state: String, idOrder: Long) {
-        db.collection("epayco")
-            .orderBy("register", Query.Direction.DESCENDING)
-            .limit(1)
-            .get()
-            .addOnSuccessListener { result ->
-                val register = (result.documents.firstOrNull()?.getLong("register") ?: 0L) + 1L
-                db.collection("epayco").document(register.toString()).set(
-                    EpaycoModel(
-                        register = register,
-                        api = apiJson,
-                        state = state,
-                        idOrder = idOrder
-                    )
-                )
-            }
-            .addOnFailureListener {
-                Toast.makeText(this, "No se pudo guardar la respuesta de ePayco", Toast.LENGTH_LONG).show()
-            }
-    }
-
-    private fun buildResultJson(state: String, message: String): String {
+    private fun buildGatewayJson(uri: Uri, state: String, paymentMethod: String): String {
+        val data = JSONObject()
+        uri.queryParameterNames.sorted().forEach { key ->
+            data.put(key, uri.getQueryParameter(key))
+        }
         return JSONObject().apply {
             put("reference", reference)
-            put("order", orderRegister)
             put("total", total)
             put("state", state)
-            put("message", message)
+            put("paymentMethod", paymentMethod)
+            put("url", uri.toString())
+            put("data", data)
         }.toString()
     }
 

@@ -27,7 +27,6 @@ class PurchaseUpdateActivity : AppCompatActivity() {
     private lateinit var fieldAmount: EditText
     private lateinit var fieldValue: EditText
     private lateinit var fieldTotal: EditText
-    private lateinit var fieldIdGangway: Spinner
     private lateinit var fieldIdOrder: Spinner
     private lateinit var fieldIdProduct: Spinner
     private lateinit var fieldIdUser: Spinner
@@ -58,7 +57,6 @@ class PurchaseUpdateActivity : AppCompatActivity() {
         fieldAmount = findViewById(R.id.fieldAmount)
         fieldValue = findViewById(R.id.fieldValue)
         fieldTotal = findViewById(R.id.fieldTotal)
-        fieldIdGangway = findViewById(R.id.fieldIdGangway)
         fieldIdOrder = findViewById(R.id.fieldIdOrder)
         fieldIdProduct = findViewById(R.id.fieldIdProduct)
         fieldIdUser = findViewById(R.id.fieldIdUser)
@@ -102,7 +100,6 @@ class PurchaseUpdateActivity : AppCompatActivity() {
         fieldAmount.setText(current.amount?.toString() ?: "")
         fieldValue.setText(current.value?.toString() ?: "")
         fieldTotal.setText(current.total?.toString() ?: "")
-        FirestoreSelectHelper.load(this, fieldIdGangway, "gateway", listOf("name"), current.idGangway)
         FirestoreSelectHelper.load(this, fieldIdOrder, "order", listOf("reference"), current.idOrder)
         FirestoreSelectHelper.load(this, fieldIdProduct, "product", listOf("name"), current.idProduct)
         FirestoreSelectHelper.load(this, fieldIdUser, "user", listOf("names", "srnms", "email"), current.idUser)
@@ -117,7 +114,6 @@ class PurchaseUpdateActivity : AppCompatActivity() {
         val amount = fieldAmount.text.toString().trim().toIntOrNull()
         val value = fieldValue.text.toString().trim().toDoubleOrNull()
         val total = fieldTotal.text.toString().trim().toDoubleOrNull()
-        val idGangway = FirestoreSelectHelper.getSelectedId(fieldIdGangway)
         val idOrder = FirestoreSelectHelper.getSelectedId(fieldIdOrder)
         val idProduct = FirestoreSelectHelper.getSelectedId(fieldIdProduct)
         val idUser = FirestoreSelectHelper.getSelectedId(fieldIdUser)
@@ -127,8 +123,8 @@ class PurchaseUpdateActivity : AppCompatActivity() {
             return
         }
 
-        if (idGangway == null || idOrder == null || idProduct == null || idUser == null) {
-            Toast.makeText(this, "Debe seleccionar pasarela, referencia, producto y usuario", Toast.LENGTH_SHORT).show()
+        if (idOrder == null || idProduct == null || idUser == null) {
+            Toast.makeText(this, "Debe seleccionar referencia, producto y usuario", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -137,7 +133,6 @@ class PurchaseUpdateActivity : AppCompatActivity() {
             amount = amount,
             value = value,
             total = total,
-            idGangway = idGangway,
             idOrder = idOrder,
             idProduct = idProduct,
             idUser = idUser

@@ -12,7 +12,7 @@ import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.model.address.AddressSelectActivity
 import com.compensar.tienda.ui.model.category.CategorySelectActivity
 import com.compensar.tienda.ui.model.gateway.GatewaySelectActivity
-import com.compensar.tienda.ui.model.epayco.EpaycoSelectActivity
+import com.compensar.tienda.ui.model.trade.TradeSelectActivity
 import com.compensar.tienda.ui.model.image.ImageSelectActivity
 import com.compensar.tienda.ui.model.module.ModuleSelectActivity
 import com.compensar.tienda.ui.model.order.OrderSelectActivity
@@ -109,8 +109,8 @@ class AdminDashboardActivity : AppCompatActivity() {
             R.id.detailOrder), "Ordenes")
         moduleViews["payment"] = ModuleDashboardItem(cardPayment, findViewById(R.id.titlePayment), findViewById(
             R.id.detailPayment), "Pagos")
-        moduleViews["epayco"] = ModuleDashboardItem(cardEpayco, findViewById(R.id.titleEpayco), findViewById(
-            R.id.detailEpayco), "Epayco")
+        moduleViews["trade"] = ModuleDashboardItem(cardEpayco, findViewById(R.id.titleEpayco), findViewById(
+            R.id.detailEpayco), "Transacciones")
         moduleViews["product"] = ModuleDashboardItem(cardProduct, findViewById(R.id.titleProduct), findViewById(
             R.id.detailProduct), "Productos")
         moduleViews["purchase"] = ModuleDashboardItem(cardPurchase, findViewById(R.id.titlePurchase), findViewById(
@@ -178,7 +178,7 @@ class AdminDashboardActivity : AppCompatActivity() {
         }
 
         cardEpayco.setOnClickListener {
-            val intent = Intent(this, EpaycoSelectActivity::class.java)
+            val intent = Intent(this, TradeSelectActivity::class.java)
             startActivity(intent)
         }
 

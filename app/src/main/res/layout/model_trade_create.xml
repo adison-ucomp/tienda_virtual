@@ -4,14 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    android:background="@color/background_layout"
-    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ui.model.purchase.PurchaseCreateActivity">
+    android:background="@color/background_layout"
+    android:fitsSystemWindows="true"
+    tools:context=".ui.model.trade.TradeCreateActivity">
 
-    <!-- Navbar superior -->
     <include
         android:id="@+id/includeSuperior"
         layout="@layout/navbar_admin_return"
@@ -21,13 +19,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Contenido principal -->
     <ScrollView
-        android:id="@+id/scrollPurchaseCreateActivity"
+        android:id="@+id/scrollTradeCreate"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:fillViewport="true"
         android:background="@color/background_layout"
+        android:fillViewport="true"
         app:layout_constraintTop_toBottomOf="@id/includeSuperior"
         app:layout_constraintBottom_toTopOf="@id/includeInferior"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,9 +48,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="20dp"
-                    android:gravity="center_vertical">
+                    android:padding="20dp">
 
                     <ImageView
                         android:layout_width="50dp"
@@ -63,25 +60,25 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginStart="16dp">
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/titleHeader"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Crear Compra"
+                            android:text="Crear Transacción"
+                            android:textColor="@color/black"
                             android:textSize="20sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/black" />
+                            android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
                             android:text="@string/register_store"
-                            android:textSize="14sp"
                             android:textColor="@color/subtitle"
-                            android:layout_marginTop="8dp" />
+                            android:textSize="14sp" />
 
                     </LinearLayout>
 
@@ -90,7 +87,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardPurchaseCreateActivity"
+                android:id="@+id/cardTradeCreate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
@@ -107,29 +104,29 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:text="Información del Registro"
                         android:textColor="@color/black"
                         android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:gravity="center" />
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
-                        android:text="Cantidad"
+                        android:text="Servicio"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <EditText
-                        android:id="@+id/fieldAmount"
+                        android:id="@+id/fieldApi"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/bg_button"
-                        android:hint="Cantidad"
-                        android:inputType="number"
+                        android:hint="JSON"
+                        android:inputType="textMultiLine"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
                         android:textColor="@color/black"
@@ -140,19 +137,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
-                        android:text="Valor"
+                        android:text="Estado"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <EditText
-                        android:id="@+id/fieldValue"
+                        android:id="@+id/fieldState"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/bg_button"
-                        android:hint="Valor"
-                        android:inputType="numberDecimal"
+                        android:hint="APROBADO"
+                        android:inputType="textCapCharacters"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
                         android:textColor="@color/black"
@@ -163,30 +160,25 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
-                        android:text="Total"
+                        android:text="Pasarela"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
-                    <EditText
-                        android:id="@+id/fieldTotal"
+                    <Spinner
+                        android:id="@+id/fieldIdGateway"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/bg_button"
-                        android:hint="Total"
-                        android:inputType="numberDecimal"
                         android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        android:textColor="@color/black"
-                        android:textColorHint="@color/hint"
-                        android:textSize="16sp" />
+                        android:paddingEnd="16dp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
-                        android:text="Referencia"
+                        android:text="Orden"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -197,44 +189,8 @@
                         android:layout_height="56dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/bg_button"
-                        android:paddingStart="12dp"
-                        android:paddingEnd="12dp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:text="Producto"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <Spinner
-                        android:id="@+id/fieldIdProduct"
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:layout_marginTop="8dp"
-                        android:background="@drawable/bg_button"
-                        android:paddingStart="12dp"
-                        android:paddingEnd="12dp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:text="Usuario"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <Spinner
-                        android:id="@+id/fieldIdUser"
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:layout_marginTop="8dp"
-                        android:background="@drawable/bg_button"
-                        android:paddingStart="12dp"
-                        android:paddingEnd="12dp" />
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp" />
 
                 </LinearLayout>
 
@@ -251,8 +207,8 @@
                     android:id="@+id/actionCancel"
                     android:layout_width="0dp"
                     android:layout_height="56dp"
-                    android:layout_weight="1"
                     android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
                     android:backgroundTint="@color/black"
                     android:text="Regresar"
                     android:textAllCaps="false"
@@ -264,8 +220,8 @@
                     android:id="@+id/actionExecute"
                     android:layout_width="0dp"
                     android:layout_height="56dp"
-                    android:layout_weight="1"
                     android:layout_marginStart="8dp"
+                    android:layout_weight="1"
                     android:backgroundTint="@color/black"
                     android:text="Guardar"
                     android:textAllCaps="false"
@@ -279,7 +235,6 @@
 
     </ScrollView>
 
-    <!-- Menú inferior -->
     <include
         android:id="@+id/includeInferior"
         layout="@layout/navbar_admin_inferior"

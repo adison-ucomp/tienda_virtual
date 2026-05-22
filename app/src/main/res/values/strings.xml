@@ -177,7 +177,9 @@
     <string name="model_order_title">Gestionar Ordenes</string>
     <string name="model_order_detail">Administra las ordenes del sistema</string>
 
-    <!-- Modelo Epayco -->
+    <!-- Modelo Trade -->
+    <string name="model_trade_title">Gestionar Transacciones</string>
+    <string name="model_trade_detail">Administra las transacciones de pago</string>
     <string name="model_epayco_title">Gestionar Epayco</string>
     <string name="model_epayco_detail">Administra las transacciones de ePayco</string>
 

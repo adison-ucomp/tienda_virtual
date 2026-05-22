@@ -82,7 +82,18 @@ class DefaultFire {
             collectionName = "module",
             data = ModuleDefault.getAll(),
             getRegister = { it.register },
-            onSuccess = onSuccess,
+            onSuccess = {
+                db.collection("module").document("17")
+                    .update(
+                        mapOf(
+                            "name" to "Transacciones",
+                            "model" to "trade",
+                            "detail" to "Administra las transacciones de pago"
+                        )
+                    )
+                    .addOnSuccessListener { onSuccess() }
+                    .addOnFailureListener { onSuccess() }
+            },
             onFailure = onFailure
         )
     }

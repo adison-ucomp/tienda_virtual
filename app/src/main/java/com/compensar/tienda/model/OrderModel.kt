@@ -7,7 +7,9 @@ data class OrderModel(
     val total: Double? = null,
     val date: String? = null,
     val hour: String? = null,
+    val idTrade: Long = 0,
     val idShop: Long = 0,
+    val idPayment: Long = 0,
     val idShipment: Long = 0,
     val idUser: Long = 0
 )

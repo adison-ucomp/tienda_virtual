@@ -22,7 +22,6 @@ class PurchaseDeleteActivity : AppCompatActivity() {
     private lateinit var fieldAmount: TextView
     private lateinit var fieldValue: TextView
     private lateinit var fieldTotal: TextView
-    private lateinit var fieldIdGangway: TextView
     private lateinit var fieldIdOrder: TextView
     private lateinit var fieldIdProduct: TextView
     private lateinit var fieldIdUser: TextView
@@ -53,7 +52,6 @@ class PurchaseDeleteActivity : AppCompatActivity() {
         fieldAmount = findViewById(R.id.fieldAmount)
         fieldValue = findViewById(R.id.fieldValue)
         fieldTotal = findViewById(R.id.fieldTotal)
-        fieldIdGangway = findViewById(R.id.fieldIdGangway)
         fieldIdOrder = findViewById(R.id.fieldIdOrder)
         fieldIdProduct = findViewById(R.id.fieldIdProduct)
         fieldIdUser = findViewById(R.id.fieldIdUser)
@@ -94,7 +92,6 @@ class PurchaseDeleteActivity : AppCompatActivity() {
         fieldAmount.text = current.amount?.toString() ?: "-"
         fieldValue.text = current.value?.toString() ?: "-"
         fieldTotal.text = current.total?.toString() ?: "-"
-        FirestoreRelationLabelHelper.load(fieldIdGangway, "gateway", current.idGangway, listOf("name"))
         FirestoreRelationLabelHelper.load(fieldIdOrder, "order", current.idOrder, listOf("reference"))
         FirestoreRelationLabelHelper.load(fieldIdProduct, "product", current.idProduct, listOf("name"))
         FirestoreRelationLabelHelper.load(fieldIdUser, "user", current.idUser, listOf("names", "srnms", "email"))

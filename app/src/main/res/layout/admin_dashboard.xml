@@ -561,7 +561,7 @@
 
             </androidx.cardview.widget.CardView>
 
-            <!-- Modulo Epayco -->
+            <!-- Modulo Transacciones -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardEpayco"
                 android:layout_width="match_parent"
@@ -593,7 +593,7 @@
                             android:id="@+id/titleEpayco"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Gestionar Epayco"
+                            android:text="Gestionar Transacciones"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />

@@ -35,16 +35,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.model.epayco.EpaycoUpdateActivity"
+            android:name=".ui.model.trade.TradeUpdateActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.model.epayco.EpaycoSelectActivity"
+            android:name=".ui.model.trade.TradeSelectActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.model.epayco.EpaycoDeleteActivity"
+            android:name=".ui.model.trade.TradeDeleteActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.model.epayco.EpaycoCreateActivity"
+            android:name=".ui.model.trade.TradeCreateActivity"
             android:exported="false" />
         <activity
             android:name=".ui.seller.SellerShopStoreActivity"
