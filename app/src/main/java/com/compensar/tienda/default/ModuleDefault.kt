@@ -13,6 +13,7 @@ object ModuleDefault {
             ModuleModel(register = 5L, name = "Imágenes", model = "image", detail = "Administra las imágenes de los productos", state = false),
             ModuleModel(register = 6L, name = "Ordenes", model = "order", detail = "Administra las ordenes de compra", state = false),
             ModuleModel(register = 7L, name = "Pagos", model = "payment", detail = "Administra los pagos de las ordenes", state = false),
+            ModuleModel(register = 17L, name = "Epayco", model = "epayco", detail = "Administra las transacciones de ePayco", state = false),
             ModuleModel(register = 8L, name = "Productos", model = "product", detail = "Administra los productos de las tiendas", state = false),
             ModuleModel(register = 9L, name = "Compras", model = "purchase", detail = "Administra las compras de los usuarios", state = false),
             ModuleModel(register = 10L, name = "Roles", model = "role", detail = "Administra los roles del sistema", state = false),

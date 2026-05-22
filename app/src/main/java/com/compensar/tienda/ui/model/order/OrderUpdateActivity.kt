@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
 import com.compensar.tienda.model.OrderModel
 import com.compensar.tienda.ui.common.SessionNavigation
+import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
 import com.compensar.tienda.ui.model.common.ModuleView
 import com.compensar.tienda.ui.admin.AdminDashboardActivity
 import com.google.firebase.firestore.FirebaseFirestore
@@ -27,6 +29,7 @@ class OrderUpdateActivity : AppCompatActivity() {
     private lateinit var fieldTotal: EditText
     private lateinit var fieldDate: EditText
     private lateinit var fieldHour: EditText
+    private lateinit var fieldIdShop: Spinner
 
     private val collection = FirebaseFirestore.getInstance().collection("order")
     private var register: Long = 0
@@ -56,6 +59,7 @@ class OrderUpdateActivity : AppCompatActivity() {
         fieldTotal = findViewById(R.id.fieldTotal)
         fieldDate = findViewById(R.id.fieldDate)
         fieldHour = findViewById(R.id.fieldHour)
+        fieldIdShop = findViewById(R.id.fieldIdShop)
     }
 
     private fun initEvents() {
@@ -98,6 +102,13 @@ class OrderUpdateActivity : AppCompatActivity() {
         fieldTotal.setText(current.total?.toString() ?: "")
         fieldDate.setText(current.date.orEmpty())
         fieldHour.setText(current.hour.orEmpty())
+        FirestoreSelectHelper.load(
+            context = this,
+            spinner = fieldIdShop,
+            collectionName = "shop",
+            labelFields = listOf("name"),
+            selectedId = current.idShop
+        )
     }
 
     private fun actionOperate() {
@@ -111,6 +122,12 @@ class OrderUpdateActivity : AppCompatActivity() {
         val total = fieldTotal.text.toString().trim().toDoubleOrNull()
         val date = fieldDate.text.toString().trim()
         val hour = fieldHour.text.toString().trim()
+        val idShop = FirestoreSelectHelper.getSelectedId(fieldIdShop)
+
+        if (idShop == null) {
+            Toast.makeText(this, "Debe seleccionar una tienda válida", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         if (reference.isEmpty() || address.isEmpty() || total == null || date.isEmpty() || hour.isEmpty()) {
             Toast.makeText(this, "Debes ingresar referencia, dirección, total, fecha y hora", Toast.LENGTH_SHORT).show()
@@ -123,7 +140,8 @@ class OrderUpdateActivity : AppCompatActivity() {
             address = address,
             total = total,
             date = date,
-            hour = hour
+            hour = hour,
+            idShop = idShop
         )
 
         collection.document(register.toString()).set(updatedData)

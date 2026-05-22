@@ -1,4 +1,4 @@
-package com.compensar.tienda.ui.model.order
+package com.compensar.tienda.ui.model.epayco
 
 import android.content.Intent
 import android.graphics.Typeface
@@ -12,23 +12,23 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import com.compensar.tienda.R
-import com.compensar.tienda.model.OrderModel
+import com.compensar.tienda.model.EpaycoModel
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.model.common.FirestoreRelationLabelHelper
 import com.compensar.tienda.ui.model.common.SelectSearchHelper
 import com.google.firebase.firestore.FirebaseFirestore
 
-class OrderSelectActivity : AppCompatActivity() {
+class EpaycoSelectActivity : AppCompatActivity() {
     private lateinit var actionReturn: TextView
     private lateinit var dataList: LinearLayout
     private lateinit var actionNew: LinearLayout
 
-    private val collection = FirebaseFirestore.getInstance().collection("order")
+    private val collection = FirebaseFirestore.getInstance().collection("epayco")
     private var searchQuery: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.model_order_select)
+        setContentView(R.layout.model_epayco_select)
         SessionNavigation.bindProfile(this)
 
         actionReturn = findViewById(R.id.actionReturn)
@@ -36,7 +36,9 @@ class OrderSelectActivity : AppCompatActivity() {
         actionNew = findViewById(R.id.actionNew)
 
         actionReturn.setOnClickListener { finish() }
-        actionNew.setOnClickListener { startActivity(Intent(this, OrderCreateActivity::class.java)) }
+        actionNew.setOnClickListener {
+            startActivity(Intent(this, EpaycoCreateActivity::class.java))
+        }
 
         SelectSearchHelper.bind(
             this,
@@ -60,14 +62,19 @@ class OrderSelectActivity : AppCompatActivity() {
         collection.get()
             .addOnSuccessListener { result ->
                 dataList.removeAllViews()
-                val items = result.documents.mapNotNull { it.toObject(OrderModel::class.java) }.filter { SelectSearchHelper.matches(it, searchQuery) }.sortedBy { it.register }
+                val items = result.documents
+                    .mapNotNull { it.toObject(EpaycoModel::class.java) }
+                    .filter { SelectSearchHelper.matches(it, searchQuery) }
+                    .sortedBy { it.register }
+
                 if (items.isEmpty()) {
                     dataList.addView(TextView(this).apply {
-                        text = "Sin órdenes registradas"
+                        text = "Sin transacciones registradas"
                         gravity = Gravity.CENTER
                         setPadding(0, dp(40), 0, dp(40))
                     })
                 }
+
                 items.forEach { dataList.addView(loadCard(it)) }
             }
             .addOnFailureListener { exception ->
@@ -76,12 +83,15 @@ class OrderSelectActivity : AppCompatActivity() {
             }
     }
 
-    private fun loadCard(data: OrderModel): CardView {
+    private fun loadCard(data: EpaycoModel): CardView {
         val cardView = CardView(this).apply {
             radius = dp(18).toFloat()
             cardElevation = dp(6).toFloat()
             setCardBackgroundColor(getColor(R.color.white))
-            layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            ).apply {
                 setMargins(dp(4), 0, dp(4), dp(16))
             }
         }
@@ -94,34 +104,50 @@ class OrderSelectActivity : AppCompatActivity() {
 
         val textContainer = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
+            layoutParams = LinearLayout.LayoutParams(
+                0,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                1f
+            )
         }
 
         addText(textContainer, "Registro: ${data.register}")
-        addText(textContainer, "Referencia: ${data.reference ?: ""}")
-        addText(textContainer, "Dirección: ${data.address ?: ""}")
-        addText(textContainer, "Total: ${data.total ?: 0.0}")
-        addText(textContainer, "Fecha: ${data.date ?: ""}")
-        addText(textContainer, "Hora: ${data.hour ?: ""}")
-        val shopLabel = addText(textContainer, "Tienda: Cargando...")
-        FirestoreRelationLabelHelper.load(shopLabel, "shop", data.idShop, listOf("name"))
+        addText(textContainer, "Servicio: ${data.api ?: ""}")
+        addText(textContainer, "Estado: ${data.state ?: ""}")
+        val orderLabel = addText(textContainer, "Orden: Cargando...")
+        FirestoreRelationLabelHelper.load(orderLabel, "order", data.idOrder, listOf("reference"))
 
         val buttonContainer = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER
-            layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT)
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
         }
 
         val btnEdit = ImageView(this).apply {
             setImageResource(R.drawable.ic_edit)
-            layoutParams = LinearLayout.LayoutParams(dp(28), dp(28)).apply { setMargins(0, 0, 0, dp(16)) }
-            setOnClickListener { startActivity(Intent(this@OrderSelectActivity, OrderUpdateActivity::class.java).putExtra("register", data.register)) }
+            layoutParams = LinearLayout.LayoutParams(dp(28), dp(28)).apply {
+                setMargins(0, 0, 0, dp(16))
+            }
+            setOnClickListener {
+                startActivity(
+                    Intent(this@EpaycoSelectActivity, EpaycoUpdateActivity::class.java)
+                        .putExtra("register", data.register)
+                )
+            }
         }
 
         val btnQuit = ImageView(this).apply {
             setImageResource(R.drawable.ic_delete)
-            layoutParams = LinearLayout.LayoutParams(dp(28), dp(28)).apply { setMargins(0, 0, 0, dp(16)) }
-            setOnClickListener { startActivity(Intent(this@OrderSelectActivity, OrderDeleteActivity::class.java).putExtra("register", data.register)) }
+            layoutParams = LinearLayout.LayoutParams(dp(28), dp(28))
+            setOnClickListener {
+                startActivity(
+                    Intent(this@EpaycoSelectActivity, EpaycoDeleteActivity::class.java)
+                        .putExtra("register", data.register)
+                )
+            }
         }
 
         buttonContainer.addView(btnEdit)
@@ -132,15 +158,19 @@ class OrderSelectActivity : AppCompatActivity() {
         return cardView
     }
 
-    private fun addText(container: LinearLayout, value: String) {
-        container.addView(TextView(this).apply {
-            text = value
+    private fun addText(container: LinearLayout, value: String): TextView {
+        val text = TextView(this).apply {
+            this.text = value
             textSize = 14f
             setTextColor(getColor(R.color.black))
             setTypeface(null, Typeface.BOLD)
             setPadding(0, dp(6), 0, 0)
-        })
+        }
+        container.addView(text)
+        return text
     }
 
-    private fun dp(value: Int): Int = (value * resources.displayMetrics.density).toInt()
+    private fun dp(value: Int): Int {
+        return (value * resources.displayMetrics.density).toInt()
+    }
 }

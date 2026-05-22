@@ -21,6 +21,30 @@
         android:theme="@style/Theme.TiendaVirtual">
         <activity
             android:name=".ui.home.HomeEpaycoActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="epayco"
+                    android:path="/result"
+                    android:scheme="emptio" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.model.epayco.EpaycoUpdateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.epayco.EpaycoSelectActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.epayco.EpaycoDeleteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.model.epayco.EpaycoCreateActivity"
             android:exported="false" />
         <activity
             android:name=".ui.seller.SellerShopStoreActivity"

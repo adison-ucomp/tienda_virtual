@@ -17,6 +17,7 @@ import com.compensar.tienda.R
 import com.compensar.tienda.model.AddressModel
 import com.compensar.tienda.ui.common.CartManager
 import com.compensar.tienda.ui.common.SessionManager
+import com.compensar.tienda.ui.home.HomeEpaycoActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -237,6 +238,7 @@ class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
                     "total" to subtotal,
                     "date" to date,
                     "hour" to hour,
+                    "idShop" to 0L,
                     "idShipment" to 1L,
                     "idUser" to userRegister
                 )
@@ -275,7 +277,12 @@ class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
                         }.addOnSuccessListener {
                             CartManager.clear(this)
                             Toast.makeText(this, "Compra registrada. Orden: $reference", Toast.LENGTH_LONG).show()
-                            startActivity(Intent(this, BuyerShoppingActivity::class.java))
+                            val intent = Intent(this, HomeEpaycoActivity::class.java).apply {
+                                putExtra("orderRegister", orderRegister)
+                                putExtra("reference", reference)
+                                putExtra("total", subtotal)
+                            }
+                            startActivity(intent)
                             finish()
                         }.addOnFailureListener { exception ->
                             btnConfirmPurchase.isEnabled = true

@@ -228,6 +228,25 @@
                         android:textColorHint="@color/hint"
                         android:textSize="16sp" />
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="Tienda"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <Spinner
+                        android:id="@+id/fieldIdShop"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_button"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp" />
+
+
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>

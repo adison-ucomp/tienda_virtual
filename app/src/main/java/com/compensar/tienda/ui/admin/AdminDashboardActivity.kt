@@ -12,6 +12,7 @@ import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.model.address.AddressSelectActivity
 import com.compensar.tienda.ui.model.category.CategorySelectActivity
 import com.compensar.tienda.ui.model.gateway.GatewaySelectActivity
+import com.compensar.tienda.ui.model.epayco.EpaycoSelectActivity
 import com.compensar.tienda.ui.model.image.ImageSelectActivity
 import com.compensar.tienda.ui.model.module.ModuleSelectActivity
 import com.compensar.tienda.ui.model.order.OrderSelectActivity
@@ -39,6 +40,7 @@ class AdminDashboardActivity : AppCompatActivity() {
     private lateinit var cardImage: CardView
     private lateinit var cardOrder: CardView
     private lateinit var cardPayment: CardView
+    private lateinit var cardEpayco: CardView
     private lateinit var cardProduct: CardView
     private lateinit var cardPurchase: CardView
     private lateinit var cardRole: CardView
@@ -81,6 +83,7 @@ class AdminDashboardActivity : AppCompatActivity() {
         cardImage = findViewById(R.id.cardImage)
         cardOrder = findViewById(R.id.cardOrder)
         cardPayment = findViewById(R.id.cardPayment)
+        cardEpayco = findViewById(R.id.cardEpayco)
         cardProduct = findViewById(R.id.cardProduct)
         cardPurchase = findViewById(R.id.cardPurchase)
         cardRole = findViewById(R.id.cardRole)
@@ -106,6 +109,8 @@ class AdminDashboardActivity : AppCompatActivity() {
             R.id.detailOrder), "Ordenes")
         moduleViews["payment"] = ModuleDashboardItem(cardPayment, findViewById(R.id.titlePayment), findViewById(
             R.id.detailPayment), "Pagos")
+        moduleViews["epayco"] = ModuleDashboardItem(cardEpayco, findViewById(R.id.titleEpayco), findViewById(
+            R.id.detailEpayco), "Epayco")
         moduleViews["product"] = ModuleDashboardItem(cardProduct, findViewById(R.id.titleProduct), findViewById(
             R.id.detailProduct), "Productos")
         moduleViews["purchase"] = ModuleDashboardItem(cardPurchase, findViewById(R.id.titlePurchase), findViewById(
@@ -169,6 +174,11 @@ class AdminDashboardActivity : AppCompatActivity() {
 
         cardPayment.setOnClickListener {
             val intent = Intent(this, PaymentSelectActivity::class.java)
+            startActivity(intent)
+        }
+
+        cardEpayco.setOnClickListener {
+            val intent = Intent(this, EpaycoSelectActivity::class.java)
             startActivity(intent)
         }
 

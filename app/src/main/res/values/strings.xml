@@ -177,6 +177,10 @@
     <string name="model_order_title">Gestionar Ordenes</string>
     <string name="model_order_detail">Administra las ordenes del sistema</string>
 
+    <!-- Modelo Epayco -->
+    <string name="model_epayco_title">Gestionar Epayco</string>
+    <string name="model_epayco_detail">Administra las transacciones de ePayco</string>
+
     <!-- Modelo Pagos -->
     <string name="model_payment_title">Gestionar Pagos</string>
     <string name="model_payment_detail">Administra los pagos del sistema</string>
@@ -222,4 +226,8 @@
     <string name="action_create">Nuevo</string>
     <string name="action_update">Editar</string>
     <string name="action_delete">Quitar</string>
+
+    <string name="epayco_result">Resultado de Pago</string>
+    <string name="epayco_service">Servicio ePayco</string>
+    <string name="payment_state">Estado del Pago</string>
 </resources>
