@@ -7,6 +7,7 @@ import com.compensar.tienda.default.PaymentDefault
 import com.compensar.tienda.default.ProductDefault
 import com.compensar.tienda.default.RoleDefault
 import com.compensar.tienda.default.SellerDefault
+import com.compensar.tienda.default.ShopDefault
 import com.compensar.tienda.default.UserDefault
 import com.compensar.tienda.model.UbicationModel
 import com.compensar.tienda.model.ShipmentModel
@@ -36,8 +37,13 @@ class DefaultFire {
                                                             onSuccess = {
                                                                 createSellers(
                                                                     onSuccess = {
-                                                                        createProducts(
-                                                                            onSuccess = onSuccess,
+                                                                        createShops(
+                                                                            onSuccess = {
+                                                                                createProducts(
+                                                                                    onSuccess = onSuccess,
+                                                                                    onFailure = onFailure
+                                                                                )
+                                                                            },
                                                                             onFailure = onFailure
                                                                         )
                                                                     },
@@ -184,6 +190,19 @@ class DefaultFire {
         )
     }
 
+
+    private fun createShops(
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        createMissingDocuments(
+            collectionName = "shop",
+            data = ShopDefault.getAll(),
+            getRegister = { it.register },
+            onSuccess = onSuccess,
+            onFailure = onFailure
+        )
+    }
 
     private fun createProducts(
         onSuccess: () -> Unit,

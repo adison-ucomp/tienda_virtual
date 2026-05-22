@@ -11,7 +11,7 @@ object SellerDefault {
                 company = "UCompensar",
                 nit = "123456789",
                 address = "Calle 1 Carrera 1 # 1",
-                idUser = 3
+                idUser = 2
             )
         )
     }
