@@ -52,7 +52,7 @@ object SessionNavigation {
         }
 
         activity.findViewById<LinearLayout?>(R.id.navProducts)?.setOnClickListener {
-            if (SessionManager.getRole(activity) == 2L) {
+            if (SessionManager.getRole(activity) == 2L && activity !is SellerProductListActivity) {
                 val intent = Intent(activity, SellerProductListActivity::class.java)
                 activity.startActivity(intent)
             }

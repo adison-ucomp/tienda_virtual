@@ -76,7 +76,8 @@ class SellerDashboardActivity : AppCompatActivity() {
         }
 
         navProducts.setOnClickListener {
-            Toast.makeText(this, "Productos", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, SellerProductListActivity::class.java)
+            startActivity(intent)
         }
     }
 
