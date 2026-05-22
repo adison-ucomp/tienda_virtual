@@ -78,8 +78,8 @@ object SessionNavigation {
     }
 
     private fun bindSharedMenu(activity: AppCompatActivity) {
-        val buyerMenu = activity.findViewById<TextView?>(R.id.btnMenu)
-        val sellerMenu = activity.findViewById<TextView?>(R.id.actionMenu)
+        val buyerMenu = activity.findViewById<View?>(R.id.btnMenu)
+        val sellerMenu = activity.findViewById<View?>(R.id.actionMenu)
         val isLogged = isLoggedIn(activity)
 
         buyerMenu?.visibility = if (isLogged) View.VISIBLE else View.GONE
@@ -102,7 +102,7 @@ object SessionNavigation {
     }
 
     fun applyBuyerSuperiorVisibility(activity: AppCompatActivity) {
-        val btnMenu = activity.findViewById<TextView?>(R.id.btnMenu)
+        val btnMenu = activity.findViewById<View?>(R.id.btnMenu)
         val isLogged = isLoggedIn(activity)
 
         btnMenu?.visibility = if (isLogged) View.VISIBLE else View.GONE
