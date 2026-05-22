@@ -18,20 +18,38 @@ object UserDefault {
             ),
             UserModel(
                 register = 2,
-                names = "Adison",
-                srnms = "Jimenez",
-                email = "adisonzenemij@gmail.com",
-                password = encryptPassword("Adison"),
+                names = "Vendedor",
+                srnms = "Adison",
+                email = "test@engcode.dev",
+                password = encryptPassword("Vendedor"),
                 storefire = "https://firebasestorage.googleapis.com/v0/b/engineering-code.firebasestorage.app/o/images%2Fuser%2F2_1779208115377.jpg?alt=media&token=370089a3-12ee-4e60-aa75-8ec91f6c3c1e",
                 idRole = 2
             ),
             UserModel(
                 register = 3,
-                names = "Daniela",
-                srnms = "Fajardo",
-                email = "danif1701@gmail.com",
-                password = encryptPassword("Daniela"),
+                names = "Vendedor",
+                srnms = "Daniela",
+                email = "test@engcode.app",
+                password = encryptPassword("Vendedor"),
                 storefire = "https://firebasestorage.googleapis.com/v0/b/engineering-code.firebasestorage.app/o/images%2Fuser%2F3_1779208125396.jpg?alt=media&token=52f52d63-848c-40dd-b272-44d5946fff9c",
+                idRole = 3
+            ),
+            UserModel(
+                register = 4,
+                names = "Comprador",
+                srnms = "Adison",
+                email = "adisonzenemij@gmail.com",
+                password = encryptPassword("Comprador"),
+                storefire = "",
+                idRole = 2
+            ),
+            UserModel(
+                register = 5,
+                names = "Comprador",
+                srnms = "Daniela",
+                email = "danif1701@gmail.com",
+                password = encryptPassword("Comprador"),
+                storefire = "",
                 idRole = 3
             )
         )

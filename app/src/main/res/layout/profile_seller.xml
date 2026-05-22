@@ -38,7 +38,7 @@
             android:padding="20dp"
             android:gravity="center_horizontal">
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/imgProfile"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
@@ -46,7 +46,8 @@
                 android:padding="16dp"
                 android:background="@drawable/bg_circle"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_profile" />
+                android:src="@drawable/ic_profile"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Tienda.ProfileCircle" />
 
             <TextView
                 android:id="@+id/textName"

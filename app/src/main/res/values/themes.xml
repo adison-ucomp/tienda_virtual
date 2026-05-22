@@ -6,4 +6,9 @@
     </style>
 
     <style name="Theme.TiendaVirtual" parent="Base.Theme.TiendaVirtual" />
+
+    <style name="ShapeAppearance.Tienda.ProfileCircle" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>
