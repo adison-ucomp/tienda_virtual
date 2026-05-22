@@ -1,6 +1,7 @@
 <resources>
     <!-- APP -->
     <string name="app_name">EMPTIO</string>
+    <string name="app_email">email@domain.ext</string>
     <string name="splash_welcome">¡Bienvenidos!</string>
 
     <!-- GENERAL -->
