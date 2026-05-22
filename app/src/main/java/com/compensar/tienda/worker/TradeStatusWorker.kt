@@ -14,6 +14,9 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 class TradeStatusWorker(
@@ -25,8 +28,18 @@ class TradeStatusWorker(
 
     private val tag = "TRADE_STATUS_WORKER"
 
+    private fun nowText(): String {
+        return SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+    }
+
+    private fun nextExecutionText(): String {
+        val nextTime = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(EpaycoConfig.CRON_MINUTES)
+        return SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date(nextTime))
+    }
+
     override fun doWork(): Result {
-        Log.d(tag, "Iniciando validación programada de transacciones pendientes ePayco")
+        val executedAt = nowText()
+        Log.d(tag, "Iniciando validación programada de transacciones pendientes ePayco. Ejecutado en: $executedAt. Próxima ejecución estimada: ${nextExecutionText()}")
         try {
             val latch = java.util.concurrent.CountDownLatch(1)
 
@@ -39,10 +52,10 @@ class TradeStatusWorker(
                             && !it.getString("reference").isNullOrBlank()
                     }
 
-                    Log.d(tag, "Transacciones pendientes encontradas: ${documents.size}")
+                    Log.d(tag, "Transacciones pendientes encontradas: ${documents.size}. Hora consulta Firestore: ${nowText()}")
 
                     if (documents.isEmpty()) {
-                        Log.d(tag, "No hay transacciones pendientes para validar")
+                        Log.d(tag, "No hay transacciones pendientes para validar. Próxima ejecución estimada: ${nextExecutionText()}")
                         latch.countDown()
                         return@addOnSuccessListener
                     }
@@ -63,11 +76,11 @@ class TradeStatusWorker(
                 }
 
             latch.await(90, TimeUnit.SECONDS)
-            Log.d(tag, "Finalizó validación programada de transacciones pendientes ePayco")
+            Log.d(tag, "Finalizó validación programada de transacciones pendientes ePayco. Ejecutado en: $executedAt. Finalizó en: ${nowText()}. Próxima ejecución estimada: ${nextExecutionText()}")
             schedule(applicationContext)
             return Result.success()
         } catch (exception: Exception) {
-            Log.e(tag, "Error general en validación programada", exception)
+            Log.e(tag, "Error general en validación programada. Ejecutado en: $executedAt. Error en: ${nowText()}. Próxima ejecución estimada: ${nextExecutionText()}", exception)
             schedule(applicationContext)
             return Result.retry()
         }
@@ -80,8 +93,10 @@ class TradeStatusWorker(
     ) {
         Thread {
             try {
-                Log.d(tag, "Validando transacción pendiente. tradeId=$tradeId reference=$reference")
-                val connection = URL(EpaycoConfig.directValidationUrl(reference)).openConnection() as HttpURLConnection
+                val requestTime = nowText()
+                val url = EpaycoConfig.directValidationUrl(reference)
+                Log.d(tag, "Ejecutando petición a ePayco. Fecha y hora: $requestTime. tradeId=$tradeId reference=$reference url=$url")
+                val connection = URL(url).openConnection() as HttpURLConnection
                 connection.requestMethod = "GET"
                 connection.connectTimeout = 15000
                 connection.readTimeout = 20000
@@ -95,7 +110,7 @@ class TradeStatusWorker(
                 }
 
                 val response = BufferedReader(InputStreamReader(stream)).use { it.readText() }
-                Log.d(tag, "Respuesta ePayco reference=$reference code=${connection.responseCode}: $response")
+                Log.d(tag, "Respuesta ePayco recibida. Fecha y hora: ${nowText()}. tradeId=$tradeId reference=$reference code=${connection.responseCode}: $response")
                 val root = JSONObject(response)
                 val data = root.optJSONObject("data") ?: JSONObject()
                 val transactionState = data.optString("x_transaction_state")
@@ -103,7 +118,7 @@ class TradeStatusWorker(
                     .ifBlank { data.optString("x_respuesta") }
                     .ifBlank { "Pendiente" }
 
-                Log.d(tag, "Estado retornado por ePayco reference=$reference state=$transactionState")
+                Log.d(tag, "Estado retornado por ePayco. Fecha y hora: ${nowText()}. reference=$reference state=$transactionState")
 
                 if (!transactionState.equals("Pendiente", ignoreCase = true)) {
                     val shipmentId = if (transactionState.equals("Aceptada", ignoreCase = true)) 1L else 4L
@@ -135,7 +150,7 @@ class TradeStatusWorker(
                                 if (task.isSuccessful) {
                                     Log.d(
                                         tag,
-                                        "Transacción actualizada. tradeId=$tradeId state=$transactionState shipmentId=$shipmentId orderId=$orderId"
+                                        "Transacción actualizada. Fecha y hora: ${nowText()}. tradeId=$tradeId state=$transactionState shipmentId=$shipmentId orderId=$orderId. Próxima ejecución estimada: ${nextExecutionText()}"
                                     )
                                 } else {
                                     Log.e(tag, "Error actualizando transacción tradeId=$tradeId", task.exception)
@@ -148,11 +163,11 @@ class TradeStatusWorker(
                             onComplete()
                         }
                 } else {
-                    Log.d(tag, "La transacción sigue pendiente. tradeId=$tradeId reference=$reference")
+                    Log.d(tag, "La transacción sigue pendiente. Fecha y hora: ${nowText()}. tradeId=$tradeId reference=$reference. Próxima ejecución estimada: ${nextExecutionText()}")
                     onComplete()
                 }
             } catch (exception: Exception) {
-                Log.e(tag, "Error validando transacción tradeId=$tradeId reference=$reference", exception)
+                Log.e(tag, "Error validando transacción. Fecha y hora: ${nowText()}. tradeId=$tradeId reference=$reference. Próxima ejecución estimada: ${nextExecutionText()}", exception)
                 onComplete()
             }
         }.start()
@@ -162,7 +177,14 @@ class TradeStatusWorker(
         private const val WORK_NAME = "trade_status_worker"
 
         fun schedule(context: Context) {
-            Log.d(WORK_NAME, "Programando próxima validación ePayco en ${EpaycoConfig.CRON_MINUTES} minuto(s)")
+            val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+            val scheduledAt = System.currentTimeMillis()
+            val nextTime = scheduledAt + TimeUnit.MINUTES.toMillis(EpaycoConfig.CRON_MINUTES)
+            Log.d(
+                WORK_NAME,
+                "Programando próxima validación ePayco. Fecha y hora actual: ${formatter.format(Date(scheduledAt))}. " +
+                    "Próxima ejecución: ${formatter.format(Date(nextTime))}. Intervalo: ${EpaycoConfig.CRON_MINUTES} minuto(s)"
+            )
             val request = OneTimeWorkRequestBuilder<TradeStatusWorker>()
                 .setInitialDelay(EpaycoConfig.CRON_MINUTES, TimeUnit.MINUTES)
                 .build()
