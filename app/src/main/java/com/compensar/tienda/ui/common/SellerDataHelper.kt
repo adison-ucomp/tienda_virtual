@@ -7,6 +7,7 @@ import com.compensar.tienda.model.PurchaseModel
 import com.compensar.tienda.model.SellerModel
 import com.compensar.tienda.model.ShipmentModel
 import com.compensar.tienda.model.ShopModel
+import com.compensar.tienda.model.TradeModel
 import com.compensar.tienda.model.UserModel
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.NumberFormat
@@ -24,14 +25,16 @@ object SellerDataHelper {
         val purchases: List<PurchaseModel>,
         val orders: List<OrderModel>,
         val users: List<UserModel>,
-        val shipments: List<ShipmentModel>
+        val shipments: List<ShipmentModel>,
+        val trades: List<TradeModel>
     )
 
     data class SellerOrder(
         val order: OrderModel,
         val purchases: List<PurchaseModel>,
         val user: UserModel?,
-        val shipment: ShipmentModel?
+        val shipment: ShipmentModel?,
+        val trade: TradeModel?
     )
 
     fun loadSellerData(
@@ -83,17 +86,26 @@ object SellerDataHelper {
                                                                     it.toObject(ShipmentModel::class.java)
                                                                 }
 
-                                                                onSuccess(
-                                                                    SellerData(
-                                                                        seller = currentSeller,
-                                                                        shops = sellerShops,
-                                                                        products = sellerProducts,
-                                                                        purchases = sellerPurchases,
-                                                                        orders = sellerOrders,
-                                                                        users = allUsers,
-                                                                        shipments = allShipments
-                                                                    )
-                                                                )
+                                                                db.collection("trade").get()
+                                                                    .addOnSuccessListener { tradeSnapshot ->
+                                                                        val allTrades = tradeSnapshot.documents.mapNotNull {
+                                                                            it.toObject(TradeModel::class.java)
+                                                                        }
+
+                                                                        onSuccess(
+                                                                            SellerData(
+                                                                                seller = currentSeller,
+                                                                                shops = sellerShops,
+                                                                                products = sellerProducts,
+                                                                                purchases = sellerPurchases,
+                                                                                orders = sellerOrders,
+                                                                                users = allUsers,
+                                                                                shipments = allShipments,
+                                                                                trades = allTrades
+                                                                            )
+                                                                        )
+                                                                    }
+                                                                    .addOnFailureListener { onFailure(it) }
                                                             }
                                                             .addOnFailureListener { onFailure(it) }
                                                     }
@@ -123,7 +135,8 @@ object SellerDataHelper {
                     order = order,
                     purchases = purchases,
                     user = data.users.firstOrNull { it.register == order.idUser },
-                    shipment = data.shipments.firstOrNull { it.register == order.idShipment }
+                    shipment = data.shipments.firstOrNull { it.register == order.idShipment },
+                    trade = data.trades.firstOrNull { it.register == order.idTrade }
                 )
             }
         }

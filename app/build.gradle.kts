@@ -87,6 +87,16 @@ android {
             "API_BASE_URL",
             envValue("API_BASE_URL", "https://xe.engcode.dev/github/adisonucomp/a3d1a7618ca7/").toBuildConfigString()
         )
+        buildConfigField(
+            "String",
+            "EPAYCO_SERVICE_URL",
+            envValue("EPAYCO_SERVICE_URL", "https://secure.epayco.co").toBuildConfigString()
+        )
+        buildConfigField(
+            "String",
+            "EPAYCO_CRON_MINUTES",
+            envValue("EPAYCO_CRON_MINUTES", "5").toBuildConfigString()
+        )
     }
 
     buildFeatures {
@@ -146,6 +156,7 @@ dependencies {
 
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("androidx.biometric:biometric:1.2.0-alpha05")
+    implementation("androidx.work:work-runtime-ktx:2.9.1")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

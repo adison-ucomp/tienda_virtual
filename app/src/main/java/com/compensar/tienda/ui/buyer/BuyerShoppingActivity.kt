@@ -12,10 +12,12 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
 import com.compensar.tienda.model.OrderModel
+import com.compensar.tienda.model.TradeModel
 import com.compensar.tienda.ui.common.SessionManager
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.home.HomeCategoryActivity
 import com.compensar.tienda.ui.home.HomeProductActivity
+import com.compensar.tienda.ui.util.StatusStyleHelper
 import com.google.firebase.firestore.FirebaseFirestore
 
 class BuyerShoppingActivity : AppCompatActivity() {
@@ -29,6 +31,7 @@ class BuyerShoppingActivity : AppCompatActivity() {
 
     private val db = FirebaseFirestore.getInstance()
     private var shipmentMap: Map<Long, String> = emptyMap()
+    private var tradeMap: Map<Long, TradeModel> = emptyMap()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,7 +83,7 @@ class BuyerShoppingActivity : AppCompatActivity() {
         shoppingContent.removeAllViews()
         keepTitle.forEach { shoppingContent.addView(it) }
 
-        loadShipments {
+        loadStates {
             db.collection("order")
                 .whereEqualTo("idUser", userRegister)
                 .get()
@@ -108,17 +111,29 @@ class BuyerShoppingActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadShipments(onComplete: () -> Unit) {
+    private fun loadStates(onComplete: () -> Unit) {
         db.collection("shipment").get()
-            .addOnSuccessListener { result ->
-                shipmentMap = result.documents.mapNotNull { doc ->
+            .addOnSuccessListener { shipmentResult ->
+                shipmentMap = shipmentResult.documents.mapNotNull { doc ->
                     val register = doc.getLong("register") ?: return@mapNotNull null
                     register to (doc.getString("name") ?: "Estado $register")
                 }.toMap()
-                onComplete()
+                db.collection("trade").get()
+                    .addOnSuccessListener { tradeResult ->
+                        tradeMap = tradeResult.documents.mapNotNull { doc ->
+                            val data = doc.toObject(TradeModel::class.java) ?: return@mapNotNull null
+                            data.register to data
+                        }.toMap()
+                        onComplete()
+                    }
+                    .addOnFailureListener {
+                        tradeMap = emptyMap()
+                        onComplete()
+                    }
             }
             .addOnFailureListener {
                 shipmentMap = emptyMap()
+                tradeMap = emptyMap()
                 onComplete()
             }
     }
@@ -150,13 +165,10 @@ class BuyerShoppingActivity : AppCompatActivity() {
             setTextColor(0xFF111111.toInt())
         })
 
-        box.addView(TextView(this).apply {
-            text = "Estado: $statusName"
-            textSize = 13f
-            setTypeface(null, Typeface.BOLD)
-            setTextColor(0xFF1E66F5.toInt())
-            setPadding(0, dp(8), 0, 0)
-        })
+        val tradeStatus = tradeMap[order.idTrade]?.state ?: "Pendiente"
+
+        box.addView(statusRow("Envio:", statusName, true))
+        box.addView(statusRow("Transaccion:", tradeStatus, false))
 
         box.addView(TextView(this).apply {
             text = "Total: $ ${String.format("%,.0f", order.total ?: 0.0)}"
@@ -196,6 +208,41 @@ class BuyerShoppingActivity : AppCompatActivity() {
         box.addView(btn)
         card.addView(box)
         return card
+    }
+
+    private fun statusRow(label: String, value: String, shipment: Boolean): LinearLayout {
+        val row = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = android.view.Gravity.CENTER_VERTICAL
+            setPadding(0, dp(8), 0, 0)
+        }
+
+        row.addView(TextView(this).apply {
+            text = label
+            textSize = 13f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(0xFF111111.toInt())
+        })
+
+        row.addView(TextView(this).apply {
+            textSize = 12f
+            setPadding(dp(12), 0, dp(12), 0)
+            minHeight = dp(30)
+            gravity = android.view.Gravity.CENTER
+            if (shipment) {
+                StatusStyleHelper.applyShipment(this, value)
+            } else {
+                StatusStyleHelper.applyTrade(this, value)
+            }
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                dp(30)
+            ).apply {
+                setMargins(dp(8), 0, 0, 0)
+            }
+        })
+
+        return row
     }
 
     private fun dp(value: Int) = (value * resources.displayMetrics.density).toInt()

@@ -201,7 +201,8 @@ class HomeEpaycoActivity : AppCompatActivity() {
 
         processValidatedPayment(
             validationJson = buildUriOnlyJson(uri),
-            transactionData = buildUriTransactionData(uri)
+            transactionData = buildUriTransactionData(uri),
+            epaycoReference = getEpaycoReference(uri)
         )
     }
 
@@ -215,7 +216,7 @@ class HomeEpaycoActivity : AppCompatActivity() {
     private fun requestEpaycoValidation(epaycoReference: String, originalUri: Uri) {
         Thread {
             try {
-                val connection = URL(EpaycoConfig.validationLookupUrl(epaycoReference)).openConnection() as HttpURLConnection
+                val connection = URL(EpaycoConfig.directValidationUrl(epaycoReference)).openConnection() as HttpURLConnection
                 connection.requestMethod = "GET"
                 connection.connectTimeout = 15000
                 connection.readTimeout = 20000
@@ -274,11 +275,12 @@ class HomeEpaycoActivity : AppCompatActivity() {
                 validationJson = JSONObject().apply {
                     put("reference", reference)
                     put("epaycoReference", epaycoReference)
-                    put("lookupUrl", EpaycoConfig.validationLookupUrl(epaycoReference))
+                    put("lookupUrl", EpaycoConfig.directValidationUrl(epaycoReference))
                     put("callbackUrl", originalUri.toString())
                     put("response", root)
                 },
-                transactionData = transactionData
+                transactionData = transactionData,
+                epaycoReference = epaycoReference
             )
         } catch (exception: Exception) {
             showLocalResult(
@@ -289,7 +291,11 @@ class HomeEpaycoActivity : AppCompatActivity() {
         }
     }
 
-    private fun processValidatedPayment(validationJson: JSONObject, transactionData: JSONObject) {
+    private fun processValidatedPayment(
+        validationJson: JSONObject,
+        transactionData: JSONObject,
+        epaycoReference: String
+    ) {
         val transactionState = getTransactionStateText(transactionData)
         val internalState = normalizeTransactionState(transactionState, transactionData)
         val paymentMethod = getPaymentMethod(transactionData)
@@ -298,7 +304,8 @@ class HomeEpaycoActivity : AppCompatActivity() {
             transactionData = transactionData,
             internalState = internalState,
             transactionState = transactionState,
-            paymentMethod = paymentMethod
+            paymentMethod = paymentMethod,
+            epaycoReference = epaycoReference
         )
 
         getPaymentId(paymentMethod) { idPayment ->
@@ -309,7 +316,8 @@ class HomeEpaycoActivity : AppCompatActivity() {
                     transactionState = transactionState,
                     idGateway = 1L,
                     idPayment = idPayment,
-                    idShop = idShop
+                    idShop = idShop,
+                    epaycoReference = epaycoReference
                 )
             }
         }
@@ -398,7 +406,8 @@ class HomeEpaycoActivity : AppCompatActivity() {
         transactionState: String,
         idGateway: Long,
         idPayment: Long,
-        idShop: Long
+        idShop: Long,
+        epaycoReference: String
     ) {
         val items = CartManager.getItems(this)
         if (items.isEmpty()) {
@@ -411,7 +420,7 @@ class HomeEpaycoActivity : AppCompatActivity() {
         }
 
         val idShipment = if (state == "APROBADO") 1L else 4L
-        val shipmentState = if (idShipment == 1L) "PENDIENTE" else "RECHAZADO"
+        val shipmentState = if (idShipment == 1L) "Pendiente" else "Rechazado"
         val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
         val hour = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
 
@@ -446,6 +455,7 @@ class HomeEpaycoActivity : AppCompatActivity() {
                                             register = tradeRegister,
                                             api = finalJson,
                                             state = transactionState,
+                                            reference = epaycoReference,
                                             idGateway = idGateway,
                                             idOrder = orderRegister
                                         )
@@ -554,10 +564,12 @@ class HomeEpaycoActivity : AppCompatActivity() {
         transactionData: JSONObject,
         internalState: String,
         transactionState: String,
-        paymentMethod: String
+        paymentMethod: String,
+        epaycoReference: String
     ): String {
         return JSONObject().apply {
             put("reference", reference)
+            put("epaycoReference", epaycoReference)
             put("total", total)
             put("state", internalState)
             put("transactionState", transactionState)

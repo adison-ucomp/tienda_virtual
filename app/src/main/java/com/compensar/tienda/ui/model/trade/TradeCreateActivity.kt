@@ -22,6 +22,7 @@ class TradeCreateActivity : AppCompatActivity() {
     private lateinit var actionExecute: Button
     private lateinit var fieldApi: EditText
     private lateinit var fieldState: EditText
+    private lateinit var fieldReference: EditText
     private lateinit var fieldIdGateway: Spinner
     private lateinit var fieldIdOrder: Spinner
 
@@ -47,6 +48,7 @@ class TradeCreateActivity : AppCompatActivity() {
         ModuleView.bindTitle(titleHeader, "Crear", "trade", "Transacciones")
         fieldApi = findViewById(R.id.fieldApi)
         fieldState = findViewById(R.id.fieldState)
+        fieldReference = findViewById(R.id.fieldReference)
         fieldIdGateway = findViewById(R.id.fieldIdGateway)
         fieldIdOrder = findViewById(R.id.fieldIdOrder)
     }
@@ -112,6 +114,7 @@ class TradeCreateActivity : AppCompatActivity() {
             register = register,
             api = fieldApi.text.toString().trim().ifEmpty { null },
             state = fieldState.text.toString().trim().ifEmpty { null },
+            reference = fieldReference.text.toString().trim().ifEmpty { null },
             idGateway = idGateway,
             idOrder = idOrder
         )

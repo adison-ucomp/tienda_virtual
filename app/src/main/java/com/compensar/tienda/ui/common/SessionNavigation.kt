@@ -14,6 +14,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
 import com.compensar.tienda.ui.buyer.BuyerCartShopActivity
+import com.compensar.tienda.ui.home.HomeCategoryActivity
+import com.compensar.tienda.ui.buyer.BuyerShoppingActivity
+import com.compensar.tienda.ui.buyer.BuyerAddressActivity
 import com.compensar.tienda.ui.home.HomeLoginActivity
 import com.compensar.tienda.ui.home.HomeProductActivity
 import com.compensar.tienda.ui.profile.ProfileAdminActivity
@@ -30,6 +33,7 @@ object SessionNavigation {
         bindProfileByRole(activity)
         bindSharedMenu(activity)
         bindBuyerCart(activity)
+        bindBuyerInferior(activity)
         applyBuyerSuperiorVisibility(activity)
     }
 
@@ -71,6 +75,32 @@ object SessionNavigation {
     private fun bindBuyerCart(activity: AppCompatActivity) {
         activity.findViewById<View?>(R.id.btnCart)?.setOnClickListener {
             openCartOrLogin(activity)
+        }
+    }
+
+    private fun bindBuyerInferior(activity: AppCompatActivity) {
+        activity.findViewById<LinearLayout?>(R.id.actionHome)?.setOnClickListener {
+            if (activity !is HomeProductActivity) {
+                activity.startActivity(Intent(activity, HomeProductActivity::class.java))
+            }
+        }
+
+        activity.findViewById<LinearLayout?>(R.id.actionCategory)?.setOnClickListener {
+            if (activity !is HomeCategoryActivity) {
+                activity.startActivity(Intent(activity, HomeCategoryActivity::class.java))
+            }
+        }
+
+        activity.findViewById<LinearLayout?>(R.id.actionShopping)?.setOnClickListener {
+            if (activity !is BuyerShoppingActivity) {
+                activity.startActivity(Intent(activity, BuyerShoppingActivity::class.java))
+            }
+        }
+
+        activity.findViewById<LinearLayout?>(R.id.actionAddress)?.setOnClickListener {
+            if (activity !is BuyerAddressActivity) {
+                activity.startActivity(Intent(activity, BuyerAddressActivity::class.java))
+            }
         }
     }
 

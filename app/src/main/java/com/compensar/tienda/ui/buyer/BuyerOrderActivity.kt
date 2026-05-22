@@ -5,6 +5,7 @@ import android.graphics.Typeface
 import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.*
+import android.webkit.WebView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
@@ -14,7 +15,9 @@ import com.bumptech.glide.Glide
 import com.compensar.tienda.R
 import com.compensar.tienda.model.OrderModel
 import com.compensar.tienda.model.PurchaseModel
+import com.compensar.tienda.ui.common.SessionNavigation
 import com.google.firebase.firestore.FirebaseFirestore
+import java.net.URLEncoder
 
 class BuyerOrderActivity : AppCompatActivity() {
 
@@ -22,6 +25,7 @@ class BuyerOrderActivity : AppCompatActivity() {
     private lateinit var txtReference: TextView
     private lateinit var txtInfo: TextView
     private lateinit var txtAddressDetail: TextView
+    private lateinit var webAddressMap: WebView
     private lateinit var productsContainer: LinearLayout
     private lateinit var txtGrandTotal: TextView
 
@@ -33,6 +37,8 @@ class BuyerOrderActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.buyer_order)
+        SessionNavigation.bindProfile(this)
+        SessionNavigation.applyBuyerInferiorVisibility(this)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { view, insets ->
             val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -46,6 +52,7 @@ class BuyerOrderActivity : AppCompatActivity() {
         txtReference = findViewById(R.id.txtReference)
         txtInfo = findViewById(R.id.txtInfo)
         txtAddressDetail = findViewById(R.id.txtAddressDetail)
+        webAddressMap = findViewById(R.id.webAddressMap)
         productsContainer = findViewById(R.id.productsContainer)
         txtGrandTotal = findViewById(R.id.txtGrandTotal)
 
@@ -79,6 +86,14 @@ class BuyerOrderActivity : AppCompatActivity() {
             .addOnFailureListener {
                 Toast.makeText(this, "Error cargando orden: ${it.message}", Toast.LENGTH_LONG).show()
             }
+    }
+
+    private fun loadAddressMap(address: String) {
+        if (address.isBlank() || address == "Sin dirección") return
+        val encoded = URLEncoder.encode(address, "UTF-8")
+        webAddressMap.settings.javaScriptEnabled = true
+        webAddressMap.settings.domStorageEnabled = true
+        webAddressMap.loadUrl("https://www.google.com/maps/search/?api=1&query=$encoded")
     }
 
     private fun loadPurchases() {

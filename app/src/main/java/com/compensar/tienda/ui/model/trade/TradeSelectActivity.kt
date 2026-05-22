@@ -114,6 +114,7 @@ class TradeSelectActivity : AppCompatActivity() {
         addText(textContainer, "Registro: ${data.register}")
         addText(textContainer, "Servicio: ${data.api ?: ""}")
         addText(textContainer, "Estado: ${data.state ?: ""}")
+        addText(textContainer, "Referencia ePayco: ${data.reference ?: ""}")
         val orderLabel = addText(textContainer, "Orden: Cargando...")
         val gatewayLabel = addText(textContainer, "Pasarela: Cargando...")
         FirestoreRelationLabelHelper.load(gatewayLabel, "gateway", data.idGateway, listOf("name"))

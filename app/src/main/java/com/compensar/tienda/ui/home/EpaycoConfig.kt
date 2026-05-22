@@ -21,6 +21,12 @@ object EpaycoConfig {
     val API_BASE_URL: String
         get() = BuildConfig.API_BASE_URL.trim().trimEnd('/') + "/"
 
+    val SERVICE_URL: String
+        get() = BuildConfig.EPAYCO_SERVICE_URL.trim().trimEnd('/')
+
+    val CRON_MINUTES: Long
+        get() = BuildConfig.EPAYCO_CRON_MINUTES.toLongOrNull()?.coerceAtLeast(1L) ?: 5L
+
     val CONFIRMATION_URL: String
         get() = API_BASE_URL + "api/epayco"
 
@@ -30,6 +36,11 @@ object EpaycoConfig {
     fun validationLookupUrl(reference: String): String {
         val encoded = URLEncoder.encode(reference, "UTF-8")
         return API_BASE_URL + "api/epayco?lookup=1&reference=" + encoded
+    }
+
+    fun directValidationUrl(reference: String): String {
+        val encoded = URLEncoder.encode(reference, "UTF-8")
+        return "$SERVICE_URL/validation/v1/reference/$encoded"
     }
 
     fun validateAmount(total: Double): String? {

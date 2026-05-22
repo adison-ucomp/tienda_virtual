@@ -12,6 +12,7 @@ import com.compensar.tienda.ui.common.SessionManager
 import com.compensar.tienda.ui.admin.AdminDashboardActivity
 import com.compensar.tienda.ui.seller.SellerDashboardActivity
 import com.compensar.tienda.ui.home.HomeProductActivity
+import com.compensar.tienda.worker.TradeStatusWorker
 
 class SplashActivity : AppCompatActivity() {
     /*override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +33,7 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_splash)
+        TradeStatusWorker.schedule(this)
 
         createDefaultData()
     }

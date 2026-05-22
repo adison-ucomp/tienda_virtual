@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import android.webkit.WebView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
@@ -21,7 +22,9 @@ import com.compensar.tienda.model.ProductModel
 import com.compensar.tienda.model.PurchaseModel
 import com.compensar.tienda.ui.common.SellerDataHelper
 import com.compensar.tienda.ui.common.SessionNavigation
+import com.compensar.tienda.ui.util.StatusStyleHelper
 import com.google.firebase.firestore.FirebaseFirestore
+import java.net.URLEncoder
 
 class SellerOrderShowActivity : AppCompatActivity() {
 
@@ -32,6 +35,8 @@ class SellerOrderShowActivity : AppCompatActivity() {
     private lateinit var textOrderStatus: TextView
     private lateinit var productListContainer: LinearLayout
     private lateinit var textOrderAddress: TextView
+    private lateinit var webOrderAddressMap: WebView
+    private lateinit var textPaymentMethod: TextView
     private lateinit var textOrderTotal: TextView
     private lateinit var orderActionsContainer: LinearLayout
     private lateinit var btnReject: LinearLayout
@@ -72,6 +77,8 @@ class SellerOrderShowActivity : AppCompatActivity() {
         textOrderStatus = findViewById(R.id.textOrderStatus)
         productListContainer = findViewById(R.id.productListContainer)
         textOrderAddress = findViewById(R.id.textOrderAddress)
+        webOrderAddressMap = findViewById(R.id.webOrderAddressMap)
+        textPaymentMethod = findViewById(R.id.textPaymentMethod)
         textOrderTotal = findViewById(R.id.textOrderTotal)
         orderActionsContainer = findViewById(R.id.orderActionsContainer)
         btnReject = findViewById(R.id.btnReject)
@@ -148,9 +155,11 @@ class SellerOrderShowActivity : AppCompatActivity() {
         textOrderReference.text = "Pedido #${item.order.reference.orEmpty().ifEmpty { item.order.register.toString() }}"
         textOrderClient.text = "Cliente: ${SellerDataHelper.getUserFullName(item.user)}"
         textOrderDate.text = "Fecha: ${item.order.date.orEmpty()} ${item.order.hour.orEmpty()}".trim()
-        textOrderStatus.text = item.shipment?.name ?: "Sin estado"
-        textOrderStatus.setTextColor(getStatusColor(item.order.idShipment))
-        textOrderAddress.text = item.order.address.orEmpty().ifEmpty { "Sin dirección" }
+        StatusStyleHelper.applyShipment(textOrderStatus, item.shipment?.name ?: "Sin estado")
+        val addressText = item.order.address.orEmpty().ifEmpty { "Sin dirección" }
+        textOrderAddress.text = addressText
+        loadAddressMap(addressText)
+        textPaymentMethod.text = getPaymentMethod(item.trade?.api)
         textOrderTotal.text = SellerDataHelper.formatCurrency(item.order.total ?: item.purchases.sumOf { it.total ?: 0.0 })
 
         orderActionsContainer.visibility = if (item.order.idShipment == 1L) {
@@ -160,6 +169,29 @@ class SellerOrderShowActivity : AppCompatActivity() {
         }
 
         renderProducts(data, item.purchases)
+    }
+
+    private fun loadAddressMap(address: String) {
+        if (address.isBlank() || address == "Sin dirección") return
+        val encoded = URLEncoder.encode(address, "UTF-8")
+        webOrderAddressMap.settings.javaScriptEnabled = true
+        webOrderAddressMap.settings.domStorageEnabled = true
+        webOrderAddressMap.loadUrl("https://www.google.com/maps/search/?api=1&query=$encoded")
+    }
+
+    private fun getPaymentMethod(api: String?): String {
+        if (api.isNullOrBlank()) return "Sin información"
+        val options = listOf("x_type_payment", "x_payment_method", "x_franchise", "paymentMethod")
+        options.forEach { key ->
+            val marker = "\"$key\":"
+            val index = api.indexOf(marker)
+            if (index >= 0) {
+                val start = api.indexOf('\"', index + marker.length)
+                val end = if (start >= 0) api.indexOf('\"', start + 1) else -1
+                if (start >= 0 && end > start) return api.substring(start + 1, end).uppercase()
+            }
+        }
+        return "Sin información"
     }
 
     private fun renderProducts(
@@ -280,15 +312,6 @@ class SellerOrderShowActivity : AppCompatActivity() {
             .addOnFailureListener {
                 Toast.makeText(this, "No fue posible actualizar el pedido", Toast.LENGTH_SHORT).show()
             }
-    }
-
-    private fun getStatusColor(status: Long): Int {
-        return when (status) {
-            1L -> Color.parseColor("#1B5E20")
-            3L -> Color.parseColor("#2962FF")
-            4L -> Color.parseColor("#D52D09")
-            else -> Color.parseColor("#666666")
-        }
     }
 
     private fun Int.dp(): Int {

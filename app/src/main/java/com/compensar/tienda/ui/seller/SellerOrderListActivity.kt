@@ -17,6 +17,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
 import com.compensar.tienda.ui.common.SellerDataHelper
 import com.compensar.tienda.ui.common.SessionNavigation
+import com.compensar.tienda.ui.util.StatusStyleHelper
 
 class SellerOrderListActivity : AppCompatActivity() {
 
@@ -209,11 +210,8 @@ class SellerOrderListActivity : AppCompatActivity() {
         )
         status.gravity = Gravity.CENTER
         status.setPadding(14.dp(), 0, 14.dp(), 0)
-        status.text = item.shipment?.name ?: "Sin estado"
-        status.setTextColor(getStatusColor(item.order.idShipment))
         status.textSize = 12f
-        status.setTypeface(null, Typeface.BOLD)
-        status.setBackgroundResource(R.drawable.bg_button)
+        StatusStyleHelper.applyShipment(status, item.shipment?.name ?: "Sin estado")
 
         totalRow.addView(totalContainer)
         totalRow.addView(status)
@@ -245,15 +243,6 @@ class SellerOrderListActivity : AppCompatActivity() {
         card.addView(container)
 
         return card
-    }
-
-    private fun getStatusColor(status: Long): Int {
-        return when (status) {
-            1L -> Color.parseColor("#1B5E20")
-            3L -> Color.parseColor("#2962FF")
-            4L -> Color.parseColor("#D52D09")
-            else -> Color.parseColor("#666666")
-        }
     }
 
     private fun Int.dp(): Int {
