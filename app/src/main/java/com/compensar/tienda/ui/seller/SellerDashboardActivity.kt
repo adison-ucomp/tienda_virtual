@@ -10,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
@@ -17,11 +18,13 @@ import com.compensar.tienda.model.OrderModel
 import com.compensar.tienda.model.PurchaseModel
 import com.compensar.tienda.ui.common.SellerDataHelper
 import com.compensar.tienda.ui.common.SessionNavigation
+import com.compensar.tienda.ui.report.ReportDataSaleActivity
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
 class SellerDashboardActivity : AppCompatActivity() {
 
+    private lateinit var cardSellerReport: CardView
     private lateinit var textSalesAmount: TextView
     private lateinit var textSalesTrend: TextView
     private lateinit var chartContainer: LinearLayout
@@ -56,6 +59,7 @@ class SellerDashboardActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
+        cardSellerReport = findViewById(R.id.cardSellerReport)
         textSalesAmount = findViewById(R.id.textSalesAmount)
         textSalesTrend = findViewById(R.id.textSalesTrend)
         chartContainer = findViewById(R.id.chartContainer)
@@ -77,6 +81,11 @@ class SellerDashboardActivity : AppCompatActivity() {
 
         navProducts.setOnClickListener {
             val intent = Intent(this, SellerProductListActivity::class.java)
+            startActivity(intent)
+        }
+
+        cardSellerReport.setOnClickListener {
+            val intent = Intent(this, ReportDataSaleActivity::class.java)
             startActivity(intent)
         }
     }

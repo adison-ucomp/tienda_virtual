@@ -151,6 +151,55 @@
 
             </androidx.cardview.widget.CardView>
 
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardSellerReport"
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                android:layout_marginTop="28dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="20dp">
+
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/ic_report" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/dash_admin_reportes"
+                            android:textColor="@color/black"
+                            android:textSize="28sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/dash_admin_sub_reportes"
+                            android:textColor="@color/subtitle"
+                            android:textSize="15sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardInventory"
                 android:layout_width="match_parent"
