@@ -1,3 +1,34 @@
+import java.util.Properties
+
+fun String.toBuildConfigString(): String {
+    return "\"" + replace("\\", "\\\\").replace("\"", "\\\"") + "\""
+}
+
+fun loadEnvironment(): Properties {
+    val properties = Properties()
+    val envLocalFile = rootProject.file(".env.local")
+    val envFile = rootProject.file(".env")
+    val selectedFile = when {
+        envLocalFile.exists() -> envLocalFile
+        envFile.exists() -> envFile
+        else -> null
+    }
+
+    selectedFile?.inputStream()?.use { input ->
+        properties.load(input)
+    }
+
+    return properties
+}
+
+val environmentProperties = loadEnvironment()
+
+fun envValue(name: String, defaultValue: String = ""): String {
+    return System.getenv(name)
+        ?: environmentProperties.getProperty(name)
+        ?: defaultValue
+}
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.ksp)
@@ -21,6 +52,23 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        manifestPlaceholders["androidMapsApiKey"] = envValue("ANDROID_MAPS_API_KEY")
+
+        buildConfigField(
+            "String",
+            "EPAYCO_PUBLIC_KEY",
+            envValue("EPAYCO_PUBLIC_KEY", "EPAYCO_PUBLIC_KEY_AQUI").toBuildConfigString()
+        )
+        buildConfigField(
+            "Boolean",
+            "EPAYCO_TEST_MODE",
+            envValue("EPAYCO_TEST_MODE", "true").lowercase()
+        )
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {

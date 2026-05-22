@@ -54,6 +54,7 @@ Thumbs.db
 # Secrets / environment files
 .env
 .env.*
+!.env.example
 secrets.properties
 
 # Kotlin / Java generated
