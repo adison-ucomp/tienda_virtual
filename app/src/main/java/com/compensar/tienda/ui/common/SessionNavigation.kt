@@ -16,6 +16,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
+import com.compensar.tienda.ui.admin.AdminDashboardActivity
 import com.compensar.tienda.ui.buyer.BuyerCartShopActivity
 import com.compensar.tienda.ui.home.HomeCategoryActivity
 import com.compensar.tienda.ui.buyer.BuyerShoppingActivity
@@ -100,8 +101,17 @@ object SessionNavigation {
 
     private fun bindBuyerInferior(activity: AppCompatActivity) {
         activity.findViewById<LinearLayout?>(R.id.actionHome)?.setOnClickListener {
-            if (activity !is HomeProductActivity) {
-                activity.startActivity(Intent(activity, HomeProductActivity::class.java))
+            when (SessionManager.getRole(activity)) {
+                1L -> {
+                    if (activity !is AdminDashboardActivity) {
+                        activity.startActivity(Intent(activity, AdminDashboardActivity::class.java))
+                    }
+                }
+                else -> {
+                    if (activity !is HomeProductActivity) {
+                        activity.startActivity(Intent(activity, HomeProductActivity::class.java))
+                    }
+                }
             }
         }
 
