@@ -21,6 +21,7 @@
         android:id="@+id/contentFrame"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:fillViewport="true"
         android:background="@color/background_layout"
         app:layout_constraintTop_toBottomOf="@id/includeSuperior"
         app:layout_constraintBottom_toTopOf="@id/includeInferior"

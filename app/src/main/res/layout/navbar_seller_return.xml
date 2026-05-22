@@ -1,31 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navbarSellerReturn"
     android:layout_width="match_parent"
     android:layout_height="64dp"
-    android:orientation="vertical">
+    android:background="#FFFFFF"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp">
+
+    <ImageView
+        android:id="@+id/actionMenu"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_menu"
+        app:tint="@color/black" />
 
     <include
-        android:id="@+id/includeNavbarSellerSuperior"
-        layout="@layout/navbar_seller_superior"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:id="@+id/includeNavbarLogo"
+        layout="@layout/navbar_logo"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 
     <TextView
         android:id="@+id/actionReturn"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_gravity="end|center_vertical"
-        android:layout_marginEnd="8dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:background="@android:color/transparent"
         android:clickable="true"
         android:focusable="true"
-        android:elevation="12dp"
         android:gravity="center"
         android:text="←"
         android:textColor="#111111"
-        android:textSize="30sp"
+        android:textSize="28sp"
         android:textStyle="bold" />
 
-</FrameLayout>
+</LinearLayout>
