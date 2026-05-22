@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -18,7 +17,6 @@ import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.common.SessionManager
 import com.compensar.tienda.model.ShopModel
 import com.compensar.tienda.ui.model.common.FirebaseStorageImageHelper
-import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
 import com.google.firebase.firestore.FirebaseFirestore
 
 class SellerShopEditActivity : AppCompatActivity() {
@@ -31,7 +29,6 @@ class SellerShopEditActivity : AppCompatActivity() {
     private lateinit var fieldName: EditText
     private lateinit var fieldStorefire: EditText
     private lateinit var imagePreview: ImageView
-    private lateinit var fieldIdSeller: Spinner
 
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("shop")
@@ -47,6 +44,7 @@ class SellerShopEditActivity : AppCompatActivity() {
 
     private var register: Long = 0
     private var currentData: ShopModel? = null
+    private var currentSellerRegister: Long = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +55,7 @@ class SellerShopEditActivity : AppCompatActivity() {
 
         initViews()
         initEvents()
-        loadRegister()
+        loadCurrentSeller()
     }
 
     private fun initViews() {
@@ -70,7 +68,6 @@ class SellerShopEditActivity : AppCompatActivity() {
         fieldName = findViewById(R.id.fieldName)
         fieldStorefire = findViewById(R.id.fieldStorefire)
         imagePreview = findViewById(R.id.imagePreview)
-        fieldIdSeller = findViewById(R.id.fieldIdSeller)
     }
 
     private fun initEvents() {
@@ -86,6 +83,29 @@ class SellerShopEditActivity : AppCompatActivity() {
         }
 
         actionExecute.setOnClickListener { actionOperate() }
+    }
+
+    private fun loadCurrentSeller() {
+        db.collection("seller")
+            .whereEqualTo("idUser", SessionManager.getRegister(this))
+            .limit(1)
+            .get()
+            .addOnSuccessListener { result ->
+                currentSellerRegister = result.documents.firstOrNull()?.getLong("register") ?: 0L
+
+                if (currentSellerRegister <= 0L) {
+                    Toast.makeText(this, "No se encontró el vendedor de la sesión", Toast.LENGTH_SHORT).show()
+                    finish()
+                    return@addOnSuccessListener
+                }
+
+                loadRegister()
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Error al cargar vendedor: ${exception.message}", Toast.LENGTH_LONG).show()
+                exception.printStackTrace()
+                finish()
+            }
     }
 
     private fun loadRegister() {
@@ -115,17 +135,15 @@ class SellerShopEditActivity : AppCompatActivity() {
     private fun showRegister() {
         val currentData = currentData ?: return
 
+        if (currentData.idSeller != currentSellerRegister) {
+            Toast.makeText(this, "No puedes editar una tienda de otro vendedor", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
+
         fieldName.setText(currentData.name?.toString() ?: "")
         fieldStorefire.setText(currentData.storefire?.toString() ?: "")
         displayImagePreview(currentData.storefire?.toString())
-
-        FirestoreSelectHelper.load(
-            context = this,
-            spinner = fieldIdSeller,
-            collectionName = "seller",
-            labelFields = listOf("company", "nit"),
-            selectedId = currentData.idSeller
-        )
     }
 
     private fun actionOperate() {
@@ -140,10 +158,9 @@ class SellerShopEditActivity : AppCompatActivity() {
 
         val storefire = fieldStorefire.text.toString().trim().ifEmpty { null }
 
-        val idSeller = FirestoreSelectHelper.getSelectedId(fieldIdSeller)
-
-        if (idSeller == null) {
-            Toast.makeText(this, "Debe seleccionar una opción válida", Toast.LENGTH_SHORT).show()
+        if (currentData.idSeller != currentSellerRegister) {
+            Toast.makeText(this, "No puedes modificar una tienda de otro vendedor", Toast.LENGTH_SHORT).show()
+            finish()
             return
         }
 
@@ -151,7 +168,7 @@ class SellerShopEditActivity : AppCompatActivity() {
             register = register,
             name = name,
             storefire = storefire,
-            idSeller = idSeller
+            idSeller = currentSellerRegister
         )
 
         collection.document(register.toString())

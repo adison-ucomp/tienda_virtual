@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,7 +16,6 @@ import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.common.SessionManager
 import com.compensar.tienda.model.ShopModel
 import com.compensar.tienda.ui.model.common.FirebaseStorageImageHelper
-import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
 import android.widget.ImageView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -32,12 +30,12 @@ class SellerShopStoreActivity : AppCompatActivity() {
     private lateinit var fieldName: EditText
     private lateinit var fieldStorefire: EditText
     private lateinit var imagePreview: ImageView
-    private lateinit var fieldIdSeller: Spinner
 
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("shop")
 
     private var generatedRegister: Long? = null
+    private var currentSellerRegister: Long = 0L
 
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uploadImageFromGallery(uri)
@@ -56,7 +54,7 @@ class SellerShopStoreActivity : AppCompatActivity() {
         initViews()
         displayImagePreview(null)
         initEvents()
-        loadSelectors()
+        loadCurrentSeller()
         loadNextRegister()
     }
 
@@ -70,7 +68,6 @@ class SellerShopStoreActivity : AppCompatActivity() {
         fieldName = findViewById(R.id.fieldName)
         fieldStorefire = findViewById(R.id.fieldStorefire)
         imagePreview = findViewById(R.id.imagePreview)
-        fieldIdSeller = findViewById(R.id.fieldIdSeller)
     }
 
     private fun initEvents() {
@@ -88,25 +85,23 @@ class SellerShopStoreActivity : AppCompatActivity() {
         actionExecute.setOnClickListener { actionOperate() }
     }
 
-    private fun loadSelectors() {
+    private fun loadCurrentSeller() {
         db.collection("seller")
             .whereEqualTo("idUser", SessionManager.getRegister(this))
             .limit(1)
             .get()
             .addOnSuccessListener { result ->
-                val sellerRegister = result.documents.firstOrNull()?.getLong("register") ?: 0L
+                currentSellerRegister = result.documents.firstOrNull()?.getLong("register") ?: 0L
 
-                FirestoreSelectHelper.load(
-                    context = this,
-                    spinner = fieldIdSeller,
-                    collectionName = "seller",
-                    labelFields = listOf("company", "nit"),
-                    selectedId = sellerRegister
-                )
+                if (currentSellerRegister <= 0L) {
+                    Toast.makeText(this, "No se encontró el vendedor de la sesión", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
             }
             .addOnFailureListener { exception ->
                 exception.printStackTrace()
                 Toast.makeText(this, "Error al cargar vendedor", Toast.LENGTH_SHORT).show()
+                finish()
             }
     }
 
@@ -128,10 +123,8 @@ class SellerShopStoreActivity : AppCompatActivity() {
 
         val storefire = fieldStorefire.text.toString().trim().ifEmpty { null }
 
-        val idSeller = FirestoreSelectHelper.getSelectedId(fieldIdSeller)
-
-        if (idSeller == null) {
-            Toast.makeText(this, "Debe seleccionar una opción válida", Toast.LENGTH_SHORT).show()
+        if (currentSellerRegister <= 0L) {
+            Toast.makeText(this, "No se encontró el vendedor de la sesión", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -139,7 +132,7 @@ class SellerShopStoreActivity : AppCompatActivity() {
             register = register,
             name = name,
             storefire = storefire,
-            idSeller = idSeller
+            idSeller = currentSellerRegister
         )
 
         collection.document(register.toString())
