@@ -222,9 +222,10 @@ class DefaultFire {
     /**
      * Crea solamente los documentos por defecto que no existen.
      *
-     * Antes se usaba batch.set(...) en cada inicio de la app, por eso Firestore
-     * volvía a sobrescribir la información por defecto. Con este método primero
-     * se consulta cada documento y solo se crea cuando no existe.
+     * Se consulta la colección una sola vez contra servidor y luego se crea en lote
+     * únicamente lo faltante. Esto evita hacer una petición por cada documento en
+     * cada inicio de la app, que podía dejar el Splash muy lento o bloquear la
+     * ejecución en el emulador/dispositivo.
      */
     private fun <T : Any> createMissingDocuments(
         collectionName: String,
@@ -239,55 +240,48 @@ class DefaultFire {
         }
 
         val collection = db.collection(collectionName)
-        var completed = 0
-        var finishedWithError = false
 
-        fun completeOne() {
-            if (finishedWithError) return
+        collection.get(Source.SERVER)
+            .addOnSuccessListener { snapshot ->
+                val existingRegisters = snapshot.documents
+                    .mapNotNull { document -> document.id.toLongOrNull() }
+                    .toSet()
 
-            completed++
+                val missingData = data.filter { item ->
+                    !existingRegisters.contains(getRegister(item))
+                }
 
-            if (completed == data.size) {
-                onSuccess()
-            }
-        }
+                if (missingData.isEmpty()) {
+                    Log.d(
+                        "DEFAULT_FIRE",
+                        "Colección sin faltantes, no se sobrescribe: $collectionName"
+                    )
+                    onSuccess()
+                    return@addOnSuccessListener
+                }
 
-        fun fail(exception: Exception) {
-            if (finishedWithError) return
+                val batch = db.batch()
 
-            finishedWithError = true
-            onFailure(exception)
-        }
+                missingData.forEach { item ->
+                    val register = getRegister(item)
+                    val document = collection.document(register.toString())
+                    batch.set(document, item)
+                }
 
-        data.forEach { item ->
-            val register = getRegister(item)
-            val document = collection.document(register.toString())
-
-            document.get(Source.SERVER)
-                .addOnSuccessListener { snapshot ->
-                    if (snapshot.exists()) {
+                batch.commit()
+                    .addOnSuccessListener {
                         Log.d(
                             "DEFAULT_FIRE",
-                            "Documento existente en servidor, no se sobrescribe: $collectionName/$register"
+                            "Documentos por defecto creados en $collectionName: ${missingData.size}"
                         )
-                        completeOne()
-                    } else {
-                        document.set(item)
-                            .addOnSuccessListener {
-                                Log.d(
-                                    "DEFAULT_FIRE",
-                                    "Documento por defecto creado: $collectionName/$register"
-                                )
-                                completeOne()
-                            }
-                            .addOnFailureListener { exception ->
-                                fail(exception)
-                            }
+                        onSuccess()
                     }
-                }
-                .addOnFailureListener { exception ->
-                    fail(exception)
-                }
-        }
+                    .addOnFailureListener { exception ->
+                        onFailure(exception)
+                    }
+            }
+            .addOnFailureListener { exception ->
+                onFailure(exception)
+            }
     }
 }

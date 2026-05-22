@@ -1,7 +1,15 @@
 import java.util.Properties
 
 fun String.toBuildConfigString(): String {
-    return "\"" + replace("\\", "\\\\").replace("\"", "\\\"") + "\""
+    return "\"" + trim().replace("\\", "\\\\").replace("\"", "\\\"") + "\""
+}
+
+fun String.toBuildConfigBoolean(defaultValue: Boolean = false): String {
+    return when (trim().lowercase()) {
+        "true", "1", "yes", "si", "sí" -> "true"
+        "false", "0", "no" -> "false"
+        else -> defaultValue.toString()
+    }
 }
 
 fun loadEnvironment(): Properties {
@@ -24,15 +32,14 @@ fun loadEnvironment(): Properties {
 val environmentProperties = loadEnvironment()
 
 fun envValue(name: String, defaultValue: String = ""): String {
-    return System.getenv(name)
-        ?: environmentProperties.getProperty(name)
+    return System.getenv(name)?.trim()
+        ?: environmentProperties.getProperty(name)?.trim()
         ?: defaultValue
 }
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.ksp)
-    // id("com.android.application")
     id("com.google.gms.google-services")
 }
 
@@ -63,7 +70,7 @@ android {
         buildConfigField(
             "Boolean",
             "EPAYCO_TEST_MODE",
-            envValue("EPAYCO_TEST_MODE", "true").lowercase()
+            envValue("EPAYCO_TEST_MODE", "true").toBuildConfigBoolean(defaultValue = true)
         )
         buildConfigField(
             "String",
@@ -90,6 +97,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -106,49 +114,33 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    dependencies {
-        implementation(libs.androidx.core.ktx)
-        implementation(libs.androidx.appcompat)
-        implementation(libs.material)
-        implementation(libs.androidx.activity)
-        implementation(libs.androidx.constraintlayout)
-
-        implementation(libs.androidx.room.runtime)
-        implementation(libs.androidx.room.ktx)
-        ksp(libs.androidx.room.compiler)
-        implementation(libs.gson)
-        implementation(libs.retrofit)
-        implementation(libs.retrofit.converter.gson)
-        implementation(libs.play.services.location)
-
-        // Firebase Firestore
-        implementation(platform("com.google.firebase:firebase-bom:34.13.0"))
-        implementation("com.google.firebase:firebase-firestore")
-        // implementation("com.google.firebase:firebase-analytics")
-        // Firebase Storage
-        implementation("com.google.firebase:firebase-storage")
-        implementation("com.github.bumptech.glide:glide:4.16.0")
-
-        // Ubicación en tiempo real
-        implementation("com.google.android.gms:play-services-location:21.3.0")
-        // Google Maps
-        implementation("com.google.android.gms:play-services-maps:19.0.0")
-        // Huella Biometrica
-        implementation("androidx.biometric:biometric:1.2.0-alpha05")
-
-        testImplementation(libs.junit)
-        androidTestImplementation(libs.androidx.junit)
-        androidTestImplementation(libs.androidx.espresso.core)
-    }
-
     implementation(libs.androidx.cardview)
     implementation(libs.androidx.recyclerview)
-    implementation(libs.androidx.recyclerview)
+
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+
+    implementation(libs.gson)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+
+    implementation(libs.play.services.location)
     implementation(libs.play.services.maps3d)
+    implementation("com.google.android.gms:play-services-location:21.3.0")
+    implementation("com.google.android.gms:play-services-maps:19.0.0")
+
+    implementation(platform("com.google.firebase:firebase-bom:34.13.0"))
+    implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-storage")
+
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation("androidx.biometric:biometric:1.2.0-alpha05")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
