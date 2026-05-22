@@ -97,8 +97,18 @@ class HomeEpaycoActivity : AppCompatActivity() {
         if (EpaycoConfig.PUBLIC_KEY == "EPAYCO_PUBLIC_KEY_AQUI") {
             showResult(
                 state = "CONFIGURAR",
-                message = "Debes configurar la llave pública de ePayco en EpaycoConfig.kt.",
+                message = "Debes configurar la llave pública de ePayco en el archivo .env.local.",
                 apiJson = buildResultJson("CONFIGURAR", "Llave pública pendiente")
+            )
+            return
+        }
+
+        val amountMessage = EpaycoConfig.validateAmount(total)
+        if (amountMessage != null) {
+            showResult(
+                state = "VALOR_NO_PERMITIDO",
+                message = amountMessage,
+                apiJson = buildResultJson("VALOR_NO_PERMITIDO", amountMessage)
             )
             return
         }
@@ -278,9 +288,9 @@ class HomeEpaycoActivity : AppCompatActivity() {
                         name: 'Compra EMPTIO',
                         description: 'Orden $reference',
                         invoice: '$reference',
-                        currency: 'cop',
+                        currency: 'COP',
                         amount: '$amount',
-                        tax_base: '0',
+                        tax_base: '$amount',
                         tax: '0',
                         country: 'co',
                         lang: 'es',

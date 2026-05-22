@@ -17,6 +17,7 @@ import com.compensar.tienda.R
 import com.compensar.tienda.model.AddressModel
 import com.compensar.tienda.ui.common.CartManager
 import com.compensar.tienda.ui.common.SessionManager
+import com.compensar.tienda.ui.home.EpaycoConfig
 import com.compensar.tienda.ui.home.HomeEpaycoActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -215,11 +216,17 @@ class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
             return
         }
 
+        val subtotal = CartManager.subtotal(this)
+        val amountMessage = EpaycoConfig.validateAmount(subtotal)
+        if (amountMessage != null) {
+            Toast.makeText(this, amountMessage, Toast.LENGTH_LONG).show()
+            return
+        }
+
         btnConfirmPurchase.isEnabled = false
         btnConfirmPurchase.text = "Procesando..."
 
         val db = FirebaseFirestore.getInstance()
-        val subtotal = CartManager.subtotal(this)
         val reference = UUID.randomUUID().toString().replace("-", "").take(12).uppercase()
 
         db.collection("order")

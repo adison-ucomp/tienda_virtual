@@ -65,6 +65,16 @@ android {
             "EPAYCO_TEST_MODE",
             envValue("EPAYCO_TEST_MODE", "true").lowercase()
         )
+        buildConfigField(
+            "String",
+            "EPAYCO_MIN_AMOUNT",
+            envValue("EPAYCO_MIN_AMOUNT", "1000").toBuildConfigString()
+        )
+        buildConfigField(
+            "String",
+            "EPAYCO_MAX_AMOUNT",
+            envValue("EPAYCO_MAX_AMOUNT", "").toBuildConfigString()
+        )
     }
 
     buildFeatures {

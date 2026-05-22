@@ -10,4 +10,23 @@ object EpaycoConfig {
 
     val TEST_MODE: Boolean
         get() = BuildConfig.EPAYCO_TEST_MODE
+
+    val MIN_AMOUNT: Double
+        get() = BuildConfig.EPAYCO_MIN_AMOUNT.toDoubleOrNull() ?: 1000.0
+
+    val MAX_AMOUNT: Double?
+        get() = BuildConfig.EPAYCO_MAX_AMOUNT.toDoubleOrNull()
+
+    fun validateAmount(total: Double): String? {
+        if (total < MIN_AMOUNT) {
+            return "El valor mínimo permitido para pagar con ePayco es $ ${String.format("%,.0f", MIN_AMOUNT)}."
+        }
+
+        val maximum = MAX_AMOUNT
+        if (maximum != null && maximum > 0.0 && total > maximum) {
+            return "El valor máximo permitido para pagar con ePayco es $ ${String.format("%,.0f", maximum)}."
+        }
+
+        return null
+    }
 }
