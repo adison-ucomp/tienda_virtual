@@ -1,6 +1,7 @@
 package com.compensar.tienda.ui.home
 
 import com.compensar.tienda.BuildConfig
+import java.net.URLEncoder
 
 object EpaycoConfig {
     const val CHECKOUT_URL = "https://checkout.epayco.co/checkout.js"
@@ -25,6 +26,11 @@ object EpaycoConfig {
 
     val RESPONSE_URL: String
         get() = API_BASE_URL + "api/epayco"
+
+    fun validationLookupUrl(reference: String): String {
+        val encoded = URLEncoder.encode(reference, "UTF-8")
+        return API_BASE_URL + "api/epayco?lookup=1&reference=" + encoded
+    }
 
     fun validateAmount(total: Double): String? {
         if (total < MIN_AMOUNT) {

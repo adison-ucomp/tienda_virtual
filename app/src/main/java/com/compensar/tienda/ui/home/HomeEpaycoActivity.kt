@@ -22,6 +22,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -160,8 +164,10 @@ class HomeEpaycoActivity : AppCompatActivity() {
 
     private fun processUrl(uri: Uri): Boolean {
         val isCustomResult = uri.scheme == "emptio" && uri.host == "epayco"
+        val hasEpaycoReference = getEpaycoReference(uri).isNotBlank()
+        val hasEpaycoResponse = uri.queryParameterNames.any { it.startsWith("x_") }
 
-        if (isCustomResult) {
+        if (isCustomResult || hasEpaycoReference || hasEpaycoResponse) {
             handleResult(uri)
             return true
         }
@@ -173,33 +179,185 @@ class HomeEpaycoActivity : AppCompatActivity() {
         if (uri == null || savedResult) return
 
         val isCustomResult = uri.scheme == "emptio" && uri.host == "epayco"
+        val hasEpaycoReference = getEpaycoReference(uri).isNotBlank()
+        val hasEpaycoResponse = uri.queryParameterNames.any { it.startsWith("x_") }
 
-        if (!isCustomResult) return
+        if (!isCustomResult && !hasEpaycoReference && !hasEpaycoResponse) return
 
         savedResult = true
         webEpayco.visibility = View.GONE
         resultContainer.visibility = View.VISIBLE
         txtReference.text = reference.ifBlank { "-" }
         txtTotal.text = "$ ${String.format("%,.0f", total)}"
-        txtState.text = "PROCESANDO"
-        txtShipmentState.text = "PROCESANDO"
-        txtMessage.text = "Procesando respuesta de la pasarela..."
+        txtState.text = "CONSULTANDO"
+        txtShipmentState.text = "CONSULTANDO"
+        txtMessage.text = "Consultando el estado real de la transacción en ePayco..."
 
-        val state = normalizeState(uri)
-        val paymentMethod = uri.getQueryParameter("x_payment_method")
-            ?: uri.getQueryParameter("x_franchise")
-            ?: "PSE"
-        val apiJson = buildGatewayJson(uri, state, paymentMethod)
+        val epaycoReference = getEpaycoReference(uri)
+        if (epaycoReference.isNotBlank()) {
+            requestEpaycoValidation(epaycoReference, uri)
+            return
+        }
+
+        processValidatedPayment(
+            validationJson = buildUriOnlyJson(uri),
+            transactionData = buildUriTransactionData(uri)
+        )
+    }
+
+    private fun getEpaycoReference(uri: Uri): String {
+        return uri.getQueryParameter("ref_payco")
+            ?: uri.getQueryParameter("x_ref_payco")
+            ?: uri.getQueryParameter("reference")
+            ?: ""
+    }
+
+    private fun requestEpaycoValidation(epaycoReference: String, originalUri: Uri) {
+        Thread {
+            try {
+                val connection = URL(EpaycoConfig.validationLookupUrl(epaycoReference)).openConnection() as HttpURLConnection
+                connection.requestMethod = "GET"
+                connection.connectTimeout = 15000
+                connection.readTimeout = 20000
+                connection.setRequestProperty("Accept", "application/json")
+
+                val stream = if (connection.responseCode in 200..299) {
+                    connection.inputStream
+                } else {
+                    connection.errorStream ?: connection.inputStream
+                }
+
+                val response = BufferedReader(InputStreamReader(stream)).use { reader ->
+                    reader.readText()
+                }
+
+                runOnUiThread {
+                    if (connection.responseCode in 200..299) {
+                        handleValidationResponse(response, epaycoReference, originalUri)
+                    } else {
+                        showLocalResult(
+                            state = "ERROR",
+                            shipmentState = "-",
+                            message = "No se pudo consultar la transacción en ePayco. Código: ${connection.responseCode}."
+                        )
+                    }
+                }
+            } catch (exception: Exception) {
+                runOnUiThread {
+                    showLocalResult(
+                        state = "ERROR",
+                        shipmentState = "-",
+                        message = "No se pudo consultar la transacción en ePayco: ${exception.message}"
+                    )
+                }
+            }
+        }.start()
+    }
+
+    private fun handleValidationResponse(response: String, epaycoReference: String, originalUri: Uri) {
+        try {
+            val root = JSONObject(response)
+            val wrapper = root.optJSONObject("data") ?: root
+            val payload = wrapper.optJSONObject("payload") ?: wrapper
+            val transactionData = payload.optJSONObject("data") ?: payload
+
+            if (!root.optBoolean("success", true) && transactionData.length() == 0) {
+                showLocalResult(
+                    state = "ERROR",
+                    shipmentState = "-",
+                    message = root.optString("message", "No fue posible validar la transacción en ePayco.")
+                )
+                return
+            }
+
+            processValidatedPayment(
+                validationJson = JSONObject().apply {
+                    put("reference", reference)
+                    put("epaycoReference", epaycoReference)
+                    put("lookupUrl", EpaycoConfig.validationLookupUrl(epaycoReference))
+                    put("callbackUrl", originalUri.toString())
+                    put("response", root)
+                },
+                transactionData = transactionData
+            )
+        } catch (exception: Exception) {
+            showLocalResult(
+                state = "ERROR",
+                shipmentState = "-",
+                message = "La respuesta de validación de ePayco no tiene formato válido: ${exception.message}"
+            )
+        }
+    }
+
+    private fun processValidatedPayment(validationJson: JSONObject, transactionData: JSONObject) {
+        val transactionState = getTransactionStateText(transactionData)
+        val internalState = normalizeTransactionState(transactionState, transactionData)
+        val paymentMethod = getPaymentMethod(transactionData)
+        val apiJson = buildGatewayJson(
+            validationJson = validationJson,
+            transactionData = transactionData,
+            internalState = internalState,
+            transactionState = transactionState,
+            paymentMethod = paymentMethod
+        )
 
         getPaymentId(paymentMethod) { idPayment ->
             getShopIdFromCart { idShop ->
                 createTradeOrderAndPurchases(
                     apiJson = apiJson,
-                    state = state,
+                    state = internalState,
+                    transactionState = transactionState,
                     idGateway = 1L,
                     idPayment = idPayment,
                     idShop = idShop
                 )
+            }
+        }
+    }
+
+    private fun getTransactionStateText(data: JSONObject): String {
+        return data.optString("x_transaction_state")
+            .ifBlank { data.optString("x_response") }
+            .ifBlank { data.optString("x_respuesta") }
+            .ifBlank { data.optString("x_response_reason_text") }
+            .ifBlank { "Pendiente" }
+    }
+
+    private fun getPaymentMethod(data: JSONObject): String {
+        return data.optString("x_type_payment")
+            .ifBlank { data.optString("x_payment_method") }
+            .ifBlank { data.optString("x_franchise") }
+            .ifBlank { "PSE" }
+            .uppercase()
+    }
+
+    private fun normalizeTransactionState(transactionState: String, data: JSONObject): String {
+        val code = data.optString("x_cod_response")
+            .ifBlank { data.optString("x_cod_respuesta") }
+            .ifBlank { data.optString("x_cod_transaction_state") }
+
+        if (code == "1") return "APROBADO"
+
+        val clean = transactionState.uppercase().trim()
+        return if (clean == "ACEPTADA" || clean.contains("ACEPT") || clean.contains("APROB")) {
+            "APROBADO"
+        } else {
+            "RECHAZADO"
+        }
+    }
+
+    private fun buildUriOnlyJson(uri: Uri): JSONObject {
+        return JSONObject().apply {
+            put("reference", reference)
+            put("callbackUrl", uri.toString())
+            put("data", buildUriTransactionData(uri))
+        }
+    }
+
+    private fun buildUriTransactionData(uri: Uri): JSONObject {
+        return JSONObject().apply {
+            uri.queryParameterNames.sorted().forEach { key ->
+                put(key, uri.getQueryParameter(key))
             }
         }
     }
@@ -237,6 +395,7 @@ class HomeEpaycoActivity : AppCompatActivity() {
     private fun createTradeOrderAndPurchases(
         apiJson: String,
         state: String,
+        transactionState: String,
         idGateway: Long,
         idPayment: Long,
         idShop: Long
@@ -286,7 +445,7 @@ class HomeEpaycoActivity : AppCompatActivity() {
                                         TradeModel(
                                             register = tradeRegister,
                                             api = finalJson,
-                                            state = state,
+                                            state = transactionState,
                                             idGateway = idGateway,
                                             idOrder = orderRegister
                                         )
@@ -342,9 +501,9 @@ class HomeEpaycoActivity : AppCompatActivity() {
                                         CartManager.clear(this)
                                     }
                                     showResult(
-                                        state = state,
+                                        state = transactionState,
                                         shipmentState = shipmentState,
-                                        message = messageForState(state, shipmentState)
+                                        message = messageForState(transactionState, shipmentState, state == "APROBADO")
                                     )
                                 }.addOnFailureListener { exception ->
                                     showLocalResult(
@@ -367,46 +526,11 @@ class HomeEpaycoActivity : AppCompatActivity() {
             }
     }
 
-    private fun normalizeState(uri: Uri): String {
-        uri.getQueryParameter("emptio_state")?.let { serverState ->
-            val cleanServerState = serverState.uppercase().trim()
-            if (cleanServerState == "APROBADO" || cleanServerState == "RECHAZADO") {
-                return cleanServerState
-            }
-        }
-
-        val code = uri.getQueryParameter("x_cod_response")
-            ?: uri.getQueryParameter("x_cod_respuesta")
-            ?: uri.getQueryParameter("x_cod_transaction_state")
-
-        if (code == "1") return "APROBADO"
-        if (code in listOf("2", "3", "4", "6", "7", "8", "9", "10", "11")) return "RECHAZADO"
-
-        val raw = uri.getQueryParameter("x_response")
-            ?: uri.getQueryParameter("x_respuesta")
-            ?: uri.getQueryParameter("x_transaction_state")
-            ?: uri.getQueryParameter("x_response_reason_text")
-            ?: uri.getQueryParameter("status")
-            ?: uri.getQueryParameter("estado")
-            ?: uri.getQueryParameter("state")
-            ?: "RECHAZADO"
-
-        val clean = raw.uppercase().trim()
-        return when {
-            clean.contains("ACEPT") || clean.contains("APPROV") || clean.contains("APROB") || clean == "OK" -> "APROBADO"
-            clean.contains("RECH") || clean.contains("DECLIN") || clean.contains("DENIED") -> "RECHAZADO"
-            clean.contains("CANCEL") || clean.contains("ABANDON") -> "RECHAZADO"
-            clean.contains("FAIL") || clean.contains("ERROR") || clean.contains("FONDOS") -> "RECHAZADO"
-            clean.contains("PEND") -> "RECHAZADO"
-            else -> clean.ifBlank { "RECHAZADO" }
-        }
-    }
-
-    private fun messageForState(state: String, shipmentState: String): String {
-        return if (state == "APROBADO") {
-            "La transacción fue aprobada correctamente. La orden quedó en estado $shipmentState."
+    private fun messageForState(transactionState: String, shipmentState: String, approved: Boolean): String {
+        return if (approved) {
+            "La transacción fue $transactionState correctamente. La orden quedó en estado $shipmentState."
         } else {
-            "La transacción quedó en estado $state. La orden quedó en estado $shipmentState."
+            "La transacción quedó en estado $transactionState. La orden quedó en estado $shipmentState."
         }
     }
 
@@ -425,18 +549,21 @@ class HomeEpaycoActivity : AppCompatActivity() {
         txtTotal.text = "$ ${String.format("%,.0f", total)}"
     }
 
-    private fun buildGatewayJson(uri: Uri, state: String, paymentMethod: String): String {
-        val data = JSONObject()
-        uri.queryParameterNames.sorted().forEach { key ->
-            data.put(key, uri.getQueryParameter(key))
-        }
+    private fun buildGatewayJson(
+        validationJson: JSONObject,
+        transactionData: JSONObject,
+        internalState: String,
+        transactionState: String,
+        paymentMethod: String
+    ): String {
         return JSONObject().apply {
             put("reference", reference)
             put("total", total)
-            put("state", state)
+            put("state", internalState)
+            put("transactionState", transactionState)
             put("paymentMethod", paymentMethod)
-            put("url", uri.toString())
-            put("data", data)
+            put("validation", validationJson)
+            put("data", transactionData)
         }.toString()
     }
 
@@ -477,7 +604,10 @@ class HomeEpaycoActivity : AppCompatActivity() {
                         lang: 'es',
                         external: 'false',
                         response: '$responseUrl',
-                        confirmation: '$confirmationUrl'
+                        confirmation: '$confirmationUrl',
+                        extra1: '$reference',
+                        extra2: '$userRegister',
+                        extra3: 'EMPTIO'
                     };
                     function openCheckout() {
                         handler.open(data);
