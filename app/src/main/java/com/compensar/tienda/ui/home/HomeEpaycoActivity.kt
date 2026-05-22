@@ -27,7 +27,7 @@ import java.util.Date
 import java.util.Locale
 
 class HomeEpaycoActivity : AppCompatActivity() {
-    private lateinit var actionReturn: TextView
+    private var actionReturn: View? = null
     private lateinit var webEpayco: WebView
     private lateinit var resultContainer: View
     private lateinit var txtReference: TextView
@@ -48,6 +48,7 @@ class HomeEpaycoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.home_epayco)
         SessionNavigation.bindProfile(this)
+        SessionNavigation.applyBuyerInferiorVisibility(this)
 
         readExtras(intent)
         initViews()
@@ -85,7 +86,7 @@ class HomeEpaycoActivity : AppCompatActivity() {
     }
 
     private fun initEvents() {
-        actionReturn.setOnClickListener { finish() }
+        actionReturn?.setOnClickListener { finish() }
         actionContinue.setOnClickListener {
             startActivity(Intent(this, BuyerShoppingActivity::class.java))
             finish()

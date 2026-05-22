@@ -12,7 +12,7 @@
 
     <include
         android:id="@+id/includeSuperior"
-        layout="@layout/navbar_buyer_return"
+        layout="@layout/navbar_buyer_superior"
         android:layout_width="0dp"
         android:layout_height="64dp"
         app:layout_constraintTop_toTopOf="parent"

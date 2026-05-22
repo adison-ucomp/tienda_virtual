@@ -3,6 +3,7 @@ package com.compensar.tienda.ui.common
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import com.compensar.tienda.BuildConfig
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.OutputStreamWriter
@@ -13,7 +14,9 @@ import kotlin.concurrent.thread
 object EmailBackHelper {
 
     private const val TAG = "PASSWORD_BACKEND"
-    private const val ENDPOINT = "https://xe.engcode.dev/github/adisonucomp/a3d1a7618ca7/api/password/send-code"
+
+    private val ENDPOINT: String
+        get() = BuildConfig.API_BASE_URL.trim().trimEnd('/') + "/api/password/send-code"
 
     private val mainHandler = Handler(Looper.getMainLooper())
 

@@ -84,13 +84,8 @@ android {
         )
         buildConfigField(
             "String",
-            "EPAYCO_CONFIRMATION_URL",
-            envValue("EPAYCO_CONFIRMATION_URL", "https://xe.engcode.dev/github/adisonucomp/a3d1a7618ca7api/epayco").toBuildConfigString()
-        )
-        buildConfigField(
-            "String",
-            "EPAYCO_RESPONSE_URL",
-            envValue("EPAYCO_RESPONSE_URL", "https://xe.engcode.dev/github/adisonucomp/a3d1a7618ca7api/epayco").toBuildConfigString()
+            "API_BASE_URL",
+            envValue("API_BASE_URL", "https://xe.engcode.dev/github/adisonucomp/a3d1a7618ca7/").toBuildConfigString()
         )
     }
 

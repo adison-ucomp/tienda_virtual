@@ -29,6 +29,7 @@ object SessionNavigation {
     fun bindProfile(activity: AppCompatActivity) {
         bindProfileByRole(activity)
         bindSharedMenu(activity)
+        bindBuyerCart(activity)
         applyBuyerSuperiorVisibility(activity)
     }
 
@@ -63,6 +64,13 @@ object SessionNavigation {
                 val intent = Intent(activity, SellerOrderListActivity::class.java)
                 activity.startActivity(intent)
             }
+        }
+    }
+
+
+    private fun bindBuyerCart(activity: AppCompatActivity) {
+        activity.findViewById<View?>(R.id.btnCart)?.setOnClickListener {
+            openCartOrLogin(activity)
         }
     }
 

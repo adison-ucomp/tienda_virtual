@@ -21,6 +21,7 @@ class BuyerOrderActivity : AppCompatActivity() {
     private lateinit var btnBack: TextView
     private lateinit var txtReference: TextView
     private lateinit var txtInfo: TextView
+    private lateinit var txtAddressDetail: TextView
     private lateinit var productsContainer: LinearLayout
     private lateinit var txtGrandTotal: TextView
 
@@ -44,6 +45,7 @@ class BuyerOrderActivity : AppCompatActivity() {
         btnBack = findViewById(R.id.btnBack)
         txtReference = findViewById(R.id.txtReference)
         txtInfo = findViewById(R.id.txtInfo)
+        txtAddressDetail = findViewById(R.id.txtAddressDetail)
         productsContainer = findViewById(R.id.productsContainer)
         txtGrandTotal = findViewById(R.id.txtGrandTotal)
 

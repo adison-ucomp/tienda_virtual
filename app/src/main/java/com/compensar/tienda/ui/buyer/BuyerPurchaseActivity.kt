@@ -61,6 +61,11 @@ class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
         loadAddresses()
     }
 
+    override fun onResume() {
+        super.onResume()
+        loadAddresses()
+    }
+
     private fun applyWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -134,6 +139,7 @@ class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
                 addresses.addAll(result.documents.mapNotNull { it.toObject(AddressModel::class.java) }.sortedBy { it.register })
 
                 if (addresses.isEmpty()) {
+                    selectedAddress = null
                     txtAddress.text = "No tienes direcciones registradas"
                     txtCity.text = "Agrega una dirección antes de continuar"
                     txtContact.text = ""
@@ -205,6 +211,11 @@ class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
         }
         if (items.isEmpty()) {
             Toast.makeText(this, "No hay productos para comprar", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (addresses.isEmpty()) {
+            Toast.makeText(this, "Debes agregar al menos una dirección para continuar", Toast.LENGTH_LONG).show()
+            startActivity(Intent(this, BuyerAddressActivity::class.java))
             return
         }
         if (address == null || address.address.isNullOrBlank()) {

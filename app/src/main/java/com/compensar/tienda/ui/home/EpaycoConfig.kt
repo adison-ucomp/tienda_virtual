@@ -17,11 +17,14 @@ object EpaycoConfig {
     val MAX_AMOUNT: Double?
         get() = BuildConfig.EPAYCO_MAX_AMOUNT.toDoubleOrNull()
 
+    val API_BASE_URL: String
+        get() = BuildConfig.API_BASE_URL.trim().trimEnd('/') + "/"
+
     val CONFIRMATION_URL: String
-        get() = BuildConfig.EPAYCO_CONFIRMATION_URL
+        get() = API_BASE_URL + "api/epayco"
 
     val RESPONSE_URL: String
-        get() = BuildConfig.EPAYCO_RESPONSE_URL.ifBlank { CONFIRMATION_URL }
+        get() = API_BASE_URL + "api/epayco"
 
     fun validateAmount(total: Double): String? {
         if (total < MIN_AMOUNT) {
