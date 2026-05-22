@@ -344,13 +344,13 @@ class HomeEpaycoActivity : AppCompatActivity() {
             .ifBlank { data.optString("x_cod_respuesta") }
             .ifBlank { data.optString("x_cod_transaction_state") }
 
-        if (code == "1") return "APROBADO"
+        if (code == "1") return "Aceptada"
 
         val clean = transactionState.uppercase().trim()
         return if (clean == "ACEPTADA" || clean.contains("ACEPT") || clean.contains("APROB")) {
-            "APROBADO"
+            "Aceptada"
         } else {
-            "RECHAZADO"
+            "Rechazada"
         }
     }
 
@@ -420,7 +420,7 @@ class HomeEpaycoActivity : AppCompatActivity() {
         }
 
         val idShipment = if (state == "APROBADO") 1L else 4L
-        val shipmentState = if (idShipment == 1L) "Pendiente" else "Rechazado"
+        val shipmentState = if (idShipment == 1L) "Pendiente" else "Rechazada"
         val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
         val hour = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
 
