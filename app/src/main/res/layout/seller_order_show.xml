@@ -136,11 +136,20 @@
                         android:text="Sin dirección"
                         android:textColor="@color/subtitle" />
 
-                    <WebView
-                        android:id="@+id/webOrderAddressMap"
+                    <FrameLayout
+                        android:id="@+id/mapContainer"
                         android:layout_width="match_parent"
-                        android:layout_height="240dp"
-                        android:layout_marginTop="14dp" />
+                        android:layout_height="170dp"
+                        android:layout_marginTop="14dp"
+                        android:background="#DDF2EB">
+
+                        <fragment
+                            android:id="@+id/orderMapFragment"
+                            android:name="com.google.android.gms.maps.SupportMapFragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                    </FrameLayout>
 
                 </LinearLayout>
 

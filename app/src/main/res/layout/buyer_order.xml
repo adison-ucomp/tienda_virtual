@@ -129,11 +129,20 @@
                         android:textColor="@color/subtitle"
                         android:textSize="14sp" />
 
-                    <WebView
-                        android:id="@+id/webAddressMap"
+                    <FrameLayout
+                        android:id="@+id/mapContainer"
                         android:layout_width="match_parent"
-                        android:layout_height="220dp"
-                        android:layout_marginTop="14dp" />
+                        android:layout_height="170dp"
+                        android:layout_marginTop="14dp"
+                        android:background="#DDF2EB">
+
+                        <fragment
+                            android:id="@+id/orderMapFragment"
+                            android:name="com.google.android.gms.maps.SupportMapFragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                    </FrameLayout>
 
                 </LinearLayout>
 

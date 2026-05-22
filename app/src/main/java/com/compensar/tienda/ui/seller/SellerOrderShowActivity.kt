@@ -1,6 +1,5 @@
 package com.compensar.tienda.ui.seller
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
@@ -11,7 +10,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import android.webkit.WebView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
@@ -24,10 +22,16 @@ import com.compensar.tienda.model.PurchaseModel
 import com.compensar.tienda.ui.common.SellerDataHelper
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.util.StatusStyleHelper
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.firestore.FirebaseFirestore
-import java.net.URLEncoder
+import java.util.Locale
 
-class SellerOrderShowActivity : AppCompatActivity() {
+class SellerOrderShowActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var actionReturn: TextView
     private lateinit var textOrderReference: TextView
@@ -36,7 +40,6 @@ class SellerOrderShowActivity : AppCompatActivity() {
     private lateinit var textOrderStatus: TextView
     private lateinit var productListContainer: LinearLayout
     private lateinit var textOrderAddress: TextView
-    private lateinit var webOrderAddressMap: WebView
     private lateinit var textPaymentMethod: TextView
     private lateinit var textOrderTotal: TextView
     private lateinit var orderActionsContainer: LinearLayout
@@ -50,6 +53,8 @@ class SellerOrderShowActivity : AppCompatActivity() {
     private var register: Long = 0
     private var currentOrder: SellerDataHelper.SellerOrder? = null
     private var currentData: SellerDataHelper.SellerData? = null
+    private var googleMap: GoogleMap? = null
+    private var pendingAddress: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +66,7 @@ class SellerOrderShowActivity : AppCompatActivity() {
 
         initViews()
         initEvents()
+        initMap()
         loadOrder()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -78,7 +84,6 @@ class SellerOrderShowActivity : AppCompatActivity() {
         textOrderStatus = findViewById(R.id.textOrderStatus)
         productListContainer = findViewById(R.id.productListContainer)
         textOrderAddress = findViewById(R.id.textOrderAddress)
-        webOrderAddressMap = findViewById(R.id.webOrderAddressMap)
         textPaymentMethod = findViewById(R.id.textPaymentMethod)
         textOrderTotal = findViewById(R.id.textOrderTotal)
         orderActionsContainer = findViewById(R.id.orderActionsContainer)
@@ -172,18 +177,42 @@ class SellerOrderShowActivity : AppCompatActivity() {
         renderProducts(data, item.purchases)
     }
 
-    @SuppressLint("SetJavaScriptEnabled", "ClickableViewAccessibility")
+    private fun initMap() {
+        val fragment = supportFragmentManager.findFragmentById(R.id.orderMapFragment) as? SupportMapFragment
+        fragment?.getMapAsync(this)
+    }
+
+    override fun onMapReady(map: GoogleMap) {
+        googleMap = map
+        map.uiSettings.isZoomControlsEnabled = false
+        map.uiSettings.isMapToolbarEnabled = false
+        map.uiSettings.isScrollGesturesEnabled = false
+        map.uiSettings.isZoomGesturesEnabled = false
+        map.uiSettings.isTiltGesturesEnabled = false
+        map.uiSettings.isRotateGesturesEnabled = false
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(4.7110, -74.0721), 12f))
+        if (pendingAddress.isNotBlank()) {
+            loadAddressMap(pendingAddress)
+        }
+    }
+
     private fun loadAddressMap(address: String) {
         if (address.isBlank() || address == "Sin dirección") return
+        pendingAddress = address
 
-        val encoded = URLEncoder.encode(address, "UTF-8")
-        webOrderAddressMap.settings.javaScriptEnabled = true
-        webOrderAddressMap.settings.domStorageEnabled = true
-        webOrderAddressMap.settings.setSupportZoom(false)
-        webOrderAddressMap.settings.builtInZoomControls = false
-        webOrderAddressMap.settings.displayZoomControls = false
-        webOrderAddressMap.setOnTouchListener { _, _ -> true }
-        webOrderAddressMap.loadUrl("https://maps.google.com/maps?q=$encoded&z=16&output=embed")
+        try {
+            val geocoder = android.location.Geocoder(this, Locale("es", "CO"))
+            @Suppress("DEPRECATION")
+            val result = geocoder.getFromLocationName(address, 1)
+
+            if (!result.isNullOrEmpty()) {
+                val latLng = LatLng(result[0].latitude, result[0].longitude)
+                googleMap?.clear()
+                googleMap?.addMarker(MarkerOptions().position(latLng).title(address))
+                googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
+            }
+        } catch (_: Exception) {
+        }
     }
 
     private fun getPaymentMethod(api: String?): String {

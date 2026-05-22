@@ -1,12 +1,10 @@
 package com.compensar.tienda.ui.buyer
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.graphics.Typeface
 import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.*
-import android.webkit.WebView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
@@ -17,22 +15,29 @@ import com.compensar.tienda.R
 import com.compensar.tienda.model.OrderModel
 import com.compensar.tienda.model.PurchaseModel
 import com.compensar.tienda.ui.common.SessionNavigation
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.firestore.FirebaseFirestore
-import java.net.URLEncoder
+import java.util.Locale
 
-class BuyerOrderActivity : AppCompatActivity() {
+class BuyerOrderActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var btnBack: TextView
     private lateinit var txtReference: TextView
     private lateinit var txtInfo: TextView
     private lateinit var txtAddressDetail: TextView
-    private lateinit var webAddressMap: WebView
     private lateinit var productsContainer: LinearLayout
     private lateinit var txtGrandTotal: TextView
 
     private val db = FirebaseFirestore.getInstance()
     private var orderRegister: Long = 0
     private var orderTotal: Double = 0.0
+    private var googleMap: GoogleMap? = null
+    private var pendingAddress: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,12 +58,12 @@ class BuyerOrderActivity : AppCompatActivity() {
         txtReference = findViewById(R.id.txtReference)
         txtInfo = findViewById(R.id.txtInfo)
         txtAddressDetail = findViewById(R.id.txtAddressDetail)
-        webAddressMap = findViewById(R.id.webAddressMap)
         productsContainer = findViewById(R.id.productsContainer)
         txtGrandTotal = findViewById(R.id.txtGrandTotal)
 
         btnBack.setOnClickListener { finish() }
 
+        initMap()
         loadOrder()
     }
 
@@ -93,18 +98,42 @@ class BuyerOrderActivity : AppCompatActivity() {
             }
     }
 
-    @SuppressLint("SetJavaScriptEnabled", "ClickableViewAccessibility")
+    private fun initMap() {
+        val fragment = supportFragmentManager.findFragmentById(R.id.orderMapFragment) as? SupportMapFragment
+        fragment?.getMapAsync(this)
+    }
+
+    override fun onMapReady(map: GoogleMap) {
+        googleMap = map
+        map.uiSettings.isZoomControlsEnabled = false
+        map.uiSettings.isMapToolbarEnabled = false
+        map.uiSettings.isScrollGesturesEnabled = false
+        map.uiSettings.isZoomGesturesEnabled = false
+        map.uiSettings.isTiltGesturesEnabled = false
+        map.uiSettings.isRotateGesturesEnabled = false
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(4.7110, -74.0721), 12f))
+        if (pendingAddress.isNotBlank()) {
+            loadAddressMap(pendingAddress)
+        }
+    }
+
     private fun loadAddressMap(address: String) {
         if (address.isBlank() || address == "Sin dirección") return
+        pendingAddress = address
 
-        val encoded = URLEncoder.encode(address, "UTF-8")
-        webAddressMap.settings.javaScriptEnabled = true
-        webAddressMap.settings.domStorageEnabled = true
-        webAddressMap.settings.setSupportZoom(false)
-        webAddressMap.settings.builtInZoomControls = false
-        webAddressMap.settings.displayZoomControls = false
-        webAddressMap.setOnTouchListener { _, _ -> true }
-        webAddressMap.loadUrl("https://maps.google.com/maps?q=$encoded&z=16&output=embed")
+        try {
+            val geocoder = android.location.Geocoder(this, Locale("es", "CO"))
+            @Suppress("DEPRECATION")
+            val result = geocoder.getFromLocationName(address, 1)
+
+            if (!result.isNullOrEmpty()) {
+                val latLng = LatLng(result[0].latitude, result[0].longitude)
+                googleMap?.clear()
+                googleMap?.addMarker(MarkerOptions().position(latLng).title(address))
+                googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
+            }
+        } catch (_: Exception) {
+        }
     }
 
     private fun loadPurchases() {
