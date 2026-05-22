@@ -2,7 +2,6 @@ package com.compensar.tienda.firestore
 
 import android.util.Log
 import com.compensar.tienda.default.CategoryDefault
-import com.compensar.tienda.default.EpaycoDefault
 import com.compensar.tienda.default.ModuleDefault
 import com.compensar.tienda.default.PaymentDefault
 import com.compensar.tienda.default.ProductDefault
@@ -35,19 +34,14 @@ class DefaultFire {
                                             onSuccess = {
                                                 createPayments(
                                                     onSuccess = {
-                                                        createEpaycos(
+                                                        createUsers(
                                                             onSuccess = {
-                                                                createUsers(
+                                                                createSellers(
                                                                     onSuccess = {
-                                                                        createSellers(
+                                                                        createShops(
                                                                             onSuccess = {
-                                                                                createShops(
-                                                                                    onSuccess = {
-                                                                                        createProducts(
-                                                                                            onSuccess = onSuccess,
-                                                                                            onFailure = onFailure
-                                                                                        )
-                                                                                    },
+                                                                                createProducts(
+                                                                                    onSuccess = onSuccess,
                                                                                     onFailure = onFailure
                                                                                 )
                                                                             },
@@ -169,18 +163,6 @@ class DefaultFire {
         )
     }
 
-    private fun createEpaycos(
-        onSuccess: () -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
-        createMissingDocuments(
-            collectionName = "epayco",
-            data = EpaycoDefault.getAll(),
-            getRegister = { it.register },
-            onSuccess = onSuccess,
-            onFailure = onFailure
-        )
-    }
 
     private fun createUsers(
         onSuccess: () -> Unit,
