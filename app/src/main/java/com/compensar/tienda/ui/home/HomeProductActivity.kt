@@ -196,11 +196,33 @@ class HomeProductActivity : AppCompatActivity() {
         homeCategoryContainer.removeAllViews()
 
         if (categories.isEmpty()) {
+            centerCategoryContainer(true)
             return
         }
 
+        val totalWidth = (categories.size * dp(110)) + ((categories.size - 1).coerceAtLeast(0) * dp(20))
+        val availableWidth = resources.displayMetrics.widthPixels - dp(48)
+        val shouldCenter = totalWidth <= availableWidth
+
+        centerCategoryContainer(shouldCenter)
+
         categories.forEachIndexed { index, category ->
             homeCategoryContainer.addView(categoryCard(category, index))
+        }
+    }
+
+    private fun centerCategoryContainer(shouldCenter: Boolean) {
+        homeCategoryContainer.layoutParams = homeCategoryContainer.layoutParams.apply {
+            width = if (shouldCenter) {
+                ViewGroup.LayoutParams.MATCH_PARENT
+            } else {
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            }
+        }
+        homeCategoryContainer.gravity = if (shouldCenter) {
+            Gravity.CENTER
+        } else {
+            Gravity.CENTER_VERTICAL
         }
     }
 

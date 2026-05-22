@@ -32,7 +32,7 @@ object UserDefault {
                 email = "test@engcode.app",
                 password = encryptPassword("Vendedor"),
                 storefire = "https://firebasestorage.googleapis.com/v0/b/engineering-code.firebasestorage.app/o/images%2Fuser%2F3_1779208125396.jpg?alt=media&token=52f52d63-848c-40dd-b272-44d5946fff9c",
-                idRole = 3
+                idRole = 2
             ),
             UserModel(
                 register = 4,
@@ -41,7 +41,7 @@ object UserDefault {
                 email = "adisonzenemij@gmail.com",
                 password = encryptPassword("Comprador"),
                 storefire = "",
-                idRole = 2
+                idRole = 3
             ),
             UserModel(
                 register = 5,
