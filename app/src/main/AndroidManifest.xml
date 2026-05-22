@@ -20,6 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TiendaVirtual">
         <activity
+            android:name=".ui.home.HomeEpaycoActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.seller.SellerShopStoreActivity"
             android:exported="false" />
         <activity
