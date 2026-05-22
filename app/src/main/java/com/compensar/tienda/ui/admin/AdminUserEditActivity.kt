@@ -227,7 +227,8 @@ class AdminUserEditActivity : AppCompatActivity() {
             email = email,
             password = currentData.password,
             storefire = storefire,
-            idRole = idRole
+            idRole = idRole,
+            biometric = currentData.biometric
         )
 
         collection.document(register.toString())

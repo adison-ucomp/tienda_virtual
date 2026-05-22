@@ -189,7 +189,8 @@ class UserUpdateActivity : AppCompatActivity() {
             email = email,
             password = if (passwordText.isEmpty()) currentData.password else encryptPassword(passwordText),
             storefire = storefire,
-            idRole = idRole
+            idRole = idRole,
+            biometric = currentData.biometric
         )
 
         collection.document(register.toString())

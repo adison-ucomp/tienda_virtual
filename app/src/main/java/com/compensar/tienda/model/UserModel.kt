@@ -7,5 +7,6 @@ data class UserModel(
     val email: String? = null,
     val password: String? = null,
     val storefire: String? = null,
-    val idRole: Long = 0
+    val idRole: Long = 0,
+    val biometric: Boolean = false
 )

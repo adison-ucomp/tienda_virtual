@@ -20,6 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TiendaVirtual">
         <activity
+            android:name=".ui.setting.SettingPasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.setting.SettingBuyerActivity"
             android:exported="false" />
         <activity

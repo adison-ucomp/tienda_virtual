@@ -32,159 +32,441 @@
             android:id="@+id/profileContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:orientation="vertical"
             android:paddingStart="24dp"
             android:paddingTop="28dp"
             android:paddingEnd="24dp"
-            android:paddingBottom="36dp"
-            android:gravity="center_horizontal">
+            android:paddingBottom="36dp">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/imgProfile"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_marginTop="20dp"
-                android:padding="5dp"
-                android:src="@drawable/ic_profile"
-                android:scaleType="centerCrop"
+                android:layout_width="124dp"
+                android:layout_height="124dp"
                 android:background="@drawable/bg_circle"
+                android:padding="4dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_profile"
                 app:shapeAppearanceOverlay="@style/ShapeAppearance.Tienda.ProfileCircle" />
 
             <TextView
                 android:id="@+id/txtUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
                 android:text="@string/app_name"
-                android:textSize="22sp"
-                android:textStyle="bold"
                 android:textColor="@color/black"
-                android:layout_marginTop="16dp" />
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/txtUserEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:text="@string/app_email"
-                android:textSize="14sp"
                 android:textColor="@color/subtitle"
-                android:layout_marginTop="6dp" />
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="38dp"
+                android:letterSpacing="0.12"
+                android:text="MI CUENTA"
+                android:textColor="@color/subtitle"
+                android:textSize="12sp" />
 
             <LinearLayout
-                android:id="@+id/btnEditProfile"
-                android:layout_width="wrap_content"
-                android:layout_height="45dp"
-                android:layout_marginTop="18dp"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:paddingHorizontal="18dp"
-                android:background="@drawable/bg_button">
+                android:id="@+id/rowInformation"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="12dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="34dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="♙"
+                    android:textColor="@color/subtitle"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Mi información"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="32dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="›"
+                    android:textColor="@color/line"
+                    android:textSize="22sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rowAddress"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="34dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="⌖"
+                    android:textColor="@color/subtitle"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Direcciones de envío"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/txtAddressCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="0"
+                    android:textColor="@color/subtitle"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="32dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="›"
+                    android:textColor="@color/line"
+                    android:textSize="22sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rowShopping"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="34dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="▤"
+                    android:textColor="@color/subtitle"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Mis compras"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/txtShoppingCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="0"
+                    android:textColor="@color/subtitle"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="32dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="›"
+                    android:textColor="@color/line"
+                    android:textSize="22sp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="34dp"
+                android:letterSpacing="0.12"
+                android:text="SEGURIDAD"
+                android:textColor="@color/subtitle"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:id="@+id/rowPassword"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="12dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="34dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="▣"
+                    android:textColor="@color/subtitle"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Cambiar contraseña"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="32dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="›"
+                    android:textColor="@color/line"
+                    android:textSize="22sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rowBiometric"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="34dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="◉"
+                    android:textColor="@color/subtitle"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Autenticación biométrica"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <Switch
+                    android:id="@+id/switchBiometric"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="34dp"
+                android:letterSpacing="0.12"
+                android:text="PREFERENCIAS"
+                android:textColor="@color/subtitle"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:id="@+id/rowNotifications"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="12dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="34dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="♧"
+                    android:textColor="@color/subtitle"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Notificaciones"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="32dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="›"
+                    android:textColor="@color/line"
+                    android:textSize="22sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rowLanguage"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="34dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="◎"
+                    android:textColor="@color/subtitle"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Idioma"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/edit_profile"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:layout_marginStart="8dp" />
+                    android:text="Español"
+                    android:textColor="@color/subtitle"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="32dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="›"
+                    android:textColor="@color/line"
+                    android:textSize="22sp" />
 
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/rowDarkMode"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="24dp">
+                android:layout_height="56dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardBuyerShopping"
+                <TextView
+                    android:layout_width="34dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="☾"
+                    android:textColor="@color/subtitle"
+                    android:textSize="18sp" />
+
+                <TextView
                     android:layout_width="0dp"
-                    android:layout_height="110dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
-                    app:cardCornerRadius="18dp"
-                    app:cardElevation="0dp"
-                    app:cardBackgroundColor="@color/white">
+                    android:text="Modo oscuro"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:gravity="center">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="▤"
-                            android:textColor="@color/black"
-                            android:textSize="32sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Compras"
-                            android:textStyle="bold"
-                            android:textColor="@color/black"
-                            android:layout_marginTop="10dp" />
-
-                        <TextView
-                            android:id="@+id/txtShoppingCount"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textSize="14sp"
-                            android:textColor="@color/subtitle"
-                            android:layout_marginTop="6dp" />
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardBuyerAddress"
-                    android:layout_width="0dp"
-                    android:layout_height="110dp"
-                    android:layout_weight="1"
-                    android:layout_marginStart="8dp"
-                    app:cardCornerRadius="18dp"
-                    app:cardElevation="0dp"
-                    app:cardBackgroundColor="@color/white">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:gravity="center">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="⌖"
-                            android:textColor="@color/black"
-                            android:textSize="32sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Direcciones"
-                            android:textStyle="bold"
-                            android:textColor="@color/black"
-                            android:layout_marginTop="10dp" />
-
-                        <TextView
-                            android:id="@+id/txtAddressCount"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textSize="14sp"
-                            android:textColor="@color/subtitle"
-                            android:layout_marginTop="6dp" />
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
+                <Switch
+                    android:id="@+id/switchDarkMode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="34dp"
+                android:letterSpacing="0.12"
+                android:text="SOPORTE"
+                android:textColor="@color/subtitle"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:id="@+id/rowSupport"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="12dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="34dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="?"
+                    android:textColor="@color/subtitle"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Centro de ayuda"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="32dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="›"
+                    android:textColor="@color/line"
+                    android:textSize="22sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rowTerms"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="34dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="□"
+                    android:textColor="@color/subtitle"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Términos y condiciones"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="32dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="›"
+                    android:textColor="@color/line"
+                    android:textSize="22sp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/actionLogout"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_marginTop="30dp"
+                android:gravity="center"
+                android:text="↪  Cerrar sesión"
+                android:textColor="#FF4B4B"
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
