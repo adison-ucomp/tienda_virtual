@@ -1,5 +1,6 @@
 package com.compensar.tienda.ui.buyer
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.graphics.Typeface
 import android.view.Gravity
@@ -78,9 +79,13 @@ class BuyerOrderActivity : AppCompatActivity() {
                 }
 
                 orderTotal = order.total ?: 0.0
+                val addressText = order.address.orEmpty().ifBlank { "Sin dirección" }
+
                 txtReference.text = "Orden #${order.reference ?: order.register}"
-                txtInfo.text = "Fecha: ${order.date ?: ""}  Hora: ${order.hour ?: ""}\nDirección: ${order.address ?: ""}"
+                txtInfo.text = "Fecha: ${order.date ?: ""}  Hora: ${order.hour ?: ""}\nDirección: $addressText"
+                txtAddressDetail.text = addressText
                 txtGrandTotal.text = "Total Compra: $ ${String.format("%,.0f", orderTotal)}"
+                loadAddressMap(addressText)
                 loadPurchases()
             }
             .addOnFailureListener {
@@ -88,12 +93,18 @@ class BuyerOrderActivity : AppCompatActivity() {
             }
     }
 
+    @SuppressLint("SetJavaScriptEnabled", "ClickableViewAccessibility")
     private fun loadAddressMap(address: String) {
         if (address.isBlank() || address == "Sin dirección") return
+
         val encoded = URLEncoder.encode(address, "UTF-8")
         webAddressMap.settings.javaScriptEnabled = true
         webAddressMap.settings.domStorageEnabled = true
-        webAddressMap.loadUrl("https://www.google.com/maps/search/?api=1&query=$encoded")
+        webAddressMap.settings.setSupportZoom(false)
+        webAddressMap.settings.builtInZoomControls = false
+        webAddressMap.settings.displayZoomControls = false
+        webAddressMap.setOnTouchListener { _, _ -> true }
+        webAddressMap.loadUrl("https://maps.google.com/maps?q=$encoded&z=16&output=embed")
     }
 
     private fun loadPurchases() {

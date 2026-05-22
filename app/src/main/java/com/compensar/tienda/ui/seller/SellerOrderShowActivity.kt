@@ -1,5 +1,6 @@
 package com.compensar.tienda.ui.seller
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
@@ -171,12 +172,18 @@ class SellerOrderShowActivity : AppCompatActivity() {
         renderProducts(data, item.purchases)
     }
 
+    @SuppressLint("SetJavaScriptEnabled", "ClickableViewAccessibility")
     private fun loadAddressMap(address: String) {
         if (address.isBlank() || address == "Sin dirección") return
+
         val encoded = URLEncoder.encode(address, "UTF-8")
         webOrderAddressMap.settings.javaScriptEnabled = true
         webOrderAddressMap.settings.domStorageEnabled = true
-        webOrderAddressMap.loadUrl("https://www.google.com/maps/search/?api=1&query=$encoded")
+        webOrderAddressMap.settings.setSupportZoom(false)
+        webOrderAddressMap.settings.builtInZoomControls = false
+        webOrderAddressMap.settings.displayZoomControls = false
+        webOrderAddressMap.setOnTouchListener { _, _ -> true }
+        webOrderAddressMap.loadUrl("https://maps.google.com/maps?q=$encoded&z=16&output=embed")
     }
 
     private fun getPaymentMethod(api: String?): String {
