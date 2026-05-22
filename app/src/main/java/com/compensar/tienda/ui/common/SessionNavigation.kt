@@ -11,6 +11,9 @@ import android.view.WindowManager
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
 import com.compensar.tienda.ui.buyer.BuyerCartShopActivity
@@ -30,11 +33,28 @@ import com.compensar.tienda.ui.seller.SellerDashboardActivity
 object SessionNavigation {
 
     fun bindProfile(activity: AppCompatActivity) {
+        applySystemBarSpacing(activity)
         bindProfileByRole(activity)
         bindSharedMenu(activity)
         bindBuyerCart(activity)
         bindBuyerInferior(activity)
         applyBuyerSuperiorVisibility(activity)
+    }
+
+    private fun applySystemBarSpacing(activity: AppCompatActivity) {
+        activity.enableEdgeToEdge()
+
+        val mainView = activity.findViewById<View?>(R.id.main) ?: return
+        ViewCompat.setOnApplyWindowInsetsListener(mainView) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(
+                systemBars.left,
+                systemBars.top,
+                systemBars.right,
+                systemBars.bottom
+            )
+            insets
+        }
     }
 
     private fun bindProfileByRole(activity: AppCompatActivity) {
