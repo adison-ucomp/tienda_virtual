@@ -14,14 +14,10 @@
         android:id="@+id/btnMenu"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:background="@android:color/transparent"
-        android:clickable="true"
-        android:focusable="true"
         android:gravity="center"
         android:text="☰"
         android:textColor="#111111"
-        android:textSize="28sp"
-        android:visibility="gone" />
+        android:textSize="28sp" />
 
     <include
         android:id="@+id/includeNavbarLogo"

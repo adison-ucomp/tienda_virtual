@@ -26,13 +26,8 @@
         android:layout_height="match_parent"
         android:layout_weight="1" />
 
-    <!-- <TextView
-        android:id="@+id/btnCart"
+    <Space
         android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:gravity="center"
-        android:text="🛒"
-        android:textColor="#111111"
-        android:textSize="24sp" /> -->
+        android:layout_height="48dp" />
 
 </LinearLayout>
