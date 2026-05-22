@@ -133,13 +133,7 @@
     <string name="save_product">Guardar Producto</string>
 
 
-
-
-
     <string name="report_data_sale">Reporte de Ventas</string>
-
-
-
 
 
     <string name="filter_sellers">Vendedores</string>
@@ -150,9 +144,6 @@
     <string name="clean_data">Limpiar</string>
     <string name="sales_report_result">Resultado del Reporte</string>
     <string name="sold_products">Productos Vendidos</string>
-
-
-
 
 
     <!-- Modelo Direcciones -->

@@ -20,6 +20,33 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TiendaVirtual">
         <activity
+            android:name=".ui.seller.SellerShopStoreActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.seller.SellerShopListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.seller.SellerShopQuitActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.seller.SellerShopEditActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.setting.SettingSellerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.seller.SellerProductStoreActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.seller.SellerProductEditActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.seller.SellerProductQuitActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.seller.SellerProductListActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.seller.SellerOrderShowActivity"
             android:exported="false" />
         <activity
