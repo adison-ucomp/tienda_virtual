@@ -17,9 +17,13 @@ import com.compensar.tienda.model.EpaycoModel
 import com.compensar.tienda.ui.buyer.BuyerShoppingActivity
 import com.compensar.tienda.ui.common.CartManager
 import com.compensar.tienda.ui.common.SessionNavigation
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import org.json.JSONObject
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class HomeEpaycoActivity : AppCompatActivity() {
     private lateinit var actionReturn: TextView
@@ -33,7 +37,9 @@ class HomeEpaycoActivity : AppCompatActivity() {
 
     private val db = FirebaseFirestore.getInstance()
     private var orderRegister: Long = 0
+    private var userRegister: Long = 0
     private var reference: String = ""
+    private var address: String = ""
     private var total: Double = 0.0
     private var savedResult = false
 
@@ -60,7 +66,9 @@ class HomeEpaycoActivity : AppCompatActivity() {
 
     private fun readExtras(intent: Intent?) {
         orderRegister = intent?.getLongExtra("orderRegister", 0L) ?: 0L
+        userRegister = intent?.getLongExtra("userRegister", 0L) ?: 0L
         reference = intent?.getStringExtra("reference").orEmpty()
+        address = intent?.getStringExtra("address").orEmpty()
         total = intent?.getDoubleExtra("total", 0.0) ?: 0.0
     }
 
@@ -85,11 +93,22 @@ class HomeEpaycoActivity : AppCompatActivity() {
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun loadCheckout() {
-        if (orderRegister <= 0 || reference.isBlank() || total <= 0.0) {
+        if (reference.isBlank() || total <= 0.0 || userRegister <= 0 || address.isBlank()) {
             showResult(
                 state = "ERROR",
-                message = "No fue posible cargar la información de la orden.",
-                apiJson = buildResultJson("ERROR", "Datos de orden incompletos")
+                message = "No fue posible cargar la información para iniciar el pago.",
+                apiJson = buildResultJson("ERROR", "Datos de pago incompletos"),
+                idOrder = 0L
+            )
+            return
+        }
+
+        if (CartManager.getItems(this).isEmpty()) {
+            showResult(
+                state = "ERROR",
+                message = "No hay productos pendientes para pagar.",
+                apiJson = buildResultJson("ERROR", "Carrito vacío"),
+                idOrder = 0L
             )
             return
         }
@@ -98,7 +117,8 @@ class HomeEpaycoActivity : AppCompatActivity() {
             showResult(
                 state = "CONFIGURAR",
                 message = "Debes configurar la llave pública de ePayco en el archivo .env.local.",
-                apiJson = buildResultJson("CONFIGURAR", "Llave pública pendiente")
+                apiJson = buildResultJson("CONFIGURAR", "Llave pública pendiente"),
+                idOrder = 0L
             )
             return
         }
@@ -108,7 +128,8 @@ class HomeEpaycoActivity : AppCompatActivity() {
             showResult(
                 state = "VALOR_NO_PERMITIDO",
                 message = amountMessage,
-                apiJson = buildResultJson("VALOR_NO_PERMITIDO", amountMessage)
+                apiJson = buildResultJson("VALOR_NO_PERMITIDO", amountMessage),
+                idOrder = 0L
             )
             return
         }
@@ -140,7 +161,11 @@ class HomeEpaycoActivity : AppCompatActivity() {
     }
 
     private fun processUrl(uri: Uri): Boolean {
-        if (uri.scheme == "emptio" && uri.host == "epayco") {
+        val isCustomResult = uri.scheme == "emptio" && uri.host == "epayco"
+        val isWebResult = uri.host?.contains("emptio", ignoreCase = true) == true &&
+            uri.path?.contains("epayco", ignoreCase = true) == true
+
+        if (isCustomResult || isWebResult) {
             handleResult(uri)
             return true
         }
@@ -148,12 +173,17 @@ class HomeEpaycoActivity : AppCompatActivity() {
     }
 
     private fun handleResult(uri: Uri?) {
-        if (uri == null || uri.scheme != "emptio" || uri.host != "epayco") {
-            return
-        }
+        if (uri == null || savedResult) return
+
+        val isCustomResult = uri.scheme == "emptio" && uri.host == "epayco"
+        val isWebResult = uri.host?.contains("emptio", ignoreCase = true) == true &&
+            uri.path?.contains("epayco", ignoreCase = true) == true
+
+        if (!isCustomResult && !isWebResult) return
 
         val rawState = uri.getQueryParameter("status")
             ?: uri.getQueryParameter("x_response")
+            ?: uri.getQueryParameter("x_response_reason_text")
             ?: uri.getQueryParameter("estado")
             ?: uri.getQueryParameter("state")
             ?: "PENDIENTE"
@@ -167,11 +197,133 @@ class HomeEpaycoActivity : AppCompatActivity() {
             put("uri", uri.toString())
         }.toString()
 
+        savedResult = true
+        webEpayco.visibility = View.GONE
+
+        if (state == "APROBADO") {
+            createOrderAfterApproved(apiJson)
+            return
+        }
+
         showResult(
             state = state,
             message = messageForState(state),
-            apiJson = apiJson
+            apiJson = apiJson,
+            idOrder = 0L
         )
+    }
+
+    private fun createOrderAfterApproved(apiJson: String) {
+        val items = CartManager.getItems(this)
+        if (items.isEmpty()) {
+            showResult(
+                state = "ERROR",
+                message = "El pago fue aprobado, pero no hay productos en el carrito para generar la orden.",
+                apiJson = buildResultJson("ERROR", "Carrito vacío después del pago"),
+                idOrder = 0L
+            )
+            return
+        }
+
+        txtReference.text = reference.ifBlank { "-" }
+        txtState.text = "PROCESANDO"
+        txtMessage.text = "Pago aprobado. Generando orden de compra..."
+        txtTotal.text = "$ ${String.format("%,.0f", total)}"
+        resultContainer.visibility = View.VISIBLE
+
+        db.collection("order")
+            .orderBy("register", Query.Direction.DESCENDING)
+            .limit(1)
+            .get()
+            .addOnSuccessListener { orderResult ->
+                orderRegister = (orderResult.documents.firstOrNull()?.getLong("register") ?: 0L) + 1L
+                val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+                val hour = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
+                val orderData = mapOf(
+                    "register" to orderRegister,
+                    "address" to address,
+                    "reference" to reference,
+                    "total" to total,
+                    "date" to date,
+                    "hour" to hour,
+                    "idShop" to 0L,
+                    "idShipment" to 1L,
+                    "idUser" to userRegister
+                )
+
+                db.collection("purchase")
+                    .orderBy("register", Query.Direction.DESCENDING)
+                    .limit(1)
+                    .get()
+                    .addOnSuccessListener { purchaseResult ->
+                        val firstPurchaseRegister = (purchaseResult.documents.firstOrNull()?.getLong("register") ?: 0L) + 1L
+                        db.runBatch { batch ->
+                            batch.set(db.collection("order").document(orderRegister.toString()), orderData)
+
+                            items.forEachIndexed { index, item ->
+                                val purchaseRegister = firstPurchaseRegister + index
+                                val productRef = db.collection("product").document(item.register.toString())
+                                val reservationRef = db.collection("cart_reservation").document("${userRegister}_${item.register}")
+                                batch.set(
+                                    db.collection("purchase").document(purchaseRegister.toString()),
+                                    mapOf(
+                                        "register" to purchaseRegister,
+                                        "amount" to item.quantity,
+                                        "value" to item.price,
+                                        "total" to item.price * item.quantity,
+                                        "idProduct" to item.register,
+                                        "idGangway" to 0L,
+                                        "idUser" to userRegister,
+                                        "idOrder" to orderRegister
+                                    )
+                                )
+                                batch.update(
+                                    productRef,
+                                    mapOf(
+                                        "stock" to FieldValue.increment(-item.quantity.toLong()),
+                                        "reserved" to FieldValue.increment(-item.quantity.toLong())
+                                    )
+                                )
+                                batch.delete(reservationRef)
+                            }
+                        }.addOnSuccessListener {
+                            CartManager.clear(this)
+                            val finalJson = JSONObject(apiJson).apply {
+                                put("order", orderRegister)
+                                put("generatedOrder", true)
+                            }.toString()
+                            showResult(
+                                state = "APROBADO",
+                                message = "El pago fue aprobado correctamente y la orden fue generada.",
+                                apiJson = finalJson,
+                                idOrder = orderRegister
+                            )
+                        }.addOnFailureListener { exception ->
+                            showResult(
+                                state = "ERROR_ORDEN",
+                                message = "El pago fue aprobado, pero no se pudo generar la orden: ${exception.message}",
+                                apiJson = buildResultJson("ERROR_ORDEN", exception.message ?: "Error generando orden"),
+                                idOrder = 0L
+                            )
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        showResult(
+                            state = "ERROR_ORDEN",
+                            message = "El pago fue aprobado, pero no se pudieron generar las compras: ${exception.message}",
+                            apiJson = buildResultJson("ERROR_ORDEN", exception.message ?: "Error generando compras"),
+                            idOrder = 0L
+                        )
+                    }
+            }
+            .addOnFailureListener { exception ->
+                showResult(
+                    state = "ERROR_ORDEN",
+                    message = "El pago fue aprobado, pero no se pudo generar la orden: ${exception.message}",
+                    apiJson = buildResultJson("ERROR_ORDEN", exception.message ?: "Error generando orden"),
+                    idOrder = 0L
+                )
+            }
     }
 
     private fun normalizeState(value: String): String {
@@ -187,19 +339,20 @@ class HomeEpaycoActivity : AppCompatActivity() {
 
     private fun messageForState(state: String): String {
         return when (state) {
-            "APROBADO" -> "El pago fue aprobado correctamente."
-            "RECHAZADO" -> "El pago fue rechazado por la pasarela."
-            "CANCELADO" -> "El pago fue cancelado."
-            "FALLIDO" -> "El pago no pudo ser procesado."
+            "APROBADO" -> "El pago fue aprobado correctamente y la orden fue generada."
+            "RECHAZADO" -> "El pago fue rechazado por la pasarela. No se generó la orden de compra."
+            "CANCELADO" -> "El pago fue cancelado. No se generó la orden de compra."
+            "FALLIDO" -> "El pago no pudo ser procesado. No se generó la orden de compra."
             "CONFIGURAR" -> "Configura la llave pública para iniciar el checkout."
-            else -> "La transacción quedó en estado $state."
+            else -> "La transacción quedó en estado $state. No se generó la orden de compra."
         }
     }
 
     private fun showResult(
         state: String,
         message: String,
-        apiJson: String
+        apiJson: String,
+        idOrder: Long
     ) {
         savedResult = true
         webEpayco.visibility = View.GONE
@@ -208,46 +361,27 @@ class HomeEpaycoActivity : AppCompatActivity() {
         txtState.text = state
         txtMessage.text = message
         txtTotal.text = "$ ${String.format("%,.0f", total)}"
-        saveEpayco(apiJson, state)
+        saveEpayco(apiJson, state, idOrder)
     }
 
-    private fun saveEpayco(apiJson: String, state: String) {
-        if (orderRegister <= 0) return
-
+    private fun saveEpayco(apiJson: String, state: String, idOrder: Long) {
         db.collection("epayco")
-            .whereEqualTo("idOrder", orderRegister)
+            .orderBy("register", Query.Direction.DESCENDING)
             .limit(1)
             .get()
-            .addOnSuccessListener { existing ->
-                val document = existing.documents.firstOrNull()
-                if (document != null) {
-                    val register = document.getLong("register") ?: return@addOnSuccessListener
-                    db.collection("epayco").document(register.toString()).set(
-                        EpaycoModel(
-                            register = register,
-                            api = apiJson,
-                            state = state,
-                            idOrder = orderRegister
-                        )
+            .addOnSuccessListener { result ->
+                val register = (result.documents.firstOrNull()?.getLong("register") ?: 0L) + 1L
+                db.collection("epayco").document(register.toString()).set(
+                    EpaycoModel(
+                        register = register,
+                        api = apiJson,
+                        state = state,
+                        idOrder = idOrder
                     )
-                    return@addOnSuccessListener
-                }
-
-                db.collection("epayco")
-                    .orderBy("register", Query.Direction.DESCENDING)
-                    .limit(1)
-                    .get()
-                    .addOnSuccessListener { result ->
-                        val register = (result.documents.firstOrNull()?.getLong("register") ?: 0L) + 1L
-                        db.collection("epayco").document(register.toString()).set(
-                            EpaycoModel(
-                                register = register,
-                                api = apiJson,
-                                state = state,
-                                idOrder = orderRegister
-                            )
-                        )
-                    }
+                )
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "No se pudo guardar la respuesta de ePayco", Toast.LENGTH_LONG).show()
             }
     }
 
@@ -262,8 +396,9 @@ class HomeEpaycoActivity : AppCompatActivity() {
     }
 
     private fun buildCheckoutHtml(): String {
-        val amount = String.format(java.util.Locale.US, "%.0f", total)
+        val amount = String.format(Locale.US, "%.0f", total)
         val testMode = if (EpaycoConfig.TEST_MODE) "true" else "false"
+        val responseUrl = "https://www.emptio.com/epayco/result"
         return """
             <!DOCTYPE html>
             <html>
@@ -286,7 +421,7 @@ class HomeEpaycoActivity : AppCompatActivity() {
                     });
                     var data = {
                         name: 'Compra EMPTIO',
-                        description: 'Orden $reference',
+                        description: 'Compra $reference',
                         invoice: '$reference',
                         currency: 'COP',
                         amount: '$amount',
@@ -295,8 +430,8 @@ class HomeEpaycoActivity : AppCompatActivity() {
                         country: 'co',
                         lang: 'es',
                         external: 'false',
-                        response: 'emptio://epayco/result?status=APROBADO',
-                        confirmation: 'emptio://epayco/result?status=APROBADO'
+                        response: '$responseUrl',
+                        confirmation: '$responseUrl'
                     };
                     function openCheckout() {
                         handler.open(data);

@@ -25,11 +25,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
-import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
 import java.util.UUID
 
@@ -223,91 +219,14 @@ class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
             return
         }
 
-        btnConfirmPurchase.isEnabled = false
-        btnConfirmPurchase.text = "Procesando..."
-
-        val db = FirebaseFirestore.getInstance()
         val reference = UUID.randomUUID().toString().replace("-", "").take(12).uppercase()
-
-        db.collection("order")
-            .orderBy("register", Query.Direction.DESCENDING)
-            .limit(1)
-            .get()
-            .addOnSuccessListener { orderResult ->
-                val orderRegister = (orderResult.documents.firstOrNull()?.getLong("register") ?: 0L) + 1L
-                val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-                val hour = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
-
-                val orderData = mapOf(
-                    "register" to orderRegister,
-                    "address" to address.address,
-                    "reference" to reference,
-                    "total" to subtotal,
-                    "date" to date,
-                    "hour" to hour,
-                    "idShop" to 0L,
-                    "idShipment" to 1L,
-                    "idUser" to userRegister
-                )
-
-                db.collection("purchase")
-                    .orderBy("register", Query.Direction.DESCENDING)
-                    .limit(1)
-                    .get()
-                    .addOnSuccessListener { purchaseResult ->
-                        val firstPurchaseRegister = (purchaseResult.documents.firstOrNull()?.getLong("register") ?: 0L) + 1L
-                        db.runBatch { batch ->
-                            batch.set(db.collection("order").document(orderRegister.toString()), orderData)
-
-
-                            items.forEachIndexed { index, item ->
-                                val purchaseRegister = firstPurchaseRegister + index
-                                val productRef = db.collection("product").document(item.register.toString())
-                                val reservationRef = db.collection("cart_reservation").document("${userRegister}_${item.register}")
-                                batch.set(db.collection("purchase").document(purchaseRegister.toString()), mapOf(
-                                    "register" to purchaseRegister,
-                                    "amount" to item.quantity,
-                                    "value" to item.price,
-                                    "total" to item.price * item.quantity,
-                                    "idProduct" to item.register,
-                                    "idMethod" to 0L,
-                                    "idGangway" to 0L,
-                                    "idUser" to userRegister,
-                                    "idOrder" to orderRegister
-                                ))
-                                batch.update(productRef, mapOf(
-                                    "stock" to FieldValue.increment(-item.quantity.toLong()),
-                                    "reserved" to FieldValue.increment(-item.quantity.toLong())
-                                ))
-                                batch.delete(reservationRef)
-                            }
-                        }.addOnSuccessListener {
-                            CartManager.clear(this)
-                            Toast.makeText(this, "Compra registrada. Orden: $reference", Toast.LENGTH_LONG).show()
-                            val intent = Intent(this, HomeEpaycoActivity::class.java).apply {
-                                putExtra("orderRegister", orderRegister)
-                                putExtra("reference", reference)
-                                putExtra("total", subtotal)
-                            }
-                            startActivity(intent)
-                            finish()
-                        }.addOnFailureListener { exception ->
-                            btnConfirmPurchase.isEnabled = true
-                            btnConfirmPurchase.text = "Confirmar compra"
-                            Toast.makeText(this, "Error al confirmar: ${exception.message}", Toast.LENGTH_LONG).show()
-                        }
-                    }
-                    .addOnFailureListener { exception ->
-                        btnConfirmPurchase.isEnabled = true
-                        btnConfirmPurchase.text = "Confirmar compra"
-                        Toast.makeText(this, "Error generando compras: ${exception.message}", Toast.LENGTH_LONG).show()
-                    }
-            }
-            .addOnFailureListener { exception ->
-                btnConfirmPurchase.isEnabled = true
-                btnConfirmPurchase.text = "Confirmar compra"
-                Toast.makeText(this, "Error generando orden: ${exception.message}", Toast.LENGTH_LONG).show()
-            }
+        val intent = Intent(this, HomeEpaycoActivity::class.java).apply {
+            putExtra("reference", reference)
+            putExtra("total", subtotal)
+            putExtra("userRegister", userRegister)
+            putExtra("address", address.address)
+        }
+        startActivity(intent)
     }
 
     private fun renderSummary() {
