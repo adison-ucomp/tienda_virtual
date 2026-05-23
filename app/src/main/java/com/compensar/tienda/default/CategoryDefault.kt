@@ -2,8 +2,14 @@ package com.compensar.tienda.default
 
 import com.compensar.tienda.model.CategoryModel
 
+/**
+ * Categorias iniciales usadas para poblar la base de datos.
+ */
 object CategoryDefault {
 
+    /**
+     * Retorna el catalogo de categorias por defecto.
+     */
     fun getAll(): List<CategoryModel> {
         return listOf(
             CategoryModel(

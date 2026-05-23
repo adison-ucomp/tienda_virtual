@@ -2,8 +2,14 @@ package com.compensar.tienda.default
 
 import com.compensar.tienda.model.ShopModel
 
+/**
+ * Tiendas iniciales asociadas a vendedores.
+ */
 object ShopDefault {
 
+    /**
+     * Retorna el conjunto de tiendas por defecto.
+     */
     fun getAll(): List<ShopModel> {
         return listOf(
             ShopModel(

@@ -3,8 +3,14 @@ package com.compensar.tienda.default
 import com.compensar.tienda.model.UserModel
 import java.security.MessageDigest
 
+/**
+ * Usuarios iniciales para carga semilla.
+ */
 object UserDefault {
 
+    /**
+     * Retorna usuarios de ejemplo con password hasheado y rol asociado.
+     */
     fun getAll(): List<UserModel> {
         return listOf(
             UserModel(
@@ -55,6 +61,9 @@ object UserDefault {
         )
     }
 
+    /**
+     * Genera un hash SHA-256 con sal fija para almacenar passwords iniciales.
+     */
     private fun encryptPassword(password: String): String {
         val salt = "com.compensar.tienda.user.password"
         val bytes = MessageDigest.getInstance("SHA-256")

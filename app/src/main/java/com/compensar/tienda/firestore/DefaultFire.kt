@@ -14,10 +14,18 @@ import com.compensar.tienda.model.ShipmentModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Source
 
+/**
+ * Inicializa datos semilla en Firestore para el primer arranque de la app.
+ *
+ * Crea documentos faltantes por coleccion y evita sobreescribir datos existentes.
+ */
 class DefaultFire {
 
     private val db = FirebaseFirestore.getInstance()
 
+    /**
+     * Ejecuta la carga de datos por defecto en orden de dependencias.
+     */
     fun createDefault(
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit

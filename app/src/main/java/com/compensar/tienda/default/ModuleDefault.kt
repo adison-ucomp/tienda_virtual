@@ -2,8 +2,14 @@ package com.compensar.tienda.default
 
 import com.compensar.tienda.model.ModuleModel
 
+/**
+ * Modulos funcionales del sistema para configuracion inicial.
+ */
 object ModuleDefault {
 
+    /**
+     * Retorna la lista base de modulos y su metadata.
+     */
     fun getAll(): List<ModuleModel> {
         return listOf(
             ModuleModel(register = 1L, name = "Modulos", model = "module", detail = "Administra los modulos del sistema", state = false),

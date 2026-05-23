@@ -2,8 +2,14 @@ package com.compensar.tienda.default
 
 import com.compensar.tienda.model.ProductModel
 
+/**
+ * Productos para pruebas o carga inicial.
+ */
 object ProductDefault {
 
+    /**
+     * Retorna productos de ejemplo con relacion a categoria y tienda.
+     */
     fun getAll(): List<ProductModel> {
         return listOf(
             ProductModel(

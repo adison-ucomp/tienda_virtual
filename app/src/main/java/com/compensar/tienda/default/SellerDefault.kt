@@ -2,8 +2,14 @@ package com.compensar.tienda.default
 
 import com.compensar.tienda.model.SellerModel
 
+/**
+ * Vendedores iniciales.
+ */
 object SellerDefault {
 
+    /**
+     * Retorna vendedores de ejemplo con referencia al usuario propietario.
+     */
     fun getAll(): List<SellerModel> {
         return listOf(
             SellerModel(
