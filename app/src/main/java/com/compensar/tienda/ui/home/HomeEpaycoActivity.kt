@@ -53,6 +53,10 @@ class HomeEpaycoActivity : AppCompatActivity() {
     private var total: Double = 0.0
     private var savedResult = false
 
+    /**
+     * Se ejecuta al crear la pantalla.
+     * Inicializa vista, estado y eventos principales.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.home_epayco)
@@ -69,12 +73,18 @@ class HomeEpaycoActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         setIntent(intent)
         handleResult(intent?.data)
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun readExtras(intent: Intent?) {
         userRegister = intent?.getLongExtra("userRegister", 0L) ?: 0L
         reference = intent?.getStringExtra("reference").orEmpty()
@@ -82,6 +92,9 @@ class HomeEpaycoActivity : AppCompatActivity() {
         total = intent?.getDoubleExtra("total", 0.0) ?: 0.0
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initViews() {
         actionReturn = findViewById(R.id.actionReturn)
         webEpayco = findViewById(R.id.webEpayco)
@@ -94,6 +107,9 @@ class HomeEpaycoActivity : AppCompatActivity() {
         actionContinue = findViewById(R.id.actionContinue)
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initEvents() {
         actionReturn?.setOnClickListener { finish() }
         actionContinue.setOnClickListener {
@@ -103,6 +119,9 @@ class HomeEpaycoActivity : AppCompatActivity() {
     }
 
     @SuppressLint("SetJavaScriptEnabled")
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadCheckout() {
         if (reference.isBlank() || total <= 0.0 || userRegister <= 0 || address.isBlank()) {
             showLocalResult(
@@ -146,12 +165,18 @@ class HomeEpaycoActivity : AppCompatActivity() {
         webEpayco.settings.javaScriptEnabled = true
         webEpayco.settings.domStorageEnabled = true
         webEpayco.webViewClient = object : WebViewClient() {
+            /**
+             * Ejecuta una parte del flujo funcional de esta clase.
+             */
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
                 val uri = request?.url ?: return false
                 return processUrl(uri)
             }
 
             @Suppress("DEPRECATION")
+            /**
+             * Ejecuta una parte del flujo funcional de esta clase.
+             */
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                 val uri = url?.let { Uri.parse(it) } ?: return false
                 return processUrl(uri)
@@ -167,6 +192,9 @@ class HomeEpaycoActivity : AppCompatActivity() {
         )
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun processUrl(uri: Uri): Boolean {
         val isCustomResult = uri.scheme == "emptio" && uri.host == "epayco"
         val hasEpaycoReference = getEpaycoReference(uri).isNotBlank()
@@ -180,6 +208,9 @@ class HomeEpaycoActivity : AppCompatActivity() {
         return false
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun handleResult(uri: Uri?) {
         if (uri == null || savedResult) return
 
@@ -211,6 +242,9 @@ class HomeEpaycoActivity : AppCompatActivity() {
         )
     }
 
+    /**
+     * Obtiene informacion requerida por la pantalla o helper.
+     */
     private fun getEpaycoReference(uri: Uri): String {
         return uri.getQueryParameter("ref_payco")
             ?: uri.getQueryParameter("x_ref_payco")
@@ -218,6 +252,9 @@ class HomeEpaycoActivity : AppCompatActivity() {
             ?: ""
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun requestEpaycoValidation(epaycoReference: String, originalUri: Uri) {
         Thread {
             try {
@@ -260,6 +297,9 @@ class HomeEpaycoActivity : AppCompatActivity() {
         }.start()
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun handleValidationResponse(response: String, epaycoReference: String, originalUri: Uri) {
         try {
             val root = JSONObject(response)
@@ -296,6 +336,9 @@ class HomeEpaycoActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun processValidatedPayment(
         validationJson: JSONObject,
         transactionData: JSONObject,
@@ -328,6 +371,9 @@ class HomeEpaycoActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Obtiene informacion requerida por la pantalla o helper.
+     */
     private fun getTransactionStateText(data: JSONObject): String {
         return data.optString("x_transaction_state")
             .ifBlank { data.optString("x_response") }
@@ -336,6 +382,9 @@ class HomeEpaycoActivity : AppCompatActivity() {
             .ifBlank { "Pendiente" }
     }
 
+    /**
+     * Obtiene informacion requerida por la pantalla o helper.
+     */
     private fun getPaymentMethod(data: JSONObject): String {
         return data.optString("x_type_payment")
             .ifBlank { data.optString("x_payment_method") }
@@ -344,6 +393,9 @@ class HomeEpaycoActivity : AppCompatActivity() {
             .uppercase()
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun normalizeTransactionState(transactionState: String, data: JSONObject): String {
         return when (transactionState.trim()) {
             "Pendiente" -> "Pendiente"
@@ -354,6 +406,9 @@ class HomeEpaycoActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun shipmentByTransactionState(transactionState: String): Long {
         return when (transactionState) {
             "Pendiente" -> 1L
@@ -364,10 +419,16 @@ class HomeEpaycoActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun isAcceptedTransaction(transactionState: String): Boolean {
         return transactionState == "Aceptada"
     }
 
+    /**
+     * Construye datos derivados necesarios para el proceso.
+     */
     private fun buildUriOnlyJson(uri: Uri): JSONObject {
         return JSONObject().apply {
             put("reference", reference)
@@ -376,6 +437,9 @@ class HomeEpaycoActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Construye datos derivados necesarios para el proceso.
+     */
     private fun buildUriTransactionData(uri: Uri): JSONObject {
         return JSONObject().apply {
             uri.queryParameterNames.sorted().forEach { key ->
@@ -384,6 +448,9 @@ class HomeEpaycoActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Obtiene informacion requerida por la pantalla o helper.
+     */
     private fun getPaymentId(paymentMethod: String, onComplete: (Long) -> Unit) {
         db.collection("payment")
             .get()
@@ -398,6 +465,9 @@ class HomeEpaycoActivity : AppCompatActivity() {
             .addOnFailureListener { onComplete(3L) }
     }
 
+    /**
+     * Obtiene informacion requerida por la pantalla o helper.
+     */
     private fun getShopIdFromCart(onComplete: (Long) -> Unit) {
         val firstProduct = CartManager.getItems(this).firstOrNull()
         if (firstProduct == null) {
@@ -414,6 +484,9 @@ class HomeEpaycoActivity : AppCompatActivity() {
             .addOnFailureListener { onComplete(0L) }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun createTradeOrderAndPurchases(
         apiJson: String,
         state: String,
@@ -550,6 +623,9 @@ class HomeEpaycoActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun messageForState(transactionState: String, shipmentState: String, approved: Boolean): String {
         return if (approved) {
             "La transacción fue $transactionState correctamente. La orden quedó en estado $shipmentState."
@@ -558,6 +634,9 @@ class HomeEpaycoActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun showLocalResult(state: String, shipmentState: String, message: String) {
         savedResult = true
         webEpayco.visibility = View.GONE
@@ -565,6 +644,9 @@ class HomeEpaycoActivity : AppCompatActivity() {
         showResult(state, shipmentState, message)
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun showResult(state: String, shipmentState: String, message: String) {
         txtReference.text = reference.ifBlank { "-" }
         txtState.text = state
@@ -573,6 +655,9 @@ class HomeEpaycoActivity : AppCompatActivity() {
         txtTotal.text = "$ ${String.format("%,.0f", total)}"
     }
 
+    /**
+     * Construye datos derivados necesarios para el proceso.
+     */
     private fun buildGatewayJson(
         validationJson: JSONObject,
         transactionData: JSONObject,
@@ -593,6 +678,9 @@ class HomeEpaycoActivity : AppCompatActivity() {
         }.toString()
     }
 
+    /**
+     * Construye datos derivados necesarios para el proceso.
+     */
     private fun buildCheckoutHtml(): String {
         val amount = String.format(Locale.US, "%.0f", total)
         val testMode = if (EpaycoConfig.TEST_MODE) "true" else "false"

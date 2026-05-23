@@ -13,8 +13,14 @@ import kotlin.math.max
 object ReserveManager {
     private val db = FirebaseFirestore.getInstance()
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun reservationId(userRegister: Long, productRegister: Long): String = "${userRegister}_${productRegister}"
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     fun reserveQuantity(
         context: Context,
         item: CartItem,
@@ -82,6 +88,9 @@ object ReserveManager {
         }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     fun releaseCart(context: Context) {
         val userRegister = SessionManager.getRegister(context)
         if (userRegister <= 0) return

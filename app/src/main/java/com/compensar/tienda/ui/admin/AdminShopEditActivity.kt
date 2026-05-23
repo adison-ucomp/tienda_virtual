@@ -52,6 +52,10 @@ class AdminShopEditActivity : AppCompatActivity() {
     private var register: Long = 0
     private var currentData: ShopModel? = null
 
+    /**
+     * Se ejecuta al crear la pantalla.
+     * Inicializa vista, estado y eventos principales.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.admin_shop_edit)
@@ -64,6 +68,9 @@ class AdminShopEditActivity : AppCompatActivity() {
         loadRegister()
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initViews() {
         actionReturn = findViewById(R.id.actionReturn)
         actionCancel = findViewById(R.id.actionCancel)
@@ -77,6 +84,9 @@ class AdminShopEditActivity : AppCompatActivity() {
         fieldIdSeller = findViewById(R.id.fieldIdSeller)
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initEvents() {
 
         actionReturn.setOnClickListener { finish() }
@@ -92,6 +102,9 @@ class AdminShopEditActivity : AppCompatActivity() {
         actionExecute.setOnClickListener { actionOperate() }
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadRegister() {
         if (register <= 0) {
             Toast.makeText(this, "Registro no válido", Toast.LENGTH_SHORT).show()
@@ -116,6 +129,9 @@ class AdminShopEditActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun showRegister() {
         val currentData = currentData ?: return
 
@@ -132,6 +148,9 @@ class AdminShopEditActivity : AppCompatActivity() {
         )
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun actionOperate() {
         val currentData = currentData ?: return
 
@@ -170,6 +189,9 @@ class AdminShopEditActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun uploadImageFromGallery(uri: Uri?) {
         if (uri == null) {
             Toast.makeText(this, "No se seleccionó imagen", Toast.LENGTH_SHORT).show()
@@ -196,6 +218,9 @@ class AdminShopEditActivity : AppCompatActivity() {
         )
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun uploadImageFromCamera(bitmap: Bitmap?) {
         if (bitmap == null) {
             Toast.makeText(this, "No se capturó imagen", Toast.LENGTH_SHORT).show()
@@ -223,6 +248,9 @@ class AdminShopEditActivity : AppCompatActivity() {
     }
 
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun displayImagePreview(url: String?) {
         if (url.isNullOrBlank()) {
             imagePreview.setImageDrawable(null)
@@ -238,6 +266,9 @@ class AdminShopEditActivity : AppCompatActivity() {
             .into(imagePreview)
     }
 
+    /**
+     * Obtiene informacion requerida por la pantalla o helper.
+     */
     private fun getRegisterForImageUpload(): Long? {
         if (register <= 0) {
             Toast.makeText(this, "Registro no válido para cargar la imagen", Toast.LENGTH_SHORT).show()

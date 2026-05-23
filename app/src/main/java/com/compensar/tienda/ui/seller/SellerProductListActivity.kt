@@ -42,6 +42,10 @@ class SellerProductListActivity : AppCompatActivity() {
     private var selectedCategory: Long = 0L
     private var searchQuery: String = ""
 
+    /**
+     * Se ejecuta al crear la pantalla.
+     * Inicializa vista, estado y eventos principales.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.seller_product_list)
@@ -52,11 +56,18 @@ class SellerProductListActivity : AppCompatActivity() {
         loadData()
     }
 
+    /**
+     * Se ejecuta cuando la pantalla vuelve al primer plano.
+     * Recarga datos o refresca el estado visual.
+     */
     override fun onResume() {
         super.onResume()
         loadData()
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initViews() {
         actionReturn = findViewById(R.id.actionReturn)
         fieldSearch = findViewById(R.id.fieldSearch)
@@ -67,6 +78,9 @@ class SellerProductListActivity : AppCompatActivity() {
         actionNew = findViewById(R.id.actionNew)
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initEvents() {
         actionReturn.setOnClickListener { finish() }
 
@@ -87,6 +101,9 @@ class SellerProductListActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadData() {
         SellerDataHelper.loadSellerData(
             context = this,
@@ -101,6 +118,9 @@ class SellerProductListActivity : AppCompatActivity() {
         )
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadCategories() {
         db.collection("category")
             .get()
@@ -122,6 +142,9 @@ class SellerProductListActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun renderCategories() {
         categoryList.removeAllViews()
         categoryList.addView(createCategoryButton("Todos", 0L))
@@ -131,6 +154,9 @@ class SellerProductListActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun createCategoryButton(label: String, register: Long): LinearLayout {
         val container = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
@@ -164,6 +190,9 @@ class SellerProductListActivity : AppCompatActivity() {
         return container
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun executeSearch() {
         val query = fieldSearch.text.toString().trim()
 
@@ -177,6 +206,9 @@ class SellerProductListActivity : AppCompatActivity() {
         renderProducts()
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun cleanSearch() {
         searchQuery = ""
         fieldSearch.setText("")
@@ -184,6 +216,9 @@ class SellerProductListActivity : AppCompatActivity() {
         renderProducts()
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun renderProducts() {
         dataList.removeAllViews()
 
@@ -203,6 +238,9 @@ class SellerProductListActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun createProductCard(product: ProductModel): CardView {
         val cardView = CardView(this).apply {
             radius = dp(18).toFloat()
@@ -272,6 +310,9 @@ class SellerProductListActivity : AppCompatActivity() {
         return cardView
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun addText(container: LinearLayout, value: String, size: Float, bold: Boolean, color: Int) {
         val textView = TextView(this).apply {
             text = value
@@ -285,6 +326,9 @@ class SellerProductListActivity : AppCompatActivity() {
         container.addView(textView)
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun addEmptyText() {
         val textView = TextView(this).apply {
             text = "No hay productos para mostrar"
@@ -301,6 +345,9 @@ class SellerProductListActivity : AppCompatActivity() {
         dataList.addView(textView)
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun dp(value: Int): Int {
         return (value * resources.displayMetrics.density).toInt()
     }

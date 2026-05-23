@@ -37,6 +37,10 @@ class HomeRestoreActivity : AppCompatActivity() {
     private val userCollection = db.collection("user")
     private val resetCollection = db.collection("password")
 
+    /**
+     * Se ejecuta al crear la pantalla.
+     * Inicializa vista, estado y eventos principales.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -47,6 +51,9 @@ class HomeRestoreActivity : AppCompatActivity() {
         initEvents()
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun applyWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -60,6 +67,9 @@ class HomeRestoreActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initViews() {
         btnBack = findViewById(R.id.btnBack)
         btnBackLogin = findViewById(R.id.btnBackLogin)
@@ -68,6 +78,9 @@ class HomeRestoreActivity : AppCompatActivity() {
         loaderRestore = findViewById(R.id.loaderRestore)
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initEvents() {
         btnBack.setOnClickListener { goToLogin() }
         btnBackLogin.setOnClickListener { goToLogin() }
@@ -78,6 +91,9 @@ class HomeRestoreActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun actionRestore() {
         val email = txtEmail.text.toString().trim()
 
@@ -115,6 +131,9 @@ class HomeRestoreActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun createRestoreRequest(user: UserModel) {
         val token = UUID.randomUUID().toString()
         val code = generateCode()
@@ -154,6 +173,9 @@ class HomeRestoreActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Envia informacion a un servicio externo o componente interno.
+     */
     private fun sendRestoreCode(
         token: String,
         email: String,
@@ -185,6 +207,9 @@ class HomeRestoreActivity : AppCompatActivity() {
         )
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun setRestoreLoading(isLoading: Boolean) {
         isRestoreLoading = isLoading
         btnRestore.isEnabled = !isLoading
@@ -195,10 +220,16 @@ class HomeRestoreActivity : AppCompatActivity() {
         btnRestore.text = if (isLoading) "Enviando..." else "Enviar código"
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun generateCode(): String {
         return (100000..999999).random().toString()
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun goToLogin() {
         val intent = Intent(this, HomeLoginActivity::class.java)
         startActivity(intent)

@@ -30,16 +30,45 @@ class BuyerAddressActivity : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
     private val ubicationNames = mutableMapOf<Long, String>()
 
+    /**
+     * Se ejecuta al crear la pantalla.
+     * Inicializa vista, estado y eventos principales.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState); enableEdgeToEdge(); setContentView(R.layout.buyer_address); applyWindowInsets(); initViews(); initEvents()
     }
+    /**
+     * Se ejecuta cuando la pantalla vuelve al primer plano.
+     * Recarga datos o refresca el estado visual.
+     */
     override fun onResume(){ super.onResume(); loadUbicationsThenAddresses() }
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun applyWindowInsets(){ ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)){v,insets-> val b=insets.getInsets(WindowInsetsCompat.Type.systemBars()); v.setPadding(b.left,b.top,b.right,b.bottom); insets } }
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initViews(){ btnBack=findViewById(R.id.btnBack); btnNew=findViewById(R.id.btnAddressNew); addressList=findViewById(R.id.addressList) }
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initEvents(){ btnBack.setOnClickListener{ finish() }; btnNew.setOnClickListener{ startActivity(Intent(this, BuyerMapsActivity::class.java)) } }
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadUbicationsThenAddresses(){ db.collection("ubication").get().addOnSuccessListener{ result -> ubicationNames.clear(); result.documents.forEach{doc-> ubicationNames[doc.getLong("register")?:0L]=doc.getString("name")?:"" }; loadAddresses() }.addOnFailureListener{ loadAddresses() } }
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadAddresses(){ val user=SessionManager.getRegister(this); addressList.removeAllViews(); if(user<=0){ addEmpty("Debes iniciar sesión para ver tus direcciones"); return }; db.collection("address").whereEqualTo("idUser", user).get().addOnSuccessListener{ result -> addressList.removeAllViews(); val items=result.documents.mapNotNull{it.toObject(AddressModel::class.java)}.sortedBy{it.register}; if(items.isEmpty()) addEmpty("No tienes direcciones registradas"); items.forEach{ addressList.addView(card(it)) } }.addOnFailureListener{ e -> addEmpty("Error cargando direcciones: ${e.message}") } }
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun addEmpty(text:String){ val view=TextView(this).apply{this.text=text;textSize=15f;setTextColor(getColor(R.color.black));gravity=Gravity.CENTER;setPadding(0,dp(30),0,dp(30))}; addressList.addView(view) }
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun card(data: AddressModel): CardView {
         val card = CardView(this).apply {
             radius = dp(8).toFloat()
@@ -118,6 +147,9 @@ class BuyerAddressActivity : AppCompatActivity() {
         return card
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun actionButton(text: String, iconRes: Int, onClick: () -> Unit): LinearLayout {
         return LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
@@ -149,7 +181,13 @@ class BuyerAddressActivity : AppCompatActivity() {
             addView(label)
         }
     }
+    /**
+     * Elimina o descarta informacion segun la accion del usuario.
+     */
     private fun deleteAddress(register:Long){ db.collection("address").document(register.toString()).delete().addOnSuccessListener{ Toast.makeText(this,"Dirección eliminada",Toast.LENGTH_SHORT).show(); loadAddresses() }.addOnFailureListener{Toast.makeText(this,"Error: ${it.message}",Toast.LENGTH_LONG).show()} }
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun dp(v:Int)=(v*resources.displayMetrics.density).toInt()
 }
 

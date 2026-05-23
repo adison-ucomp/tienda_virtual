@@ -16,6 +16,9 @@ object BiometricSessionManager {
     private const val KEY_EMAIL = "biometric_user_email"
     private const val KEY_ROLE = "biometric_user_role"
 
+    /**
+     * Guarda informacion en almacenamiento local o remoto.
+     */
     fun save(context: Context, user: UserModel) {
         context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
             .edit()
@@ -26,6 +29,9 @@ object BiometricSessionManager {
             .apply()
     }
 
+    /**
+     * Limpia estado temporal o datos persistidos.
+     */
     fun clear(context: Context) {
         context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
             .edit()
@@ -33,21 +39,33 @@ object BiometricSessionManager {
             .apply()
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     fun isEnabled(context: Context): Boolean {
         return context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
             .getBoolean(KEY_ENABLED, false)
     }
 
+    /**
+     * Obtiene informacion requerida por la pantalla o helper.
+     */
     fun getRegister(context: Context): Long {
         return context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
             .getLong(KEY_REGISTER, 0L)
     }
 
+    /**
+     * Obtiene informacion requerida por la pantalla o helper.
+     */
     fun getEmail(context: Context): String {
         return context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
             .getString(KEY_EMAIL, "").orEmpty()
     }
 
+    /**
+     * Obtiene informacion requerida por la pantalla o helper.
+     */
     fun getRole(context: Context): Long {
         return context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
             .getLong(KEY_ROLE, 0L)

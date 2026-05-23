@@ -36,6 +36,10 @@ class HomeCategoryActivity : AppCompatActivity() {
     private lateinit var actionAddress: LinearLayout
     private lateinit var actionAccount: LinearLayout
 
+    /**
+     * Se ejecuta al crear la pantalla.
+     * Inicializa vista, estado y eventos principales.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -49,6 +53,9 @@ class HomeCategoryActivity : AppCompatActivity() {
         loadCategories()
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun applyWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -57,6 +64,9 @@ class HomeCategoryActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initViews() {
         btnCart = findViewById(R.id.btnCart)
         categoryContainer = findViewById(R.id.categoryContainer)
@@ -67,6 +77,9 @@ class HomeCategoryActivity : AppCompatActivity() {
         actionAccount = findViewById(R.id.actionAccount)
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initEvents() {
         btnCart.setOnClickListener { SessionNavigation.openCartOrLogin(this) }
         actionHome.setOnClickListener { startActivity(Intent(this, HomeProductActivity::class.java)); finish() }
@@ -76,6 +89,9 @@ class HomeCategoryActivity : AppCompatActivity() {
         actionAccount.setOnClickListener { SessionNavigation.openProfileOrLogin(this) }
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadCategories() {
         FirebaseFirestore.getInstance()
             .collection("category")
@@ -89,6 +105,9 @@ class HomeCategoryActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun renderCategories(categories: List<CategoryModel>) {
         categoryContainer.removeAllViews()
 
@@ -108,6 +127,9 @@ class HomeCategoryActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun categoryCard(category: CategoryModel): LinearLayout {
         return LinearLayout(this).apply {
             layoutParams = LinearLayout.LayoutParams(
@@ -173,6 +195,9 @@ class HomeCategoryActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun dp(value: Int): Int = (value * resources.displayMetrics.density).toInt()
 }
 

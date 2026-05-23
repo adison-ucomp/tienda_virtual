@@ -25,6 +25,9 @@ object EmailBackHelper {
 
     private val mainHandler = Handler(Looper.getMainLooper())
 
+    /**
+     * Envia informacion a un servicio externo o componente interno.
+     */
     fun sendCode(
         email: String,
         code: String,

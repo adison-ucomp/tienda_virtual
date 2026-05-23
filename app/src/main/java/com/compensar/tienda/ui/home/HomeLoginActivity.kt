@@ -58,6 +58,10 @@ class HomeLoginActivity : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("user")
 
+    /**
+     * Se ejecuta al crear la pantalla.
+     * Inicializa vista, estado y eventos principales.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -70,6 +74,9 @@ class HomeLoginActivity : AppCompatActivity() {
         initEvents()
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun applyWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -83,6 +90,9 @@ class HomeLoginActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initViews() {
         actionHome = findViewById(R.id.actionHome)
         actionCategory = findViewById(R.id.actionCategory)
@@ -102,6 +112,9 @@ class HomeLoginActivity : AppCompatActivity() {
         loaderLogin = findViewById(R.id.loaderLogin)
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initEvents() {
         actionHome.setOnClickListener {
             val intent = Intent(this, HomeProductActivity::class.java)
@@ -157,6 +170,9 @@ class HomeLoginActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun configureBiometricLogin() {
         val biometricEnabled = BiometricSessionManager.isEnabled(this)
         val biometricRegister = BiometricSessionManager.getRegister(this)
@@ -169,6 +185,9 @@ class HomeLoginActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun actionBiometricLogin() {
         val biometricRegister = BiometricSessionManager.getRegister(this)
 
@@ -191,16 +210,25 @@ class HomeLoginActivity : AppCompatActivity() {
             this,
             executor,
             object : BiometricPrompt.AuthenticationCallback() {
+                /**
+                 * Ejecuta una parte del flujo funcional de esta clase.
+                 */
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
                     loadUserByBiometric(biometricRegister)
                 }
 
+                /**
+                 * Ejecuta una parte del flujo funcional de esta clase.
+                 */
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     super.onAuthenticationError(errorCode, errString)
                     Toast.makeText(this@HomeLoginActivity, errString, Toast.LENGTH_SHORT).show()
                 }
 
+                /**
+                 * Ejecuta una parte del flujo funcional de esta clase.
+                 */
                 override fun onAuthenticationFailed() {
                     super.onAuthenticationFailed()
                     Toast.makeText(this@HomeLoginActivity, "No se pudo validar la huella", Toast.LENGTH_SHORT).show()
@@ -217,6 +245,9 @@ class HomeLoginActivity : AppCompatActivity() {
         prompt.authenticate(promptInfo)
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadUserByBiometric(userRegister: Long) {
         setLoginLoading(true)
 
@@ -242,6 +273,9 @@ class HomeLoginActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun actionLogin() {
         val email = fieldEmail.text.toString().trim()
         val password = fieldPassword.text.toString().trim()
@@ -303,6 +337,9 @@ class HomeLoginActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun setLoginLoading(isLoading: Boolean) {
         isLoginLoading = isLoading
         actionExecute.isEnabled = !isLoading
@@ -316,6 +353,9 @@ class HomeLoginActivity : AppCompatActivity() {
         actionExecute.text = if (isLoading) "Validando..." else "Iniciar Sesión"
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun redirectByRole(user: UserModel) {
         val intent = when (user.idRole) {
             1L -> Intent(this, AdminDashboardActivity::class.java)
@@ -338,6 +378,9 @@ class HomeLoginActivity : AppCompatActivity() {
         finish()
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun encryptPassword(password: String): String {
         val salt = "com.compensar.tienda.user.password"
 

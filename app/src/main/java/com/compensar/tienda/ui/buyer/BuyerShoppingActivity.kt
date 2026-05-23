@@ -38,6 +38,10 @@ class BuyerShoppingActivity : AppCompatActivity() {
     private var shipmentMap: Map<Long, String> = emptyMap()
     private var tradeMap: Map<Long, TradeModel> = emptyMap()
 
+    /**
+     * Se ejecuta al crear la pantalla.
+     * Inicializa vista, estado y eventos principales.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -51,6 +55,9 @@ class BuyerShoppingActivity : AppCompatActivity() {
         loadShopping()
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun applyWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -59,6 +66,9 @@ class BuyerShoppingActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initViews() {
         actionHome = findViewById(R.id.actionHome)
         actionCategory = findViewById(R.id.actionCategory)
@@ -68,6 +78,9 @@ class BuyerShoppingActivity : AppCompatActivity() {
         shoppingContent = findViewById(R.id.shoppingContent)
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initEvents() {
         actionHome.setOnClickListener { startActivity(Intent(this, HomeProductActivity::class.java)); finish() }
         actionCategory.setOnClickListener { startActivity(Intent(this, HomeCategoryActivity::class.java)); finish() }
@@ -76,6 +89,9 @@ class BuyerShoppingActivity : AppCompatActivity() {
         actionAccount.setOnClickListener { SessionNavigation.openProfileOrLogin(this) }
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadShopping() {
         val userRegister = SessionManager.getRegister(this)
         if (userRegister <= 0) {
@@ -116,6 +132,9 @@ class BuyerShoppingActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadStates(onComplete: () -> Unit) {
         db.collection("shipment").get()
             .addOnSuccessListener { shipmentResult ->
@@ -143,6 +162,9 @@ class BuyerShoppingActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun orderCard(order: OrderModel): CardView {
         val card = CardView(this).apply {
             radius = dp(16).toFloat()
@@ -222,6 +244,9 @@ class BuyerShoppingActivity : AppCompatActivity() {
         return card
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun statusRow(label: String, value: String, shipment: Boolean): LinearLayout {
         val row = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
@@ -257,6 +282,9 @@ class BuyerShoppingActivity : AppCompatActivity() {
         return row
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun dp(value: Int) = (value * resources.displayMetrics.density).toInt()
 }
 

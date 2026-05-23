@@ -58,6 +58,10 @@ class SellerProductEditActivity : AppCompatActivity() {
     private var register: Long = 0
     private var currentData: ProductModel? = null
 
+    /**
+     * Se ejecuta al crear la pantalla.
+     * Inicializa vista, estado y eventos principales.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.seller_product_edit)
@@ -70,6 +74,9 @@ class SellerProductEditActivity : AppCompatActivity() {
         loadRegister()
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initViews() {
         titleHeader = findViewById(R.id.titleHeader)
         actionReturn = findViewById(R.id.actionReturn)
@@ -90,6 +97,9 @@ class SellerProductEditActivity : AppCompatActivity() {
         fieldIdShop = findViewById(R.id.fieldIdShop)
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initEvents() {
         actionReturn.setOnClickListener { finish() }
         actionCancel.setOnClickListener { finish() }
@@ -104,6 +114,9 @@ class SellerProductEditActivity : AppCompatActivity() {
         actionExecute.setOnClickListener { actionOperate() }
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadRegister() {
         if (register <= 0) {
             Toast.makeText(this, "Registro no válido", Toast.LENGTH_SHORT).show()
@@ -128,6 +141,9 @@ class SellerProductEditActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun showRegister() {
         val currentData = currentData ?: return
         fieldName.setText(currentData.name?.toString() ?: "")
@@ -148,6 +164,9 @@ class SellerProductEditActivity : AppCompatActivity() {
         loadSellerShopSelector(currentData.idShop)
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadSellerShopSelector(selectedId: Long) {
         val userRegister = SessionManager.getRegister(this)
 
@@ -176,6 +195,9 @@ class SellerProductEditActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun actionOperate() {
         val name = fieldName.text.toString().trim()
         val detail = fieldDetail.text.toString().trim().ifEmpty { null }
@@ -249,6 +271,9 @@ class SellerProductEditActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun uploadImageFromGallery(uri: Uri?) {
         if (uri == null) {
             Toast.makeText(this, "No se seleccionó imagen", Toast.LENGTH_SHORT).show()
@@ -275,6 +300,9 @@ class SellerProductEditActivity : AppCompatActivity() {
         )
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun uploadImageFromCamera(bitmap: Bitmap?) {
         if (bitmap == null) {
             Toast.makeText(this, "No se capturó imagen", Toast.LENGTH_SHORT).show()
@@ -302,6 +330,9 @@ class SellerProductEditActivity : AppCompatActivity() {
     }
 
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun displayImagePreview(url: String?) {
         if (url.isNullOrBlank()) {
             imagePreview.setImageDrawable(null)
@@ -317,6 +348,9 @@ class SellerProductEditActivity : AppCompatActivity() {
             .into(imagePreview)
     }
 
+    /**
+     * Obtiene informacion requerida por la pantalla o helper.
+     */
     private fun getRegisterForImageUpload(): Long? {
         if (register <= 0) {
             Toast.makeText(this, "Registro no válido para cargar la imagen", Toast.LENGTH_SHORT).show()

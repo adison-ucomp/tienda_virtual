@@ -61,6 +61,10 @@ class SellerOrderShowActivity : AppCompatActivity(), OnMapReadyCallback {
     private var googleMap: GoogleMap? = null
     private var pendingAddress: String = ""
 
+    /**
+     * Se ejecuta al crear la pantalla.
+     * Inicializa vista, estado y eventos principales.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -81,6 +85,9 @@ class SellerOrderShowActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initViews() {
         actionReturn = findViewById(R.id.actionReturn)
         textOrderReference = findViewById(R.id.textOrderReference)
@@ -99,6 +106,9 @@ class SellerOrderShowActivity : AppCompatActivity(), OnMapReadyCallback {
         navProfile = findViewById(R.id.navProfile)
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initEvents() {
         actionReturn.setOnClickListener {
             finish()
@@ -129,6 +139,9 @@ class SellerOrderShowActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadOrder() {
         if (register <= 0L) {
             Toast.makeText(this, "Pedido no válido", Toast.LENGTH_SHORT).show()
@@ -159,6 +172,9 @@ class SellerOrderShowActivity : AppCompatActivity(), OnMapReadyCallback {
         )
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun renderOrder(
         data: SellerDataHelper.SellerData,
         item: SellerDataHelper.SellerOrder
@@ -182,11 +198,17 @@ class SellerOrderShowActivity : AppCompatActivity(), OnMapReadyCallback {
         renderProducts(data, item.purchases)
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initMap() {
         val fragment = supportFragmentManager.findFragmentById(R.id.orderMapFragment) as? SupportMapFragment
         fragment?.getMapAsync(this)
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     override fun onMapReady(map: GoogleMap) {
         googleMap = map
         map.uiSettings.isZoomControlsEnabled = false
@@ -201,6 +223,9 @@ class SellerOrderShowActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadAddressMap(address: String) {
         if (address.isBlank() || address == "Sin dirección") return
         pendingAddress = address
@@ -220,6 +245,9 @@ class SellerOrderShowActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    /**
+     * Obtiene informacion requerida por la pantalla o helper.
+     */
     private fun getPaymentMethod(api: String?): String {
         if (api.isNullOrBlank()) return "Sin información"
         val options = listOf("x_type_payment", "x_payment_method", "x_franchise", "paymentMethod")
@@ -235,6 +263,9 @@ class SellerOrderShowActivity : AppCompatActivity(), OnMapReadyCallback {
         return "Sin información"
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun renderProducts(
         data: SellerDataHelper.SellerData,
         purchases: List<PurchaseModel>
@@ -247,6 +278,9 @@ class SellerOrderShowActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun createProductCard(
         product: ProductModel?,
         purchase: PurchaseModel
@@ -340,6 +374,9 @@ class SellerOrderShowActivity : AppCompatActivity(), OnMapReadyCallback {
         return card
     }
 
+    /**
+     * Actualiza informacion existente segun el flujo actual.
+     */
     private fun updateShipment(idShipment: Long) {
         val order = currentOrder?.order ?: return
 

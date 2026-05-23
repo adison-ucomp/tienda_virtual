@@ -41,6 +41,10 @@ class SellerDashboardActivity : AppCompatActivity() {
 
     private var sellerData: SellerDataHelper.SellerData? = null
 
+    /**
+     * Se ejecuta al crear la pantalla.
+     * Inicializa vista, estado y eventos principales.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -58,11 +62,18 @@ class SellerDashboardActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Se ejecuta cuando la pantalla vuelve al primer plano.
+     * Recarga datos o refresca el estado visual.
+     */
     override fun onResume() {
         super.onResume()
         loadDashboard()
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initViews() {
         cardSellerReport = findViewById(R.id.cardSellerReport)
         textSalesAmount = findViewById(R.id.textSalesAmount)
@@ -75,6 +86,9 @@ class SellerDashboardActivity : AppCompatActivity() {
         navProducts = findViewById(R.id.navProducts)
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initEvents() {
         navHome.setOnClickListener {
             loadDashboard()
@@ -95,6 +109,9 @@ class SellerDashboardActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadDashboard() {
         SellerDataHelper.loadSellerData(
             context = this,
@@ -110,6 +127,9 @@ class SellerDashboardActivity : AppCompatActivity() {
         )
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun renderSalesSummary(data: SellerDataHelper.SellerData) {
         val totalSales = data.purchases.sumOf { it.total ?: 0.0 }
         val sellerOrders = SellerDataHelper.buildSellerOrders(data)
@@ -128,6 +148,9 @@ class SellerDashboardActivity : AppCompatActivity() {
         renderChart(lastMonths, totalsByMonth)
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun renderTrend(
         lastMonths: List<String>,
         totalsByMonth: Map<String, Double>
@@ -161,6 +184,9 @@ class SellerDashboardActivity : AppCompatActivity() {
         textSalesTrend.setBackgroundColor(Color.parseColor(background))
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun renderChart(
         lastMonths: List<String>,
         totalsByMonth: Map<String, Double>
@@ -221,11 +247,17 @@ class SellerDashboardActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun renderInventory(data: SellerDataHelper.SellerData) {
         val availableProducts = data.products.count { it.stock > 0 }
         textInventoryCount.text = availableProducts.toString()
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun renderPendingOrders(data: SellerDataHelper.SellerData) {
         pendingOrdersContainer.removeAllViews()
 
@@ -252,6 +284,9 @@ class SellerDashboardActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun createPendingOrderView(item: SellerDataHelper.SellerOrder): View {
         val row = LinearLayout(this)
         row.layoutParams = LinearLayout.LayoutParams(

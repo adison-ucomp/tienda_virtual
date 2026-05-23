@@ -34,6 +34,10 @@ class BuyerCartShopActivity : AppCompatActivity() {
     private lateinit var btnContinue: Button
     private val listeners = mutableListOf<ListenerRegistration>()
 
+    /**
+     * Se ejecuta al crear la pantalla.
+     * Inicializa vista, estado y eventos principales.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -48,12 +52,18 @@ class BuyerCartShopActivity : AppCompatActivity() {
         render()
     }
 
+    /**
+     * Se ejecuta al destruir la pantalla y liberar recursos.
+     */
     override fun onDestroy() {
         listeners.forEach { it.remove() }
         listeners.clear()
         super.onDestroy()
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initViews() {
         btnBack = findViewById(R.id.btnBack)
         cartList = findViewById(R.id.cartList)
@@ -64,6 +74,9 @@ class BuyerCartShopActivity : AppCompatActivity() {
         btnContinue = findViewById(R.id.btnContinue)
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initEvents() {
         btnBack.setOnClickListener { finish() }
         btnContinue.setOnClickListener {
@@ -75,6 +88,9 @@ class BuyerCartShopActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun render() {
         listeners.forEach { it.remove() }
         listeners.clear()
@@ -92,6 +108,9 @@ class BuyerCartShopActivity : AppCompatActivity() {
         renderTotals()
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun renderTotals() {
         val subtotal = CartManager.subtotal(this)
         txtSubtotal.text = "Subtotal: $ ${String.format("%,.0f", subtotal)}"
@@ -100,6 +119,9 @@ class BuyerCartShopActivity : AppCompatActivity() {
         txtTotal.text = "Total: $ ${String.format("%,.0f", subtotal)}"
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun card(item: CartItem): CardView {
         val card = CardView(this).apply {
             radius = dp(16).toFloat()
@@ -134,6 +156,9 @@ class BuyerCartShopActivity : AppCompatActivity() {
         row.addView(img); row.addView(info); card.addView(row); return card
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun listenStock(item: CartItem, target: TextView) {
         val listener = FirebaseFirestore.getInstance().collection("product").document(item.register.toString())
             .addSnapshotListener { snapshot, _ ->
@@ -145,6 +170,9 @@ class BuyerCartShopActivity : AppCompatActivity() {
         listeners.add(listener)
     }
 
+    /**
+     * Actualiza informacion existente segun el flujo actual.
+     */
     private fun updateQuantity(item: CartItem, quantity: Int) {
         ReserveManager.reserveQuantity(this, item, quantity, onSuccess = {
             render()
@@ -153,6 +181,9 @@ class BuyerCartShopActivity : AppCompatActivity() {
         })
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun dp(v: Int) = (v * resources.displayMetrics.density).toInt()
 }
 

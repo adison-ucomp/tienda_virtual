@@ -64,6 +64,10 @@ class AdminUserEditActivity : AppCompatActivity() {
     private var currentData: UserModel? = null
     private var currentSellerRegister: Long? = null
 
+    /**
+     * Se ejecuta al crear la pantalla.
+     * Inicializa vista, estado y eventos principales.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.admin_user_edit)
@@ -77,6 +81,9 @@ class AdminUserEditActivity : AppCompatActivity() {
         loadRegister()
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initViews() {
         actionReturn = findViewById(R.id.actionReturn)
         actionCancel = findViewById(R.id.actionCancel)
@@ -97,6 +104,9 @@ class AdminUserEditActivity : AppCompatActivity() {
         fieldSellerAddress = findViewById(R.id.fieldSellerAddress)
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initEvents() {
         actionReturn.setOnClickListener { finish() }
         actionCancel.setOnClickListener { finish() }
@@ -105,6 +115,9 @@ class AdminUserEditActivity : AppCompatActivity() {
         actionExecute.setOnClickListener { actionOperate() }
 
         fieldIdRole.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            /**
+             * Ejecuta una parte del flujo funcional de esta clase.
+             */
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 configureSellerFields(isSellerRoleSelected(), clearFields = !isSellerRoleSelected())
                 if (isSellerRoleSelected()) {
@@ -112,12 +125,18 @@ class AdminUserEditActivity : AppCompatActivity() {
                 }
             }
 
+            /**
+             * Ejecuta una parte del flujo funcional de esta clase.
+             */
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 configureSellerFields(false)
             }
         }
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadRegister() {
         if (register <= 0) {
             Toast.makeText(this, "Registro no válido", Toast.LENGTH_SHORT).show()
@@ -142,6 +161,9 @@ class AdminUserEditActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun showRegister() {
         val currentData = currentData ?: return
 
@@ -165,6 +187,9 @@ class AdminUserEditActivity : AppCompatActivity() {
         )
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadSellerByUser(userRegister: Long) {
         sellerCollection
             .whereEqualTo("idUser", userRegister)
@@ -186,6 +211,9 @@ class AdminUserEditActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun actionOperate() {
         val currentData = currentData ?: return
 
@@ -251,6 +279,9 @@ class AdminUserEditActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Guarda informacion en almacenamiento local o remoto.
+     */
     private fun saveSellerRegister(data: SellerModel) {
         val sellerRegister = currentSellerRegister ?: data.register
         val normalized = data.copy(register = sellerRegister)
@@ -267,6 +298,9 @@ class AdminUserEditActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Elimina o descarta informacion segun la accion del usuario.
+     */
     private fun deleteSellerByUser(userRegister: Long) {
         sellerCollection
             .whereEqualTo("idUser", userRegister)
@@ -303,6 +337,9 @@ class AdminUserEditActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Construye datos derivados necesarios para el proceso.
+     */
     private fun buildSellerData(userRegister: Long): SellerModel? {
         val company = fieldSellerCompany.text.toString().trim()
         val nit = fieldSellerNit.text.toString().trim()
@@ -330,6 +367,9 @@ class AdminUserEditActivity : AppCompatActivity() {
         )
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun configureSellerFields(show: Boolean, clearFields: Boolean = true) {
         sellerFieldsContainer.visibility = if (show) View.VISIBLE else View.GONE
         fieldSellerCompany.isEnabled = show
@@ -343,10 +383,16 @@ class AdminUserEditActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun isSellerRoleSelected(): Boolean {
         return FirestoreSelectHelper.getSelectedId(fieldIdRole) == SELLER_ROLE_ID
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun uploadImageFromGallery(uri: Uri?) {
         if (uri == null) {
             Toast.makeText(this, "No se seleccionó imagen", Toast.LENGTH_SHORT).show()
@@ -373,6 +419,9 @@ class AdminUserEditActivity : AppCompatActivity() {
         )
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun uploadImageFromCamera(bitmap: Bitmap?) {
         if (bitmap == null) {
             Toast.makeText(this, "No se capturó imagen", Toast.LENGTH_SHORT).show()
@@ -399,6 +448,9 @@ class AdminUserEditActivity : AppCompatActivity() {
         )
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun displayImagePreview(url: String?) {
         if (url.isNullOrBlank()) {
             imagePreview.setImageDrawable(null)
@@ -414,6 +466,9 @@ class AdminUserEditActivity : AppCompatActivity() {
             .into(imagePreview)
     }
 
+    /**
+     * Obtiene informacion requerida por la pantalla o helper.
+     */
     private fun getRegisterForImageUpload(): Long? {
         if (register <= 0) {
             Toast.makeText(this, "Registro no válido para cargar la imagen", Toast.LENGTH_SHORT).show()

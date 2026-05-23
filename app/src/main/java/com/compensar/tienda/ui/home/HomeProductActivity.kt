@@ -57,6 +57,10 @@ class HomeProductActivity : AppCompatActivity() {
     private var page = 0
     private val pageSize = 10
 
+    /**
+     * Se ejecuta al crear la pantalla.
+     * Inicializa vista, estado y eventos principales.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -71,12 +75,19 @@ class HomeProductActivity : AppCompatActivity() {
         loadProducts()
     }
 
+    /**
+     * Se ejecuta cuando la pantalla vuelve al primer plano.
+     * Recarga datos o refresca el estado visual.
+     */
     override fun onResume() {
         super.onResume()
         SessionNavigation.applyBuyerInferiorVisibility(this)
         SessionNavigation.applyBuyerSuperiorVisibility(this)
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun applyWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -85,6 +96,9 @@ class HomeProductActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initViews() {
         btnCart = findViewById(R.id.btnCart)
         txtViewAll = findViewById(R.id.txtViewAll)
@@ -105,6 +119,9 @@ class HomeProductActivity : AppCompatActivity() {
         actionAccount = findViewById(R.id.actionAccount)
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initEvents() {
         btnCart.setOnClickListener {
             SessionNavigation.openCartOrLogin(this)
@@ -132,8 +149,14 @@ class HomeProductActivity : AppCompatActivity() {
         }
 
         fieldSearch.addTextChangedListener(object : TextWatcher {
+            /**
+             * Ejecuta una parte del flujo funcional de esta clase.
+             */
             override fun beforeTextChanged(text: CharSequence?, start: Int, count: Int, after: Int) {}
 
+            /**
+             * Ejecuta una parte del flujo funcional de esta clase.
+             */
             override fun onTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {
                 val hasText = !text.isNullOrBlank()
                 actionSearch.alpha = if (hasText) 1f else 0.45f
@@ -147,6 +170,9 @@ class HomeProductActivity : AppCompatActivity() {
                 }
             }
 
+            /**
+             * Ejecuta una parte del flujo funcional de esta clase.
+             */
             override fun afterTextChanged(editable: Editable?) {}
         })
 
@@ -179,6 +205,9 @@ class HomeProductActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadCategories() {
         FirebaseFirestore.getInstance()
             .collection("category")
@@ -197,6 +226,9 @@ class HomeProductActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun renderHomeCategories() {
         homeCategoryContainer.removeAllViews()
 
@@ -216,6 +248,9 @@ class HomeProductActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun centerCategoryContainer(shouldCenter: Boolean) {
         homeCategoryContainer.layoutParams = homeCategoryContainer.layoutParams.apply {
             width = if (shouldCenter) {
@@ -231,6 +266,9 @@ class HomeProductActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun categoryCard(category: CategoryModel, index: Int): LinearLayout {
         val card = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -278,6 +316,9 @@ class HomeProductActivity : AppCompatActivity() {
         return card
     }
 
+    /**
+     * Abre recurso o pantalla asociada al flujo actual.
+     */
     private fun openCategory(category: CategoryModel) {
         startActivity(
             Intent(this, HomeFilteringActivity::class.java)
@@ -286,6 +327,9 @@ class HomeProductActivity : AppCompatActivity() {
         )
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadProducts() {
         FirebaseFirestore.getInstance()
             .collection("product")
@@ -307,6 +351,9 @@ class HomeProductActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun searchProducts() {
         val query = fieldSearch.text.toString().trim()
 
@@ -327,6 +374,9 @@ class HomeProductActivity : AppCompatActivity() {
         renderProducts()
     }
 
+    /**
+     * Limpia estado temporal o datos persistidos.
+     */
     private fun clearSearch() {
         fieldSearch.setText("")
         filteredProducts.clear()
@@ -337,6 +387,9 @@ class HomeProductActivity : AppCompatActivity() {
         renderProducts()
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun renderProducts() {
         productGrid.removeAllViews()
 
@@ -371,6 +424,9 @@ class HomeProductActivity : AppCompatActivity() {
         updatePaginationButtons()
     }
 
+    /**
+     * Actualiza informacion existente segun el flujo actual.
+     */
     private fun updatePaginationButtons() {
         val hasMoreThanOnePage = filteredProducts.size > pageSize
         val hasPrevious = page > 0
@@ -387,6 +443,9 @@ class HomeProductActivity : AppCompatActivity() {
         txtViewAll.text = "VER TODO"
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun productCard(product: ProductModel): LinearLayout {
         val card = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -447,6 +506,9 @@ class HomeProductActivity : AppCompatActivity() {
         return card
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun dp(value: Int): Int = (value * resources.displayMetrics.density).toInt()
 }
 

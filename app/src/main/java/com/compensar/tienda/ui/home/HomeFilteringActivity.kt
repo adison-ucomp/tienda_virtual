@@ -39,6 +39,10 @@ class HomeFilteringActivity : AppCompatActivity() {
     private var categoryRegister: Long = 0
     private var categoryName: String = "Categoría"
 
+    /**
+     * Se ejecuta al crear la pantalla.
+     * Inicializa vista, estado y eventos principales.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -53,6 +57,9 @@ class HomeFilteringActivity : AppCompatActivity() {
         loadProducts()
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun applyWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -61,6 +68,9 @@ class HomeFilteringActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initViews() {
         btnBack = findViewById(R.id.actionReturn)
         btnCart = findViewById(R.id.btnCart)
@@ -74,6 +84,9 @@ class HomeFilteringActivity : AppCompatActivity() {
         txtTitle.text = categoryName
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initEvents() {
         btnBack.setOnClickListener { finish() }
         btnCart?.setOnClickListener { SessionNavigation.openCartOrLogin(this) }
@@ -84,6 +97,9 @@ class HomeFilteringActivity : AppCompatActivity() {
         actionAccount.setOnClickListener { SessionNavigation.openProfileOrLogin(this) }
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadProducts() {
         if (categoryRegister <= 0) return
         FirebaseFirestore.getInstance()
@@ -109,6 +125,9 @@ class HomeFilteringActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun productCard(product: ProductModel): LinearLayout {
         val card = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -148,6 +167,9 @@ class HomeFilteringActivity : AppCompatActivity() {
         return card
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun dp(value: Int): Int = (value * resources.displayMetrics.density).toInt()
 }
 

@@ -37,6 +37,10 @@ class SellerShopListActivity : AppCompatActivity() {
     private var currentSellerRegisters: Set<Long> = emptySet()
 
 
+    /**
+     * Se ejecuta al crear la pantalla.
+     * Inicializa vista, estado y eventos principales.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.seller_shop_list)
@@ -68,19 +72,32 @@ class SellerShopListActivity : AppCompatActivity() {
         loadDataBase()
     }
 
+    /**
+     * Se ejecuta cuando la pantalla vuelve al primer plano.
+     * Recarga datos o refresca el estado visual.
+     */
     override fun onResume() {
         super.onResume()
         loadReferenceData { loadItems() }
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadDataBase() {
         loadReferenceData { loadItems() }
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadReferenceData(onComplete: () -> Unit) {
         loadSellers(onComplete)
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadSellers(onComplete: () -> Unit) {
         db.collection("seller")
             .get()
@@ -116,6 +133,9 @@ class SellerShopListActivity : AppCompatActivity() {
     }
 
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadItems() {
         collection
             .get()
@@ -138,6 +158,9 @@ class SellerShopListActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadCard(data: ShopModel): CardView {
         val cardView = CardView(this).apply {
             radius = dp(18).toFloat()
@@ -218,6 +241,9 @@ class SellerShopListActivity : AppCompatActivity() {
         return cardView
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun addText(container: LinearLayout, value: String, color: Int = R.color.black) {
         val textView = TextView(this).apply {
             text = value
@@ -230,11 +256,17 @@ class SellerShopListActivity : AppCompatActivity() {
         container.addView(textView)
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun label(map: Map<Long, String>, id: Long): String {
         return map[id] ?: "Sin Informacion"
     }
 
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun dp(value: Int): Int {
         return (value * resources.displayMetrics.density).toInt()
     }

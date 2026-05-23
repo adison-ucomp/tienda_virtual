@@ -53,6 +53,10 @@ class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
     private var googleMap: GoogleMap? = null
     private var selectedAddress: AddressModel? = null
 
+    /**
+     * Se ejecuta al crear la pantalla.
+     * Inicializa vista, estado y eventos principales.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -66,11 +70,18 @@ class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
         loadAddresses()
     }
 
+    /**
+     * Se ejecuta cuando la pantalla vuelve al primer plano.
+     * Recarga datos o refresca el estado visual.
+     */
     override fun onResume() {
         super.onResume()
         loadAddresses()
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun applyWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -79,6 +90,9 @@ class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initViews() {
         btnBack = findViewById(R.id.btnBack)
         btnEditAddress = findViewById(R.id.btnEditAddress)
@@ -94,6 +108,9 @@ class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
         txtTotalValue = findViewById(R.id.txtTotalValue)
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initEvents() {
         btnBack.setOnClickListener { finish() }
 
@@ -104,21 +121,33 @@ class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
         btnConfirmPurchase.setOnClickListener { confirmPurchase() }
 
         spnAddresses.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            /**
+             * Ejecuta una parte del flujo funcional de esta clase.
+             */
             override fun onItemSelected(parent: AdapterView<*>?, view: android.view.View?, position: Int, id: Long) {
                 if (position in addresses.indices) {
                     selectAddress(addresses[position])
                 }
             }
 
+            /**
+             * Ejecuta una parte del flujo funcional de esta clase.
+             */
             override fun onNothingSelected(parent: AdapterView<*>?) = Unit
         }
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initMap() {
         val fragment = supportFragmentManager.findFragmentById(R.id.mapFragment) as? SupportMapFragment
         fragment?.getMapAsync(this)
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     override fun onMapReady(map: GoogleMap) {
         googleMap = map
         map.uiSettings.isZoomControlsEnabled = true
@@ -128,6 +157,9 @@ class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadAddresses() {
         val userRegister = SessionManager.getRegister(this)
         if (userRegister <= 0) {
@@ -175,6 +207,9 @@ class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
             }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun selectAddress(address: AddressModel) {
         selectedAddress = address
         val label = address.label?.takeIf { it.isNotBlank() } ?: "Dirección"
@@ -186,6 +221,9 @@ class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
         showAddressOnMap(value)
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun showAddressOnMap(address: String) {
         if (address.isBlank()) return
 
@@ -205,6 +243,9 @@ class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun confirmPurchase() {
         val userRegister = SessionManager.getRegister(this)
         val items = CartManager.getItems(this)
@@ -245,6 +286,9 @@ class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
         startActivity(intent)
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun renderSummary() {
         val items = CartManager.getItems(this)
         val count = items.sumOf { it.quantity }

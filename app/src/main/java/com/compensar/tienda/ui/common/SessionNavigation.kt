@@ -41,6 +41,9 @@ import com.compensar.tienda.ui.setting.SettingSellerActivity
  */
 object SessionNavigation {
 
+    /**
+     * Vincula datos con componentes visuales o contexto de sesion.
+     */
     fun bindProfile(activity: AppCompatActivity) {
         applySystemBarSpacing(activity)
         bindProfileByRole(activity)
@@ -50,6 +53,9 @@ object SessionNavigation {
         applyBuyerSuperiorVisibility(activity)
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun applySystemBarSpacing(activity: AppCompatActivity) {
         activity.enableEdgeToEdge()
 
@@ -66,6 +72,9 @@ object SessionNavigation {
         }
     }
 
+    /**
+     * Vincula datos con componentes visuales o contexto de sesion.
+     */
     private fun bindProfileByRole(activity: AppCompatActivity) {
         val actionAccount = activity.findViewById<LinearLayout?>(R.id.actionAccount)
         val navProfile = activity.findViewById<LinearLayout?>(R.id.navProfile)
@@ -98,12 +107,18 @@ object SessionNavigation {
     }
 
 
+    /**
+     * Vincula datos con componentes visuales o contexto de sesion.
+     */
     private fun bindBuyerCart(activity: AppCompatActivity) {
         activity.findViewById<View?>(R.id.btnCart)?.setOnClickListener {
             openCartOrLogin(activity)
         }
     }
 
+    /**
+     * Vincula datos con componentes visuales o contexto de sesion.
+     */
     private fun bindBuyerInferior(activity: AppCompatActivity) {
         activity.findViewById<LinearLayout?>(R.id.actionHome)?.setOnClickListener {
             when (SessionManager.getRole(activity)) {
@@ -147,6 +162,9 @@ object SessionNavigation {
         }
     }
 
+    /**
+     * Abre recurso o pantalla asociada al flujo actual.
+     */
     fun openProfileOrLogin(activity: AppCompatActivity) {
         val intent = when (SessionManager.getRole(activity)) {
             1L -> Intent(activity, ProfileAdminActivity::class.java)
@@ -158,6 +176,9 @@ object SessionNavigation {
         activity.startActivity(intent)
     }
 
+    /**
+     * Vincula datos con componentes visuales o contexto de sesion.
+     */
     private fun bindSharedMenu(activity: AppCompatActivity) {
         val buyerMenu = activity.findViewById<View?>(R.id.btnMenu)
         val sellerMenu = activity.findViewById<View?>(R.id.actionMenu)
@@ -182,6 +203,9 @@ object SessionNavigation {
         sellerMenu?.setOnClickListener { listener() }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     fun applyBuyerSuperiorVisibility(activity: AppCompatActivity) {
         val btnMenu = activity.findViewById<View?>(R.id.btnMenu)
         val isLogged = isLoggedIn(activity)
@@ -191,6 +215,9 @@ object SessionNavigation {
         btnMenu?.isClickable = isLogged
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     fun applyBuyerInferiorVisibility(activity: AppCompatActivity) {
         val actionShopping = activity.findViewById<LinearLayout?>(R.id.actionShopping)
         val actionAddress = activity.findViewById<LinearLayout?>(R.id.actionAddress)
@@ -206,6 +233,9 @@ object SessionNavigation {
         actionAddress?.isClickable = isBuyerLogged
     }
 
+    /**
+     * Abre recurso o pantalla asociada al flujo actual.
+     */
     fun openCartOrLogin(activity: AppCompatActivity) {
         val intent = if (isLoggedIn(activity)) {
             Intent(activity, BuyerCartShopActivity::class.java)
@@ -215,10 +245,16 @@ object SessionNavigation {
         activity.startActivity(intent)
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun isLoggedIn(activity: AppCompatActivity): Boolean {
         return SessionManager.getRegister(activity) > 0L && SessionManager.getRole(activity) > 0L
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     fun showProfileShareDrawer(activity: AppCompatActivity) {
         val dialog = Dialog(activity)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)

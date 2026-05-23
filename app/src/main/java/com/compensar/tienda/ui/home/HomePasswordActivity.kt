@@ -46,6 +46,10 @@ class HomePasswordActivity : AppCompatActivity() {
     private var userRegister: Long = 0
     private var tokenValid: Boolean = false
 
+    /**
+     * Se ejecuta al crear la pantalla.
+     * Inicializa vista, estado y eventos principales.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -61,6 +65,9 @@ class HomePasswordActivity : AppCompatActivity() {
         validateToken()
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun applyWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -74,6 +81,9 @@ class HomePasswordActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initViews() {
         btnBack = findViewById(R.id.btnBack)
         btnBackLogin = findViewById(R.id.btnBackLogin)
@@ -85,6 +95,9 @@ class HomePasswordActivity : AppCompatActivity() {
         loaderPassword = findViewById(R.id.loaderPassword)
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initEvents() {
         btnBack.setOnClickListener {
             goToLogin()
@@ -117,6 +130,9 @@ class HomePasswordActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun togglePasswordVisibility(
         field: EditText,
         button: TextView,
@@ -136,6 +152,9 @@ class HomePasswordActivity : AppCompatActivity() {
         return newVisibleState
     }
 
+    /**
+     * Valida reglas de negocio antes de continuar el flujo.
+     */
     private fun validateToken() {
         if (token.isEmpty()) {
             btnContinue.isEnabled = false
@@ -192,6 +211,9 @@ class HomePasswordActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun actionUpdatePassword() {
         if (!tokenValid || userRegister <= 0) {
             Toast.makeText(this, "Solicitud no válida", Toast.LENGTH_SHORT).show()
@@ -247,6 +269,9 @@ class HomePasswordActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun setPasswordLoading(isLoading: Boolean) {
         isPasswordLoading = isLoading
         btnContinue.isEnabled = !isLoading
@@ -260,6 +285,9 @@ class HomePasswordActivity : AppCompatActivity() {
         btnContinue.text = if (isLoading) "Guardando..." else "Continuar"
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun encryptPassword(password: String): String {
         val salt = "com.compensar.tienda.user.password"
 
@@ -269,6 +297,9 @@ class HomePasswordActivity : AppCompatActivity() {
         return bytes.joinToString("") { "%02x".format(it) }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun goToLogin() {
         val intent = Intent(this, HomeLoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK

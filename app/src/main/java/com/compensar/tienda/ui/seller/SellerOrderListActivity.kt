@@ -31,6 +31,10 @@ class SellerOrderListActivity : AppCompatActivity() {
     private lateinit var navOrders: LinearLayout
     private lateinit var navProfile: LinearLayout
 
+    /**
+     * Se ejecuta al crear la pantalla.
+     * Inicializa vista, estado y eventos principales.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -48,11 +52,18 @@ class SellerOrderListActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Se ejecuta cuando la pantalla vuelve al primer plano.
+     * Recarga datos o refresca el estado visual.
+     */
     override fun onResume() {
         super.onResume()
         loadOrders()
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initViews() {
         orderListContainer = findViewById(R.id.orderListContainer)
         navHome = findViewById(R.id.navHome)
@@ -60,6 +71,9 @@ class SellerOrderListActivity : AppCompatActivity() {
         navProfile = findViewById(R.id.navProfile)
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initEvents() {
         navHome.setOnClickListener {
             val intent = Intent(this, SellerDashboardActivity::class.java)
@@ -76,6 +90,9 @@ class SellerOrderListActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadOrders() {
         SellerDataHelper.loadSellerData(
             context = this,
@@ -91,6 +108,9 @@ class SellerOrderListActivity : AppCompatActivity() {
         )
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun renderOrders(orders: List<SellerDataHelper.SellerOrder>) {
         orderListContainer.removeAllViews()
 
@@ -113,6 +133,9 @@ class SellerOrderListActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun createOrderCard(item: SellerDataHelper.SellerOrder): View {
         val card = CardView(this)
         card.layoutParams = LinearLayout.LayoutParams(

@@ -69,6 +69,10 @@ class AdminUserStoreActivity : AppCompatActivity() {
         uploadImageFromCamera(bitmap)
     }
 
+    /**
+     * Se ejecuta al crear la pantalla.
+     * Inicializa vista, estado y eventos principales.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.admin_user_store)
@@ -82,6 +86,9 @@ class AdminUserStoreActivity : AppCompatActivity() {
         loadNextRegister()
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initViews() {
         actionReturn = findViewById(R.id.actionReturn)
         actionCancel = findViewById(R.id.actionCancel)
@@ -104,6 +111,9 @@ class AdminUserStoreActivity : AppCompatActivity() {
         fieldSellerAddress = findViewById(R.id.fieldSellerAddress)
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initEvents() {
         actionReturn.setOnClickListener { finish() }
         actionCancel.setOnClickListener { finish() }
@@ -115,16 +125,25 @@ class AdminUserStoreActivity : AppCompatActivity() {
         actionExecute.setOnClickListener { actionOperate() }
 
         fieldIdRole.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            /**
+             * Ejecuta una parte del flujo funcional de esta clase.
+             */
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 configureSellerFields(isSellerRoleSelected())
             }
 
+            /**
+             * Ejecuta una parte del flujo funcional de esta clase.
+             */
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 configureSellerFields(false)
             }
         }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun togglePasswordVisibility() {
         isPasswordVisible = !isPasswordVisible
 
@@ -138,6 +157,9 @@ class AdminUserStoreActivity : AppCompatActivity() {
         btnShowPassword.text = if (isPasswordVisible) "◌" else "◉"
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadSelectors() {
         FirestoreSelectHelper.load(
             context = this,
@@ -148,6 +170,9 @@ class AdminUserStoreActivity : AppCompatActivity() {
         )
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun actionOperate() {
         val register = generatedRegister
 
@@ -225,6 +250,9 @@ class AdminUserStoreActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadNextRegister() {
         actionExecute.isEnabled = false
 
@@ -249,6 +277,9 @@ class AdminUserStoreActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Guarda informacion en almacenamiento local o remoto.
+     */
     private fun saveRegister(data: UserModel, sellerData: SellerModel?) {
         collection.document(data.register.toString())
             .set(data)
@@ -266,6 +297,9 @@ class AdminUserStoreActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Guarda informacion en almacenamiento local o remoto.
+     */
     private fun saveSellerRegister(data: SellerModel) {
         sellerCollection.document(data.register.toString())
             .set(data)
@@ -279,6 +313,9 @@ class AdminUserStoreActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Construye datos derivados necesarios para el proceso.
+     */
     private fun buildSellerData(userRegister: Long): SellerModel? {
         val company = fieldSellerCompany.text.toString().trim()
         val nit = fieldSellerNit.text.toString().trim()
@@ -306,6 +343,9 @@ class AdminUserStoreActivity : AppCompatActivity() {
         )
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun configureSellerFields(show: Boolean) {
         sellerFieldsContainer.visibility = if (show) View.VISIBLE else View.GONE
         fieldSellerCompany.isEnabled = show
@@ -319,10 +359,16 @@ class AdminUserStoreActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun isSellerRoleSelected(): Boolean {
         return FirestoreSelectHelper.getSelectedId(fieldIdRole) == SELLER_ROLE_ID
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun encryptPassword(password: String): String {
         val salt = "com.compensar.tienda.user.password"
         val bytes = MessageDigest.getInstance("SHA-256")
@@ -331,6 +377,9 @@ class AdminUserStoreActivity : AppCompatActivity() {
         return bytes.joinToString("") { "%02x".format(it) }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun uploadImageFromGallery(uri: Uri?) {
         if (uri == null) {
             Toast.makeText(this, "No se seleccionó imagen", Toast.LENGTH_SHORT).show()
@@ -357,6 +406,9 @@ class AdminUserStoreActivity : AppCompatActivity() {
         )
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun uploadImageFromCamera(bitmap: Bitmap?) {
         if (bitmap == null) {
             Toast.makeText(this, "No se capturó imagen", Toast.LENGTH_SHORT).show()
@@ -383,6 +435,9 @@ class AdminUserStoreActivity : AppCompatActivity() {
         )
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun displayImagePreview(url: String?) {
         if (url.isNullOrBlank()) {
             imagePreview.setImageDrawable(null)
@@ -398,6 +453,9 @@ class AdminUserStoreActivity : AppCompatActivity() {
             .into(imagePreview)
     }
 
+    /**
+     * Obtiene informacion requerida por la pantalla o helper.
+     */
     private fun getRegisterForImageUpload(): Long? {
         val register = generatedRegister
 

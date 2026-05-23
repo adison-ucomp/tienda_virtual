@@ -42,6 +42,9 @@ object SellerDataHelper {
         val trade: TradeModel?
     )
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     fun loadSellerData(
         context: Context,
         onSuccess: (SellerData) -> Unit,
@@ -133,6 +136,9 @@ object SellerDataHelper {
             .addOnFailureListener { onFailure(it) }
     }
 
+    /**
+     * Construye datos derivados necesarios para el proceso.
+     */
     fun buildSellerOrders(data: SellerData): List<SellerOrder> {
         val purchasesByOrder = data.purchases.groupBy { it.idOrder }
 
@@ -153,11 +159,17 @@ object SellerDataHelper {
         }
     }
 
+    /**
+     * Formatea informacion para presentacion o envio.
+     */
     fun formatCurrency(value: Double): String {
         val formatter = NumberFormat.getCurrencyInstance(Locale("es", "CO"))
         return formatter.format(value)
     }
 
+    /**
+     * Obtiene informacion requerida por la pantalla o helper.
+     */
     fun getLastSixMonths(): List<String> {
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.MONTH, -5)
@@ -174,6 +186,9 @@ object SellerDataHelper {
         return months
     }
 
+    /**
+     * Obtiene informacion requerida por la pantalla o helper.
+     */
     fun getOrderMonth(order: OrderModel): String {
         val date = order.date.orEmpty()
 
@@ -184,6 +199,9 @@ object SellerDataHelper {
         }
     }
 
+    /**
+     * Obtiene informacion requerida por la pantalla o helper.
+     */
     fun getUserFullName(user: UserModel?): String {
         val names = user?.names.orEmpty()
         val surnames = user?.srnms.orEmpty()

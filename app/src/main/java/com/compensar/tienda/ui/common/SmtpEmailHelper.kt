@@ -5,6 +5,9 @@ package com.compensar.tienda.ui.common
  * Se conserva este helper solamente como compatibilidad temporal si alguna clase antigua lo invoca.
  */
 object SmtpEmailHelper {
+    /**
+     * Envia informacion a un servicio externo o componente interno.
+     */
     fun sendPasswordRestoreEmail(
         toEmail: String,
         resetLink: String,

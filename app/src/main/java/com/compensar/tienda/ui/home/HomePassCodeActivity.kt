@@ -37,6 +37,10 @@ class HomePassCodeActivity : AppCompatActivity() {
     private var token: String = ""
     private var email: String = ""
 
+    /**
+     * Se ejecuta al crear la pantalla.
+     * Inicializa vista, estado y eventos principales.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -51,6 +55,9 @@ class HomePassCodeActivity : AppCompatActivity() {
         validateInitialData()
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun applyWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -64,6 +71,9 @@ class HomePassCodeActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initViews() {
         btnBack = findViewById(R.id.btnBack)
         btnBackLogin = findViewById(R.id.btnBackLogin)
@@ -73,6 +83,9 @@ class HomePassCodeActivity : AppCompatActivity() {
         loaderPassCode = findViewById(R.id.loaderPassCode)
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initEvents() {
         btnBack.setOnClickListener { goToRestore() }
         btnBackLogin.setOnClickListener { goToLogin() }
@@ -83,6 +96,9 @@ class HomePassCodeActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Valida reglas de negocio antes de continuar el flujo.
+     */
     private fun validateInitialData() {
         if (token.isBlank() || email.isBlank()) {
             btnContinue.isEnabled = false
@@ -93,6 +109,9 @@ class HomePassCodeActivity : AppCompatActivity() {
         txtEmailInfo.text = "Enviamos un código de 6 dígitos a:\n$email"
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun actionValidateCode() {
         val code = txtCode.text.toString().trim()
 
@@ -167,6 +186,9 @@ class HomePassCodeActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun setCodeLoading(isLoading: Boolean) {
         isCodeLoading = isLoading
         btnContinue.isEnabled = !isLoading
@@ -177,12 +199,18 @@ class HomePassCodeActivity : AppCompatActivity() {
         btnContinue.text = if (isLoading) "Validando..." else "Validar código"
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun goToRestore() {
         val intent = Intent(this, HomeRestoreActivity::class.java)
         startActivity(intent)
         finish()
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun goToLogin() {
         val intent = Intent(this, HomeLoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK

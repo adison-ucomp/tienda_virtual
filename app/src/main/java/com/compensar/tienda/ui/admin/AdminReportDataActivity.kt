@@ -25,6 +25,10 @@ class AdminReportDataActivity : AppCompatActivity() {
 
     private val db = FirebaseFirestore.getInstance()
 
+    /**
+     * Se ejecuta al crear la pantalla.
+     * Inicializa vista, estado y eventos principales.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.admin_report_data)
@@ -35,11 +39,18 @@ class AdminReportDataActivity : AppCompatActivity() {
         loadCounters()
     }
 
+    /**
+     * Se ejecuta cuando la pantalla vuelve al primer plano.
+     * Recarga datos o refresca el estado visual.
+     */
     override fun onResume() {
         super.onResume()
         loadCounters()
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initViews() {
         cardReportSale = findViewById(R.id.cardReportSale)
         cardUserCount = findViewById(R.id.cardUserCount)
@@ -48,6 +59,9 @@ class AdminReportDataActivity : AppCompatActivity() {
         textShopCount = findViewById(R.id.textShopCount)
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initEvents() {
         cardReportSale.setOnClickListener {
             val intent = Intent(this, ReportDataSaleActivity::class.java)
@@ -65,6 +79,9 @@ class AdminReportDataActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadCounters() {
         db.collection("user")
             .get()

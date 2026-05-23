@@ -44,6 +44,10 @@ class BuyerOrderActivity : AppCompatActivity(), OnMapReadyCallback {
     private var googleMap: GoogleMap? = null
     private var pendingAddress: String = ""
 
+    /**
+     * Se ejecuta al crear la pantalla.
+     * Inicializa vista, estado y eventos principales.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -72,6 +76,9 @@ class BuyerOrderActivity : AppCompatActivity(), OnMapReadyCallback {
         loadOrder()
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadOrder() {
         if (orderRegister <= 0) {
             Toast.makeText(this, "Orden no válida", Toast.LENGTH_SHORT).show()
@@ -103,11 +110,17 @@ class BuyerOrderActivity : AppCompatActivity(), OnMapReadyCallback {
             }
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initMap() {
         val fragment = supportFragmentManager.findFragmentById(R.id.orderMapFragment) as? SupportMapFragment
         fragment?.getMapAsync(this)
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     override fun onMapReady(map: GoogleMap) {
         googleMap = map
         map.uiSettings.isZoomControlsEnabled = false
@@ -122,6 +135,9 @@ class BuyerOrderActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadAddressMap(address: String) {
         if (address.isBlank() || address == "Sin dirección") return
         pendingAddress = address
@@ -141,6 +157,9 @@ class BuyerOrderActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadPurchases() {
         productsContainer.removeAllViews()
 
@@ -169,6 +188,9 @@ class BuyerOrderActivity : AppCompatActivity(), OnMapReadyCallback {
             }
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadProductCard(purchase: PurchaseModel) {
         db.collection("product").document(purchase.idProduct.toString()).get()
             .addOnSuccessListener { product ->
@@ -182,6 +204,9 @@ class BuyerOrderActivity : AppCompatActivity(), OnMapReadyCallback {
             }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun productCard(name: String, image: String, amount: Int, value: Double, total: Double): CardView {
         val card = CardView(this).apply {
             radius = dp(16).toFloat()
@@ -253,6 +278,9 @@ class BuyerOrderActivity : AppCompatActivity(), OnMapReadyCallback {
         return card
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun dp(value: Int): Int = (value * resources.displayMetrics.density).toInt()
 }
 

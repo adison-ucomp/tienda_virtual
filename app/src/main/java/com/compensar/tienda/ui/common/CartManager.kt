@@ -22,6 +22,9 @@ object CartManager {
     private const val PREF = "buyer_cart_pref"
     private const val KEY = "items"
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     fun add(context: Context, item: CartItem) {
         val items = getItems(context).toMutableList()
         val index = items.indexOfFirst { it.register == item.register }
@@ -29,6 +32,9 @@ object CartManager {
         save(context, items)
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     fun setQuantity(context: Context, register: Long, quantity: Int) {
         val items = getItems(context).toMutableList()
         val index = items.indexOfFirst { it.register == register }
@@ -38,6 +44,9 @@ object CartManager {
         save(context, items)
     }
 
+    /**
+     * Obtiene informacion requerida por la pantalla o helper.
+     */
     fun getItems(context: Context): List<CartItem> {
         val raw = context.getSharedPreferences(PREF, Context.MODE_PRIVATE).getString(KEY, "[]") ?: "[]"
         val array = JSONArray(raw)
@@ -56,12 +65,21 @@ object CartManager {
         return list
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     fun subtotal(context: Context): Double = getItems(context).sumOf { it.price * it.quantity }
 
+    /**
+     * Limpia estado temporal o datos persistidos.
+     */
     fun clear(context: Context) {
         context.getSharedPreferences(PREF, Context.MODE_PRIVATE).edit().remove(KEY).apply()
     }
 
+    /**
+     * Guarda informacion en almacenamiento local o remoto.
+     */
     private fun save(context: Context, items: List<CartItem>) {
         val array = JSONArray()
         items.forEach {

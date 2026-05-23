@@ -62,6 +62,10 @@ class AdminDashboardActivity : AppCompatActivity() {
 
     private val moduleViews = mutableMapOf<String, ModuleDashboardItem>()
 
+    /**
+     * Se ejecuta al crear la pantalla.
+     * Inicializa vista, estado y eventos principales.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.admin_dashboard)
@@ -72,11 +76,18 @@ class AdminDashboardActivity : AppCompatActivity() {
         loadModules()
     }
 
+    /**
+     * Se ejecuta cuando la pantalla vuelve al primer plano.
+     * Recarga datos o refresca el estado visual.
+     */
     override fun onResume() {
         super.onResume()
         loadModules()
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initViews() {
         dataShop = findViewById(R.id.dataShop)
         dataUser = findViewById(R.id.dataUser)
@@ -136,6 +147,9 @@ class AdminDashboardActivity : AppCompatActivity() {
             R.id.detailUser), "Usuarios")
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initEvents() {
         dataShop.setOnClickListener {
             val intent = Intent(this, AdminShopListActivity::class.java)
@@ -238,6 +252,9 @@ class AdminDashboardActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadModules() {
         collection
             .get()

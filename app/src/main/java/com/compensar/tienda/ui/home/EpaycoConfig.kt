@@ -38,16 +38,25 @@ object EpaycoConfig {
     val RESPONSE_URL: String
         get() = API_BASE_URL + "api/epayco"
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     fun validationLookupUrl(reference: String): String {
         val encoded = URLEncoder.encode(reference, "UTF-8")
         return API_BASE_URL + "api/epayco?lookup=1&reference=" + encoded
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     fun directValidationUrl(reference: String): String {
         val encoded = URLEncoder.encode(reference, "UTF-8")
         return "$SERVICE_URL/validation/v1/reference/$encoded"
     }
 
+    /**
+     * Valida reglas de negocio antes de continuar el flujo.
+     */
     fun validateAmount(total: Double): String? {
         if (total < MIN_AMOUNT) {
             return "El valor mínimo permitido para pagar con ePayco es $ ${String.format("%,.0f", MIN_AMOUNT)}."

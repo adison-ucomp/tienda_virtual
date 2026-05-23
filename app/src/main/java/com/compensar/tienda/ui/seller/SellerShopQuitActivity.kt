@@ -33,6 +33,10 @@ class SellerShopQuitActivity : AppCompatActivity() {
     private var register: Long = 0
     private var data: ShopModel? = null
 
+    /**
+     * Se ejecuta al crear la pantalla.
+     * Inicializa vista, estado y eventos principales.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.seller_shop_quit)
@@ -45,6 +49,9 @@ class SellerShopQuitActivity : AppCompatActivity() {
         loadRegister()
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initViews() {
         actionReturn = findViewById(R.id.actionReturn)
         actionCancel = findViewById(R.id.actionCancel)
@@ -54,12 +61,18 @@ class SellerShopQuitActivity : AppCompatActivity() {
         fieldIdSeller = findViewById(R.id.fieldIdSeller)
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initEvents() {
         actionReturn.setOnClickListener { finish() }
         actionCancel.setOnClickListener { finish() }
         actionExecute.setOnClickListener { actionOperate() }
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadRegister() {
         if (register <= 0) {
             Toast.makeText(this, "Registro no válido", Toast.LENGTH_SHORT).show()
@@ -84,6 +97,9 @@ class SellerShopQuitActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun showRegister() {
         val current = data ?: return
 
@@ -93,6 +109,9 @@ class SellerShopQuitActivity : AppCompatActivity() {
         FirestoreRelationLabelHelper.load(fieldIdSeller, "seller", current.idSeller, listOf("company", "nit"))
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun actionOperate() {
         if (register <= 0) {
             Toast.makeText(this, "Registro no válido", Toast.LENGTH_SHORT).show()

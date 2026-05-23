@@ -17,6 +17,9 @@ object SessionManager {
     private const val KEY_EMAIL = "user_email"
     private const val KEY_ROLE = "user_role"
 
+    /**
+     * Guarda informacion en almacenamiento local o remoto.
+     */
     fun save(context: Context, user: UserModel) {
         context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
             .edit()
@@ -28,6 +31,9 @@ object SessionManager {
             .apply()
     }
 
+    /**
+     * Actualiza informacion existente segun el flujo actual.
+     */
     fun updateProfile(
         context: Context,
         names: String,
@@ -42,21 +48,33 @@ object SessionManager {
             .apply()
     }
 
+    /**
+     * Obtiene informacion requerida por la pantalla o helper.
+     */
     fun getRegister(context: Context): Long {
         val preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
         return preferences.getLong(KEY_REGISTER, 0)
     }
 
+    /**
+     * Obtiene informacion requerida por la pantalla o helper.
+     */
     fun getNames(context: Context): String {
         val preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
         return preferences.getString(KEY_NAMES, "") ?: ""
     }
 
+    /**
+     * Obtiene informacion requerida por la pantalla o helper.
+     */
     fun getSurnames(context: Context): String {
         val preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
         return preferences.getString(KEY_SURNAMES, "") ?: ""
     }
 
+    /**
+     * Obtiene informacion requerida por la pantalla o helper.
+     */
     fun getFullName(context: Context): String {
         val names = getNames(context)
         val surnames = getSurnames(context)
@@ -65,16 +83,25 @@ object SessionManager {
         return fullName.ifEmpty { "Sin Informacion" }
     }
 
+    /**
+     * Obtiene informacion requerida por la pantalla o helper.
+     */
     fun getEmail(context: Context): String {
         val preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
         return preferences.getString(KEY_EMAIL, "")?.ifEmpty { "Sin Informacion" } ?: "Sin Informacion"
     }
 
+    /**
+     * Obtiene informacion requerida por la pantalla o helper.
+     */
     fun getRole(context: Context): Long {
         val preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
         return preferences.getLong(KEY_ROLE, 0)
     }
 
+    /**
+     * Limpia estado temporal o datos persistidos.
+     */
     fun clear(context: Context) {
         context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
             .edit()

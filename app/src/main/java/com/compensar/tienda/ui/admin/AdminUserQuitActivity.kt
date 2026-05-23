@@ -34,6 +34,10 @@ class AdminUserQuitActivity : AppCompatActivity() {
     private var register: Long = 0
     private var user: UserModel? = null
 
+    /**
+     * Se ejecuta al crear la pantalla.
+     * Inicializa vista, estado y eventos principales.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.admin_user_quit)
@@ -46,6 +50,9 @@ class AdminUserQuitActivity : AppCompatActivity() {
         loadRegister()
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initViews() {
         actionReturn = findViewById(R.id.actionReturn)
         actionCancel = findViewById(R.id.actionCancel)
@@ -58,6 +65,9 @@ class AdminUserQuitActivity : AppCompatActivity() {
         fieldIdRole = findViewById(R.id.fieldIdRole)
     }
 
+    /**
+     * Inicializa componentes internos de la clase.
+     */
     private fun initEvents() {
 
         actionReturn.setOnClickListener {
@@ -73,6 +83,9 @@ class AdminUserQuitActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Carga informacion desde origen local o remoto.
+     */
     private fun loadRegister() {
         if (register <= 0) {
             Toast.makeText(this, "Registro no válido", Toast.LENGTH_SHORT).show()
@@ -97,6 +110,9 @@ class AdminUserQuitActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun showRegister() {
         val currentUser = user ?: return
 
@@ -109,6 +125,9 @@ class AdminUserQuitActivity : AppCompatActivity() {
         FirestoreRelationLabelHelper.load(fieldIdRole, "role", currentUser.idRole, listOf("name"))
     }
 
+    /**
+     * Ejecuta una parte del flujo funcional de esta clase.
+     */
     private fun actionOperate() {
         if (register <= 0) {
             Toast.makeText(this, "Registro no válido", Toast.LENGTH_SHORT).show()
