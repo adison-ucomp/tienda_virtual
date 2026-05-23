@@ -11,6 +11,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.compensar.tienda.R
 import java.text.Normalizer
 
+/**
+ * Objeto singleton [SelectSearchHelper].
+ *
+ * Responsable de la logica asociada al helper comun para CRUD de modelos.
+ */
 object SelectSearchHelper {
     fun bind(
         activity: AppCompatActivity,
@@ -182,3 +187,4 @@ object SelectSearchHelper {
             .trim()
     }
 }
+

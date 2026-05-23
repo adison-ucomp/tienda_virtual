@@ -4,6 +4,11 @@ import android.widget.TextView
 import com.compensar.tienda.model.ModuleModel
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Objeto singleton [ModuleView].
+ *
+ * Responsable de la logica asociada al helper comun para CRUD de modelos.
+ */
 object ModuleView {
 
     fun bindTitle(
@@ -29,3 +34,4 @@ object ModuleView {
             }
     }
 }
+

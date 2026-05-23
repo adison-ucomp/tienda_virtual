@@ -6,6 +6,11 @@ import android.widget.Spinner
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 
+/**
+ * Clase de datos [SelectOption].
+ *
+ * Responsable de la logica asociada al helper comun para CRUD de modelos.
+ */
 data class SelectOption(
     val register: Long,
     val label: String,
@@ -114,3 +119,4 @@ object FirestoreSelectHelper {
         }
     }
 }
+

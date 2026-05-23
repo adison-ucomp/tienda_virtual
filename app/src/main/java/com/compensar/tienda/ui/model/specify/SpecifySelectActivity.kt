@@ -16,6 +16,11 @@ import com.compensar.tienda.ui.model.common.SelectSearchHelper
 import com.google.firebase.firestore.FirebaseFirestore
 import com.compensar.tienda.model.SpecifyModel
 
+/**
+ * Clase [SpecifySelectActivity].
+ *
+ * Responsable de la logica asociada al pantalla de mantenimiento (CRUD) de modelos.
+ */
 class SpecifySelectActivity : AppCompatActivity() {
     private lateinit var actionReturn: TextView
     private lateinit var dataList: LinearLayout
@@ -212,3 +217,4 @@ class SpecifySelectActivity : AppCompatActivity() {
         return (value * resources.displayMetrics.density).toInt()
     }
 }
+

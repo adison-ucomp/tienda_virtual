@@ -34,6 +34,11 @@ import com.compensar.tienda.ui.setting.SettingAdminActivity
 import com.compensar.tienda.ui.setting.SettingBuyerActivity
 import com.compensar.tienda.ui.setting.SettingSellerActivity
 
+/**
+ * Objeto singleton [SessionNavigation].
+ *
+ * Responsable de la logica asociada al utilidad comun de interfaz y sesion.
+ */
 object SessionNavigation {
 
     fun bindProfile(activity: AppCompatActivity) {
@@ -273,3 +278,4 @@ object SessionNavigation {
         }
     }
 }
+

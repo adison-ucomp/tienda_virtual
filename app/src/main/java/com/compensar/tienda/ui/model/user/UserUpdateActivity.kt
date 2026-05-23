@@ -25,6 +25,11 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import com.compensar.tienda.ui.model.common.FirebaseStorageImageHelper
 
+/**
+ * Clase [UserUpdateActivity].
+ *
+ * Responsable de la logica asociada al pantalla de mantenimiento (CRUD) de modelos.
+ */
 class UserUpdateActivity : AppCompatActivity() {
     private lateinit var actionHome: LinearLayout
     private lateinit var titleHeader: TextView
@@ -290,3 +295,4 @@ class UserUpdateActivity : AppCompatActivity() {
         return register
     }
 }
+

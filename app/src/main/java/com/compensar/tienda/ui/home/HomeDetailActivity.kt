@@ -18,6 +18,11 @@ import com.compensar.tienda.ui.common.ReserveManager
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [HomeDetailActivity].
+ *
+ * Responsable de la logica asociada al pantalla o helper del flujo de inicio/autenticacion/compra.
+ */
 class HomeDetailActivity : AppCompatActivity() {
     private lateinit var btnBack: TextView; private lateinit var btnCart: TextView; private lateinit var btnAddCart: Button; private lateinit var btnBuyNow: Button; private lateinit var btnAllSpecifications: Button
     private lateinit var imgProduct: ImageView; private lateinit var txtName: TextView; private lateinit var txtPrice: TextView; private lateinit var txtDetail: TextView; private lateinit var relatedImages: LinearLayout
@@ -32,3 +37,4 @@ class HomeDetailActivity : AppCompatActivity() {
     private fun addToCart(openCart:Boolean){ val p=product?:return; val existing=CartManager.getItems(this).firstOrNull{it.register==p.register}; val item=existing ?: CartItem(p.register,p.name?:"Producto",p.detail?:"",p.price,p.storefire?:"",0); ReserveManager.reserveQuantity(this,item,item.quantity+1,onSuccess={ Toast.makeText(this,"Producto agregado al carrito",Toast.LENGTH_SHORT).show(); if(openCart) startActivity(Intent(this,BuyerCartShopActivity::class.java)) },onError={ message -> Toast.makeText(this,message,Toast.LENGTH_LONG).show() }) }
     private fun dp(v:Int)=(v*resources.displayMetrics.density).toInt()
 }
+

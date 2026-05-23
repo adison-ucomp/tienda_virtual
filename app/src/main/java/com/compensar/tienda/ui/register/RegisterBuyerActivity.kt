@@ -20,6 +20,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import java.security.MessageDigest
 
+/**
+ * Clase [RegisterBuyerActivity].
+ *
+ * Responsable de la logica asociada al pantalla de registro.
+ */
 class RegisterBuyerActivity : AppCompatActivity() {
     private lateinit var btnBack: TextView
     private lateinit var btnGoLogin: TextView
@@ -255,3 +260,4 @@ class RegisterBuyerActivity : AppCompatActivity() {
         private const val BUYER_ROLE_ID = 3L
     }
 }
+

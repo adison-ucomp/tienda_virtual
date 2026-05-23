@@ -16,6 +16,11 @@ import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.model.common.SelectSearchHelper
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [ModuleSelectActivity].
+ *
+ * Responsable de la logica asociada al pantalla de mantenimiento (CRUD) de modelos.
+ */
 class ModuleSelectActivity : AppCompatActivity() {
     private lateinit var actionReturn: TextView
     private lateinit var dataList: LinearLayout
@@ -193,3 +198,4 @@ class ModuleSelectActivity : AppCompatActivity() {
         return (value * resources.displayMetrics.density).toInt()
     }
 }
+

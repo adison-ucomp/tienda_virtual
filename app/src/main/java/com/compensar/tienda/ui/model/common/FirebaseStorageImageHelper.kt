@@ -5,6 +5,11 @@ import android.net.Uri
 import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream
 
+/**
+ * Objeto singleton [FirebaseStorageImageHelper].
+ *
+ * Responsable de la logica asociada al helper comun para CRUD de modelos.
+ */
 object FirebaseStorageImageHelper {
 
     fun uploadFromUri(
@@ -67,3 +72,4 @@ object FirebaseStorageImageHelper {
         return "images/$module/${register}_${System.currentTimeMillis()}.jpg"
     }
 }
+

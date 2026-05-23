@@ -21,6 +21,11 @@ import android.widget.ImageView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 
+/**
+ * Clase [AdminShopStoreActivity].
+ *
+ * Responsable de la logica asociada al pantalla del panel administrativo.
+ */
 class AdminShopStoreActivity : AppCompatActivity() {
     private lateinit var actionReturn: TextView
     private lateinit var actionCancel: Button
@@ -262,3 +267,4 @@ class AdminShopStoreActivity : AppCompatActivity() {
         return register
     }
 }
+

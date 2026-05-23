@@ -30,6 +30,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import java.util.Locale
 
+/**
+ * Clase [BuyerMapsActivity].
+ *
+ * Responsable de la logica asociada al pantalla del flujo de comprador.
+ */
 class BuyerMapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var googleMap: GoogleMap; private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var btnBack: TextView; private lateinit var btnUseCurrentLocation: TextView; private lateinit var btnSaveAddress: Button; private lateinit var btnSearchAddress: TextView
@@ -54,3 +59,4 @@ class BuyerMapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun loadAddressForEdit(){ collection.document(register.toString()).get().addOnSuccessListener{ doc -> val data=doc.toObject(AddressModel::class.java)?:return@addOnSuccessListener; txtAddressDetail.setText(data.address?:""); txtSearchAddress.setText(data.address?:""); txtLabel.setText(data.label?:""); loadUbications(data.id_ubication); searchAddressOnMap() } }
     private fun saveAddress(){ val user=SessionManager.getRegister(this); if(user<=0){Toast.makeText(this,"Debes iniciar sesión",Toast.LENGTH_SHORT).show();return}; val address=txtAddressDetail.text.toString().trim(); val label=txtLabel.text.toString().trim(); val ubication=FirestoreSelectHelper.getSelectedId(spnUbication); if(address.isEmpty()||label.isEmpty()||ubication==null){Toast.makeText(this,"Completa ubicación, dirección y etiqueta",Toast.LENGTH_SHORT).show();return}; val finalRegister=if(register>0) register else generatedRegister; val data=AddressModel(finalRegister,address,label,ubication,user); collection.document(finalRegister.toString()).set(data).addOnSuccessListener{Toast.makeText(this,"Dirección guardada",Toast.LENGTH_SHORT).show();finish()}.addOnFailureListener{Toast.makeText(this,"Error: ${it.message}",Toast.LENGTH_LONG).show()} }
 }
+

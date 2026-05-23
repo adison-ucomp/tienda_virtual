@@ -12,6 +12,11 @@ import com.compensar.tienda.ui.model.common.ModuleView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.compensar.tienda.model.GatewayModel
 
+/**
+ * Clase [GatewayUpdateActivity].
+ *
+ * Responsable de la logica asociada al pantalla de mantenimiento (CRUD) de modelos.
+ */
 class GatewayUpdateActivity : AppCompatActivity() {
     private lateinit var titleHeader: TextView
     private lateinit var actionReturn: TextView
@@ -106,3 +111,4 @@ class GatewayUpdateActivity : AppCompatActivity() {
             }
     }
 }
+

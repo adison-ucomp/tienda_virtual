@@ -13,6 +13,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.compensar.tienda.model.RoleModel
 
+/**
+ * Clase [RoleCreateActivity].
+ *
+ * Responsable de la logica asociada al pantalla de mantenimiento (CRUD) de modelos.
+ */
 class RoleCreateActivity : AppCompatActivity() {
     private lateinit var titleHeader: TextView
     private lateinit var actionReturn: TextView
@@ -120,3 +125,4 @@ class RoleCreateActivity : AppCompatActivity() {
             }
     }
 }
+

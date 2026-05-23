@@ -3,6 +3,11 @@ package com.compensar.tienda.ui.home
 import com.compensar.tienda.BuildConfig
 import java.net.URLEncoder
 
+/**
+ * Objeto singleton [EpaycoConfig].
+ *
+ * Responsable de la logica asociada al pantalla o helper del flujo de inicio/autenticacion/compra.
+ */
 object EpaycoConfig {
     const val CHECKOUT_URL = "https://checkout.epayco.co/checkout.js"
 
@@ -56,3 +61,4 @@ object EpaycoConfig {
         return null
     }
 }
+

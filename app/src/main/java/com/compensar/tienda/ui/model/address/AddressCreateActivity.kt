@@ -13,6 +13,11 @@ import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 
+/**
+ * Clase [AddressCreateActivity].
+ *
+ * Responsable de la logica asociada al pantalla de mantenimiento (CRUD) de modelos.
+ */
 class AddressCreateActivity : AppCompatActivity() {
     private lateinit var titleHeader: TextView
     private lateinit var actionHome: LinearLayout; private lateinit var actionReturn: TextView; private lateinit var actionCancel: Button; private lateinit var actionExecute: Button
@@ -25,3 +30,4 @@ class AddressCreateActivity : AppCompatActivity() {
     private fun actionOperate(){ val register=generatedRegister; if(register==null||register<=0){Toast.makeText(this,"No fue posible generar ID",Toast.LENGTH_SHORT).show();loadNextRegister();return}; val address=fieldAddress.text.toString().trim(); val label=fieldLabel.text.toString().trim(); if(address.isEmpty()){Toast.makeText(this,"Debes ingresar la dirección",Toast.LENGTH_SHORT).show();return}; if(label.isEmpty()){Toast.makeText(this,"Debes ingresar la etiqueta",Toast.LENGTH_SHORT).show();return}; val idUser=FirestoreSelectHelper.getSelectedId(fieldIdUser); val idUbication=FirestoreSelectHelper.getSelectedId(fieldIdUbication); if(idUser==null||idUbication==null){Toast.makeText(this,"Debes seleccionar usuario y ubicación",Toast.LENGTH_SHORT).show();return}; val data=AddressModel(register,address,label,idUbication,idUser); collection.document(register.toString()).set(data).addOnSuccessListener{Toast.makeText(this,"Dirección creada",Toast.LENGTH_SHORT).show();finish()}.addOnFailureListener{Toast.makeText(this,"Error: ${it.message}",Toast.LENGTH_LONG).show()} }
     private fun loadNextRegister(){ actionExecute.isEnabled=false; collection.orderBy("register", Query.Direction.DESCENDING).limit(1).get().addOnSuccessListener{generatedRegister=(it.documents.firstOrNull()?.getLong("register")?:0L)+1L;actionExecute.isEnabled=true}.addOnFailureListener{generatedRegister=null;actionExecute.isEnabled=true} }
 }
+

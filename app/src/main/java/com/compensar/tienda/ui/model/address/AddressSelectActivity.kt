@@ -16,6 +16,11 @@ import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.model.common.SelectSearchHelper
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [AddressSelectActivity].
+ *
+ * Responsable de la logica asociada al pantalla de mantenimiento (CRUD) de modelos.
+ */
 class AddressSelectActivity : AppCompatActivity() {
     private lateinit var actionReturn: TextView
     private lateinit var dataList: LinearLayout
@@ -160,3 +165,4 @@ class AddressSelectActivity : AppCompatActivity() {
     private fun label(map: Map<Long, String>, id: Long): String = map[id] ?: "Sin Informacion"
     private fun dp(value: Int): Int = (value * resources.displayMetrics.density).toInt()
 }
+

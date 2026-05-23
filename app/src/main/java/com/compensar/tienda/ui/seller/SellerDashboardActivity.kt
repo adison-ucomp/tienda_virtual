@@ -22,6 +22,11 @@ import com.compensar.tienda.ui.report.ReportDataSaleActivity
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
+/**
+ * Clase [SellerDashboardActivity].
+ *
+ * Responsable de la logica asociada al pantalla del flujo de vendedor.
+ */
 class SellerDashboardActivity : AppCompatActivity() {
 
     private lateinit var cardSellerReport: CardView
@@ -324,3 +329,4 @@ class SellerDashboardActivity : AppCompatActivity() {
         return (this * resources.displayMetrics.density).toInt()
     }
 }
+

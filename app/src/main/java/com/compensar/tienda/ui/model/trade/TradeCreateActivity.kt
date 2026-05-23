@@ -15,6 +15,11 @@ import com.compensar.tienda.ui.model.common.ModuleView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 
+/**
+ * Clase [TradeCreateActivity].
+ *
+ * Responsable de la logica asociada al pantalla de mantenimiento (CRUD) de modelos.
+ */
 class TradeCreateActivity : AppCompatActivity() {
     private lateinit var titleHeader: TextView
     private lateinit var actionReturn: TextView
@@ -137,3 +142,4 @@ class TradeCreateActivity : AppCompatActivity() {
             }
     }
 }
+

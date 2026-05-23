@@ -3,6 +3,11 @@ package com.compensar.tienda.ui.common
 import android.content.Context
 import com.compensar.tienda.model.UserModel
 
+/**
+ * Objeto singleton [SessionManager].
+ *
+ * Responsable de la logica asociada al utilidad comun de interfaz y sesion.
+ */
 object SessionManager {
 
     private const val PREFERENCES_NAME = "session_preferences"
@@ -77,3 +82,4 @@ object SessionManager {
             .apply()
     }
 }
+

@@ -19,6 +19,11 @@ import com.compensar.tienda.ui.model.category.CategorySelectActivity
 import com.compensar.tienda.ui.setting.SettingAdminActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [ProfileAdminActivity].
+ *
+ * Responsable de la logica asociada al pantalla de perfil de usuario.
+ */
 class ProfileAdminActivity : AppCompatActivity() {
 
     private lateinit var actionReturn: TextView
@@ -165,3 +170,4 @@ class ProfileAdminActivity : AppCompatActivity() {
             }
     }
 }
+

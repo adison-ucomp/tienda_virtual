@@ -10,6 +10,11 @@ import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.report.ReportDataSaleActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [AdminReportDataActivity].
+ *
+ * Responsable de la logica asociada al pantalla del panel administrativo.
+ */
 class AdminReportDataActivity : AppCompatActivity() {
 
     private lateinit var cardReportSale: CardView
@@ -80,3 +85,4 @@ class AdminReportDataActivity : AppCompatActivity() {
             }
     }
 }
+

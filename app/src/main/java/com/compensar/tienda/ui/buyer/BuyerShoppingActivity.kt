@@ -20,6 +20,11 @@ import com.compensar.tienda.ui.home.HomeProductActivity
 import com.compensar.tienda.ui.util.StatusStyleHelper
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [BuyerShoppingActivity].
+ *
+ * Responsable de la logica asociada al pantalla del flujo de comprador.
+ */
 class BuyerShoppingActivity : AppCompatActivity() {
 
     private lateinit var actionHome: LinearLayout
@@ -254,3 +259,4 @@ class BuyerShoppingActivity : AppCompatActivity() {
 
     private fun dp(value: Int) = (value * resources.displayMetrics.density).toInt()
 }
+

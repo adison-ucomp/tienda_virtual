@@ -13,6 +13,11 @@ import com.compensar.tienda.ui.model.common.ModuleView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 
+/**
+ * Clase [ShipmentCreateActivity].
+ *
+ * Responsable de la logica asociada al pantalla de mantenimiento (CRUD) de modelos.
+ */
 class ShipmentCreateActivity : AppCompatActivity() {
     private lateinit var titleHeader: TextView
     private lateinit var actionReturn: TextView
@@ -105,3 +110,4 @@ class ShipmentCreateActivity : AppCompatActivity() {
             }
     }
 }
+

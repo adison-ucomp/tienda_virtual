@@ -18,6 +18,11 @@ import com.compensar.tienda.ui.admin.AdminDashboardActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 
+/**
+ * Clase [SellerCreateActivity].
+ *
+ * Responsable de la logica asociada al pantalla de mantenimiento (CRUD) de modelos.
+ */
 class SellerCreateActivity : AppCompatActivity() {
     private lateinit var actionHome: LinearLayout
     private lateinit var titleHeader: TextView
@@ -179,3 +184,4 @@ class SellerCreateActivity : AppCompatActivity() {
             }
     }
 }
+

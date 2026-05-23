@@ -12,6 +12,11 @@ import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.model.common.ModuleView
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [UbicationUpdateActivity].
+ *
+ * Responsable de la logica asociada al pantalla de mantenimiento (CRUD) de modelos.
+ */
 class UbicationUpdateActivity : AppCompatActivity() {
     private lateinit var titleHeader: TextView
     private lateinit var actionReturn: TextView
@@ -97,3 +102,4 @@ class UbicationUpdateActivity : AppCompatActivity() {
             }
     }
 }
+

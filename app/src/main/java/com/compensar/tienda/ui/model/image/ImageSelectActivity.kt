@@ -17,6 +17,11 @@ import com.compensar.tienda.ui.model.common.SelectSearchHelper
 import com.google.firebase.firestore.FirebaseFirestore
 import com.compensar.tienda.model.ImageModel
 
+/**
+ * Clase [ImageSelectActivity].
+ *
+ * Responsable de la logica asociada al pantalla de mantenimiento (CRUD) de modelos.
+ */
 class ImageSelectActivity : AppCompatActivity() {
     private lateinit var actionReturn: TextView
     private lateinit var dataList: LinearLayout
@@ -212,3 +217,4 @@ class ImageSelectActivity : AppCompatActivity() {
         return (value * resources.displayMetrics.density).toInt()
     }
 }
+

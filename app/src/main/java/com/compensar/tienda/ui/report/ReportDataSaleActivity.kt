@@ -38,6 +38,11 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+/**
+ * Clase [ReportDataSaleActivity].
+ *
+ * Responsable de la logica asociada al pantalla de reportes.
+ */
 class ReportDataSaleActivity : AppCompatActivity() {
 
     private lateinit var containerSeller: LinearLayout
@@ -769,3 +774,4 @@ class ReportDataSaleActivity : AppCompatActivity() {
         val total: Double
     )
 }
+

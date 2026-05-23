@@ -21,6 +21,11 @@ import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.model.common.FirebaseStorageImageHelper
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [SettingSellerActivity].
+ *
+ * Responsable de la logica asociada al pantalla de configuracion.
+ */
 class SettingSellerActivity : AppCompatActivity() {
 
     private lateinit var actionReturn: TextView
@@ -327,3 +332,4 @@ class SettingSellerActivity : AppCompatActivity() {
             }
     }
 }
+

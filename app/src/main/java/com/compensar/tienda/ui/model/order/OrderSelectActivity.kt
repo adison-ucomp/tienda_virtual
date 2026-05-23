@@ -18,6 +18,11 @@ import com.compensar.tienda.ui.model.common.FirestoreRelationLabelHelper
 import com.compensar.tienda.ui.model.common.SelectSearchHelper
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [OrderSelectActivity].
+ *
+ * Responsable de la logica asociada al pantalla de mantenimiento (CRUD) de modelos.
+ */
 class OrderSelectActivity : AppCompatActivity() {
     private lateinit var actionReturn: TextView
     private lateinit var dataList: LinearLayout
@@ -150,3 +155,4 @@ class OrderSelectActivity : AppCompatActivity() {
 
     private fun dp(value: Int): Int = (value * resources.displayMetrics.density).toInt()
 }
+

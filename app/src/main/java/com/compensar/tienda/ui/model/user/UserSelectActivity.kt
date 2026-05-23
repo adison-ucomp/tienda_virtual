@@ -18,6 +18,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.compensar.tienda.model.UserModel
 import com.compensar.tienda.ui.admin.AdminDashboardActivity
 
+/**
+ * Clase [UserSelectActivity].
+ *
+ * Responsable de la logica asociada al pantalla de mantenimiento (CRUD) de modelos.
+ */
 class UserSelectActivity : AppCompatActivity() {
     private lateinit var actionHome: LinearLayout
     private lateinit var actionReturn: TextView
@@ -225,3 +230,4 @@ class UserSelectActivity : AppCompatActivity() {
         return (value * resources.displayMetrics.density).toInt()
     }
 }
+

@@ -13,6 +13,11 @@ import com.compensar.tienda.ui.model.common.FirestoreRelationLabelHelper
 import com.compensar.tienda.model.ShopModel
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [SellerShopQuitActivity].
+ *
+ * Responsable de la logica asociada al pantalla del flujo de vendedor.
+ */
 class SellerShopQuitActivity : AppCompatActivity() {
     private lateinit var actionReturn: TextView
     private lateinit var actionCancel: Button
@@ -121,3 +126,4 @@ class SellerShopQuitActivity : AppCompatActivity() {
             }
     }
 }
+

@@ -15,6 +15,11 @@ import androidx.core.view.WindowInsetsCompat
 import com.compensar.tienda.R
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [HomePassCodeActivity].
+ *
+ * Responsable de la logica asociada al pantalla o helper del flujo de inicio/autenticacion/compra.
+ */
 class HomePassCodeActivity : AppCompatActivity() {
 
     private lateinit var btnBack: TextView
@@ -185,3 +190,4 @@ class HomePassCodeActivity : AppCompatActivity() {
         finish()
     }
 }
+

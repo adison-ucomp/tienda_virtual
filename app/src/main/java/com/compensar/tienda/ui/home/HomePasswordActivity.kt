@@ -18,6 +18,11 @@ import com.compensar.tienda.R
 import com.google.firebase.firestore.FirebaseFirestore
 import java.security.MessageDigest
 
+/**
+ * Clase [HomePasswordActivity].
+ *
+ * Responsable de la logica asociada al pantalla o helper del flujo de inicio/autenticacion/compra.
+ */
 class HomePasswordActivity : AppCompatActivity() {
 
     private lateinit var btnBack: TextView
@@ -271,3 +276,4 @@ class HomePasswordActivity : AppCompatActivity() {
         finish()
     }
 }
+

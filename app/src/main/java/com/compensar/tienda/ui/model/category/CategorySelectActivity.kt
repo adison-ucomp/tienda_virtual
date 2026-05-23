@@ -18,6 +18,11 @@ import com.compensar.tienda.model.CategoryModel
 import com.compensar.tienda.ui.admin.AdminDashboardActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [CategorySelectActivity].
+ *
+ * Responsable de la logica asociada al pantalla de mantenimiento (CRUD) de modelos.
+ */
 class CategorySelectActivity : AppCompatActivity() {
     private lateinit var actionHome: LinearLayout
     private lateinit var actionReturn: TextView
@@ -190,3 +195,4 @@ class CategorySelectActivity : AppCompatActivity() {
         return (value * resources.displayMetrics.density).toInt()
     }
 }
+

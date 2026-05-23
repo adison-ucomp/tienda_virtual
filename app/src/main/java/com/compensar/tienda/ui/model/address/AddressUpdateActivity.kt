@@ -12,6 +12,11 @@ import com.compensar.tienda.ui.admin.AdminDashboardActivity
 import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [AddressUpdateActivity].
+ *
+ * Responsable de la logica asociada al pantalla de mantenimiento (CRUD) de modelos.
+ */
 class AddressUpdateActivity : AppCompatActivity() {
     private lateinit var titleHeader: TextView
     private lateinit var actionHome: LinearLayout; private lateinit var actionReturn: TextView; private lateinit var actionCancel: Button; private lateinit var actionExecute: Button
@@ -24,3 +29,4 @@ class AddressUpdateActivity : AppCompatActivity() {
     private fun showRegister(){ val c=currentData?:return; fieldAddress.setText(c.address?:""); fieldLabel.setText(c.label?:""); FirestoreSelectHelper.load(this, fieldIdUser, "user", listOf("names","srnms","email"), c.idUser); FirestoreSelectHelper.load(this, fieldIdUbication, "ubication", listOf("name"), c.id_ubication) }
     private fun actionOperate(){ val address=fieldAddress.text.toString().trim(); val label=fieldLabel.text.toString().trim(); if(address.isEmpty()||label.isEmpty()){Toast.makeText(this,"Debes completar dirección y etiqueta",Toast.LENGTH_SHORT).show();return}; val idUser=FirestoreSelectHelper.getSelectedId(fieldIdUser); val idUbication=FirestoreSelectHelper.getSelectedId(fieldIdUbication); if(idUser==null||idUbication==null){Toast.makeText(this,"Debes seleccionar usuario y ubicación",Toast.LENGTH_SHORT).show();return}; val data=AddressModel(register,address,label,idUbication,idUser); collection.document(register.toString()).set(data).addOnSuccessListener{Toast.makeText(this,"Dirección actualizada",Toast.LENGTH_SHORT).show();finish()}.addOnFailureListener{Toast.makeText(this,"Error: ${it.message}",Toast.LENGTH_LONG).show()} }
 }
+

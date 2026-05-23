@@ -17,6 +17,11 @@ import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
 import com.compensar.tienda.ui.admin.AdminDashboardActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [SellerUpdateActivity].
+ *
+ * Responsable de la logica asociada al pantalla de mantenimiento (CRUD) de modelos.
+ */
 class SellerUpdateActivity : AppCompatActivity() {
     private lateinit var actionHome: LinearLayout
     private lateinit var titleHeader: TextView
@@ -162,3 +167,4 @@ class SellerUpdateActivity : AppCompatActivity() {
             }
     }
 }
+

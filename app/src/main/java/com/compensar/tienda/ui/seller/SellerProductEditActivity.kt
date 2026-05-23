@@ -21,6 +21,11 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import com.compensar.tienda.ui.model.common.FirebaseStorageImageHelper
 
+/**
+ * Clase [SellerProductEditActivity].
+ *
+ * Responsable de la logica asociada al pantalla del flujo de vendedor.
+ */
 class SellerProductEditActivity : AppCompatActivity() {
     private lateinit var titleHeader: TextView
     private lateinit var actionReturn: TextView
@@ -321,3 +326,4 @@ class SellerProductEditActivity : AppCompatActivity() {
         return register
     }
 }
+

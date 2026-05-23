@@ -12,6 +12,11 @@ import com.compensar.tienda.ui.model.common.ModuleView
 import com.compensar.tienda.ui.model.common.FirestoreRelationLabelHelper
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [PurchaseDeleteActivity].
+ *
+ * Responsable de la logica asociada al pantalla de mantenimiento (CRUD) de modelos.
+ */
 class PurchaseDeleteActivity : AppCompatActivity() {
     private lateinit var titleHeader: TextView
     private lateinit var actionReturn: TextView
@@ -114,3 +119,4 @@ class PurchaseDeleteActivity : AppCompatActivity() {
             }
     }
 }
+

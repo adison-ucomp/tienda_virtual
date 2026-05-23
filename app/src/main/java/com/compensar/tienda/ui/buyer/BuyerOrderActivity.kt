@@ -24,6 +24,11 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Locale
 
+/**
+ * Clase [BuyerOrderActivity].
+ *
+ * Responsable de la logica asociada al pantalla del flujo de comprador.
+ */
 class BuyerOrderActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var btnBack: TextView
@@ -250,3 +255,4 @@ class BuyerOrderActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun dp(value: Int): Int = (value * resources.displayMetrics.density).toInt()
 }
+

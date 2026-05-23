@@ -20,6 +20,11 @@ import com.compensar.tienda.ui.seller.SellerShopListActivity
 import com.compensar.tienda.ui.setting.SettingSellerActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [ProfileSellerActivity].
+ *
+ * Responsable de la logica asociada al pantalla de perfil de usuario.
+ */
 class ProfileSellerActivity : AppCompatActivity() {
 
     private lateinit var actionReturn: TextView
@@ -151,3 +156,4 @@ class ProfileSellerActivity : AppCompatActivity() {
         )
     }
 }
+

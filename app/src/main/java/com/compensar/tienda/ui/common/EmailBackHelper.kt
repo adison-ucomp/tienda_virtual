@@ -11,6 +11,11 @@ import java.net.HttpURLConnection
 import java.net.URL
 import kotlin.concurrent.thread
 
+/**
+ * Objeto singleton [EmailBackHelper].
+ *
+ * Responsable de la logica asociada al utilidad comun de interfaz y sesion.
+ */
 object EmailBackHelper {
 
     private const val TAG = "PASSWORD_BACKEND"
@@ -86,3 +91,4 @@ object EmailBackHelper {
         }
     }
 }
+

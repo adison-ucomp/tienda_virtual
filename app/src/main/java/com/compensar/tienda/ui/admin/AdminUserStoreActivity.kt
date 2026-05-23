@@ -28,6 +28,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import java.security.MessageDigest
 
+/**
+ * Clase [AdminUserStoreActivity].
+ *
+ * Responsable de la logica asociada al pantalla del panel administrativo.
+ */
 class AdminUserStoreActivity : AppCompatActivity() {
     private lateinit var actionReturn: TextView
     private lateinit var actionCancel: Button
@@ -409,3 +414,4 @@ class AdminUserStoreActivity : AppCompatActivity() {
         private const val SELLER_ROLE_ID = 2L
     }
 }
+

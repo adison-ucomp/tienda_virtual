@@ -3,6 +3,11 @@ package com.compensar.tienda.ui.common
 import android.content.Context
 import com.compensar.tienda.model.UserModel
 
+/**
+ * Objeto singleton [BiometricSessionManager].
+ *
+ * Responsable de la logica asociada al utilidad comun de interfaz y sesion.
+ */
 object BiometricSessionManager {
 
     private const val PREFERENCES_NAME = "biometric_preferences"
@@ -48,3 +53,4 @@ object BiometricSessionManager {
             .getLong(KEY_ROLE, 0L)
     }
 }
+

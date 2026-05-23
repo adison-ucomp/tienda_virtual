@@ -4,6 +4,11 @@ import android.widget.TextView
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Objeto singleton [FirestoreRelationLabelHelper].
+ *
+ * Responsable de la logica asociada al helper comun para CRUD de modelos.
+ */
 object FirestoreRelationLabelHelper {
 
     private val db = FirebaseFirestore.getInstance()
@@ -46,3 +51,4 @@ object FirestoreRelationLabelHelper {
         return label.ifEmpty { "Sin Informacion" }
     }
 }
+

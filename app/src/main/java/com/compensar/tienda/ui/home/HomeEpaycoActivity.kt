@@ -30,6 +30,11 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+/**
+ * Clase [HomeEpaycoActivity].
+ *
+ * Responsable de la logica asociada al pantalla o helper del flujo de inicio/autenticacion/compra.
+ */
 class HomeEpaycoActivity : AppCompatActivity() {
     private var actionReturn: View? = null
     private lateinit var webEpayco: WebView
@@ -640,3 +645,4 @@ class HomeEpaycoActivity : AppCompatActivity() {
         """.trimIndent()
     }
 }
+

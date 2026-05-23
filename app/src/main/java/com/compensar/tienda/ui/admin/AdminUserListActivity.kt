@@ -17,6 +17,11 @@ import com.compensar.tienda.ui.model.common.SelectSearchHelper
 import com.compensar.tienda.model.UserModel
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [AdminUserListActivity].
+ *
+ * Responsable de la logica asociada al pantalla del panel administrativo.
+ */
 class AdminUserListActivity : AppCompatActivity() {
     private lateinit var actionReturn: TextView
     private lateinit var dataList: LinearLayout
@@ -215,3 +220,4 @@ class AdminUserListActivity : AppCompatActivity() {
         return (value * resources.displayMetrics.density).toInt()
     }
 }
+

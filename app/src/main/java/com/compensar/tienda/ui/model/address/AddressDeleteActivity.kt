@@ -9,6 +9,11 @@ import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.model.common.ModuleView
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [AddressDeleteActivity].
+ *
+ * Responsable de la logica asociada al pantalla de mantenimiento (CRUD) de modelos.
+ */
 class AddressDeleteActivity : AppCompatActivity() {
     private lateinit var titleHeader: TextView
     private lateinit var actionReturn: TextView; private lateinit var actionCancel: Button; private lateinit var actionExecute: Button; private lateinit var fieldRegister: TextView; private lateinit var fieldAddress: TextView; private lateinit var fieldLabel: TextView
@@ -18,3 +23,4 @@ class AddressDeleteActivity : AppCompatActivity() {
     private fun initEvents(){ actionReturn.setOnClickListener{finish()}; actionCancel.setOnClickListener{finish()}; actionExecute.setOnClickListener{ collection.document(register.toString()).delete().addOnSuccessListener{Toast.makeText(this,"Dirección eliminada",Toast.LENGTH_SHORT).show();finish()}.addOnFailureListener{Toast.makeText(this,"Error: ${it.message}",Toast.LENGTH_LONG).show()} } }
     private fun load(){ fieldRegister.text=register.toString(); collection.document(register.toString()).get().addOnSuccessListener{ val data=it.toObject(AddressModel::class.java); fieldAddress.text=data?.address?:""; fieldLabel.text=data?.label?:"" } }
 }
+

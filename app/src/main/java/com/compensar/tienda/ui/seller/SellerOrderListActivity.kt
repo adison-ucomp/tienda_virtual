@@ -19,6 +19,11 @@ import com.compensar.tienda.ui.common.SellerDataHelper
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.util.StatusStyleHelper
 
+/**
+ * Clase [SellerOrderListActivity].
+ *
+ * Responsable de la logica asociada al pantalla del flujo de vendedor.
+ */
 class SellerOrderListActivity : AppCompatActivity() {
 
     private lateinit var orderListContainer: LinearLayout
@@ -249,3 +254,4 @@ class SellerOrderListActivity : AppCompatActivity() {
         return (this * resources.displayMetrics.density).toInt()
     }
 }
+

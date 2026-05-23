@@ -14,6 +14,11 @@ import java.text.NumberFormat
 import java.util.Calendar
 import java.util.Locale
 
+/**
+ * Objeto singleton [SellerDataHelper].
+ *
+ * Responsable de la logica asociada al utilidad comun de interfaz y sesion.
+ */
 object SellerDataHelper {
 
     private val db = FirebaseFirestore.getInstance()
@@ -187,3 +192,4 @@ object SellerDataHelper {
         return fullName.ifEmpty { "Sin información" }
     }
 }
+

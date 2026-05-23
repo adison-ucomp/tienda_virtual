@@ -12,6 +12,11 @@ import com.compensar.tienda.ui.model.common.FirestoreRelationLabelHelper
 import com.compensar.tienda.model.ShopModel
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [AdminShopQuitActivity].
+ *
+ * Responsable de la logica asociada al pantalla del panel administrativo.
+ */
 class AdminShopQuitActivity : AppCompatActivity() {
     private lateinit var actionReturn: TextView
     private lateinit var actionCancel: Button
@@ -105,3 +110,4 @@ class AdminShopQuitActivity : AppCompatActivity() {
             }
     }
 }
+

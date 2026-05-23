@@ -20,6 +20,11 @@ import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.model.common.ImagePreviewHelper
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [SellerProductListActivity].
+ *
+ * Responsable de la logica asociada al pantalla del flujo de vendedor.
+ */
 class SellerProductListActivity : AppCompatActivity() {
 
     private lateinit var actionReturn: TextView
@@ -300,3 +305,4 @@ class SellerProductListActivity : AppCompatActivity() {
         return (value * resources.displayMetrics.density).toInt()
     }
 }
+

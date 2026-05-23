@@ -24,6 +24,11 @@ import com.compensar.tienda.ui.model.common.FirebaseStorageImageHelper
 import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [AdminUserEditActivity].
+ *
+ * Responsable de la logica asociada al pantalla del panel administrativo.
+ */
 class AdminUserEditActivity : AppCompatActivity() {
     private lateinit var actionReturn: TextView
     private lateinit var actionCancel: Button
@@ -422,3 +427,4 @@ class AdminUserEditActivity : AppCompatActivity() {
         private const val SELLER_ROLE_ID = 2L
     }
 }
+

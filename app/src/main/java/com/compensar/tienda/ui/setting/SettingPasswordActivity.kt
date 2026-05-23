@@ -12,6 +12,11 @@ import com.compensar.tienda.ui.common.SessionNavigation
 import com.google.firebase.firestore.FirebaseFirestore
 import java.security.MessageDigest
 
+/**
+ * Clase [SettingPasswordActivity].
+ *
+ * Responsable de la logica asociada al pantalla de configuracion.
+ */
 class SettingPasswordActivity : AppCompatActivity() {
 
     private lateinit var actionReturn: TextView
@@ -106,3 +111,4 @@ class SettingPasswordActivity : AppCompatActivity() {
         return bytes.joinToString("") { "%02x".format(it) }
     }
 }
+

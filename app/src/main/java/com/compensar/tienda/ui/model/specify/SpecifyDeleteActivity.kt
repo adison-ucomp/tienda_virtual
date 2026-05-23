@@ -12,6 +12,11 @@ import com.compensar.tienda.ui.model.common.FirestoreRelationLabelHelper
 import com.google.firebase.firestore.FirebaseFirestore
 import com.compensar.tienda.model.SpecifyModel
 
+/**
+ * Clase [SpecifyDeleteActivity].
+ *
+ * Responsable de la logica asociada al pantalla de mantenimiento (CRUD) de modelos.
+ */
 class SpecifyDeleteActivity : AppCompatActivity() {
     private lateinit var titleHeader: TextView
     private lateinit var actionReturn: TextView
@@ -110,3 +115,4 @@ class SpecifyDeleteActivity : AppCompatActivity() {
             }
     }
 }
+

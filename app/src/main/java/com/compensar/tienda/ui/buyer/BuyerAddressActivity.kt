@@ -18,6 +18,11 @@ import com.compensar.tienda.model.AddressModel
 import com.compensar.tienda.ui.common.SessionManager
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [BuyerAddressActivity].
+ *
+ * Responsable de la logica asociada al pantalla del flujo de comprador.
+ */
 class BuyerAddressActivity : AppCompatActivity() {
     private lateinit var btnBack: TextView
     private lateinit var btnNew: Button
@@ -147,3 +152,4 @@ class BuyerAddressActivity : AppCompatActivity() {
     private fun deleteAddress(register:Long){ db.collection("address").document(register.toString()).delete().addOnSuccessListener{ Toast.makeText(this,"Dirección eliminada",Toast.LENGTH_SHORT).show(); loadAddresses() }.addOnFailureListener{Toast.makeText(this,"Error: ${it.message}",Toast.LENGTH_LONG).show()} }
     private fun dp(v:Int)=(v*resources.displayMetrics.density).toInt()
 }
+

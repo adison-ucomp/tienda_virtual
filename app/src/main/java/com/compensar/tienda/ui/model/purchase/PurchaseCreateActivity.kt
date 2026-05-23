@@ -18,6 +18,11 @@ import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 
+/**
+ * Clase [PurchaseCreateActivity].
+ *
+ * Responsable de la logica asociada al pantalla de mantenimiento (CRUD) de modelos.
+ */
 class PurchaseCreateActivity : AppCompatActivity() {
     private lateinit var actionHome: LinearLayout
     private lateinit var titleHeader: TextView
@@ -155,3 +160,4 @@ class PurchaseCreateActivity : AppCompatActivity() {
             }
     }
 }
+

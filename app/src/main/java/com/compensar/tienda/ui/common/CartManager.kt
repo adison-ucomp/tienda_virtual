@@ -4,6 +4,11 @@ import android.content.Context
 import org.json.JSONArray
 import org.json.JSONObject
 
+/**
+ * Clase de datos [CartItem].
+ *
+ * Responsable de la logica asociada al utilidad comun de interfaz y sesion.
+ */
 data class CartItem(
     val register: Long,
     val name: String,
@@ -72,3 +77,4 @@ object CartManager {
         context.getSharedPreferences(PREF, Context.MODE_PRIVATE).edit().putString(KEY, array.toString()).apply()
     }
 }
+

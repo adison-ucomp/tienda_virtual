@@ -13,6 +13,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.compensar.tienda.model.PaymentModel
 
+/**
+ * Clase [PaymentCreateActivity].
+ *
+ * Responsable de la logica asociada al pantalla de mantenimiento (CRUD) de modelos.
+ */
 class PaymentCreateActivity : AppCompatActivity() {
     private lateinit var titleHeader: TextView
     private lateinit var actionReturn: TextView
@@ -120,3 +125,4 @@ class PaymentCreateActivity : AppCompatActivity() {
             }
     }
 }
+

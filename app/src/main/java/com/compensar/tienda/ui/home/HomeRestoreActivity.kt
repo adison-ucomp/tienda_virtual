@@ -18,6 +18,11 @@ import com.compensar.tienda.ui.common.EmailBackHelper
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.UUID
 
+/**
+ * Clase [HomeRestoreActivity].
+ *
+ * Responsable de la logica asociada al pantalla o helper del flujo de inicio/autenticacion/compra.
+ */
 class HomeRestoreActivity : AppCompatActivity() {
 
     private lateinit var btnBack: TextView
@@ -200,3 +205,4 @@ class HomeRestoreActivity : AppCompatActivity() {
         finish()
     }
 }
+

@@ -24,6 +24,11 @@ import com.compensar.tienda.ui.model.common.FirebaseStorageImageHelper
 import com.compensar.tienda.ui.profile.ProfileAdminActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [SettingAdminActivity].
+ *
+ * Responsable de la logica asociada al pantalla de configuracion.
+ */
 class SettingAdminActivity : AppCompatActivity() {
 
     private lateinit var actionReturn: TextView
@@ -320,3 +325,4 @@ class SettingAdminActivity : AppCompatActivity() {
         actionChangePhoto.alpha = if (isLoading) 0.6f else 1f
     }
 }
+

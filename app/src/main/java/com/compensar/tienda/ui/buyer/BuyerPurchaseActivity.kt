@@ -29,6 +29,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Locale
 import java.util.UUID
 
+/**
+ * Clase [BuyerPurchaseActivity].
+ *
+ * Responsable de la logica asociada al pantalla del flujo de comprador.
+ */
 class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var btnBack: TextView
@@ -255,3 +260,4 @@ class BuyerPurchaseActivity : AppCompatActivity(), OnMapReadyCallback {
         txtTotalValue.text = "$ ${String.format("%,.0f", total)}"
     }
 }
+

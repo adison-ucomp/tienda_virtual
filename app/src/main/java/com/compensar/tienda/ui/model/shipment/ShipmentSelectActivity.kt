@@ -16,6 +16,11 @@ import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.model.common.SelectSearchHelper
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [ShipmentSelectActivity].
+ *
+ * Responsable de la logica asociada al pantalla de mantenimiento (CRUD) de modelos.
+ */
 class ShipmentSelectActivity : AppCompatActivity() {
     private lateinit var actionReturn: TextView
     private lateinit var actionNew: LinearLayout
@@ -164,3 +169,4 @@ class ShipmentSelectActivity : AppCompatActivity() {
 
     private fun dp(v: Int) = (v * resources.displayMetrics.density).toInt()
 }
+

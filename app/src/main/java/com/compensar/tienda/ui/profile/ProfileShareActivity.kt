@@ -16,6 +16,11 @@ import com.compensar.tienda.ui.common.SessionManager
 import com.compensar.tienda.ui.home.HomeProductActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [ProfileShareActivity].
+ *
+ * Responsable de la logica asociada al pantalla de perfil de usuario.
+ */
 class ProfileShareActivity : AppCompatActivity() {
 
     private lateinit var actionOverlayClose: View
@@ -156,3 +161,4 @@ class ProfileShareActivity : AppCompatActivity() {
         finish()
     }
 }
+

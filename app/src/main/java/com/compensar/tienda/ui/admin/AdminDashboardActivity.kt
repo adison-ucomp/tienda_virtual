@@ -28,6 +28,11 @@ import com.compensar.tienda.ui.model.ubication.UbicationSelectActivity
 import com.compensar.tienda.ui.model.user.UserSelectActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [AdminDashboardActivity].
+ *
+ * Responsable de la logica asociada al pantalla del panel administrativo.
+ */
 class AdminDashboardActivity : AppCompatActivity() {
 
     private lateinit var dataShop: CardView
@@ -267,3 +272,4 @@ class AdminDashboardActivity : AppCompatActivity() {
         val defaultName: String
     )
 }
+

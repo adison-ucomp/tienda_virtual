@@ -16,6 +16,11 @@ import com.compensar.tienda.model.UserModel
 import com.compensar.tienda.ui.admin.AdminDashboardActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [UserDeleteActivity].
+ *
+ * Responsable de la logica asociada al pantalla de mantenimiento (CRUD) de modelos.
+ */
 class UserDeleteActivity : AppCompatActivity() {
     private lateinit var actionHome: LinearLayout
     private lateinit var titleHeader: TextView
@@ -137,3 +142,4 @@ class UserDeleteActivity : AppCompatActivity() {
             }
     }
 }
+

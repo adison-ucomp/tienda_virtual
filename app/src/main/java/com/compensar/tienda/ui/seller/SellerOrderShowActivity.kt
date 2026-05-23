@@ -31,6 +31,11 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Locale
 
+/**
+ * Clase [SellerOrderShowActivity].
+ *
+ * Responsable de la logica asociada al pantalla del flujo de vendedor.
+ */
 class SellerOrderShowActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var actionReturn: TextView
@@ -354,3 +359,4 @@ class SellerOrderShowActivity : AppCompatActivity(), OnMapReadyCallback {
         return (this * resources.displayMetrics.density).toInt()
     }
 }
+

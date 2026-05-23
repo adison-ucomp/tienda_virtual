@@ -11,6 +11,11 @@ import com.compensar.tienda.ui.model.common.ModuleView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.compensar.tienda.model.PaymentModel
 
+/**
+ * Clase [PaymentDeleteActivity].
+ *
+ * Responsable de la logica asociada al pantalla de mantenimiento (CRUD) de modelos.
+ */
 class PaymentDeleteActivity : AppCompatActivity() {
     private lateinit var titleHeader: TextView
     private lateinit var actionReturn: TextView
@@ -103,3 +108,4 @@ class PaymentDeleteActivity : AppCompatActivity() {
             }
     }
 }
+

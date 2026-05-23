@@ -12,6 +12,11 @@ import com.compensar.tienda.ui.model.common.FirestoreRelationLabelHelper
 import com.compensar.tienda.ui.model.common.ModuleView
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [OrderDeleteActivity].
+ *
+ * Responsable de la logica asociada al pantalla de mantenimiento (CRUD) de modelos.
+ */
 class OrderDeleteActivity : AppCompatActivity() {
     private lateinit var titleHeader: TextView
     private lateinit var actionReturn: TextView
@@ -120,3 +125,4 @@ class OrderDeleteActivity : AppCompatActivity() {
             }
     }
 }
+

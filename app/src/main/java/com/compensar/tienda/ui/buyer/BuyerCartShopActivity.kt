@@ -19,6 +19,11 @@ import com.compensar.tienda.ui.common.ReserveManager
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 
+/**
+ * Clase [BuyerCartShopActivity].
+ *
+ * Responsable de la logica asociada al pantalla del flujo de comprador.
+ */
 class BuyerCartShopActivity : AppCompatActivity() {
     private lateinit var btnBack: TextView
     private lateinit var cartList: LinearLayout
@@ -150,3 +155,4 @@ class BuyerCartShopActivity : AppCompatActivity() {
 
     private fun dp(v: Int) = (v * resources.displayMetrics.density).toInt()
 }
+

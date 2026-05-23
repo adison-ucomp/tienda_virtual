@@ -5,6 +5,11 @@ import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.widget.TextView
 
+/**
+ * Objeto singleton [StatusStyleHelper].
+ *
+ * Responsable de la logica asociada al helper visual reutilizable.
+ */
 object StatusStyleHelper {
     fun applyShipment(textView: TextView, status: String) {
         apply(textView, status, colorForShipment(status))
@@ -50,3 +55,4 @@ object StatusStyleHelper {
         textView.background = background
     }
 }
+

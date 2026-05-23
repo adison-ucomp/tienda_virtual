@@ -30,6 +30,11 @@ import com.compensar.tienda.ui.common.BiometricSessionManager
 import com.google.firebase.firestore.FirebaseFirestore
 import java.security.MessageDigest
 
+/**
+ * Clase [HomeLoginActivity].
+ *
+ * Responsable de la logica asociada al pantalla o helper del flujo de inicio/autenticacion/compra.
+ */
 class HomeLoginActivity : AppCompatActivity() {
     private lateinit var actionHome: LinearLayout
     private lateinit var actionCategory: LinearLayout
@@ -342,3 +347,4 @@ class HomeLoginActivity : AppCompatActivity() {
         return bytes.joinToString("") { "%02x".format(it) }
     }
 }
+

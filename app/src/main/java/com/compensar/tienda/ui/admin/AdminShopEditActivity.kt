@@ -20,6 +20,11 @@ import com.compensar.tienda.ui.model.common.FirebaseStorageImageHelper
 import com.compensar.tienda.ui.model.common.FirestoreSelectHelper
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [AdminShopEditActivity].
+ *
+ * Responsable de la logica asociada al pantalla del panel administrativo.
+ */
 class AdminShopEditActivity : AppCompatActivity() {
     private lateinit var actionReturn: TextView
     private lateinit var actionCancel: Button
@@ -242,3 +247,4 @@ class AdminShopEditActivity : AppCompatActivity() {
         return register
     }
 }
+

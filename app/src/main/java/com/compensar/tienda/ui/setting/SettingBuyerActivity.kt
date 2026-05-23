@@ -19,6 +19,11 @@ import com.compensar.tienda.ui.model.common.FirebaseStorageImageHelper
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [SettingBuyerActivity].
+ *
+ * Responsable de la logica asociada al pantalla de configuracion.
+ */
 class SettingBuyerActivity : AppCompatActivity() {
 
     private lateinit var actionReturn: TextView
@@ -238,3 +243,4 @@ class SettingBuyerActivity : AppCompatActivity() {
             }
     }
 }
+

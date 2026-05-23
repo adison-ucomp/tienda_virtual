@@ -9,6 +9,11 @@ import androidx.cardview.widget.CardView
 import com.bumptech.glide.Glide
 import com.compensar.tienda.R
 
+/**
+ * Objeto singleton [ImagePreviewHelper].
+ *
+ * Responsable de la logica asociada al helper comun para CRUD de modelos.
+ */
 object ImagePreviewHelper {
 
     fun addPreviewToRow(
@@ -74,3 +79,4 @@ object ImagePreviewHelper {
         return (value * activity.resources.displayMetrics.density).toInt()
     }
 }
+

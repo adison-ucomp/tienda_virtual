@@ -19,6 +19,11 @@ import com.compensar.tienda.ui.buyer.BuyerShoppingActivity
 import com.compensar.tienda.ui.common.SessionNavigation
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [HomeFilteringActivity].
+ *
+ * Responsable de la logica asociada al pantalla o helper del flujo de inicio/autenticacion/compra.
+ */
 class HomeFilteringActivity : AppCompatActivity() {
 
     private lateinit var btnBack: TextView
@@ -145,3 +150,4 @@ class HomeFilteringActivity : AppCompatActivity() {
 
     private fun dp(value: Int): Int = (value * resources.displayMetrics.density).toInt()
 }
+

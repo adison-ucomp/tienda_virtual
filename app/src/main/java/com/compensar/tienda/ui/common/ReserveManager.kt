@@ -5,6 +5,11 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlin.math.max
 
+/**
+ * Objeto singleton [ReserveManager].
+ *
+ * Responsable de la logica asociada al utilidad comun de interfaz y sesion.
+ */
 object ReserveManager {
     private val db = FirebaseFirestore.getInstance()
 
@@ -94,3 +99,4 @@ object ReserveManager {
         }
     }
 }
+

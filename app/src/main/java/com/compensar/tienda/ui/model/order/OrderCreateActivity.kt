@@ -22,6 +22,11 @@ import java.util.Date
 import java.util.Locale
 import java.util.UUID
 
+/**
+ * Clase [OrderCreateActivity].
+ *
+ * Responsable de la logica asociada al pantalla de mantenimiento (CRUD) de modelos.
+ */
 class OrderCreateActivity : AppCompatActivity() {
     private lateinit var actionHome: LinearLayout
     private lateinit var titleHeader: TextView
@@ -202,3 +207,4 @@ class OrderCreateActivity : AppCompatActivity() {
             }
     }
 }
+

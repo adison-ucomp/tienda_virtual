@@ -20,6 +20,11 @@ import android.widget.ImageView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 
+/**
+ * Clase [SellerShopStoreActivity].
+ *
+ * Responsable de la logica asociada al pantalla del flujo de vendedor.
+ */
 class SellerShopStoreActivity : AppCompatActivity() {
     private lateinit var actionReturn: TextView
     private lateinit var actionCancel: Button
@@ -272,3 +277,4 @@ class SellerShopStoreActivity : AppCompatActivity() {
         return register
     }
 }
+

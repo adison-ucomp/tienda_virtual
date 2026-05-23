@@ -25,6 +25,11 @@ import com.compensar.tienda.ui.setting.SettingPasswordActivity
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [ProfileBuyerActivity].
+ *
+ * Responsable de la logica asociada al pantalla de perfil de usuario.
+ */
 class ProfileBuyerActivity : AppCompatActivity() {
 
     private lateinit var actionReturn: TextView
@@ -293,3 +298,4 @@ class ProfileBuyerActivity : AppCompatActivity() {
         loadingBiometricState = false
     }
 }
+

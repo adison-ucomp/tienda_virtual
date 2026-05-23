@@ -14,6 +14,11 @@ import com.compensar.tienda.ui.common.SessionNavigation
 import com.compensar.tienda.ui.model.common.SelectSearchHelper
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Clase [UbicationSelectActivity].
+ *
+ * Responsable de la logica asociada al pantalla de mantenimiento (CRUD) de modelos.
+ */
 class UbicationSelectActivity : AppCompatActivity() {
     private lateinit var actionReturn: TextView
     private lateinit var actionNew: LinearLayout
@@ -141,3 +146,4 @@ class UbicationSelectActivity : AppCompatActivity() {
 
     private fun dp(v: Int) = (v * resources.displayMetrics.density).toInt()
 }
+
