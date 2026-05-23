@@ -86,6 +86,26 @@ class TradeStatusWorker(
         }
     }
 
+    private fun normalizeTransactionState(transactionState: String): String {
+        return when (transactionState.trim()) {
+            "Pendiente" -> "Pendiente"
+            "Aceptada" -> "Aceptada"
+            "Rechazada" -> "Rechazada"
+            "Fallida" -> "Fallida"
+            else -> "Pendiente"
+        }
+    }
+
+    private fun shipmentByTransactionState(transactionState: String): Long {
+        return when (transactionState) {
+            "Pendiente" -> 1L
+            "Aceptada" -> 1L
+            "Rechazada" -> 4L
+            "Fallida" -> 4L
+            else -> 1L
+        }
+    }
+
     private fun validateAndUpdate(
         tradeId: String,
         reference: String,
@@ -113,15 +133,14 @@ class TradeStatusWorker(
                 Log.d(tag, "Respuesta ePayco recibida. Fecha y hora: ${nowText()}. tradeId=$tradeId reference=$reference code=${connection.responseCode}: $response")
                 val root = JSONObject(response)
                 val data = root.optJSONObject("data") ?: JSONObject()
-                val transactionState = data.optString("x_transaction_state")
-                    .ifBlank { data.optString("x_response") }
-                    .ifBlank { data.optString("x_respuesta") }
-                    .ifBlank { "Pendiente" }
+                val transactionState = normalizeTransactionState(
+                    data.optString("x_transaction_state").ifBlank { "Pendiente" }
+                )
 
                 Log.d(tag, "Estado retornado por ePayco. Fecha y hora: ${nowText()}. reference=$reference state=$transactionState")
 
-                if (!transactionState.equals("Pendiente", ignoreCase = true)) {
-                    val shipmentId = if (transactionState.equals("Aceptada", ignoreCase = true)) 1L else 4L
+                if (transactionState != "Pendiente") {
+                    val shipmentId = shipmentByTransactionState(transactionState)
                     db.collection("trade").document(tradeId).get()
                         .addOnSuccessListener { tradeDocument ->
                             val orderId = tradeDocument.getLong("idOrder") ?: 0L

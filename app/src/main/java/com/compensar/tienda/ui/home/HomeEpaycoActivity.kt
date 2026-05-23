@@ -340,17 +340,12 @@ class HomeEpaycoActivity : AppCompatActivity() {
     }
 
     private fun normalizeTransactionState(transactionState: String, data: JSONObject): String {
-        val code = data.optString("x_cod_response")
-            .ifBlank { data.optString("x_cod_respuesta") }
-            .ifBlank { data.optString("x_cod_transaction_state") }
-
-        if (code == "1") return "Aceptada"
-
-        val clean = transactionState.uppercase().trim()
-        return if (clean == "ACEPTADA" || clean.contains("ACEPT") || clean.contains("APROB")) {
-            "Aceptada"
-        } else {
-            "Rechazada"
+        return when (transactionState.trim()) {
+            "Pendiente" -> "Pendiente"
+            "Aceptada" -> "Aceptada"
+            "Rechazada" -> "Rechazada"
+            "Fallida" -> "Fallida"
+            else -> "Pendiente"
         }
     }
 
