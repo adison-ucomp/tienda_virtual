@@ -191,12 +191,19 @@ class BuyerShoppingActivity : AppCompatActivity() {
             setPadding(0, dp(6), 0, dp(12))
         })
 
-        val btn = Button(this).apply {
+        val btn = TextView(this).apply {
             text = "Consultar"
+            gravity = android.view.Gravity.CENTER
+            setTextColor(0xFFFFFFFF.toInt())
+            textSize = 14f
+            setTypeface(null, Typeface.BOLD)
+            setBackgroundResource(R.drawable.bg_button_dark)
             layoutParams = LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 dp(48)
-            )
+            ).apply {
+                topMargin = dp(4)
+            }
             setOnClickListener {
                 startActivity(
                     Intent(this@BuyerShoppingActivity, BuyerOrderActivity::class.java)

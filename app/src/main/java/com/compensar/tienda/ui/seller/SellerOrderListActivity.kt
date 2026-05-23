@@ -228,7 +228,7 @@ class SellerOrderListActivity : AppCompatActivity() {
         action.setTextColor(Color.WHITE)
         action.textSize = 14f
         action.setTypeface(null, Typeface.BOLD)
-        action.setBackgroundColor(Color.BLACK)
+        action.setBackgroundResource(R.drawable.bg_button_dark)
         action.setOnClickListener {
             val intent = Intent(this, SellerOrderShowActivity::class.java)
             intent.putExtra("register", item.order.register)
