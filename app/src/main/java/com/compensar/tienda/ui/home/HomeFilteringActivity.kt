@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.Gravity
+import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.enableEdgeToEdge
@@ -21,7 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 class HomeFilteringActivity : AppCompatActivity() {
 
     private lateinit var btnBack: TextView
-    private lateinit var btnCart: TextView
+    private var btnCart: View? = null
     private lateinit var txtTitle: TextView
     private lateinit var productGrid: GridLayout
     private lateinit var actionHome: LinearLayout
@@ -56,7 +57,7 @@ class HomeFilteringActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        btnBack = findViewById(R.id.btnBack)
+        btnBack = findViewById(R.id.actionReturn)
         btnCart = findViewById(R.id.btnCart)
         txtTitle = findViewById(R.id.txtTitle)
         productGrid = findViewById(R.id.productGrid)
@@ -70,7 +71,7 @@ class HomeFilteringActivity : AppCompatActivity() {
 
     private fun initEvents() {
         btnBack.setOnClickListener { finish() }
-        btnCart.setOnClickListener { SessionNavigation.openCartOrLogin(this) }
+        btnCart?.setOnClickListener { SessionNavigation.openCartOrLogin(this) }
         actionHome.setOnClickListener { startActivity(Intent(this, HomeProductActivity::class.java)); finish() }
         actionCategory.setOnClickListener { startActivity(Intent(this, HomeCategoryActivity::class.java)); finish() }
         actionShopping.setOnClickListener { startActivity(Intent(this, BuyerShoppingActivity::class.java)) }
