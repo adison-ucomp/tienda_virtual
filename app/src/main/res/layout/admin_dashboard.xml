@@ -198,9 +198,8 @@
 
 
 
-            <!-- Modulo Direcciones -->
-                        <!-- Modulo Modulos -->
-<androidx.cardview.widget.CardView
+            <!-- Modulo Modulos -->
+            <androidx.cardview.widget.CardView
                 android:id="@+id/cardModule"
                 android:layout_width="match_parent"
                 android:layout_height="170dp"
@@ -231,7 +230,7 @@
                             android:id="@+id/titleModule"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Gestionar Modulos"
+                            android:text="@string/model_module_title"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
@@ -251,7 +250,8 @@
 
             </androidx.cardview.widget.CardView>
 
-<androidx.cardview.widget.CardView
+            <!-- Modulo Direcciones -->
+            <androidx.cardview.widget.CardView
                 android:id="@+id/cardAddress"
                 android:layout_width="match_parent"
                 android:layout_height="170dp"
@@ -282,7 +282,7 @@
                             android:id="@+id/titleAddress"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Gestionar Direcciones"
+                            android:text="@string/model_address_title"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
@@ -334,7 +334,7 @@
                             android:id="@+id/titleCategory"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Gestionar Categorias"
+                            android:text="@string/model_category_title"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
@@ -386,7 +386,7 @@
                             android:id="@+id/titleGateway"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Gestionar Pasarelas"
+                            android:text="@string/model_gateway_title"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
@@ -438,7 +438,7 @@
                             android:id="@+id/titleImage"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Gestionar Imágenes"
+                            android:text="@string/model_image_title"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
@@ -490,7 +490,7 @@
                             android:id="@+id/titleOrder"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Gestionar Ordenes"
+                            android:text="@string/model_order_title"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black"/>
@@ -542,7 +542,7 @@
                             android:id="@+id/titlePayment"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Gestionar Pagos"
+                            android:text="@string/model_payment_title"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
@@ -594,7 +594,7 @@
                             android:id="@+id/titleEpayco"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Gestionar Transacciones"
+                            android:text="@string/model_trade_title"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
@@ -646,7 +646,7 @@
                             android:id="@+id/titleProduct"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Gestionar Productos"
+                            android:text="@string/model_product_title"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
@@ -698,7 +698,7 @@
                             android:id="@+id/titlePurchase"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Gestionar Compras"
+                            android:text="@string/model_purchase_title"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
@@ -750,7 +750,7 @@
                             android:id="@+id/titleRole"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Gestionar Roles"
+                            android:text="@string/model_role_title"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
@@ -802,7 +802,7 @@
                             android:id="@+id/titleSeller"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Gestionar Vendedores"
+                            android:text="@string/model_seller_title"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
@@ -854,7 +854,7 @@
                             android:id="@+id/titleShipment"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Gestionar Envios"
+                            android:text="@string/model_shipment_title"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
@@ -906,7 +906,7 @@
                             android:id="@+id/titleShop"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Gestionar Tiendas"
+                            android:text="@string/model_shop_title"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black"/>
@@ -958,7 +958,7 @@
                             android:id="@+id/titleSpecify"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Gestionar Especifaciones"
+                            android:text="@string/model_specify_title"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
@@ -1011,7 +1011,7 @@
                             android:id="@+id/titleUbication"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Gestionar Ubicaciones"
+                            android:text="@string/model_ubication_title"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black" />
@@ -1063,7 +1063,7 @@
                             android:id="@+id/titleUser"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Gestionar Usuarios"
+                            android:text="@string/model_user_title"
                             android:textSize="28sp"
                             android:textStyle="bold"
                             android:textColor="@color/black"/>
