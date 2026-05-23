@@ -349,6 +349,20 @@ class HomeEpaycoActivity : AppCompatActivity() {
         }
     }
 
+    private fun shipmentByTransactionState(transactionState: String): Long {
+        return when (transactionState) {
+            "Pendiente" -> 1L
+            "Aceptada" -> 1L
+            "Rechazada" -> 4L
+            "Fallida" -> 4L
+            else -> 1L
+        }
+    }
+
+    private fun isAcceptedTransaction(transactionState: String): Boolean {
+        return transactionState == "Aceptada"
+    }
+
     private fun buildUriOnlyJson(uri: Uri): JSONObject {
         return JSONObject().apply {
             put("reference", reference)
@@ -414,7 +428,7 @@ class HomeEpaycoActivity : AppCompatActivity() {
             return
         }
 
-        val idShipment = if (state == "APROBADO") 1L else 4L
+        val idShipment = shipmentByTransactionState(state)
         val shipmentState = if (idShipment == 1L) "Pendiente" else "Rechazada"
         val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
         val hour = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
@@ -488,7 +502,7 @@ class HomeEpaycoActivity : AppCompatActivity() {
                                             )
                                         )
 
-                                        if (state == "APROBADO") {
+                                        if (isAcceptedTransaction(state)) {
                                             val productRef = db.collection("product").document(item.register.toString())
                                             val reservationRef = db.collection("cart_reservation").document("${userRegister}_${item.register}")
                                             batch.update(
@@ -502,13 +516,13 @@ class HomeEpaycoActivity : AppCompatActivity() {
                                         }
                                     }
                                 }.addOnSuccessListener {
-                                    if (state == "APROBADO") {
+                                    if (isAcceptedTransaction(state)) {
                                         CartManager.clear(this)
                                     }
                                     showResult(
                                         state = transactionState,
                                         shipmentState = shipmentState,
-                                        message = messageForState(transactionState, shipmentState, state == "APROBADO")
+                                        message = messageForState(transactionState, shipmentState, isAcceptedTransaction(state))
                                     )
                                 }.addOnFailureListener { exception ->
                                     showLocalResult(

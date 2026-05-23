@@ -29,7 +29,7 @@ object StatusStyleHelper {
         val clean = status.uppercase().trim()
         return when {
             clean.contains("PENDIENT") -> Color.parseColor("#C79000")
-            clean.contains("ACEPT") || clean.contains("APROB") -> Color.parseColor("#1B8A3A")
+            clean.contains("ACEPT") -> Color.parseColor("#1B8A3A")
             clean.contains("FALL") -> Color.parseColor("#D52D09")
             clean.contains("RECH") -> Color.parseColor("#D52D09")
             else -> Color.parseColor("#666666")
